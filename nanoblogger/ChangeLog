@@ -1,3 +1,14 @@
+2004-05-25  n1xt3r  <n1xt3r@bluefalcon>
+
+	* plugins/entry/auto_break.sh, plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh (read_entry):
+	Moved code for category links into a new entry plugin.
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/master_index.sh:
+	- Removed AUTO_FORMAT and autoformat plugins.
+	- Renamed autoformat plugins to entry plugins.
+	- (build_archives): new load_plugins plugins/archive
+	- (read_entry): new load_plugins plugins/entry
+
 2004-05-23  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
@@ -66,11 +77,10 @@
 
 	* ChangeLog, plugins/01_mymood.off: Fixed a broken sed command.
 
-	* ChangeLog, nb, plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/autoformat/moods.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh:
+	* ChangeLog, nb, plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh:
 	Converted sed substitute commands to shorthand for increase in speed.
 
-	* ChangeLog, plugins/autoformat/auto_break.sh:
-	Reverted auto formmating back to old behaviour.
+	* ChangeLog: Reverted auto formmating back to old behaviour.
 
 2004-05-02  n1xt3r  <n1xt3r@bluefalcon>
 
@@ -119,17 +129,15 @@
 
 2004-04-29  n1xt3r  <n1xt3r@bluefalcon>
 
-	* ChangeLog, nb, plugins/autoformat/01_escape_chars.off:
+	* ChangeLog, nb:
 	- Added filter to escape special characters, such as ampersand and quotes.
 	- Removed experimental autoformat plugin that escaped characters.
 
 2004-04-28  n1xt3r  <n1xt3r@bluefalcon>
 
-	* ChangeLog, plugins/autoformat/auto_break.sh:
-	Fixed over zealous conversions of line breaks to br tags.
+	* ChangeLog: Fixed over zealous conversions of line breaks to br tags.
 
-	* ChangeLog, plugins/autoformat/auto_break.sh:
-	Fixed line break conversions to include br tags.
+	* ChangeLog: Fixed line break conversions to include br tags.
 
 2004-04-24  n1xt3r  <n1xt3r@bluefalcon>
 
@@ -409,18 +417,9 @@
 	* default/blog.conf:
 	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
 
-	* plugins/autoformat/moods.sh:
-	Improved regex, added a blank space to beggining of the match.
-
-	* plugins/autoformat/01_escape_chars.off, plugins/autoformat/01_escape_chars.sh:
-	Replaced 01_escape_chars.sh with 01_escape_chars.off, to disable it becuase of too many problems.
-
 2004-03-05  n1xt3r  <n1xt3r@bluefalcon>
 
-	* plugins/autoformat/01_escape_chars.sh:
-	Added new autoformat plugin, escape_chars that escapes characters: & and " to their respective HTML entities.
-
-	* nb, plugins/01_mymood.off, plugins/autoformat/auto_break.sh, plugins/mymood.off:
+	* nb, plugins/01_mymood.off, plugins/mymood.off:
 	Renamed plugins/mymood.off to plugins/01_mymood.off, so it loads 1st!
 
 	* nb:
@@ -455,10 +454,10 @@
 	* default/archives/monthly/2004-01.html, default/styles/mt_clean.css, default/styles/nb_rusted.css:
 	New file.
 
-	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/autoformat/auto_break.sh, plugins/autoformat/moods.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	Initial import
 
-	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/autoformat/auto_break.sh, plugins/autoformat/moods.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	New file.
 
 	* COPYING, docs/nanoblogger.html, moods/moods.conf, moods/mymood.txt, moods/smilies/angry.gif, moods/smilies/cheesy.gif, moods/smilies/cool.gif, moods/smilies/cry.gif, moods/smilies/embarassed.gif, moods/smilies/grin.gif, moods/smilies/huh.gif, moods/smilies/kiss.gif, moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif, moods/smilies/rolleyes.gif, moods/smilies/sad.gif, nb, nb.conf:
