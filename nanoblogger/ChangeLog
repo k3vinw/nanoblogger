@@ -1,3 +1,10 @@
+2004-05-06  n1xt3r  <n1xt3r@scorcher>
+
+	* nb (delete_blog): Added test for existance of entry's file.
+
+	* ChangeLog, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/fortune.htm, default/parts/news.htm:
+	Updated intro/help entry for default.
+
 2004-05-04  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/01_mymood.off: Fixed a broken sed command.
