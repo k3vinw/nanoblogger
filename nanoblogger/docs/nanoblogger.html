@@ -71,10 +71,13 @@ When upgrading nanoblogger, there's three basic things that need to be considere
 		rename your blog directory and create a new one using nanoblogger: "nb -b [blog_dir] -a" (skip the configuration)
 	</li>
 	<li>
-		copy the archives directory over to the new blog directory: "cp -r [oldblog_dir]/archives [newblog_dir]"
+		copy the <em>archives</em> (data) directory over to the new blog directory: "cp -r [oldblog_dir]/archives [newblog_dir]"
 	</li>
 	<li>
-		now you can copy blog.conf and your templates back over and rebuild the blog: "nb -b [blog_dir] -u all"
+		make the required changes (if any) to your templates, refer to the default templates for helpful hints.
+	</li>
+	<li>
+		edit the new <em>blog.conf</em> to your likings and rebuild the blog: "nb -b [blog_dir] -u all"
 	</li>
 </ul>
 
