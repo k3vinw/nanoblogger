@@ -1,3 +1,9 @@
+2004-07-20  state  <state@bluefalcon>
+
+	* plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh, ChangeLog, nb:
+	- Updated "exit on error" messages.
+	- Abstracted an entry's filename extenstion.
+
 2004-07-17  state  <state@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html, nb:

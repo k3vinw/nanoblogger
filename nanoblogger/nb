@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh --posix
 ############################################################
 #  NanoBlogger 2.9 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
@@ -796,7 +796,7 @@ if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-if [ -z "$usr_message" ]; then
+if [ -z "$usr_body" ]; then
 	echo "editing in '$EDITOR' ..."
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
@@ -804,7 +804,7 @@ if [ -z "$usr_message" ]; then
 		NB_EntryBody=`cat "$NB_EditFile"`
 	fi
 else
-	NB_EntryBody="$usr_message"
+	NB_EntryBody="$usr_body"
 fi
 [ ! -z "$usr_description" ] && NB_EntryDescription="$usr_description"
 # prompt for descritption
@@ -831,6 +831,7 @@ cat <<-EOF
 	 -a, --add				create new entry, category, or weblog
 	 					(directory).
 	 -b, --blogdir <directory>		specify weblog directory.
+	 -B, --body <text>			set body of entry (for '--add').
 	 -c, --category	<ID,cat>		specify category (for '--add', '--delete',
 	 					'--edit', '--list' and '--update').
 	 --configure				configure weblog.
@@ -844,7 +845,6 @@ cat <<-EOF
 	 					(defaults to current entries).
 	 --makepage <source> <output>		specify source and output file to create
 	 					html page.
-	 -M, --message <text>			set body of entry as message (for '--add').
 	 -m, --move <ID>			move an entry to a specified category (for
 	 					'--category').
 	 -n, --author <text>			set author of entry (for '--add').
@@ -880,8 +880,8 @@ cat <<-EOF
 	 edit the title of category number 1
 	 	nb -b ~/public_html/weblog -c 1 -t Humor -e cat
 
-	 create new entry using the message option
-	 	nb -b ~/public_html/weblog -n myname -t 'my title' -M 'My message!' -a
+	 sets author, title, and body for new entry
+	 	nb -b ~/public_html/weblog -n myname -t 'my title' -B 'My message!' -a
 
 	More info:
 	 URL: http://home.columbus.rr.com/n1xt3r/nanoblogger/
@@ -908,6 +908,7 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-a|--add)		create_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
+		-B|--body)		check_arg; usr_body="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		config_weblog;;
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
@@ -923,7 +924,6 @@ while [ $# -gt 0 ]; do
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
 					check_blogdir; make_page;;
-		-M|--message)		check_arg; usr_message="$2"; shift;;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_blogdir; move_entry;;
 		-p|--preview)		check_blogdir; preview_weblog;;

@@ -46,13 +46,11 @@
 	#content {
 		float: left;
 		width: 72%;
-		background:#FFF;
 		margin-right:0px;
 		padding-bottom:10px;
 		}
 
 	#container {
-		background:#FFF;
 		border:1px solid #FFF;
 		}
 
@@ -71,7 +69,6 @@
 	.blog {
 		width:84%;
  		padding:15px;
-		background:#FFF; 
 		}
 
 	.blogbody {
@@ -79,7 +76,6 @@
 		color:#333;
 		font-size:small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:120%;
 		}
 
@@ -103,7 +99,6 @@
 		font-family:verdana, arial, sans-serif;
 		font-size: small;
   		margin-bottom:15px;
-		background:#FFF;
 		text-align:center;
 		}
 
@@ -123,17 +118,23 @@
 		margin-bottom:25px;
 		}
 
-
 	.calendar {
 		font-family:verdana, arial, sans-serif;
 		color:#d34c09;
 		font-size:x-small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:150%;
   		padding:2px;
 		text-align:left;
 		}
+
+	.calendar a,
+	.calendar a:link,
+	.calendar a:active,
+	.calendar a:hover {
+		font-weight: bold;
+		text-decoration: underline;
+	}
 
 	.calendarhead {	
 		font-family:verdana, arial, sans-serif;
@@ -142,17 +143,21 @@
 		font-weight:bold;
   		padding:2px;
 		letter-spacing: .3em;
-  		background:#FFF;
   		text-transform:uppercase;
 		text-align:center;
+		border-bottom: 1px solid #999;
 		}
+
+	.calendarday {
+		font-weight:bold;
+		text-align:center;
+	}
 
 	.side {
 		font-family:verdana, arial, sans-serif;
 		color:#333;
 		font-size:x-small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:150%;
   		padding:2px;
 		}
@@ -201,7 +206,6 @@
 		color:#666;
 		font-size:small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:120%;
  		padding-bottom:10px;
   		padding-top:10px;
@@ -213,7 +217,6 @@
 		color:#666;
 		font-size:x-small;
 		font-weight:normal;
-  		background:#FFF;
 		}
 
 
@@ -222,7 +225,6 @@
 		color:#666;
 		font-size:small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:150%;
  		padding:5px;
  		border:1px dotted #999;
@@ -234,7 +236,6 @@
 		color:#666;
 		font-size:small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:120%;
  		padding-bottom:10px;
   		padding-top:10px;
@@ -246,7 +247,6 @@
 		color:#666;
 		font-size:x-small;
 		font-weight:normal;
-  		background:#FFF;
 		}
 
 
@@ -257,7 +257,6 @@
 		border-bottom:1px solid #999;
 		margin-top:20px;
 		font-weight:bold;
-  		background:#FFF;
 		}
 
 	#banner-commentspop {
@@ -268,7 +267,6 @@
 		border-left:1px solid #FFF;
 		border-right:1px solid #FFF;
 		border-top:1px solid #FFF;
-  		background:#003366;
   		padding-left:15px;
   		padding-right:15px;
   		padding-top:5px;
@@ -280,7 +278,6 @@
 		color:#333;
 		font-size:x-small;
 		font-weight:normal;
-  		background:#FFF;
   		line-height:140%;
 		margin-bottom:15px;
 		}

@@ -25,7 +25,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
 	for wd in $WEEK_DAYS ; do
-		echo '<th align="center"><span class="calendar">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
+		echo '<th align="center"><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
 	done
 	echo '</tr>' >> "$PLUGIN_OUTFILE"
 	for line in $NUM_DAY_LINES ; do
