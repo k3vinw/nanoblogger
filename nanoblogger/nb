@@ -810,14 +810,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 		case $choice in
 		[Yy]|"")
 			echo "configuring new blog ..."
-			echo "to set your preferences in $BLOG_DIR/blog.conf,"
-			echo "enter your favorite editor or press enter to use the default."
-			read -p "$NB_PROMPT" edit_cmd
-			if [ ! -z "$edit_cmd" ]; then
-				"$edit_cmd" "$BLOG_DIR"/blog.conf
-			else
-				"$EDITOR" "$BLOG_DIR"/blog.conf
-			fi;;
+			"$EDITOR" "$BLOG_DIR"/blog.conf;;
 		[Nn])
 			echo "blog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 		esac;;
