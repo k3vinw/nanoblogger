@@ -666,11 +666,15 @@ for entry_id in $NUMVAR; do
 	done
 	if [ ! -z "$cat_list" ]; then
 		for cat_db in $cat_list; do
-			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+			[ ! -z "$cat_mod" ] &&
+				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 	else
 		for cat_db in $db_categories; do
-			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+			[ ! -z "$cat_mod" ] &&
+				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 		rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
 		Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`

@@ -1,3 +1,10 @@
+2004-04-23  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb:
+	- (nb_main): Fixed category so it really gets set to Untitled now.
+	- (edit_blog): Checks for empty DB_RESULTS before writing to category database.
+	- (build_archives): Fixed check for monthly archive updating.
+
 2004-04-22  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/master_index.sh, nb, ChangeLog:
