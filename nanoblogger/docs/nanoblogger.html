@@ -207,8 +207,8 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 1. create a new weblog directory using nanoblogger (skip the configuration):
 	nb [-b blog_dir] -a
 
-2. copy the old archives (data) directory over to the new weblog directory:
-	cp -r [old_blog_dir]/archives [newblog_dir]
+2. copy the old data directory over to the new weblog directory:
+	cp -r [old_blog_dir]/data [newblog_dir]
 
 3. edit the new blog.conf to your likings and rebuild the weblog:
 	nb [-b blog_dir] -u all
@@ -1034,7 +1034,7 @@ This is my new entry ...
 
  <p><b>Updating the Weblog's Data Directory</b></p>
  <p>
-  	The imported entries should be copied into the <em>archives</em> (data) directory of your weblog.<br />
+  	The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
 
 	Update the weblog with the new entries:
  </p>

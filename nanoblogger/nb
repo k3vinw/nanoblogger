@@ -1,10 +1,10 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.1 Copyright 2004 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.2 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 
 # nanoblogger's version.
-VERSION="3.1"
+VERSION="CVS-3.2"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -294,12 +294,17 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
+	if [ "$ENABLE_CACHE" = 1 ]; then
+		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
+			read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
+			load_plugins entry/body
+			echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
+		else
+			NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
+		fi
+	else
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
-		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
-	else
-		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
 	fi
 	load_plugins entry
 fi
@@ -593,6 +598,7 @@ weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
+[ "$weblog_update" = cache ] && { rm -fr "$BLOG_DIR/$CACHE_DIR"/*.*; weblog_update=all; }
 if [ "$weblog_update" = all ]; then
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
@@ -600,6 +606,7 @@ if [ "$weblog_update" = all ]; then
 fi
 load_plugins
 # build the archives
+ENABLE_CACHE=1
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != main ] && build_archives
 if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
@@ -607,9 +614,9 @@ if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
-[ "$ABSOLUTE_LINKS" != "1" ] && BASE_URL="./"
+[ "$ABSOLUTE_LINKS" != 1 ] && BASE_URL="./"
 nb_msg "generating main index page(s) ..."
-ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
+ENABLE_CACHE=0; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
 }
 
