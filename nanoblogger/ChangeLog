@@ -1,3 +1,8 @@
+2004-06-24  n1xt3r  <n1xt3r@bluefalcon>
+
+	* nb, plugins/01_mymood.off, plugins/entry/moods.sh, ChangeLog:
+	Changed alt in <img /> tag from $mood_img to $mood_var.
+
 2004-06-23  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/rss.sh, ChangeLog, nb:
