@@ -37,15 +37,15 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
 			for entry in $MONTH_LINE ; do
-				NB_EntryDay=`echo "$entry" |cut -c1-10`
 				entry_year=`echo $entry |cut -c1-4`
+				NB_EntryID=e`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
 				entry_month=`echo $entry |cut -c6-7`
 				entry_day=`echo $entry |cut -c9-10 |sed -e '/^0/ s///g'`
 				curr_month=`date +%m`
 				curr_year=`date +%Y`
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
 				set_link="1"
-				dn='<a href="'$BLOG_URL'/'$MONTHLY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryDay'">'$dn'</a>'
+				dn='<a href="'$BLOG_URL'/'$MONTHLY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
 				echo '<td align="center"><span>'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done

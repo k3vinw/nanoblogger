@@ -1,3 +1,9 @@
+2004-06-14  n1xt3r  <n1xt3r@bluefalcon>
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, docs/nanoblogger.html, nb, ChangeLog:
+	- Reverted NB_EntryID and NB_EntryDay back to normal.
+	- Updated "Tips and Tricks" section of manual.
+
 2004-06-12  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/archive/monthly/monthly-cal.sh, plugins/atom.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb:
@@ -413,13 +419,8 @@
 
 2004-03-30  n1xt3r  <n1xt3r@bluefalcon>
 
-	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:
+	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, nb:
 	Fixed "a id=... name=... and W3C validator" bug.
-	- Dropped BLOG_TZD from NB_EntryID.
-	- Added BLOG_TZD to the feed templates.
-
-	* plugins/list_entries.sh:
-	* ChangeLog, nb: Fixed "a id=... name=... and W3C validator" bug.
 	- Dropped BLOG_TZD from NB_EntryID.
 	- Added BLOG_TZD to the feed templates.
 
