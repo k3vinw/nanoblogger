@@ -17,6 +17,7 @@ build_atomfeed(){
 	ARCHIVE_LIST="$DB_RESULTS"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
+		[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 		NB_AtomEntryDate=`echo "$NB_EntryID$BLOG_TZD"`
 		# non-portable find command!
 		#NB_AtomEntryModDate=`find "$BLOG_DIR/$ARCHIVES/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
