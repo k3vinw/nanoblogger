@@ -1,4 +1,10 @@
+2004-03-24  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb (make_page): Set NB_EntryTitle from usr_title.
+
 2004-03-22  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/master_index.sh: Added New_EntryFile to modification test.
 
 	* ChangeLog, plugins/master_index.sh:
 	Checks for modifications before building index.

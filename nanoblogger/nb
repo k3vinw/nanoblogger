@@ -510,9 +510,10 @@ fi
 make_placeholder "$MAINLINKS_TEMPLATE" main_links.tmp main_links.htm; NB_Main_Links="$PLACEHOLDER"
 rm -f "$BLOG_DIR"/main_links.tmp; PLACEHOLDER=
 # build the archives
-nb_msg "generating index pages ..."
 load_plugins plugins
+nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
+[ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
 [ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
 # build main index and feed
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
