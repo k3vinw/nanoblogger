@@ -1,4 +1,17 @@
+2004-03-22  n1xt3r  <n1xt3r@scorcher>
+
+	* nb (build_blog):
+	archives are no longer built when blog_update is set to main.
+
+	* default/templates/category_links.htm, default/templates/month_links.htm:
+	Moved month and category totals so that there outside their links.
+
 2004-03-20  n1xt3r  <n1xt3r@scorcher>
+
+	* default/templates/rdf_catfeed.xml, plugins/category_links.sh, ChangeLog, default/templates/entrycat_links.htm, nb:
+	- modified templates to link to cat_index.
+	- improved sort functionality to category's links based on title.
+	- fixed bug in NB_EntryCategories that limited category templates to 1 line.
 
 	* plugins/category_links.sh:
 	created new plugin for creating category links from master_index.sh.
