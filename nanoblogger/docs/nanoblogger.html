@@ -29,7 +29,6 @@ div.tables { margin:10px; padding:4px; }
 
 h1, h2, h3 {
 	font-family:verdana, arial, sans-serif;
-	font-size:13px;
 	font-color:#333;
 	}
 
@@ -333,13 +332,17 @@ nb --blogdir [myblog_dir] --configure -u all
    respective options, <em>--preview</em> and <em>--publish</em>.
  </p>
 
+ <p><b>Plugin Configuration</b></p>
+
+ <p>
+   <em>PLUGIN_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>.
+
  <p><b>Global Configuration</b></p>
 
  <p>
    NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all weblogs. The global
    configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>nb.conf</em>.
-   Typically one would set <em>BLOG_DIR</em> here as a default weblog directory to use. This configuration is also looked for
-   under the file, <em>$HOME/.nb.conf</em>.
+   This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.
  </p>
 
  <h2><a name="cr7" id="cr7">Managing Entries and Categories</a></h2>
@@ -409,6 +412,10 @@ nb [-b blog_dir] -e 1
 	Editing an entry from a category:
 	<pre>
 nb [-b blog_dir] -c 1 -e 1
+	</pre>
+	Editing multiple entries:
+	<pre>
+nb [-b blog_dir] -e 1,2,3
 	</pre>
 
  <p><b>Moving Entries</b></p>
@@ -662,16 +669,17 @@ nb [-b blog_dir] -c 1 -d cat
    <p>
      Postformat plugins are stored in the plugins/postformat directory and are loaded after each page generated.
    </p>
- </p>Plugins typically work by creating placeholders for the templates, but are in no way limited to creating
-   placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. The variable,
-   <em>ENABLE_PLUGINS</em>, in <em>blog.conf</em> toggles the use of plugins on/off. Create plugins that run specifically for your
-   weblog by creating a "plugins" directory under a weblog's own directory and copying or creating a plugin with the ".sh" extension.
+ </p>
+  <p>
+   Plugins typically work by creating placeholders for the templates, but are in no way limited to creating
+   placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template.
    Some plugins may require you to identify it's unique placeholder/destination and manually add it to your templates.
+  </p>
 
  <div class="tables">
    <table border="0" cellspacing="4" cellpadding="2" summary="plugins">
      <caption>
-       The main plugins (most are enabled by default):
+       Default plugins (most are enabled by default):
      </caption>
      <tr>
        <th align="left">plugins</th>
@@ -788,7 +796,7 @@ nb [-b blog_dir] -c 1 -d cat
    </table>
    * = actual name may vary.
  </div>
-   To disable a plugin, rename the plugin's extension from ".sh" to ".off".
+   To disable an individual plugin, rename the plugin's extension from ".sh" to ".off".
 
  <h2><a name="cr10" id="cr10">Publishing</a></h2>
 
