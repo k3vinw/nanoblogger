@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="2.8a2"
+VERSION="2.8"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -315,21 +315,6 @@ echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 rm -f "$MKPAGE_OUTFILE".tmp
 load_plugins plugins/postformat
-}
-
-# create a temporary place-holder using a template
-make_placeholder(){
-TEMPLATE_FILE="$1"
-TEMP_FILE="$2"
-OUTPUT_FILE="$3"
-load_template "$NB_TEMPLATE_DIR/$TEMPLATE_FILE"
-if [ ! -z "$BLOG_HTML" ]; then
-	echo "$BLOG_HTML" >> "$BLOG_DIR/$TEMP_FILE"
-	BLOG_HTML=
-	cat "$BLOG_DIR/$TEMP_FILE" > "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"
-fi
-touch "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"
-PLACEHOLDER=`cat "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"`
 }
 
 # create individual page for an entry

@@ -1,5 +1,11 @@
 2004-06-17  n1xt3r  <n1xt3r@bluefalcon>
 
+	* docs/nanoblogger.html, plugins/archive/master_index.sh, plugins/atom.sh, plugins/blog_links.sh, plugins/entry/entry_catlinks.sh, plugins/rss.sh, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/cat_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/recent_entries.htm, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/atom.xml, default/templates/atom_entry.xml, default/templates/category_links.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/month_links.htm, default/templates/rdf.xml, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, ChangeLog, default/archives.html, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/index.xml, nb.conf:
+	- Updated Atom, RSS, and Blog links, no longer use templates.
+	- Updated Master archive plugin, only uses makepage.htm template.
+	- Removed templates associated with the old plugins.
+	- Updated Documentation to reflect changes.
+
 	* ChangeLog, default/templates/atom_entry.xml, docs/nanoblogger.html, nb, plugins/atom.sh:
 	- Code cleanup.
 	- Updated "Plugins" section of manual.
