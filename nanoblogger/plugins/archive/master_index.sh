@@ -26,7 +26,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 		# make NB_Category_Links placeholder
 		NB_Browse_CatLinks=$(
 		cat <<-EOF
-			<a id="category" name="category"></a>
+			<a id="category"></a>
 			<b>Browse by category</b>
 			<div>
 			$NB_Category_Links
@@ -38,13 +38,13 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	# make NB_Archive_Links placeholder
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.$NB_FILETYPE <<-EOF
 		$NB_Browse_CatLinks
-		<a id="date" name="date"></a>
+		<a id="date"></a>
 		<b>Browse by date</b>
 		<div>
 		$NB_Month_Links
 		</div>
 		<br />
-		<a id="entry" name="entry"></a>
+		<a id="entry"></a>
 		<b>Browse by entry</b>
 		<div>
 		$NB_Entry_Links

@@ -19,21 +19,6 @@ NB_PROMPT=": "
 # set current path
 CURR_PATH="$PWD"
 
-# directory to store archives of weblog
-ARCHIVES_DIR=archives
-
-# directory to store cached data of weblog
-CACHE_DIR=cache
-
-# directory to store data of weblog
-DATA_DIR=data
-
-# directory to store parts of weblog
-PARTS_DIR=parts
-
-# the templates directory name
-TEMPLATE_DIR=templates
-
 # the temp directory
 TEMP_DIR=/tmp
 
@@ -44,6 +29,15 @@ VERBOSE=1
 tzd_mm=`date +%z |cut -c4-5`
 AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 
+# directory to store archives of weblog
+ARCHIVES_DIR="archives"
+
+# directory to store cached data of weblog
+CACHE_DIR="cache"
+
+# directory to store parts of weblog
+PARTS_DIR="parts"
+
 # letter to prepend to entry's html id tag
 x_id=e
 
@@ -51,17 +45,18 @@ nb_edit(){
 EDIT_FILE="$1"
 $EDITOR "$EDIT_FILE"
 if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
-	echo "press enter to continue"
+	echo "press [enter] to continue."
 	read -p "$NB_PROMPT" enter_key
 fi
 [ ! -f "$EDIT_FILE" ] && die "failed to write '$EDIT_FILE'! goodbye."
 }
 
 nb_msg(){
-[ "$VERBOSE" = 0 ] ||
+if [ "$VERBOSE" != 0 ]; then
 	cat <<-EOF
 		$@
 	EOF
+fi
 }
 
 # function to die with a message
@@ -93,11 +88,11 @@ load_config(){
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
-[ -d "$BLOG_DIR/$DATA_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
+[ -d "$BLOG_DIR/data" ] && NB_DATA_DIR="$BLOG_DIR/data"
 # USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
 [ -d "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
-[ -d "$BLOG_DIR/$TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
+[ -d "$BLOG_DIR/templates" ] && NB_TEMPLATE_DIR="$BLOG_DIR/templates"
 # BLOG_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
 [ -d "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
 # USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
@@ -168,7 +163,7 @@ load_config
 	[ ! -f "$USR_BLOGCONF" ] && die "weblog config file '$USR_BLOGCONF' doesn't exist! goodbye."
 [ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
-[ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "weblog's cache directory '$BLOG_DIR/$CACHE_DIR' doesn't exist! goodbye."
+[ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "weblog's cache directory '$CACHE_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. goodbye."
 }
 

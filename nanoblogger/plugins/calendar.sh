@@ -28,13 +28,13 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
 	for wd in $WEEK_DAYS ; do
-		echo '<th align="center"><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
+		echo '<th style="text-align: center;"><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
 	done
 	echo '</tr>' >> "$PLUGIN_OUTFILE"
 	for line in $NUM_DAY_LINES ; do
 		DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 		echo '<tr>' >> "$PLUGIN_OUTFILE"
-		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td style="text-align: center;"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 		for dn in $DN_LINES ; do
 			set_link=0
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
@@ -48,11 +48,11 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
 				set_link=1
 				dn='<a href="'\${ARCHIVES_PATH}$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
-				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+				echo '<td style="text-align: center;"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done
 			if [ "$set_link" != 1 ] ; then
-				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+				echo '<td style="text-align: center;"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 		done
 		echo '</tr>' >> "$PLUGIN_OUTFILE"
