@@ -9,7 +9,7 @@
 
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.htm"
 
-if cal > /dev/null 2>&1 ; then
+if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 
 	CALENDAR=`cal`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e 's/^[ ]*//g'`

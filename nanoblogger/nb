@@ -114,15 +114,12 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
-# check blog directory's structure to make sure it matches the default
+# check for BLOG_DIR and some important directories existance.
 check_blogdir(){
 [ ! -z "$BLOG_DIR" ] || die "no blog directory specified! bye."
-[ -d "$BLOG_DIR" ] || die "blog_directory '$BLOG_DIR' doesn't exist! bye."
-cd "$BASE_DIR"/default; for subdirs in */; do 
-	cd "$CURR_PATH"
-	[ -d "$BLOG_DIR/$subdirs" ] ||
-		die "blog directory '$BLOG_DIR/$subdirs' doesn't exist! bye."
-done
+[ -d "$BLOG_DIR" ] || die "blog directory '$BLOG_DIR' doesn't exist! bye."
+[ -d "$BLOG_DIR/$ARCHIVES" ] || die "blog's archive directory '$BLOG_DIR/$ARCHIVES' doesn't exist! bye."
+[ -d "$BLOG_DIR/$TEMPLATE_DIR" ] || die "blog's templates directory '$BLOG_DIR/$TEMPLATE_DIR' doesn't exist!. bye."
 }
 
 # create list of entries based on a month or interval
