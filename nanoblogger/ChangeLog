@@ -1,3 +1,15 @@
+2004-05-31  n1xt3r  <n1xt3r@bluefalcon>
+
+	* nb, plugins/atom.sh, plugins/rss.sh:
+	- (query_db): Added new query_type, limit.
+	- Updated Atom and RSS plugins to use new query_type, limit.
+
+	* ChangeLog, default/blog.conf, nb, plugins/atom.sh, plugins/list_entries.sh, plugins/rss.sh:
+	- Renamed MAX_DISPLAY to MAX_ENTRIES.
+	- Renamed PERMALINKS to PERMALINKS_DIR.
+	- Renamed FULL_PERMALINKS to PERMALINKS.
+	- Renamed CAT_FEEDS to CATEGORY_FEEDS.
+
 2004-05-30  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb:
