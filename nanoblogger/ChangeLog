@@ -1,3 +1,11 @@
+2004-06-22  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/templates/entry.htm, nb:
+	- Fixed bad HTML in default entry.
+	- (build_archives): Fixed updating more than once bug.
+	- (edit_blog),(delete_blog),(move_blog): Improved category updating.
+	- (edit_blog): Removed code similar to find_categories().
+
 2004-06-21  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/templates/entry.htm, plugins/entry/auto_break.sh:

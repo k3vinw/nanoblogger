@@ -426,9 +426,10 @@ if [ ! -z "$db_categories" ]; then
 fi
 }
 
-# create monthly archives and update any modified parts
+# create/update archives
 build_archives(){
 load_plugins plugins/archive
+build_catarchives
 if [ "$blog_update" = "all" ]; then
 	cycle_months_for build_monthlyarchive
 else
@@ -462,7 +463,6 @@ else
 		fi
 	done
 fi
-build_catarchives
 }
 
 # generate the blog files
