@@ -114,7 +114,7 @@ filter_dateformat(){
 FILTER_VAR="$1"
 [ -z "$FILTER_VAR" ] && FILTER_VAR="%B %d, %Y %l:%M %p"
 # it would've been nice to use the date command's description feature here
-[ ! -z "$DATE_LOCALE" ] && LANG="$DATE_LOCALE" date +"$FILTER_VAR"
+[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
 [ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
 }
 
@@ -521,7 +521,7 @@ nb_msg "blog entry added to '$BLOG_TITLE'."
 # load BLOG_CONF (or blog.conf) into an editor
 config_blog(){
 if [ -f "$BLOG_CONF" ]; then
-	"$EDITOR" "$BLOG_CONF"
+	$EDITOR "$BLOG_CONF"
 	# check if file's been modified since opened
 	[ ! -N "$BLOG_CONF" ] && die "no changes were made! bye."
 	load_config; nb_msg "applying changes to '$BLOG_TITLE' ..."
@@ -564,7 +564,7 @@ db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"
 Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
 [ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $NUMVAR"
-"$EDITOR" "$NB_DATA_DIR/$Edit_EntryFile"
+$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
 if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 	nb_msg "processing blog entry id: $NUMVAR ..."
 	read_entry "$NB_DATA_DIR/$Edit_EntryFile"
@@ -795,7 +795,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 	case $choice in
 	[Yy]|"")
 		echo "configuring new blog ..."
-		"$EDITOR" "$BLOG_DIR"/blog.conf;;
+		$EDITOR "$BLOG_DIR"/blog.conf;;
 	[Nn])
 		echo "blog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 	esac
@@ -853,7 +853,7 @@ if [ -z "$NB_EntryTitle" ]; then
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 echo "editing in '$EDITOR' ..."
-"$EDITOR" "$NB_EditFile"
+$EDITOR "$NB_EditFile"
 # load content of edited file into entry variable NB_EntryBody
 if [ -f "$NB_EditFile" ]; then
 	NB_EntryBody=`cat "$NB_EditFile"`

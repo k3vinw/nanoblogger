@@ -11,7 +11,7 @@ PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.htm"
 
 if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 
-	[ -z "$DATE_LOCALE" ] || CALENDAR=`LANG="$DATE_LOCALE" cal`
+	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" cal`
 	[ ! -z "$CALENDAR" ] || CALENDAR=`cal`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
@@ -21,8 +21,6 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	curr_month=`date +%m`
 	query_db all
 	MONTH_LIST=`echo "$DB_RESULTS" |sort -r |grep '[-]'$curr_month'[-]'`
-
-	html_nbsp="&nbsp;"
 
 	echo '<table border="0" cellspacing="4" cellpadding="0">' > "$PLUGIN_OUTFILE"
 	echo '<caption>'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
@@ -34,7 +32,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	for line in $NUM_DAY_LINES ; do
 		DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 		echo '<tr>' >> "$PLUGIN_OUTFILE"
-		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><span class="calendar">\'$html_nbsp'\<\/span><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><span class="calendar"><\/span><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 		for dn in $DN_LINES ; do
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`

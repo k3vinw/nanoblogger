@@ -1,4 +1,16 @@
+2004-06-09  n1xt3r  <n1xt3r@bluefalcon>
+
+	* nb, plugins/archive/master_index.sh, plugins/articles.off, plugins/atom.sh, plugins/rss.sh:
+	- Added new NB_TEMPLATE_DIR, replaces references to BLOG_DIR/TEMPLATE_DIR.
+	- Added new BLOG_TEMPLATE_DIR, for use in blog.conf.
+	- Added new USR_TEMPLATE_DIR, set with --templatedir option.
+	- Added new --templatedir option, to specify blog's template directory.
+	- (show_help): List --templatedir and info.
+
 2004-06-08  n1xt3r  <n1xt3r@bluefalcon>
+
+	* default/blog.conf, ChangeLog:
+	Fixed BLOG_URL_MAIN: replaced index.$NB_FILETYPE with index.html, becuase NB_FILETYPE wasn't set yet.
 
 	* ChangeLog, docs/nanoblogger.html:
 	Updated "Installation" section of manual.
