@@ -1,3 +1,13 @@
+2004-03-25  n1xt3r  <n1xt3r@scorcher>
+
+	* articles/articles.list, plugins/articles.sh:
+	Added new plugin: articles.sh.
+
+	* plugins/master_index.sh, ChangeLog, nb, plugins/01_mymood.off:
+	- (build_blog): builds NB_Month_Links when blog_update's not set to all.
+	- minor code cleanup to mymood plugin.
+	- master index plugin now checks if blog_update is set to all.
+
 2004-03-24  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, nb (make_page): Set NB_EntryTitle from usr_title.
