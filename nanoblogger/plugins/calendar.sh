@@ -11,7 +11,8 @@ PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.htm"
 
 if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 
-	CALENDAR=`cal`
+	[ -z "$DATE_LOCALE" ] || CALENDAR=`LANG="$DATE_LOCALE" cal`
+	[ ! -z "$CALENDAR" ] || CALENDAR=`cal`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e 's/^[ ]*//g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 	DAYS=`echo "$CALENDAR" |sed 1,2d`
