@@ -65,10 +65,8 @@ exit 1
 [ -d "$BASE_DIR" ] ||
 	die "`basename $0`: $BASE_DIR doesn't exist! goodbye."
 
-# entry's new file for editing
-NB_EditFile="/tmp/nb_entry$$.$NB_DATATYPE"
-
 # cleanup for special temp files
+NB_EditFile="/tmp/nb_entry$$.*"
 tmp_files="$NB_EditFile"
 [ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
@@ -797,6 +795,8 @@ if [ -z "$NB_EntryTitle" ]; then
 fi
 if [ -z "$usr_body" ]; then
 	echo "editing body ..."
+	# entry's new file for editing
+	NB_EditFile="/tmp/nb_entry$$.$NB_DATATYPE"
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
