@@ -156,9 +156,9 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>pagination</li>
 
-   <li>permalinks</li>
+   <li>permanent links</li>
 
-   <li>RSS syndication (comes with RSS 1.0 (RDF) format)</li>
+   <li>RSS syndication (comes with RSS 2.0 and 1.0 formats)</li>
 
    <li>Atom syndication (comes with 0.3 format)</li>
 
@@ -178,13 +178,17 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>per-weblog configuration to override global defaults (blog.conf)</li>
 
+   <li>intelligent build system, only rebuilds relative parts for a modified entry</li>
+
+   <li>simple cache system, for faster content generation</li>
+
    <li>auto-detection of weblog from current directory</li>
 
    <li>no dependency on any javascript, server-side scripting, or server-side includes</li>
 
    <li>no dependency on any special database (uses flat-file)</li>
 
-   <li>multi-platform portability (or wherever there's bash)</li>
+   <li>multi-platform portability (at least where there's bash and the required commands)</li>
  </ul>
 
  <h2><a name="3" id="3">3. Installation</a></h2>To install nanoblogger: 
@@ -213,7 +217,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
  <h2><a name="4" id="4">4. Requirements</a></h2>Programs:
 
  <p>
-   bash, cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap
+   bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap
  </p>
 
  <p>* = GNU version recommended, but not required</p>
@@ -257,12 +261,19 @@ nb --blogdir [myblog_dir] --configure -u all
 	</pre>
  This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
+ <p><b>Setting the Browser</b></p>
+
+ <p>
+   The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em>
+   is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em>
+   variable in your bash environment. In Mac OS X, you would set this to "open".
+
  <p><b>Setting the Editor</b></p>
 
  <p>
-   The editor defaults to the <em>EDITOR</em> variable in your shell's environment, but falls back on vi when no <em>EDITOR</em>
+   The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em>
    is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the
-   <em>EDITOR</em> variable in your shell's environment.
+   <em>EDITOR</em> variable in your bash environment.
  </p>
 
  <p><b>Setting the Date Format for New Entries</b></p>
@@ -285,7 +296,7 @@ DATE_LOCALE="$LANG"
 
  <p>
    <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a
-   non-standard exstension of the date command.  You'll have to set this manually, if the date command on your system doesn't support it or see
+   non-standard extension of the date command.  You'll have to set this manually, if the date command on your system doesn't support it or see
    if your system administrator will install GNU date for you.
  </p>
  <p>
@@ -367,7 +378,7 @@ BLOG_CSS="styles/nb_rusted.css"
  <p><b>Toggling the Display of Permanent Links</b></p>
 
  <p>
-   <em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display the entry's permanent link.
+   <em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.
  </p>
 
  <p><b>Building Individual Archives for Each Entry</b></p>
@@ -625,7 +636,7 @@ nb [-b blog_dir] -c 1 -d cat
      </tr>
      <tr>
         <td align="left">$NB_EntryPermalink</td>
-        <td align="left">entry's permalink</td>
+        <td align="left">entry's permanent link</td>
      </tr>
      <tr>
         <td align="left">$NB_EntryTitle</td>
@@ -667,6 +678,10 @@ nb [-b blog_dir] -c 1 -d cat
       <tr>
          <td align="left">$BLOG_URL</td>
          <td align="left">weblog's URL</td>
+      </tr>
+      <tr>
+  	 <td align="left">$NB_ArticleLinks</td>
+	 <td align="left">links to articles</td>
       </tr>
       <tr>
          <td align="left">$NB_Month_Links*</td>
@@ -711,16 +726,23 @@ nb [-b blog_dir] -c 1 -d cat
      Monthly plugins are stored in plugin/archive/monthly directory and are loaded for each month.
    </p>
 
-   <p><b>Entry Plugins</b></p>
+   <p><b>General Entry Plugins</b></p>
 
    <p>
      Entry plugins are stored in the plugins/entry directory and are loaded for each entry processed.
    </p>
 
-   <p><b>Postformat Plugins</b></p>
+   <p><b>Entry-body Plugins</b></p>
 
    <p>
-     Postformat plugins are stored in the plugins/postformat directory and are loaded after each page generated.
+     Entry-body plugins are stored in the plugins/entry/body directory and are loaded for each entry modified.
+     They typically modify the NB_EntryBody, variable.
+   </p>
+
+   <p><b>Post-format Plugins</b></p>
+
+   <p>
+     Post-format plugins are stored in the plugins/postformat directory and are loaded after each page generated.
    </p>
  </p>
   <p>
@@ -791,7 +813,7 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">requires cal</td>
      </tr>
      <tr>
-       <td align="left">entry/auto_break.sh</td>
+       <td align="left">entry/body/auto_break.sh</td>
        <td align="left">converts blank lines to html paragraph breaks</td>
        <td align="left">AUTO_FORMAT</td>
        <td align="left">$NB_EntryBody</td>
@@ -805,7 +827,7 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">none</td>
      </tr>
      <tr>
-       <td align="left">entry/moods.sh</td>
+       <td align="left">entry/body/moods.sh</td>
        <td align="left">converts mood variables into smiley icons</td>
        <td align="left">AUTO_FORMAT, MOODS_URL</td>
        <td align="left">$NB_EntryBody</td>
@@ -962,10 +984,10 @@ ARTICLEDIR=../[blog_dir]/
       </ul>
 
       <p>When you have comments working you can download my modified set of CGIComment templates[1] that have been designed to
-      integrate with NanoBlogger's default stylesheets.</p>
+      integrate with NanoBlogger's default style sheets.</p>
 
   <h2><a name="12" id="12">12. Importing Entries</a></h2>
-	<p>Importing entries from another weblogging system is not entirely impossible.  This section hopefully contains the right
+	<p>Importing entries from another web-logging system is not entirely impossible.  This section hopefully contains the right
 	information to make it possible.</p>
 
  <p><b>The Format of an Entry</b></p>
@@ -1029,7 +1051,17 @@ nb [-b blog_dir] -u all
     	Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em> and set <em>BLOG_DIR</em> to your weblog directory.
    </p>
 
-   <p><b>Add an introduction to your Weblog</b></p>
+   <p><b>Adding Shell Scripting to your Templates</b></p>
+   <p>
+   	It's possible to use command substitution in your templates, using one of the following forms:
+		<pre>
+	$(command)
+or
+	`command`
+		</pre>
+	This is mostly useful for small and simple dynamic changes you wish to make to the content generated from the templates.
+   </p>
+   <p><b>Add an Introduction to your Weblog</b></p>
    <p>
 	Create a text file in your weblog directory called, "intro.txt". Edit the text file to say
 	what you want, then add the following to the main template:<br />
