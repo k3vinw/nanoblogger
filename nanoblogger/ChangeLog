@@ -1,5 +1,8 @@
 2004-06-15  n1xt3r  <n1xt3r@bluefalcon>
 
+	* default/templates/rdf_catfeedentry.xml, ChangeLog:
+	Replaced NB_EntryID with NB_EntryTime.
+
 	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
 	- (read_entry): Removed NB_EntryDay.
 	- (read_entry): Prepended letter to NB_EntryID to follow w3c recommendations.

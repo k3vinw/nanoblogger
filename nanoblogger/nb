@@ -16,7 +16,7 @@ NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
 # prompt to use when asking something.
 NB_PROMPT=": "
 
-# Current path
+# current path
 CURR_PATH="$PWD"
 
 # directory name to store archives
@@ -42,6 +42,9 @@ VERBOSE="1"
 
 # automatically set time zone using 'date +%z'
 tzd_mm=`date +%z |cut -c4-5`; AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
+
+# prepended to entry's html id
+x_id="e"
 
 nb_msg(){
 [ "$VERBOSE" = "0" ] ||
@@ -259,8 +262,7 @@ read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
 	month=`echo "$entry" |cut -c1-7`
-	NB_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
-	NB_EntryID="e$NB_EntryTime"
+	NB_EntryID="$x_id$entry"
 	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"

@@ -38,7 +38,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
 			for entry in $MONTH_LINE ; do
 				entry_year=`echo $entry |cut -c1-4`
-				NB_EntryID=e`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
+				NB_EntryID="$x_id$entry"
 				entry_month=`echo $entry |cut -c6-7`
 				entry_day=`echo $entry |cut -c9-10 |sed -e '/^0/ s///g'`
 				curr_month=`date +%m`
