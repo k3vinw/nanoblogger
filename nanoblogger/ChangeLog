@@ -1,3 +1,10 @@
+2004-03-17  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, default/blog.conf, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, nb, nb.conf:
+	- Added new build_catfeeds function to nb.
+	- Added new CAT_FEEDS variable to blog.conf.
+	- Added new RDF templates for category feeds.
+
 2004-03-14  n1xt3r  <n1xt3r@scorcher>
 
 	* nb.conf, ChangeLog, nb: - Fixed BLOG_DIR bug.

@@ -508,9 +508,7 @@ fi
 nb_msg "generating index pages ..."
 load_plugins plugins
 build_archives
-if [ "$FULL_PERMALINKS" = "1" ]; then
-	[ ! -d "$BLOG_DIR/$PERMALINKS" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
-fi
+[ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
 # build main index and feed
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
 make_archive current nocat "$FEEDENTRY_TEMPLATE" news."$NB_SYND_FILETYPE"
@@ -607,8 +605,7 @@ import_file(){
 [ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
 if [ -z "$NB_EntryAuthor$NB_EntryTitle" ]; then
-	NB_EntryAuthor="no author"
-	NB_EntryTitle="Untitled"
+	NB_EntryAuthor="Anonymous"; NB_EntryTitle="Untitled"
 fi
 NB_EntryBody=`cat "$entry_file"`
 # create new timestamp
