@@ -343,7 +343,7 @@ fi
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file, '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-if [ "$weblog_update" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
+if [ "$USR_QUERY" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
 	# preserve content of the source, but let plugins modify it
 	: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 	# escape content of $NB_Entries so no execution takes place
@@ -389,7 +389,8 @@ for entry in $ARCHIVE_LIST; do
 	load_template "$NB_TEMPLATE_DIR/$archive_template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$PARTS_FILE"
-		build_permalink
+		[ "$archive_template" = "$PERMALINKENTRY_TEMPLATE" ] &&
+			build_permalink
 		BLOG_HTML=
 	fi
 done
@@ -446,7 +447,7 @@ for relative_entry in $UPDATE_CATLIST; do
 	done
 done
 [ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
-if [ "$weblog_update" = all ]; then query_db; CAT_LIST="$db_categories"; fi
+if [ "$USR_QUERY" = all ]; then query_db; CAT_LIST="$db_categories"; fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
@@ -552,26 +553,24 @@ build_archives(){
 load_plugins archive
 nb_msg "generating archives ..."
 build_catarchives
-if [ "$weblog_update" = all ]; then
+if [ "$USR_QUERY" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
-	# rebuild current month archive
-	month=`date "+%Y-%m"`; this_month="$month"
-	if [ -z "$weblog_update" ]; then
+	# build current month archive
+	month=`date "+%Y-%m"`
+	if [ -z "$USR_QUERY" ]; then
 		query_db "$month"; build_monthlyarchive
 	# or update archives based on a query match
 	else
-		db_query="$weblog_update"; query_db "$db_query"
+		db_query="$USR_QUERY"; query_db "$db_query"
 		UPDATE_LIST="$DB_RESULTS"
 	fi
 
 	# update relative monthly archives
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
 	for mod_month in $MOD_MONTHS; do
-		if [ "$mod_month" != "$this_month" ]; then
-			month="$mod_month"
-			query_db "$month"; build_monthlyarchive
-		fi
+		month="$mod_month"
+		query_db "$month"; build_monthlyarchive
 	done
 	# update relative entry archives
 	for mod_entry in $UPDATE_LIST; do
@@ -579,10 +578,6 @@ else
 			entry="$mod_entry"
 			read_entry "$NB_DATA_DIR/$entry"
 			load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
-			if [ ! -z "$BLOG_HTML" ]; then
-				echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
-				BLOG_HTML=
-			fi
 			build_permalink
 		fi
 	done
@@ -611,11 +606,11 @@ fi
 
 # build the weblog
 build_weblog(){
-[ -z "$weblog_update" ] && weblog_update="current"
+[ -z "$USR_QUERY" ] && USR_QUERY="current"
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
-if [ "$weblog_update" = all ]; then
+if [ "$USR_QUERY" = all ]; then
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
@@ -627,9 +622,9 @@ CACHE_LIST=`sort -u "$SCRATCH_FILE.cache_list"`
 update_cache list "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
-[ "$weblog_update" != main ] && build_archives
-if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
-	make_archive "$weblog_update" nocat "$PERMALINKENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
+[ "$USR_QUERY" != main ] && build_archives
+if [ "$USR_QUERY" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
+	make_archive "$USR_QUERY" nocat "$PERMALINKENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
@@ -651,8 +646,8 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-[ "$build_newblog" = 1 ] && weblog_update=all
-build_weblog "$weblog_update"
+[ "$build_newblog" = 1 ] && USR_QUERY=all
+build_weblog "$USR_QUERY"
 }
 
 # edit $BLOG_CONF
@@ -770,7 +765,7 @@ build_weblog
 
 # list entries and categories
 list_weblog(){
-query_db; db_query="$usr_query"
+query_db; db_query="$USR_QUERY"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = cat ]; then
 	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
@@ -1010,7 +1005,7 @@ cat <<-EOF
 
 	 -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
 	 
-	 --list and --update accepts regular expressions to match dates of entries.
+	 --list and --update accepts regular expressions to match entries by date.
 	 date = YYYY-MM-DD, YYYY-MM, ^YYYY
 
 	Examples:
@@ -1069,7 +1064,7 @@ while [ $# -gt 0 ]; do
 					check_config; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-l|--list)		usr_query="$2"; shift
+		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog "$db_query";;
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
@@ -1082,8 +1077,8 @@ while [ $# -gt 0 ]; do
 		--template)		check_arg; usr_template="$2"; shift;;
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; usr_title="$2"; shift;;
-		-u|--update)		weblog_update="$2"; shift
-					check_config; build_weblog "$weblog_update";; 
+		-u|--update)		USR_QUERY="$2"; shift
+					check_config; build_weblog "$USR_QUERY";; 
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
