@@ -102,7 +102,7 @@ FILTER_VAR="$1"
 [ ! -z "$FILTER_VAR" ] || FILTER_VAR="%B %d, %Y %l:%M %p"
 # it would've been nice to use the date command's description feature here
 [ -z "$DATE_LOCALE" ] || LANG="$DATE_LOCALE" date +"$FILTER_VAR"
-date +"$FILTER_VAR"
+[ ! -z "$DATE_LOCALE" ] || date +"$FILTER_VAR"
 }
 
 # changes suffix of file
@@ -110,8 +110,7 @@ chg_suffix(){
 filename="$1"
 suffix="$2"
 old_suffix=`echo $filename |cut -d"." -f2`
-[ -z "$suffix" ] ||
-	NB_FILETYPE="$suffix"
+[ -z "$suffix" ] || NB_FILETYPE="$suffix"
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
