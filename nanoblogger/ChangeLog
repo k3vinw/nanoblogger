@@ -1,9 +1,17 @@
+2004-06-26  n1xt3r  <n1xt3r@bluefalcon>
+
+	* plugins/blog_status.sh, ChangeLog, default/blog.conf, docs/nanoblogger.html:
+	- Added New "Managing Entries and Categories" section to manual.
+	- Added some CSS code to manual to enhance readability.
+
+	Martin Slavík <msl@actinet.cz>
+	- blog_status.sh plugin: Fixed LAST_UPDATED to use DATE_FORMAT.
+
 2004-06-25  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/templates/month_archive.htm, nb:
 	(delete_blog), (find_categories):
-	- Fixed delete bug when deleting entry from category.
-	- Fixed update bug when deleting a category.
+	- Fixed typo in command for deleting entry.
 	- Filtered CAT_LIST for cleaner update of categories.
 
 	* ChangeLog, default/archives/monthly/2004-01.html, default/atom.xml, default/blog.conf, default/index.html, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/fortune.htm, default/styles/nb_rusted.css, default/templates/main_index.htm, default/templates/month_archive.htm, nb, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/rss.sh:
