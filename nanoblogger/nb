@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="Pre3.1"
+VERSION="3.1"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
