@@ -1,3 +1,19 @@
+2004-10-20 23:26  n1xt3r
+
+	* nb, docs/nanoblogger.html: Ken Foskey <foskey@optushome.com.au>:
+	  Added example for remote publishing section of manual.
+
+2004-10-19 23:06  n1xt3r
+
+	* docs/nanoblogger.html: - Added PLUGIN_DIR to "Settings and
+	  Configuration" section of manual.  - Fixed some minor issues with
+	  CSS code of manual.
+
+2004-10-19 02:58  n1xt3r
+
+	* ChangeLog, docs/nanoblogger.html: Updated the manual to match
+	  some major changes done to the code base.
+
 2004-10-13 00:18  n1xt3r
 
 	* nb, default/blog.conf, default/styles/mt_clean.css,

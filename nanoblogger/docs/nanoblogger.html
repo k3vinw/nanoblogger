@@ -101,37 +101,37 @@ span.copyright {
 
  <p><b>Table of Contents</b></p>
 
- <ul>
-   <li><a href="#cr1">Introduction</a></li>
+ <table summary="toc" style="border:0px;">
+   <tr><td>1.</td><td><a href="#1">Introduction</a></td></tr>
 
-   <li><a href="#cr2">Features</a></li>
+   <tr><td>2.</td><td><a href="#2">Features</a></td></tr>
 
-   <li><a href="#cr3">Installation</a></li>
+   <tr><td>3.</td><td><a href="#3">Installation</a></td></tr>
 
-   <li><a href="#cr4">Requirements</a></li>
+   <tr><td>4.</td><td><a href="#4">Requirements</a></td></tr>
 
-   <li><a href="#cr5">Getting Started</a></li>
+   <tr><td>5.</td><td><a href="#5">Getting Started</a></td></tr>
 
-   <li><a href="#cr6">Settings and Configuration</a></li>
+   <tr><td>6.</td><td><a href="#6">Settings and Configuration</a></td></tr>
 
-   <li><a href="#cr7">Managing Entries and Categories</a></li>
+   <tr><td>7.</td><td><a href="#7">Managing Entries and Categories</a></td></tr>
 
-   <li><a href="#cr8">Templates and Placeholders</a></li>
+   <tr><td>8.</td><td><a href="#8">Templates and Placeholders</a></td></tr>
 
-   <li><a href="#cr9">Plugins</a></li>
+   <tr><td>9.</td><td><a href="#9">Plugins</a></td></tr>
 
-   <li><a href="#cr10">Publishing</a></li>
+   <tr><td>10.</td><td><a href="#10">Publishing</a></td></tr>
 
-   <li><a href="#cr11">Adding Support for Comments</a></li>
+   <tr><td>11.</td><td><a href="#11">Adding Support for Comments</a></td></tr>
 
-   <li><a href="#cr12">Importing Entries</a></li>
+   <tr><td>12.</td><td><a href="#12">Importing Entries</a></td></tr>
 
-   <li><a href="#cr13">Tips and Tricks</a></li>
+   <tr><td>13.</td><td><a href="#13">Tips and Tricks</a></td></tr>
 
-   <li><a href="#cr14">Credits</a></li>
- </ul>
+   <tr><td>14.</td><td><a href="#14">Credits</a></td></tr>
+ </table>
 
- <h2><a name="cr1" id="cr1">Introduction</a></h2>
+ <h2><a name="1" id="1">1. Introduction</a></h2>
  NanoBlogger is a small weblog engine written in Bash for the command line. It
  uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
 
@@ -141,7 +141,7 @@ span.copyright {
 nb [<u>-b blog_dir</u>] [<u>options</u>]
 	</pre>
 
- <h2><a name="cr2" id="cr2">Features</a></h2>
+ <h2><a name="2" id="2">2. Features</a></h2>
 
  <ul>
    <li>intuitive commandline interface</li>
@@ -187,7 +187,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
    <li>some small effort at shell portability</li>
  </ul>
 
- <h2><a name="cr3" id="cr3">Installation</a></h2>To install nanoblogger: 
+ <h2><a name="3" id="3">3. Installation</a></h2>To install nanoblogger: 
 
 	<pre>
 1. download the gzipped tar archive from the web site[1]
@@ -210,13 +210,13 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 	nb [-b blog_dir] -u all
 	</pre>
 
- <h2><a name="cr4" id="cr4">Requirements</a></h2>Programs:
+ <h2><a name="4" id="4">4. Requirements</a></h2>Programs:
 
  <p>
    bash, cat, cp, cut, dirname, date, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap
  </p>
 
- <h2><a name="cr5" id="cr5">Getting Started</a></h2>
+ <h2><a name="5" id="5">5. Getting Started</a></h2>
  <p><b>Creating a New Weblog</b></p>
 
  <p>
@@ -224,12 +224,20 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
  </p>
 
 	<pre>
-nb --blogdir [myblog_dir] --add
+./nb --blogdir [myblog_dir] --add
 	</pre>
 
 where <em>myblog_dir</em> is a non-existant directory. This is will create a new directory, copy the default files over, and then
 let you edit the weblog's configuration. Multiple weblogs can be created this way.  Running the same command again on an existing weblog
 directory will add a new entry.
+
+ <p>For easier invocation, add nb to your $PATH in Bash:</p>
+
+ 	<pre>
+export PATH="$PATH:[nb_dir]/nb"
+	</pre>
+
+where <em>nb_dir</em> is the path that NanoBlogger was installed to.
 
  <p>To set a default weblog directory:</p>
 
@@ -240,7 +248,7 @@ directory will add a new entry.
 	BLOG_DIR="$HOME/public_html/[myblog_dir]"
 	</pre>
 
- <h2><a name="cr6" id="cr6">Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
+ <h2><a name="6" id="6">6. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
 	<pre>
 nb --blogdir [myblog_dir] --configure -u all
 	</pre>
@@ -345,7 +353,7 @@ nb --blogdir [myblog_dir] --configure -u all
    This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.
  </p>
 
- <h2><a name="cr7" id="cr7">Managing Entries and Categories</a></h2>
+ <h2><a name="7" id="7">7. Managing Entries and Categories</a></h2>
 
  Commands to manage entries and categories.
 
@@ -490,7 +498,7 @@ nb [-b blog_dir] -c 1 -t "News" -e cat
 nb [-b blog_dir] -c 1 -d cat
 	</pre>
 
- <h2><a name="cr8" id="cr8">Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
+ <h2><a name="8" id="8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
 
  <div class="tables">
    <table border="0" cellspacing="4" cellpadding="2" summary="templates">
@@ -635,7 +643,7 @@ nb [-b blog_dir] -c 1 -d cat
    * = generated by plugin
  </div>
 
- <h2><a name="cr9" id="cr9">Plugins</a></h2>
+ <h2><a name="9" id="9">9. Plugins</a></h2>
 
  <p><h3>Types of Plugins</h3></p>
 
@@ -798,7 +806,7 @@ nb [-b blog_dir] -c 1 -d cat
  </div>
    To disable an individual plugin, rename the plugin's extension from ".sh" to ".off".
 
- <h2><a name="cr10" id="cr10">Publishing</a></h2>
+ <h2><a name="10" id="10">10. Publishing</a></h2>
 
  <p><b>Setting the Publish Command</b></p>
 
@@ -838,7 +846,7 @@ mput *
 	To do this you can set <em>BLOG_PUBLISH_CMD</em> to null. e.g. BLOG_PUBLISH_CMD=""
  </p>
 
- <h2><a name="cr11" id="cr11">Adding Support for Comments</a></h2>
+ <h2><a name="11" id="11">11. Adding Support for Comments</a></h2>
 
  <p>
 	To add support for comments, you can use a cgi script called CGIComment [2].  CGIComment is a nice solution because it
@@ -898,7 +906,7 @@ ARTICLEDIR="[blog_dir]"
       <p>When you have comments working you can download my modified set of CGIComment templates[1] that have been designed to
       integrate with NanoBlogger's default stylesheets.</p>
 
-  <h2><a name="cr12" id="cr12">Importing Entries</a></h2>
+  <h2><a name="12" id="12">12. Importing Entries</a></h2>
 	<p>Importing entries from another weblogging system is not entirely impossible.  This section hopefully contains the right
 	information to make it possible.</p>
 
@@ -955,7 +963,7 @@ This is my new entry ...
 nb [-b blog_dir] -u all
 	</pre>
 
- <h2><a name="cr13" id="cr13">Tips and Tricks</a></h2>
+ <h2><a name="13" id="13">13. Tips and Tricks</a></h2>
 
    <p><b>Set a Default Weblog Directory</b></p>
    <p>
@@ -985,7 +993,7 @@ $(<"$BLOG_DIR/intro.txt")
      you can have a simple weblog-like page, that's updated whenever news.htm changes.
    </p>
 
- <h2><a name="cr14" id="cr14">Credits</a></h2>
+ <h2><a name="14" id="14">14. Credits</a></h2>
  <p>
    Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik
    &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and

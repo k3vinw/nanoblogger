@@ -5,6 +5,7 @@
 # NOTES: because entries get placed in variables, it's possible to produce
 # non-fatal errors when the entry contains incomplete command subsitutions.
 # e.g. ` and $(
+
 # nanoblogger's version.
 VERSION="CVS-3.0"
 
