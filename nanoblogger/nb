@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="2.8"
+VERSION="CVS-2.9"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
