@@ -1,3 +1,8 @@
+2004-05-29  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, nb (move_entry):
+	Fixed corruption cuased to category's database.
+
 2004-05-28  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/rss.sh:

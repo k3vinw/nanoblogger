@@ -708,10 +708,6 @@ nb_msg "moving blog entry id('s): $move_num, to category id('s): $cat_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 query_db "$db_query" "$db_catquery"
 for cat_db in $db_categories; do
-	cat_title=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
-	cat_entries=`sed 1d "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
-	echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
-	[ ! -z "$cat_entries" ] && echo "$cat_entries" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 	for entry_id in $UPDATE_LIST; do
 		Move_EntryFile="$entry_id"
 		if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Move_EntryFile" ]; then
