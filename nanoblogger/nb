@@ -190,23 +190,23 @@ else
 	db_categories="$db_catquery"
 fi
 if [ "$db_categories" = "cat_*.$NB_DBTYPE" ]; then db_categories=; fi
-	# list amount of entries based on db_limit
-	filter_limit(){
-		[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
-		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
-		db_limit=; db_offset=
-		}
-        filter_query(){ grep "$db_query." |sort -ru; } # allow for empty $db_query
-	# list all entries
-        list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
-	# include categorized entries
-	cat_db(){
-		[ -z "$db_catquery" ] && list_db
-		for cat_db in $db_categories; do
-			[ ! -z "$cat_db" ] &&
-				grep "[\.]$NB_DATATYPE" "$cat_db"
-		done
-		}
+# list amount of entries based on db_limit
+filter_limit(){
+	[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
+	[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
+	db_limit=; db_offset=
+	}
+filter_query(){ grep "$db_query." |sort -ru; } # allow for empty $db_query
+# list all entries
+list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
+# include categorized entries
+cat_db(){
+	[ -z "$db_catquery" ] && list_db
+	for cat_db in $db_categories; do
+		[ ! -z "$cat_db" ] &&
+			grep "[\.]$NB_DATATYPE" "$cat_db"
+	done
+	}
 if [ "$db_query" = all ] || [ -z "$db_limit" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = current ]; then
@@ -216,10 +216,9 @@ elif [ "$db_query" = max ]; then
 else
 	DB_RESULTS=`cat_db |filter_query`
 fi
-# try to clear bad data
-if [ "$DB_RESULTS" = "$NB_DATA_DIR/*.$NB_DATATYPE" ]; then
-	DB_RESULTS=
-fi
+# clear DB_RESULTS on mismatch
+DB_RESET=`echo "$DB_RESULTS" |grep -c "*.$NB_DATATYPE"`
+[ "$DB_RESET" -ge 1 ] && DB_RESULTS=
 db_query=; cd "$CURR_PATH"
 }
 
@@ -259,7 +258,7 @@ if [ -f "$BLOG_FILE" ]; then
 			$BLOG_TEMPLATE
 		TMPL
 	EOF
-	BLOG_HTML=$(. "$SCRATCH_FILE")
+	BLOG_HTML=`. "$SCRATCH_FILE"`
 else
 	die "template file, '$BLOG_FILE' doesn't exist! goodbye."
 fi
@@ -301,6 +300,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
+	load_plugins entry
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
@@ -309,7 +309,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
 	fi
-	load_plugins entry
+	#load_plugins entry
 fi
 }
 
@@ -589,8 +589,8 @@ update_cache(){
 cache_update="$1"
 CACHE_LIST="$2"
 nb_msg "updating cache ..."
+> "$SCRATCH_FILE".cache_list
 if [ "$cache_update" = list ]; then
-	> "$SCRATCH_FILE".cache_list
 	for cache_entry in $CACHE_LIST; do
 		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
@@ -638,8 +638,8 @@ paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."
 
 # add a new entry
 add_entry(){
-New_EntryFile=$(NB_TimeStamp).$NB_DATATYPE
-NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
+New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
+NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
@@ -676,7 +676,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 		die "no changes were made! goodbye."
 	fi
 fi
-NUMVAR=$(echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
+NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id."
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"; ENTRY_LIST="$DB_RESULTS"
@@ -716,10 +716,10 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	done
 	cat_num=; [ ! -z "$UPDATE_LIST" ] && build_weblog; exit 0
 fi
-NUMVAR=$(echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
+NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 if [ ! -z "$cat_list" ]; then
-	CATNUMVAR=$(echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
+	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 	[ -z "$CATNUMVAR" ] &&
 		die "must specify a single category when deleting entries from a category!"
 fi
@@ -729,7 +729,7 @@ for entry_id in $NUMVAR; do
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id(s): $delete_num"
 done
 nb_msg "deleting weblog entry id(s): $delete_num$cat_msg ..."
-UPDATE_LIST=$(for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done)
+UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
@@ -810,7 +810,7 @@ done
 
 # move entries into other categories
 move_entry(){
-NUMVAR=$(echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
+NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 query_db
 for entry_id in $NUMVAR; do
@@ -819,7 +819,7 @@ for entry_id in $NUMVAR; do
 done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
 nb_msg "moving weblog entry id(s): $move_num, to category id(s): $cat_num ..."
-UPDATE_LIST=$(for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done)
+UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
 	Move_EntryFile="$entry_id"
