@@ -1,3 +1,9 @@
+2004-04-20  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, default/templates/rdf.xml:
+	- Added references for DOCTYPE and ENTITY.
+	- Added admin module and set admin:generatorAgent to NanoBlogger.
+
 2004-04-18  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/atom.sh, plugins/rss.sh:

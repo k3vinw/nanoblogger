@@ -513,7 +513,7 @@ nb_msg "generating index pages ..."
 [ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
 # build main index
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-if [ "$blog_update" = "all" ] && [ "$FULL_PERMALINKS" = "1" ]; then
+if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
