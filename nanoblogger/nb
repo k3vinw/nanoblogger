@@ -47,6 +47,13 @@ AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 # letter to prepend to entry's html id tag
 x_id=e
 
+nb_edit(){
+EDIT_FILE="$1"
+$EDITOR "$EDIT_FILE"
+echo "press enter to continue"
+read -p "$NB_PROMPT" enter_key
+}
+
 nb_msg(){
 [ "$VERBOSE" = 0 ] ||
 	cat <<-EOF
@@ -308,8 +315,6 @@ fi
 # write entry to file
 write_entry(){
 ENTRY_FILE="$1"
-[ -z "$NB_EntryBody" ] &&
-	die "NB_EntryBody contains no data! ...aborting."
 cat > "$ENTRY_FILE" <<-EOF
 	TITLE: $NB_EntryTitle
 	AUTHOR: $NB_EntryAuthor
@@ -650,7 +655,7 @@ nb_msg "new weblog entry added to '$BLOG_TITLE'."
 
 # edit $BLOG_CONF
 config_weblog(){
-$EDITOR "$BLOG_CONF"
+nb_edit "$BLOG_CONF"
 # check if file's been modified since opened
 [ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
 deconfig; load_config
@@ -684,7 +689,7 @@ done
 > "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
+	nb_edit "$NB_DATA_DIR/$Edit_EntryFile"
 	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 	fi
@@ -884,7 +889,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 	case $choice in
 	[Yy]|"")
 		nb_msg "configuring new weblog ..."
-		$EDITOR "$BLOG_DIR"/blog.conf;;
+		nb_edit "$BLOG_DIR"/blog.conf;;
 	[Nn])
 		nb_msg "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later."
 	esac
@@ -945,7 +950,7 @@ if [ -z "$usr_body" ]; then
 	echo "editing body ..."
 	# entry's new file for editing
 	NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
-	$EDITOR "$NB_EditFile"
+	nb_edit "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
 		NB_EntryBody=$(< "$NB_EditFile")
