@@ -585,10 +585,9 @@ cache_update="$1"
 CACHE_LIST="$2"
 cache_limit="$3"
 nb_msg "updating cache ..."
-if [ "$cache_update" = add ] && [ ! -z "$CACHE_LIST" ]; then
+if [ "$cache_update" = add ]; then
 	> "$SCRATCH_FILE".cache_list
 	for cache_entry in $CACHE_LIST; do
-		#echo "adding $cache_entry to CACHE_LIST ..."
 		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
 	done
@@ -596,7 +595,6 @@ if [ "$cache_update" = add ] && [ ! -z "$CACHE_LIST" ]; then
 else
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery" "$cache_limit"
 	for cache_entry in $DB_RESULTS; do	
-		#echo "updating $cache_entry in cache ..."
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
 	done
 fi
@@ -615,10 +613,9 @@ if [ "$weblog_update" = all ]; then
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
 fi
-#[ "$weblog_update" = cache ] && { weblog_update=all; update_cache all; }
 update_cache all
 load_plugins
-update_cache all
+[ "$weblog_update" != main ] && update_cache all
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != main ] && build_archives
