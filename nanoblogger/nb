@@ -799,7 +799,7 @@ nb_main(){
 # ask to create a new blog directory
 if [ ! -d "$BLOG_DIR" ]; then
 	blog_update="all"
-	echo "blog directory '$BLOG_DIR' doesn't exist! bye."
+	echo "blog directory '$BLOG_DIR' doesn't exist!"
 	echo "would you like to create it now? [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in

@@ -1,5 +1,8 @@
 2004-05-06  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, nb (build_archives):
+	Replaced generation of "cat_n.db.htm" with "cat_n.htm" in $PARTS_DIR.
+
 	* ChangeLog, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/fortune.htm, default/parts/news.htm:
 	Updated support information in the default entry.
 
