@@ -365,6 +365,7 @@ build_monthlyarchive(){
 		"$BLOG_DIR/$MONTHLY_DIR/$month.$NB_FILETYPE"
 	fi
 }
+
 # create all the monthly archives
 cycle_months_for(){
 	which_part="$1"
