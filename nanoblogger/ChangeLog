@@ -1,3 +1,64 @@
+2004-11-09 03:10  n1xt3r
+
+	* default/blog.conf, default/templates/permalink_entry.htm,
+	  docs/nanoblogger.html, plugins/blog_links.sh,
+	  plugins/postformat/tidy.sh: - Fixed bad character encoding in the
+	  defaults of the tidy.sh plugin..  - Added language setting to
+	  "Settings and Configuration", section of manual.
+
+2004-11-07 21:06  n1xt3r
+
+	* nb, default/atom.xml, default/blog.conf, default/index.html,
+	  default/index.xml, default/archives/cat_1.html,
+	  default/archives/index.html, default/articles/example.txt,
+	  default/data/2004-01-18T17_12_12.txt,
+	  default/data/2004-11-07T18_52_16.txt, default/data/cat_1.db,
+	  default/parts/2004-01.html, default/parts/2004-11.html,
+	  default/parts/archive_links.html, default/parts/blog_status.html,
+	  default/parts/cal-2004-01.html, default/parts/cal-2004-11.html,
+	  default/parts/cal.html, default/parts/cat_1.html,
+	  default/parts/fortune.html, default/parts/recent_entries.html,
+	  default/templates/main_index.htm, docs/nanoblogger.html,
+	  plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh,
+	  plugins/calendar.sh, plugins/rss.sh, plugins/zyx_articles.sh,
+	  plugins/archive/monthly/monthly-cal.sh,
+	  plugins/entry/category_links.sh: - Improved speed and use of sed
+	  commands, removed unecessary piping.	- Added many updates to the
+	  manual.
+
+2004-11-02 23:51  n1xt3r
+
+	* nb, default/blog.conf, default/templates/main_links.htm,
+	  plugins/zyx_articles.sh: Fixed bug that caused the wrong
+	  configuration file to load when BLOG_DIR was specified globally.
+
+2004-11-01 01:02  n1xt3r
+
+	* nb, default/templates/category_archive.htm,
+	  default/templates/main_index.htm,
+	  default/templates/main_links.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm, plugins/blog_status.sh,
+	  plugins/calendar.sh, plugins/zyx_articles.sh,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/monthly/monthly-cal.sh: Integrated $BASE_URL into
+	  the template's links, to improve relative links.
+
+2004-10-31 16:11  n1xt3r
+
+	* nb, default/blog.conf, default/templates/main_index.htm,
+	  docs/nanoblogger.html, plugins/blog_status.sh,
+	  plugins/calendar.sh, plugins/zyx_articles.sh,
+	  plugins/archive/monthly/monthly-cal.sh: - Improved default of
+	  date format, more portable.  - Vastly improved regex in grep
+	  commands, more portable.
+
+2004-10-30 22:02  n1xt3r
+
+	* ChangeLog, nb, docs/nanoblogger.html: - Improved table of
+	  contents, numbered sections.	- Added tips for easier invocation
+	  of "nb".
+
 2004-10-20 23:26  n1xt3r
 
 	* nb, docs/nanoblogger.html: Ken Foskey <foskey@optushome.com.au>:
@@ -32,12 +93,11 @@
 2004-10-05 00:52  n1xt3r
 
 	* ChangeLog, nb, default/atom.xml, default/index.html,
-	  default/index.xml, default/archives/2004-01.html,
-	  default/archives/cat_1.html, default/parts/2004-01.html,
-	  default/parts/archive_links.html, default/parts/blog_status.html,
-	  default/parts/cal-2004-01.html, default/parts/cal.html,
-	  default/parts/cat_1.html, default/parts/fortune.html,
-	  default/parts/recent_entries.html,
+	  default/index.xml, default/archives/cat_1.html,
+	  default/parts/2004-01.html, default/parts/archive_links.html,
+	  default/parts/blog_status.html, default/parts/cal-2004-01.html,
+	  default/parts/cal.html, default/parts/cat_1.html,
+	  default/parts/fortune.html, default/parts/recent_entries.html,
 	  default/templates/main_index.htm, docs/nanoblogger.html,
 	  plugins/articles.off, plugins/zyx_articles.sh: - Enabled the
 	  articles plugin by default.  - Added CSS to the user manual.
@@ -206,9 +266,8 @@
 
 2004-08-28 00:06  n1xt3r
 
-	* nb, default/archives.html, default/atom.xml, default/blog.conf,
-	  default/index.html, default/index.xml,
-	  default/archives/2004-01.html, default/archives/cat_1.html,
+	* nb, default/atom.xml, default/blog.conf, default/index.html,
+	  default/index.xml, default/archives/cat_1.html,
 	  default/data/2004-01-18T17_12_12.htm, default/data/cat_1.db,
 	  default/parts/2004-01.html, default/parts/archive_links.html,
 	  default/parts/blog_status.html, default/parts/cal-2004-01.html,

@@ -556,7 +556,7 @@ if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
-[ "$ABSOLUTE_LINKS" != "1" ] && BASE_URL=""
+[ "$ABSOLUTE_LINKS" != "1" ] && BASE_URL="./"
 nb_msg "generating main index page('s) ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"

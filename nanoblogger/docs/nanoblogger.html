@@ -284,7 +284,9 @@ DATE_LOCALE="$LANG"
  <p><b>Setting the Timezone for Syndication Feeds</b></p>
 
  <p>
-   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds.
+   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a
+   non-standard exstension of the date command.  You'll have to set this manually, if the date command on your system doesn't support it or see
+   if your system administrator will install GNU date for you.
  </p>
  <p>
    Example:
@@ -835,7 +837,7 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">validates HTML code</td>
        <td align="left">TIDY_ARGS</td>
        <td align="left">$NB_Tidy</td>
-       <td align="left">requires HTML Tidy</td>
+       <td align="left">requires HTML Tidy, overrides $BLOG_CHARSET</td>
      </tr>
      <tr>
        <td align="left">rss.sh</td>
@@ -930,7 +932,7 @@ tar xzf CGIComment-XX.tar.gz
         <li>Edit <em>cgi-bin/cgicomment.conf</em>, add or change:
 		<pre>
 BASE_DIR="../cgicomment/"
-ARTICLEDIR="../[blog_dir]/archives/"
+ARTICLEDIR="../[blog_dir]/"
 		</pre>
 	</li>
 
