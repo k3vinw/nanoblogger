@@ -268,47 +268,79 @@ nb --blogdir [myblog_dir] --configure -u all
  <p><b>Setting the Date Format for New Entries</b></p>
 
  <p>
-   <em>DATE_FORMAT</em> controls the look of a new entry's date. The default <em>DATE_FORMAT</em> uses <code>"%m.%d.%Y %H:%M"</code>
-   (a portable date string) which should produce: "11.07.2004 18:52". You can also specify the locale to be used for date command (see
-   the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous entries. Read the man pages of
-   the date command to see more on how to customize the format of the date command's output.
+   <em>DATE_FORMAT</em> specifies the date format to use for new entries. The default <em>DATE_FORMAT</em> uses
+   <code>"%m.%d.%Y %H:%M"</code> (a portable date string) which should produce: "11.07.2004 18:52". You can also specify the locale
+   to be used for date command (see the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous
+   entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.
+ </p>
+ <p>
+   Example:
+   <pre>
+DATE_FORMAT="%m.%d.%Y %H:%M"
+DATE_LOCALE="$LANG"
+   </pre>
  </p>
 
  <p><b>Setting the Timezone for Syndication Feeds</b></p>
 
  <p>
-   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. e.g. <code>BLOG_TZD="-0:500"</code> Sets the timezone to
-   EST time.
+   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds.
+ </p>
+ <p>
+   Example:
+   <pre>
+BLOG_TZD="-0:500"
+   </pre>
+ </p>
+
+ <p><b>Setting the Language</b></p>
+
+ <p>
+   <em>BLOG_CHARSET</em> sets the character encoding to be used for your weblog.
+ </p>
+ <p>
+   Example:
+   <pre>
+BLOG_CHARSET="iso-8859-1"
+   </pre>
  </p>
 
  <p><b>Setting the Web Address</b></p>
 
  <p>
-   <em>BLOG_URL</em> is used as the address for the weblog. Typically, you would set this to a remote address such as:
-   "http://myblogurl.com". Replacing <em>myblogurl.com</em> with the actual address of your weblog. The "/" is appended
-   automatically.
+   <em>BLOG_URL</em> should be set as the full URL to your weblog, excluding the index file and any
+   preceding "/".
  </p>
-
- <p><b>Enabling Generation of Absolute Links</b></p>
-
  <p>
-   <em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to disabled.
- </p>
-
- <p><b>Setting the Link for "Main"</b></p>
-
- <p>
-   <em>MAIN_LINK</em> is used as the navigational link for "main". The default is set to "index.html", for easier
-   local navigation.
+   Example:
+   <pre>
+BLOG_URL="http://my-site.com/weblog"
+   </pre>
  </p>
 
  <p><b>Setting the Style Sheet</b></p>
 
  <p>
-   <em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates. It provides an easy way to edit or
-   switch the style sheet's location without having to edit each template. It should be set in a similar fashion to
-   <em>MAIN_LINK</em>, 'BLOG_CSS="styles/nb_rusted.css"'. Style sheets are located in the <em>styles</em>
-   directory.
+   <em>BLOG_CSS</em> sets the style sheet to be used by your weblog. Style sheets are located in the
+   <em>styles</em> directory.
+ </p>
+ <p>
+   Example:
+   <pre>
+BLOG_CSS="styles/nb_rusted.css"
+   </pre>
+ </p>
+
+ <p><b>Enabling Generation of Absolute Links</b></p>
+
+ <p>
+   <em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to "0", disabled.
+ </p>
+
+ <p><b>Setting the Link for "Main"</b></p>
+
+ <p>
+   <em>MAIN_LINK</em> is used for the navigational link, "main". The default is set to "index.html".
  </p>
 
  <p><b>Setting the Author's Name</b></p>
@@ -321,13 +353,13 @@ nb --blogdir [myblog_dir] --configure -u all
  <p><b>Setting the Maximum Number of Entries to Display on the Main Page</b></p>
 
  <p>
-   <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page.
+   <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page. Defaults to "10".
  </p>
 
  <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
  
  <p>
-   <em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to <em>MAX_ENTRIES</em>.
+   <em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".
  </p>
 
  <p><b>Toggling the Display of Permanent Links</b></p>
