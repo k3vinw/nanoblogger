@@ -1,5 +1,8 @@
 2004-06-24  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, plugins/archive/master_index.sh:
+	Changed master_index.sh plugin to create archive_links.htm for $PARTS_DIR.
+
 	* nb, plugins/01_mymood.off, plugins/entry/moods.sh, ChangeLog:
 	Changed alt in <img /> tag from $mood_img to $mood_var.
 

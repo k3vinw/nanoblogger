@@ -12,7 +12,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$blog_update" = "all" ]; then
 	ENTRY_LIST="$DB_RESULTS"
 	for entry in $ENTRY_LIST; do
 		month=`echo "$entry" |cut -c1-7`
-		read_entry "$NB_DATA_DIR/$entry"; load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$ENTRYLINKS_TEMPLATE"
+		read_entry "$NB_DATA_DIR/$entry"
 		cat >> "$BLOG_DIR"/entry_links.tmp <<-EOF
 			<a href="$BLOG_URL/$MONTHLY_DIR/$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			`[ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }'`<br />

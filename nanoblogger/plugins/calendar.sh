@@ -10,9 +10,8 @@
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.htm"
 
 if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
-
-	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" cal`
-	[ ! -z "$CALENDAR" ] || CALENDAR=`cal`
+	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" cal $CAL_ARGS`
+	[ ! -z "$CALENDAR" ] || CALENDAR=`cal $CAL_ARGS`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 	DAYS=`echo "$CALENDAR" |sed 1,2d`
@@ -22,8 +21,8 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	query_db all
 	MONTH_LIST=`echo "$DB_RESULTS" |sort -r |grep '[-]'$curr_month'[-]'`
 
-	echo '<table border="0" cellspacing="4" cellpadding="0">' > "$PLUGIN_OUTFILE"
-	echo '<caption>'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
+	echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with links to days with entries">' > "$PLUGIN_OUTFILE"
+	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
 	for wd in $WEEK_DAYS ; do
 		echo '<th align="center"><span class="calendar">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
@@ -32,7 +31,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	for line in $NUM_DAY_LINES ; do
 		DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 		echo '<tr>' >> "$PLUGIN_OUTFILE"
-		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><span class="calendar"><\/span><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 		for dn in $DN_LINES ; do
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
@@ -46,11 +45,11 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
 				set_link="1"
 				dn='<a href="'$BLOG_URL'/'$MONTHLY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
-				echo '<td align="center"><span>'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done
 			if [ "$set_link" != "1" ] ; then
-				echo '<td align="center"><span>'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 		done
 		echo '</tr>' >> "$PLUGIN_OUTFILE"
