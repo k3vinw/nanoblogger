@@ -72,32 +72,26 @@ tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 [ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # loads global and user configurations
-# TODO: fix unconditional loading of default weblog's blog.conf
 load_config(){
-# always load global configs
-. "$BASE_DIR"/nb.conf
-# check for user's .nb.conf in their home directory
-[ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
-# auto-detect blog.conf from our cwd
-[ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
 # USR_BLOGDIR overrides BLOG_DIR
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
-# default BLOG_CONF
+# auto-detect blog.conf from our CWD
+[ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
 BLOG_CONF="$BLOG_DIR/blog.conf"
 # USR_BLOGCONF overrides BLOG_CONF
-[ ! -z "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
+[ -f "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
-[ ! -z "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
+[ -d "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
 # USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
-[ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
+[ -d "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
-[ ! -z "$BLOG_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
+[ -d "$BLOG_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
 # BLOG_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
-[ ! -z "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
+[ -d "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
 # USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
-[ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
+[ -d "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # where plugins are located and run by default
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
@@ -142,8 +136,9 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
-# die without a default directory structure
-check_blogdir(){
+# insure a sane configuration or die
+check_config(){
+load_config
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 [ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
@@ -805,7 +800,7 @@ case $choice in
 esac
 }
 
-# create a new entry, category  or weblog directory
+# create a new entry, category or weblog directory
 create_weblog(){
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
@@ -826,7 +821,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 		nb_msg "weblog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 	esac
 fi
-check_blogdir; load_config
+check_config
 # create a new category 
 if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
@@ -985,35 +980,38 @@ invalid_opt=`echo "$argument" |grep '^[--]$*'`
 while [ $# -gt 0 ]; do
 	[ $# -gt 1 ] && argument=$2
 	bad_argument=$1
-	load_config
+	# always load global configs
+	. "$BASE_DIR"/nb.conf
+	# check for user's .nb.conf in their home directory
+	[ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
 	case "$1" in
-		-a|--add)		create_weblog;;
+		-a|--add)		load_config; create_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-B|--body)		check_arg; usr_body="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
-		--configure)		config_weblog;;
+		--configure)		check_config; config_weblog;;
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
-					check_blogdir; delete_weblog;;
+					check_config; delete_weblog;;
 		-D|--desc)		desc_var=1; usr_description="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
-					check_blogdir; edit_weblog;;
+					check_config; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-l|--list)		db_query="$2"; shift
-					check_blogdir; list_weblog "$db_query";;
+					check_config; list_weblog "$db_query";;
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
-					check_blogdir; make_page;;
+					check_config; make_page;;
 		-m|--move)		check_arg; move_num="$2"; shift
-					check_blogdir; move_entry;;
-		-p|--preview)		check_blogdir; preview_weblog;;
-		-P|--publish)		check_blogdir; publish_weblog;;
+					check_config; move_entry;;
+		-p|--preview)		check_config; preview_weblog;;
+		-P|--publish)		check_config; publish_weblog;;
 		--template)		check_arg; usr_template="$2"; shift;;
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; usr_title="$2"; shift;;
 		-u|--update)		weblog_update="$2"; shift
-					check_blogdir; build_weblog "$weblog_update";; 
+					check_config; build_weblog "$weblog_update";; 
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
