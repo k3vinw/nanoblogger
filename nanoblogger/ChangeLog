@@ -1,5 +1,8 @@
 2004-05-25  n1xt3r  <n1xt3r@bluefalcon>
 
+	* default/blog.conf, plugins/archive/master_index.sh, ChangeLog:
+	Moved AUTO_FORMAT & CAT_FEEDS into Plugin Variables section.
+
 	* ChangeLog, plugins/entry/auto_break.sh, plugins/entry/moods.sh:
 	Added checks for AUTO_FORMAT.
 

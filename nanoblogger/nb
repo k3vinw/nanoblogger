@@ -353,12 +353,6 @@ cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 rm -f "$BLOG_DIR"/archives.tmp
 }
 
-# create monthly archive links
-make_monthlylink(){
-	month_total=`echo "$DB_RESULTS" |grep -c '[.]htm'`
-	make_placeholder "$MONTHLINKS_TEMPLATE" month_links.tmp month_links.htm
-	NB_Month_Links=`echo "$PLACEHOLDER" |sort -ru`
-}
 # run this after monthly links have been created
 build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
@@ -479,13 +473,8 @@ if [ "$blog_update" = "all" ]; then
 	# clear permalinks if they exist
 	rm -fr "$BLOG_DIR"/"$PERMALINKS"/*
 fi
-# create main set of links
-make_placeholder "$MAINLINKS_TEMPLATE" main_links.tmp main_links.htm; NB_Main_Links="$PLACEHOLDER"
-rm -f "$BLOG_DIR"/main_links.tmp; PLACEHOLDER=
-[ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
-rm -f "$BLOG_DIR"/month_links.tmp; PLACEHOLDER=
-# build the archives
 load_plugins plugins
+# build the archives
 nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
 if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
@@ -498,7 +487,7 @@ make_archive current nocat "$ENTRY_TEMPLATE" news.htm
 make_page "$BLOG_DIR"/"$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
 
-# process entry metadata into time-stamped text-file and store in the archives for future processing
+# function to add a new entry
 add_entry(){
 New_EntryFile=`NB_TimeStamp`.htm
 if [ ! -z "$cat_num" ]; then
@@ -507,7 +496,6 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$BLOG_DIR/$ARCHIVES"/"$cat_db"
 	done
 fi
-# load autoformat plugins
 nb_msg "processing blog entry ..."
 write_entry "$BLOG_DIR"/"$ARCHIVES"/"$New_EntryFile"
 build_blog "$blog_update"
