@@ -156,6 +156,7 @@ load_config
 	[ ! -f "$USR_BLOGCONF" ] && die "weblog config file '$USR_BLOGCONF' doesn't exist! goodbye."
 [ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
+[ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "weblog's cache directory '$BLOG_DIR/$CACHE_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. goodbye."
 }
 
@@ -330,19 +331,21 @@ fi
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-# preserve content of the source, but let plugins modify it
-: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
-# escape content of $NB_Entries so no execution takes place
-NB_Entries="\$MKPAGE_CONTENT"
-load_template "$MKPAGE_TMPLFILE"
-echo "$BLOG_HTML" > "$SCRATCH_FILE"
-load_template "$SCRATCH_FILE"
-echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-nb_msg "$MKPAGE_OUTFILE"
-# load postformat plugins, but with reusable functionality
-for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
-	[ -f "$mkp_plugin" ] && . "$mkp_plugin"
-done
+if [ "$weblog_update" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
+	# preserve content of the source, but let plugins modify it
+	: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
+	# escape content of $NB_Entries so no execution takes place
+	NB_Entries="\$MKPAGE_CONTENT"
+	load_template "$MKPAGE_TMPLFILE"
+	echo "$BLOG_HTML" > "$SCRATCH_FILE"
+	load_template "$SCRATCH_FILE"
+	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+	nb_msg "$MKPAGE_OUTFILE"
+	# load postformat plugins, but with reusable functionality
+	for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
+		[ -f "$mkp_plugin" ] && . "$mkp_plugin"
+	done
+fi
 MKPAGE_CONTENT=; NB_EntryTitle=
 }
 
