@@ -657,30 +657,32 @@ done
 nb_msg "deleting blog entry id('s): $delete_num$cat_msg ..."
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	DEL_LIST="$Delete_EntryFile"
-	[ "$DEL_LIST" != "$OLD_DELLIST" ] && DEL_LIST="$OLD_DELLIST $Delete_EntryFile"
-	OLD_DELLIST="$DEL_LIST"
-	query_db "$db_query"
-	for cat_db in $db_categories; do
-		cat_var=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
-		build_catlist
-	done
-	if [ ! -z "$cat_list" ]; then
-		for cat_db in $cat_list; do
-			cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
-			[ ! -z "$cat_mod" ] &&
-				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
-		done
-	else
+	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile" ]; then
+		DEL_LIST="$Delete_EntryFile"
+		[ "$DEL_LIST" != "$OLD_DELLIST" ] && DEL_LIST="$OLD_DELLIST $Delete_EntryFile"
+		OLD_DELLIST="$DEL_LIST"
+		query_db "$db_query"
 		for cat_db in $db_categories; do
-			cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
-			[ ! -z "$cat_mod" ] &&
-				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			cat_var=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+			build_catlist
 		done
-		rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
-		Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
-		if [ -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile" ]; then
-			rm -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile"
+		if [ ! -z "$cat_list" ]; then
+			for cat_db in $cat_list; do
+				cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+				[ ! -z "$cat_mod" ] &&
+					cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			done
+		else
+			for cat_db in $db_categories; do
+				cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+				[ ! -z "$cat_mod" ] &&
+					cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			done
+			rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
+			Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
+			if [ -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile" ]; then
+				rm -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile"
+			fi
 		fi
 	fi
 done
