@@ -252,10 +252,10 @@ load_template(){
 BLOG_FILE="$1"
 if [ -f "$BLOG_FILE" ]; then
 	# prefix text/html with an X in front of each line
-	BLOG_TEMPLATE=`sed -e '/^/ s//X/' < "$BLOG_FILE"`
+	BLOG_TEMPLATE=`sed -e '/^/ s//X: /' < "$BLOG_FILE"`
 	# remove X's and source variables into a temp file
 	cat > "$SCRATCH_FILE" <<-EOF
-		sed -e '/^X/ s///' <<TMPL
+		sed -e '/^X:[ ]/ s///' <<TMPL
 			$BLOG_TEMPLATE
 		TMPL
 	EOF
@@ -503,7 +503,8 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 			echo '<a href="'$page_outfile'">'$NB_PrevPage'</a>' >> "$SCRATCH_FILE"
 		[ "$prev_num" -gt 1 ] &&
 			echo '<a href="'$prev_page'">'$NB_PrevPage'</a>' >> "$SCRATCH_FILE"
-		for ((i=1; i <= $total_pages; i++)); do
+		i=1
+		while [ $i -le $total_pages ]; do
 			[ "$i" = 1 ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
@@ -511,6 +512,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 			else
 				echo '<a href="'$page'">['$i']</a>' >> "$SCRATCH_FILE"
 			fi
+			i=`expr $i + 1`
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
 				echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
