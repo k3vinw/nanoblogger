@@ -217,15 +217,15 @@ if [ "$ENABLE_PLUGINS" = "1" ]; then
 	[ ! -d "$BASE_DIR"/"$PLUGINS_DIR" ] &&
 		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! bye."
 	# loads plugins in alpha-numeric order (0-9, a-z)
-	#nb_msg "loading global $PLUGINS_DIR ..."
-	for plugin in "$BASE_DIR"/"$PLUGINS_DIR"/*.sh; do
-		[ -f "$plugin" ] && . "$plugin"
-	done
 	#[ -d "$BLOG_DIR"/"$PLUGINS_DIR" ] && nb_msg "loading user $PLUGINS_DIR ..."
 	[ -d "$BLOG_DIR"/"$PLUGINS_DIR" ] &&
 		for plugin in "$BLOG_DIR"/"$PLUGINS_DIR"/*.sh; do
 			[ -f "$plugin" ] && . "$plugin"
 		done
+	#nb_msg "loading global $PLUGINS_DIR ..."
+	for plugin in "$BASE_DIR"/"$PLUGINS_DIR"/*.sh; do
+		[ -f "$plugin" ] && . "$plugin"
+	done
 fi
 }
 

@@ -1,5 +1,8 @@
 2004-04-09  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/atom.sh:
+	Removed call to make_page function to fix loading of user plugins.
+
 	* default/templates/atom.xml, default/templates/atom_entry.xml, plugins/atom.sh:
 	- Added BLOG_TZD in atom feed plugin.
 	- NB_AtomEntryModDate uses the find command.
