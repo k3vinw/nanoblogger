@@ -19,8 +19,8 @@
 <li><a href="#cr2">Features</a>
 <li><a href="#cr3">Installation</a>
 <li><a href="#cr4">Requirements</a>
-<li><a href="#cr5">Usage</a>
-<li><a href="#cr6">Building The Blog</a>
+<li><a href="#cr5">Getting Started</a>
+<li><a href="#cr6">Templates and Placeholders</a>
 <li><a href="#cr7">Plugins</a>
 <li><a href="#cr8">Publishing Your Blog to a Remote Site</a>
 <li><a href="#cr9">Tips and Tricks</a>
@@ -29,8 +29,12 @@
 <p />
 
 <h2><a name="cr1">Introduction</a></h2>
-NanoBlogger is a small weblog engine written in Bash that uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.<br />
+NanoBlogger is a small weblog engine written in Bash for the command line.  It uses common unix tools, such as cat, grep and sed.  It's free to use and modify under the GNU General Public License.<br />
 <p />
+<b>Synopsis</b>
+<blockquote>
+	<pre>nb [<u>-b blogdir</u>] [<u>options</u>]</pre>
+</blockquote>
 
 <h2><a name="cr2">Features</a></h2>
 <ul>
@@ -83,41 +87,22 @@ programs required other than bash:
 For online publishing you'll need some kind of shell or FTP access to your web server.
 </p>
 
-<h2><a name="cr5">Usage</a></h2>
-<p />
-NanoBlogger is designed to work off-line, but the contents created are intended to be published online.  To create a blog, use <em>nb --blogdir myblog --add</em>.  Where <em>"myblog"</em> is the local path to your new blog.  This is will setup a new directory and open the blog's configuration for editing.  To setup your blog for a remote site, edit the blog's BLOG_URL variable to point to the remote path, then refer to the section: "Publishing a blog to a remote web site" for further details.<br />
-<p />
-
-<b>Synopsis</b>
+<h2><a name="cr5">Getting Started</a></h2>
+<b>Creating a New Blog</b>
 <blockquote>
-	nb [<u>-b blogdir</u>] [<u>options</u>]
+	To create a new blog invoke:
+	<pre>nb --blogdir myblog_dir --add</pre>
+	where "myblog_dir" is a non-existant directory. This is will create a new directory, copy the default files over, and then let you edit the blog's configuration.  Run the same command again to add a new entry.
 </blockquote>
-Try "nb --help" for all available options.
-<p />
-For each blog there's a user defined configuration file called "blog.conf".  This file controls the behavior of a blog.  It allows you to change such things as, how many entries to display on the front page.  It's also where you set the title, description, and the URL for your blog. The DATE_FORMAT variable can be customized to change the date format of a new entry.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Read the man pages of the date command to see more on how to customize the format of a date.<br />
-<p />
 
-<h2><a name="cr6">Building The Blog</a></h2>
-<p />
-Entries are kept inside the blog's "archives" directory as time-stamped filenames.  NanoBlogger uses the filename to determine how to sort the entries into the archives.<br />
-<p />
-
-NanoBlogger features "clippings", which is a directory consisting of the parts that build your blog.  They contain preformatted versions of your recent entries as well as other things that might be part of your blog, e.g. output from a plugin.  Thus, allowing for a certain amount of modularity with server-side scripting languages such as PHP, for further processing.<br />
-
+<b>Configuring the New Blog</b>
 <blockquote>
-	NanoBlogger creates the following web pages:<br />
-	<ul>
-		<li>index.html</li>
-		<li>index.rdf</li>
-		<li>archives/cat_[N].html (only when categories exist)</li>
-		<li>archives/monthly/[YYYY-MM].html</li>
-		<li>archives/permalinks/[YYYY-MM-HH_MM_SS].htm (only when full permalinks are enabled)</li>
-	</ul>
-	The web pages are regenerated each time you add, edit, or delete an entry.
-	<p>
-	Enabling full permalinks, causes each entry to have it's own web page.  To enable full permalinks in your blog, edit blog.conf and set FULL_PERMALINKS equal to 1.  Make sure that the permalinks have been generated, you may have to rebuild your blog.  The entries' permalinks should've automatically been changed,  if you experience any problems, have a look at the "entry.htm" template.  Look at the "href" line and make sure that it's only set to equal "$NB_EntryPermalink".  If it's not then change it and rebuild your blog again.
-	</p>
+	To open the blog's configuration invoke:
+	<pre>nb --blogdir myblog_dir --configure</pre>
+	<b>DATE_FORMAT</b> can be customized to change the look of a new entry's date.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Read the man pages of the date command to see more on how to customize the format of a date.
 </blockquote>
+
+<h2><a name="cr6">Templates and Placeholders</a></h2>
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
@@ -183,16 +168,22 @@ NanoBlogger features "clippings", which is a directory consisting of the parts t
 	<td align="left">controls look of a blog entry within a permalink page</td>
 	</tr>
 	<tr>
+	<td align="left">rdf_catfeed_entry.xml</td>
+	<td align="left">controls look of the news items in a category's rss feed</td>
+	</tr>
+	<tr>
+	<td align="left">rdf_catfeed.xml</td>
+	<td align="left">controls look and format of a category's rss feed</td>
+	</tr>
+	<tr>
 	<td align="left">rdf_entry.xml</td>
-	<td align="left">controls look of each individual news item in the rss feed</td>
+	<td align="left">controls look of the news item in the rss feed</td>
 	</tr>
 	<tr>
 	<td align="left">rdf.xml</td>
 	<td align="left">controls look and format of rss feed (index.rdf)</td>
 	</tr>
 	</table>
-	<br />
-	In addition there's a stylesheet called, "blog_style.css".<br />
 </blockquote>
 
 <blockquote>
@@ -299,16 +290,19 @@ This is my new entry ...<br />
 -----<br />
 </blockquote>
 
+Entries are kept inside the blog's "archives" directory as time-stamped filenames.  NanoBlogger uses the filename to determine how to sort the entries into the archives.<br />
+<p />
+
 <h2><a name="cr7">Plugins</a></h2>
 <p />
 
-Plugins work by creating placeholders for the templates, allowing a great deal of control in how the plugins output is placed in the template.  The variable, ENABLE_PLUGINS, in blog.conf toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
+Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders.  Placeholders allow for a great deal of control in how the plugins output is placed in the template.  The variable, ENABLE_PLUGINS, in blog.conf toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
 <p />
 
 Additionally there are some plugins specific to the formatting of entries, and are referred to as auto-format plugins, which allows for automatic placement of HTML elements, such as placing paragraph breaks inside blank lines.  The variable, AUTO_FORMAT, in blog.conf toggles this feature on/off, but requires ENABLE_PLUGINS to be toggled on.<br />
 <p />
 
-To use a new plugin, you need to identify it's unique placeholder and add it to your template.<br />
+To use a some of the new plugins, you may need to identify it's unique placeholder/destination and add it to your template accordingly.<br />
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
@@ -316,14 +310,20 @@ To use a new plugin, you need to identify it's unique placeholder and add it to 
 	<tr>
 	<th align="left">plugins</th>
 	<th align="left">description</th>
-	<th align="left">placeholders</th>
-	<th align="left">special requirements</th>
+	<th align="left">placeholders/destination</th>
+	<th align="left">special requirements/notes</th>
 	</tr>
 	<tr>
 	<td align="left">archive/monthly_cal.sh</td>
 	<td align="left">adds a calendar with links to each monthly archive</td>
 	<td align="left">$NB_Monthly_Calendar</td>
 	<td align="left">cal</td>
+	</tr>
+	<tr>
+	<td align="left">atom.sh</td>
+	<td align="left">adds an atom feed</td>
+	<td align="left">$BLOG_URL/atom.xml</td>
+	<td align="left">uses templates</td>
 	</tr>
 	<tr>
 	<td align="left">autoformat/auto_break.sh</td>
@@ -350,6 +350,12 @@ To use a new plugin, you need to identify it's unique placeholder and add it to 
 	<td align="left">cal</td>
 	</tr>
 	<tr>
+	<td align="left">category_links.sh</td>
+	<td align="left">adds links to the categories</td>
+	<td align="left">$NB_Category_Links</td>
+	<td align="left">none</td>
+	</tr>
+	<tr>
 	<td align="left">fortune.sh</td>
 	<td align="left">uses fortune to generate random quotes</td>
 	<td align="left">$NB_Fortune</td>
@@ -357,9 +363,15 @@ To use a new plugin, you need to identify it's unique placeholder and add it to 
 	</tr>
 	<tr>
 	<td align="left">list_entries.sh</td>
-	<td align="left">generates list of entries recent or old</td>
+	<td align="left">adds links to entries recent or old</td>
 	<td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
 	<td align="left">none</td>
+	</tr>
+	<tr>
+	<td align="left">master_index.sh</td>
+	<td align="left">creates a master index page of the archives</td>
+	<td align="left">$BLOG_URL/archives.html</td>
+	<td align="left">uses templates</td>
 	</tr>
 	<tr>
 	<td align="left">mymood.sh</td>
@@ -372,6 +384,12 @@ To use a new plugin, you need to identify it's unique placeholder and add it to 
 	<td align="left">validates HTML code</td>
 	<td align="left">$NB_Tidy</td>
 	<td align="left">HTML tidy</td>
+	</tr>
+	<tr>
+	<td align="left">rss.sh</td>
+	<td align="left">adds rss feeds</td>
+	<td align="left">$BLOG_URL/index.rdf, $BLOG_URL/$ARCHIVES/cat_n.rdf</td>
+	<td align="left">uses templates</td>
 	</tr>
 	</table>
 </blockquote>
