@@ -22,7 +22,7 @@ CURR_PATH="$PWD"
 # directory name to store archives
 ARCHIVES="archives"
 
-# directory name to store parts of blog
+# directory name to store parts of weblog
 PARTS_DIR="parts"
 
 # directory name to store monthly archives
@@ -84,7 +84,7 @@ load_config(){
 BLOG_CONF="$BLOG_DIR/blog.conf"
 # USR_BLOGCONF overrides BLOG_CONF
 [ ! -z "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
-# load blog config file
+# load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
 [ ! -z "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
@@ -132,10 +132,10 @@ echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 
 # die without a default directory structure
 check_blogdir(){
-[ -z "$BLOG_DIR" ] && die "no blog directory specified! bye."
-[ ! -d "$BLOG_DIR" ] && die "blog directory '$BLOG_DIR' doesn't exist! bye."
-[ ! -d "$NB_DATA_DIR" ] && die "blog's data directory '$NB_DATA_DIR' doesn't exist! bye."
-[ ! -d "$NB_TEMPLATE_DIR" ] && die "blog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. bye."
+[ -z "$BLOG_DIR" ] && die "no weblog directory specified! bye."
+[ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! bye."
+[ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! bye."
+[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. bye."
 }
 
 # create list of entries based on a month or interval
@@ -464,7 +464,7 @@ else
 fi
 }
 
-# generate the blog files
+# generate the weblog files
 build_blog(){
 blog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$blog_update" ] && blog_update="current"
@@ -501,11 +501,11 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-nb_msg "processing blog entry ..."
+nb_msg "processing weblog entry ..."
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 [ "$build_newblog" = "1" ] && blog_update="all"
 build_blog "$blog_update"
-nb_msg "blog entry added to '$BLOG_TITLE'."
+nb_msg "weblog entry added to '$BLOG_TITLE'."
 }
 
 # edit $BLOG_CONF
@@ -546,7 +546,7 @@ Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
 [ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $NUMVAR"
 $EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
 if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
-	nb_msg "processing blog entry id: $NUMVAR ..."
+	nb_msg "processing weblog entry id: $NUMVAR ..."
 	read_entry "$NB_DATA_DIR/$Edit_EntryFile"
 	UPDATE_LIST="$Edit_EntryFile"
 	build_blog
@@ -596,7 +596,7 @@ for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
 done
-nb_msg "deleting blog entry id('s): $delete_num$cat_msg ..."
+nb_msg "deleting weblog entry id('s): $delete_num$cat_msg ..."
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
@@ -683,7 +683,7 @@ for entry_id in $NUMVAR; do
 	[ ! -f "$NB_DATA_DIR/$Move_EntryFile" ] && die "invalid entry id('s): $move_num"
 done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
-nb_msg "moving blog entry id('s): $move_num, to category id('s): $cat_num ..."
+nb_msg "moving weblog entry id('s): $move_num, to category id('s): $cat_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
@@ -703,13 +703,13 @@ build_blog
 }
 
 preview_blog(){
-[ -z "$BLOG_PREVIEW_CMD" ] && die "no BLOG_PREVIEW_CMD set for this blog! bye."
+[ -z "$BLOG_PREVIEW_CMD" ] && die "no BLOG_PREVIEW_CMD set for this weblog! bye."
 nb_msg "running '$BLOG_PREVIEW_CMD' ..."
 $BLOG_PREVIEW_CMD
 }
 
 preview_ask(){
-echo "would you like to preview your blog now? [y/N]"
+echo "would you like to preview your weblog now? [y/N]"
 read -p "$NB_PROMPT" choice
 case $choice in
 	[Yy])
@@ -720,13 +720,13 @@ esac
 }
 
 publish_blog(){
-[ -z "$BLOG_PUBLISH_CMD" ] && die "no BLOG_PUBLISH_CMD set for this blog! bye."
+[ -z "$BLOG_PUBLISH_CMD" ] && die "no BLOG_PUBLISH_CMD set for this weblog! bye."
 nb_msg "running '$BLOG_PUBLISH_CMD' ..."
 $BLOG_PUBLISH_CMD
 }
 
 publish_ask(){
-echo "would you like to publish the blog now? [y/N]"
+echo "would you like to publish the weblog now? [y/N]"
 read -p "$NB_PROMPT" choice
 case $choice in
 	[Yy])
@@ -736,25 +736,25 @@ case $choice in
 esac
 }
 
-# create a new entry or blog directory
+# create a new entry or weblog directory
 nb_main(){
-[ -z "$BLOG_DIR" ] && die "no blog directory specified! bye."
-# automatically create new blog directory.
+[ -z "$BLOG_DIR" ] && die "no weblog directory specified! bye."
+# automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
 	build_newblog="1"
 	mkdir -p "$BLOG_DIR"
-	echo "creating blog directory '$BLOG_DIR' ..."
-	echo "copying default blog files ..."
+	echo "creating weblog directory '$BLOG_DIR' ..."
+	echo "copying default weblog files ..."
 	cp -R "$BASE_DIR"/default/* "$BLOG_DIR"
 	# but prompt for configuration.
-	echo "would you like to configure the new blog now? [Y/n]"
+	echo "would you like to configure the new weblog now? [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 	[Yy]|"")
-		echo "configuring new blog ..."
+		echo "configuring new weblog ..."
 		$EDITOR "$BLOG_DIR"/blog.conf;;
 	[Nn])
-		echo "blog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
+		echo "weblog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 	esac
 fi
 check_blogdir; load_config
@@ -838,14 +838,14 @@ cat <<-EOF
 	 `basename $0` [-b blogdir] [options]
 
 	Options:
-	 -a, --add				create new entry, category, or blog
+	 -a, --add				create new entry, category, or weblog
 	 					(directory).
-	 -b, --blogdir				specify blog directory.
+	 -b, --blogdir				specify weblog directory.
 	 -c, --category	<new,number>		specify category (for '--add',
 	 					'--delete', '--edit', '--list' and
 	 					'--update').
-	 --configure				configure blog.
-	 --datadir <directory>			specify blog's data directory.
+	 --configure				configure weblog.
+	 --datadir <directory>			specify weblog's data directory.
 	 -d, --delete <cat,number>		delete an entry or category.
 	 -e, --edit <cat,number>		edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration
@@ -860,15 +860,15 @@ cat <<-EOF
 	 					(for '--category').
 	 -n, --author				author attribute of entry (for
 	 					'--importfile' and '--add').
-	 -p, --preview				run preview blog command.
-	 -P, --publish				run publish blog command.
+	 -p, --preview				run command to preview weblog.
+	 -P, --publish				run command to publish weblog.
 	 --template <file>			specify file to load as template (for
 	 					'--makepage').
-	 --templatedir <directory>		specify blog's template directory.
+	 --templatedir <directory>		specify weblog's template directory.
 	 -t, --title				title attribute of entry/category/page
 	 					(for '--add', '--category',
 	 					'--importfile', and '--makepage').
-	 -u, --update <all,current,main>	force update of blog (defaults to
+	 -u, --update <all,current,main>	force update of weblog (defaults to
 	 					current).
 	 -v, --verbose				toggle level of verbosity (on=1/off=0).
 	 -V, --version				display version information.
@@ -877,7 +877,7 @@ cat <<-EOF
 
 	Examples:
 	
-	 specify the blog directory to create or add new entry to
+	 specify the weblog directory to create or add new entry to
 	 	nb -b ~/public_html/blog -a
 
 	 creates new category and titles it "News"

@@ -1,3 +1,8 @@
+2004-07-05  n1xt3r  <n1xt3r@bluefalcon>
+
+	* docs/nanoblogger.html, ChangeLog: - More minor updates to the manual.
+	- Added "Importing Entries" section to the manual, due to popular demand.
+
 2004-07-03  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/blog.conf, docs/nanoblogger.html:
