@@ -26,7 +26,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	done; month=)
 
 	cat_total=`echo "$db_categories" |grep -c "[\.]db"`
-	if [ "$cat_total" -gt "0" ]; then
+	#echo "cat_total: $cat_total"
+	if [ "$cat_total" -gt 0 ]; then
 		# make NB_Category_Links placeholder
 		NB_Browse_CatLinks=$(
 		cat <<-EOF
@@ -55,16 +56,14 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 		</div>
 	EOF
 	load_template "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE
-	echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR"/archive_links."$NB_FILETYPE"
+	echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE
 	NB_Archive_Links="$BLOG_HTML"
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/index.$NB_FILETYPE"
 	# set title for makepage template
 	NB_EntryTitle=Archives
 	NB_Entries="$NB_Archive_Links"
-	load_template "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
-	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-	nb_msg "$MKPAGE_OUTFILE"
+	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"

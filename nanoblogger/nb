@@ -240,16 +240,17 @@ BLOG_HTML=$(. "$SCRATCH_FILE")
 
 # load plugins from BASE_DIR/plugins and BLOG_DIR/plugins
 load_plugins(){
-PLUGINS_DIR="$1"
+PLUGIN_DIR="$1"
+[ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
 if [ "$ENABLE_PLUGINS" = 1 ]; then
-	[ ! -d "$BASE_DIR/$PLUGINS_DIR" ] &&
-		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! goodbye."
+	[ ! -d "$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}" ] &&
+		die "directory '$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}' doesn't exist! goodbye."
 	# loads plugins in alpha-numeric order (0-9, a-z)
-	[ -d "$BLOG_DIR/$PLUGINS_DIR" ] &&
-		for plugin in "$BLOG_DIR/$PLUGINS_DIR"/*.sh; do
+	[ -d "$BLOG_DIR/$PLUGINS_DIR${PLUGIN_DIR}" ] &&
+		for plugin in "$BLOG_DIR/$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
 			[ -f "$plugin" ] && . "$plugin"
 		done
-	for plugin in "$BASE_DIR/$PLUGINS_DIR"/*.sh; do
+	for plugin in "$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
 		[ -f "$plugin" ] && . "$plugin"
 	done
 fi
@@ -281,7 +282,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
-	load_plugins plugins/entry
+	load_plugins entry
 fi
 }
 
@@ -329,7 +330,10 @@ for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 done
 nb_msg "$MKPAGE_OUTFILE"
-load_plugins plugins/postformat
+# load postformat plugins, but with reusable functionality
+for mkp_plugin in "$BLOG_DIR/$PLUGINS_DIR"/postformat/*.sh "$BASE_DIR/$PLUGINS_DIR"/postformat/*.sh; do
+	[ -f "$mkp_plugin" ] && . "$mkp_plugin"
+done
 }
 
 # create individual page for an entry
@@ -375,7 +379,7 @@ build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
 		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE
 		NB_ArchiveTitle="$month"
-		load_plugins plugins/archive/monthly
+		load_plugins archive/monthly
 		make_page "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$month.$NB_FILETYPE"
 	fi
@@ -499,7 +503,7 @@ fi
 
 # create/update archives
 build_archives(){
-load_plugins plugins/archive
+load_plugins archive
 nb_msg "generating archives ..."
 build_catarchives
 if [ "$weblog_update" = all ]; then
@@ -548,7 +552,7 @@ if [ "$weblog_update" = all ]; then
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
 fi
-load_plugins plugins
+load_plugins
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != main ] && build_archives
@@ -576,7 +580,7 @@ if [ ! -z "$cat_num" ]; then
 fi
 [ "$build_newblog" = 1 ] && weblog_update=all
 build_weblog "$weblog_update"
-nb_msg "new weblog entry added to '$BLOG_TITLE'."
+nb_msg "new weblog entry added to '$BLOG_TITLE'"
 }
 
 # edit $BLOG_CONF
@@ -731,7 +735,7 @@ for entry in $DB_RESULTS; do
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
 	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$NB_Metadata" |cut -c1-32` ..."
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$NB_Metadata" |cut -c1-32`..."
 	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$NB_Metadata"
 	id=`expr 1 + $id`
 	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
