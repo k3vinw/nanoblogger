@@ -502,6 +502,14 @@ build_blog "$blog_update"
 nb_msg "blog entry added to '$BLOG_TITLE'."
 }
 
+build_catlist(){
+if [ ! -z "$cat_var" ]; then
+	CAT_LIST="$cat_db"
+	[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
+	OLD_CATLIST="$CAT_LIST"
+fi
+}
+
 # load BLOG_CONF (or blog.conf) into an editor
 config_blog(){
 if [ -f "$BLOG_CONF" ]; then
@@ -534,7 +542,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 					echo $cat_db `grep $cat_entry "$BLOG_DIR"/"$ARCHIVES"/$cat_db`
 				done
 			done |grep " " |cut -d" " -f 1 |sort -u |sed -e '/cat_/ s///; /[.]db/ s///'
-		}
+			}
 		cat_num=`find_catlinks`
 		UPDATE_LIST="$DB_RESULTS"
 		build_blog; exit 0
@@ -574,13 +582,7 @@ add_entry; exit 0
 
 # delete parts of blog by id number
 delete_blog(){
-	build_catlist(){
-		if [ ! -z "$cat_var" ]; then
-			CAT_LIST="$cat_db"
-			[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
-			OLD_CATLIST="$CAT_LIST"
-		fi
-	}
+
 db_catquery=`cat_id`; check_catid
 if [ ! -z "$cat_num" ]; then
 	cat_list="$db_catquery"
@@ -704,18 +706,23 @@ done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
 nb_msg "moving blog entry id('s): $move_num, to category id('s): $cat_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
-for entry_id in $UPDATE_LIST; do
-	Move_EntryFile="$entry_id"
-	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Move_EntryFile" ]; then
-		if [ ! -z "$db_catquery" ]; then
-			query_db "$db_query" "$db_catquery"
-			for cat_db in $db_categories; do
+query_db "$db_query" "$db_catquery"
+for cat_db in $db_categories; do
+	cat_title=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
+	cat_entries=`sed 1d "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
+	echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+	[ ! -z "$cat_entries" ] && echo "$cat_entries" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+	for entry_id in $UPDATE_LIST; do
+		Move_EntryFile="$entry_id"
+		if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Move_EntryFile" ]; then
+			if [ ! -z "$db_catquery" ]; then
 				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Move_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 				echo "$Move_EntryFile" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
-			done
+			fi
 		fi
-	fi
-done; cat_num=; build_blog
+	done
+done
+cat_num=; build_blog
 }
 
 preview_blog(){
