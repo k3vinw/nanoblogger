@@ -228,10 +228,12 @@ if [ "$ENABLE_PLUGINS" = "1" ]; then
 fi
 }
 
+escape_chars(){ sed -e '{1,$ s/[\&]/\&amp;/g; s/[\"]/\&quot;/g; }'; }
 strip_html(){ sed -e :a -e 's/<[^>]*>//g; /</N; //ba'; }
 
 load_encode_filters(){
 	[ "$encode_text" = "1" ] && ENCODE_FILTER="strip_html"
+	[ "$escape_chars" = "1" ] && ENCODE_FILTER="escape_chars"
 	}
 
 # read file's metadata

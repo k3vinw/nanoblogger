@@ -1,6 +1,9 @@
 2004-04-28  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/autoformat/auto_break.sh:
+	Fixed over zealous conversions of line breaks to br tags.
+
+	* ChangeLog, plugins/autoformat/auto_break.sh:
 	Fixed line break conversions to include br tags.
 
 2004-04-24  n1xt3r  <n1xt3r@scorcher>
