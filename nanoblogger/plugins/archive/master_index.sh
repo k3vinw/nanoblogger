@@ -4,6 +4,8 @@
 MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 OLD_BLOG_CSS="$BLOG_CSS"
 BLOG_CSS="../$BLOG_CSS"
+OLD_BLOG_URL_MAIN="$BLOG_URL_MAIN"
+BLOG_URL_MAIN="../$BLOG_URL_MAIN"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
@@ -65,4 +67,5 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"
+BLOG_URL_MAIN="$OLD_BLOG_URL_MAIN"
 
