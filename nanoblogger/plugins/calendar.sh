@@ -18,7 +18,7 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 	DAYS=`echo "$CALENDAR" |sed 1,2d`
-	NUM_DAY_LINES=`echo "$DAYS" |grep -n "" |cut -c1`
+	NUM_DAY_LINES=`echo "$DAYS" |grep -n -v "[.]" |cut -c1`
 
 	curr_month=`date +%m`
 	query_db all

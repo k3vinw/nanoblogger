@@ -40,7 +40,7 @@ TEMP_DIR=/tmp
 # default verbosity, 0 = silent
 VERBOSE=1
 
-# automatically set time zone using 'date +%z'
+# automatically set time zone using GNU specific, 'date +%z'
 tzd_mm=`date +%z |cut -c4-5`
 AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 
@@ -123,7 +123,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # filter custom date format for a new entry
 filter_dateformat(){
 FILTER_VAR="$1"
-: ${FILTER_VAR:="%B %d, %Y %l:%M %p"}
+: ${FILTER_VAR:="%m.%d.%Y %H:%M"}
 # it might be cool to use the gnu date's description feature here
 [ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
 [ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
@@ -169,7 +169,7 @@ fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
-		[ "$db_limit" = 0 ] && grep -v ''
+		[ "$db_limit" = 0 ] && grep -v '[.]' # regexp hack for non-GNU versions
 		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
 		db_limit=; db_offset=
 		}
@@ -437,7 +437,7 @@ total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 	nb_msg "paginating $page_outfile ..."
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
-		y=`expr "$page_items" + "$y"`; echo "$y"; done |grep -c ""; }
+		y=`expr "$page_items" + "$y"`; echo "$y"; done |grep -c "."; }
 	total_pages=`get_pages`
 	end=0; page_num=0
 	while [ "$end" -lt "$total_items" ]; do
