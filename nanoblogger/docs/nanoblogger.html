@@ -178,13 +178,13 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>per-weblog configuration to override global defaults (blog.conf)</li>
 
-   <li>auto-detection of weblog directories containing config file (blog.conf)</li>
+   <li>auto-detection of weblog from current directory</li>
 
    <li>no dependency on any javascript, server-side scripting, or server-side includes</li>
 
    <li>no dependency on any special database (uses flat-file)</li>
 
-   <li>some small effort at shell portability</li>
+   <li>multi-platform portability (or wherever there's bash)</li>
  </ul>
 
  <h2><a name="3" id="3">3. Installation</a></h2>To install nanoblogger: 
@@ -216,7 +216,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
    bash, cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap
  </p>
 
- <p>* = GNU version</p>
+ <p>* = GNU version recommended, but not required</p>
 
  <h2><a name="5" id="5">5. Getting Started</a></h2>
  <p><b>Creating a New Weblog</b></p>
@@ -230,14 +230,14 @@ cd [nb_dir]
 ./nb --blogdir [myblog_dir] --add
 	</pre>
 
-where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a non-existant directory. This is will
+where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This is will
 create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created
 this way.  Running the same command again on an existing weblog directory will add a new entry.
 
  <p>For easier invocation, add nb to your $PATH in Bash:</p>
 
  	<pre>
-export PATH="$PATH:[nb_dir]/nb"
+export PATH="$PATH:[nanoblogger_dir]"
 	</pre>
 
 where <em>nb_dir</em> is the path that NanoBlogger was installed to.
@@ -255,7 +255,7 @@ where <em>nb_dir</em> is the path that NanoBlogger was installed to.
 	<pre>
 nb --blogdir [myblog_dir] --configure -u all
 	</pre>
- This opens <em>blog.conf</em> from the weblog directory for editing and updates all of the weblog.
+ This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
  <p><b>Setting the Editor</b></p>
 
@@ -268,17 +268,25 @@ nb --blogdir [myblog_dir] --configure -u all
  <p><b>Setting the Date Format for New Entries</b></p>
 
  <p>
-   <em>DATE_FORMAT</em> controls the look of a new entry's date. The default <em>DATE_FORMAT</em> uses "%B %d, %Y %l:%M %p" and
-   produces something like this: "August 05, 2003 12:53 AM". You can also specify the locale to be used for date command (see
+   <em>DATE_FORMAT</em> controls the look of a new entry's date. The default <em>DATE_FORMAT</em> uses <code>"%m.%d.%Y %H:%M"</code>
+   (a portable date string) which should produce: "11.07.2004 18:52". You can also specify the locale to be used for date command (see
    the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous entries. Read the man pages of
    the date command to see more on how to customize the format of the date command's output.
+ </p>
+
+ <p><b>Setting the Timezone for Syndication Feeds</b></p>
+
+ <p>
+   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. e.g. <code>BLOG_TZD="-0:500"</code> Sets the timezone to
+   EST time.
  </p>
 
  <p><b>Setting the Web Address</b></p>
 
  <p>
    <em>BLOG_URL</em> is used as the address for the weblog. Typically, you would set this to a remote address such as:
-   "http://myblogurl.com". Replacing <em>myblogurl.com</em> with the actual address to your weblog.
+   "http://myblogurl.com". Replacing <em>myblogurl.com</em> with the actual address of your weblog. The "/" is appended
+   automatically.
  </p>
 
  <p><b>Enabling Generation of Absolute Links</b></p>
@@ -316,7 +324,7 @@ nb --blogdir [myblog_dir] --configure -u all
    <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page.
  </p>
 
- <p><b>Setting the Maximum Number of Entries to Display for each Page</b></p>
+ <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
  
  <p>
    <em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to <em>MAX_ENTRIES</em>.
@@ -604,27 +612,27 @@ nb [-b blog_dir] -c 1 -d cat
       </tr>
       <tr>
          <td align="left">$BLOG_CHARSET</td>
-         <td align="left">blog's character set</td>
+         <td align="left">weblog's character set</td>
       </tr>
       <tr>
          <td align="left">$MAIN_LINK</td>
-         <td align="left">blog's "main" link</td>
+         <td align="left">weblog's "main" link</td>
       </tr>
       <tr>
          <td align="left">$BLOG_CONTACT</td>
-         <td align="left">blog's contact info</td>
+         <td align="left">weblog's contact info</td>
       </tr>
       <tr>
          <td align="left">$BLOG_DESCRIPTION</td>
-         <td align="left">blog's description</td>
+         <td align="left">weblog's description</td>
       </tr>
       <tr>
          <td align="left">$BLOG_TITLE</td>
-         <td align="left">blog's title</td>
+         <td align="left">weblog's title</td>
       </tr>
       <tr>
          <td align="left">$BLOG_URL</td>
-         <td align="left">blog's URL</td>
+         <td align="left">weblog's URL</td>
       </tr>
       <tr>
          <td align="left">$NB_Month_Links*</td>
@@ -715,10 +723,10 @@ nb [-b blog_dir] -c 1 -d cat
      </tr>
      <tr>
        <td align="left">articles.sh*</td>
-       <td align="left">generates articles from source</td>
+       <td align="left">generates articles found in the "articles" directory</td>
        <td align="left">$NB_ArticleLinks</td>
-       <td align="left">$ARTICLE_DIR/article_title.$NB_FILETYPE</td>
-       <td align="left">none</td>
+       <td align="left">$ARTICLE_DIR/article_title.$ARTICLE_SUFFIX</td>
+       <td align="left">requires makepage.htm template</td>
      </tr>
      <tr>
        <td align="left">atom.sh</td>
@@ -737,9 +745,9 @@ nb [-b blog_dir] -c 1 -d cat
      <tr>
        <td align="left">blog_status.sh</td>
        <td align="left">generates some statistics</td>
-       <td align="left">none</td>
+       <td align="left">see notes</td>
        <td align="left">$NB_Blog_Status</td>
-       <td align="left">none</td>
+       <td align="left">requires blog_status.htm template</td>
      </tr>
      <tr>
        <td align="left">calendar.sh</td>
@@ -859,14 +867,15 @@ mput *
       Here are the steps to enable comments using CGIComment:
 
      <ul>
-       <li>Edit <em>blog.conf</em>, add:
+       <li>Edit <em>blog.conf</em>, add or change:
 		<pre>
 BLOG_URL_ACTION="http://myblog.com/cgi-bin/cgicomment.pl?article="
 ENTRY_ARCHIVES="1"
+ABSOLUTE_LINKS="1"
 		</pre>
 	</li>
 
-        <li>Edit <em>templates/entry.htm</em> and <em>templates/permalink_entry.htm</em>, add:
+        <li>Edit <em>templates/entry.htm</em> and <em>templates/permalink_entry.htm</em>, add or change:
 		<pre>
 &lt;a href="$BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_entry"&gt;Comments&lt;/a&gt;
 		</pre>
@@ -886,10 +895,10 @@ tar xzf CGIComment-XX.tar.gz
 		</pre>
 	</li>
 
-        <li>Edit <em>cgi-bin/cgicomment.conf</em>, add:
+        <li>Edit <em>cgi-bin/cgicomment.conf</em>, add or change:
 		<pre>
-BASE_DIR="[cgicomment_dir]
-ARTICLEDIR="[blog_dir]"
+BASE_DIR="../cgicomment/"
+ARTICLEDIR="../[blog_dir]/archives/"
 		</pre>
 	</li>
 

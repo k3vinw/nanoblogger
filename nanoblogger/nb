@@ -140,6 +140,8 @@ echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 check_config(){
 load_config
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
+[ ! -z "$USR_BLOGCONF" ] &&
+	[ ! -f "$USR_BLOGCONF" ] && die "weblog config file '$USR_BLOGCONF' doesn't exist! goodbye."
 [ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. goodbye."
@@ -168,11 +170,11 @@ fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
-		[ "$db_limit" = 0 ] && grep "." # regexp hack for non-GNU versions
+		[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
 		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
 		db_limit=; db_offset=
 		}
-        filter_query(){ grep "$db_query." |sort -ru; } # "." allows for empty $db_query
+        filter_query(){ grep "$db_query." |sort -ru; } # allow for empty $db_query
 	# list all entries
         list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
 	# include categorized entries
@@ -252,9 +254,9 @@ PLUGIN_DIR="$1"
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
+NB_Metadata=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:][ ]/ s///' "$META_FILE"`
 [ "$MTAG" = BODY ] &&
-NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
+NB_Metadata=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; /^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d' "$META_FILE"`
 }
 
 # read an entry
@@ -389,7 +391,7 @@ cycle_months_for(){
 	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort -ru`
 	for yearn in $ENTRY_YEARS; do
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed -n 1p`
+			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
 			for entry_month in $ENTRY_LIST; do
 				month="$yearn-$monthn"
 				query_db "$month"
@@ -486,7 +488,7 @@ db_categories="$CAT_LIST"
 if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
-			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
+			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
 			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
 			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
@@ -705,7 +707,7 @@ if [ "$db_query" = cat ]; then
 	while [ "$id" != "$cat_total" ]; do
 		id=`expr 1 + $id`
 		if [ -f "$NB_DATA_DIR/cat_$id.db" ]; then
-			echo " $id, `sed -n 1p "$NB_DATA_DIR"/cat_"$id".db`"
+			echo " $id, `sed 1q "$NB_DATA_DIR"/cat_"$id".db`"
 		else
 			cat_total=`expr 1 + $cat_total`
 		fi
@@ -722,7 +724,7 @@ for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
 		cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 		if [ ! -z "$cat_var" ]; then
-			cat_title=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
+			cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
 			[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
 			oldcat_title="$cat_title,"
 		fi
@@ -936,7 +938,7 @@ cat <<-EOF
 	 					(for '--add', '--category', and
 	 					'--makepage').
 	 -u, --update <all,current,main,max>	force update of weblog (defaults to
-	 					to current).
+	 					current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 

@@ -45,7 +45,7 @@ build_atomfeed(){
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
-		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
+		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 		Atom_EntryDate=`echo "$Atom_EntryTime$BLOG_TZD"`
 		# non-portable find command!
 		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
@@ -55,7 +55,7 @@ build_atomfeed(){
 		for cat_db in $db_categories; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
-				cat_title=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
+				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
 				[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
 				oldcat_title="$cat_title,"
 			fi
