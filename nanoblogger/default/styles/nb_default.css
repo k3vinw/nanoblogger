@@ -42,7 +42,7 @@
 		}
 
 	.description {
-		font-family: verdana, arial serif;
+		font-family: verdana, arial, serif;
 		color:#FFF;
 		font-size:small;
 		font-weight:bold;
@@ -99,6 +99,7 @@
 		font-size: small;
   		text-transform:uppercase;
 		color: #003366;
+		margin-bottom:15px;
 		}
 
 	#menu {
@@ -281,9 +282,22 @@
 
 	.intro {
 		font-family: verdana, arial, sans-serif;
+		border:1px solid #003366;
+		background:#EEE;
 		color:#333;
 		font-size:x-small;
 		font-weight:normal;
   		line-height:140%;
+		padding:10px;
 		margin-bottom:15px;
+		}
+
+	.intro a,
+	.intro a:link,
+	.intro a:visited,
+	.intro a:active,
+	.intro a:hover {
+		font-weight: normal;
+		text-decoration: underline;
+		color:#333;
 		}

@@ -585,6 +585,7 @@ else
 fi
 }
 
+# build the weblog
 build_weblog(){
 # set base for relative links
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`

@@ -1,350 +1,1096 @@
-2004-11-11 15:44  n1xt3r
+2004-12-12  n1xt3r  <n1xt3r@pilot>
 
-	* ChangeLog, nb, default/blog.conf, docs/nanoblogger.html,
-	  plugins/entry/base_url.sh: Added new plugin that allows for
-	  easier link creation when editing an entry.
+	* nb: Fixed new entry message to include category information again.
 
-2004-11-09 03:10  n1xt3r
+	* default/templates/main_index.htm, nb, plugins/rss.sh, plugins/zyx_articles.sh:
+	- Enhanced pagination, can detect and paginate relevant pages.
+	- Now only the relevant category page(s) get updated upon entry edit.
 
-	* default/blog.conf, default/templates/permalink_entry.htm,
-	  docs/nanoblogger.html, plugins/blog_links.sh,
-	  plugins/postformat/tidy.sh: - Fixed bad character encoding in the
-	  defaults of the tidy.sh plugin..  - Added language setting to
-	  "Settings and Configuration", section of manual.
+2004-12-10  n1xt3r  <n1xt3r@pilot>
 
-2004-11-07 21:06  n1xt3r
+	* plugins/01_mymood.off, plugins/atom.sh, plugins/rss.sh, plugins/rss2.sh, plugins/zyx_articles.sh, default/archives/cat_1.html, default/archives/index.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-11.html, default/parts/archive_links.html, default/parts/blog_status.html, default/parts/cal.html, default/parts/cat_1.html, default/parts/fortune.html, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, docs/nanoblogger.html, nb:
+	- Automated generation of alternate links to RSS and Atom feeds in the templates.
+	- Enhanced articles plugin to work with multiple directories.
+	- Added "--manual" option, suggested by, Rhithyn Arth <rhithyn_AT_users.sourceforge.net>.
+	- Now checks for existance of template before loading.
 
-	* nb, default/atom.xml, default/blog.conf, default/index.html,
-	  default/index.xml, default/archives/cat_1.html,
-	  default/archives/index.html, default/articles/example.txt,
-	  default/data/2004-01-18T17_12_12.txt,
-	  default/data/2004-11-07T18_52_16.txt, default/data/cat_1.db,
-	  default/parts/2004-01.html, default/parts/2004-11.html,
-	  default/parts/archive_links.html, default/parts/blog_status.html,
-	  default/parts/cal-2004-01.html, default/parts/cal-2004-11.html,
-	  default/parts/cal.html, default/parts/cat_1.html,
-	  default/parts/fortune.html, default/parts/recent_entries.html,
-	  default/templates/main_index.htm, docs/nanoblogger.html,
-	  plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh,
-	  plugins/calendar.sh, plugins/rss.sh, plugins/zyx_articles.sh,
-	  plugins/archive/monthly/monthly-cal.sh,
-	  plugins/entry/category_links.sh: - Improved speed and use of sed
-	  commands, removed unecessary piping.	- Added many updates to the
-	  manual.
+2004-12-06  n1xt3r  <n1xt3r@pilot>
 
-2004-11-02 23:51  n1xt3r
+	* default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, plugins/rss.sh, plugins/rss2.sh, plugins/zyx_articles.sh, default/templates/category_archive.htm, nb:
+	- Source files get compared for modifications before page generation.
+	- Added plugin for generating RSS 2.0 feed.
 
-	* nb, default/blog.conf, default/templates/main_links.htm,
-	  plugins/zyx_articles.sh: Fixed bug that caused the wrong
-	  configuration file to load when BLOG_DIR was specified globally.
+2004-12-04  n1xt3r  <n1xt3r@pilot>
 
-2004-11-01 01:02  n1xt3r
+	* default/blog.conf, docs/nanoblogger.html, plugins/01_mymood.off, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/atom.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/entry/auto_break.sh, plugins/entry/base_url.sh, plugins/entry/body/auto_break.sh, plugins/entry/body/base_url.sh, plugins/entry/body/moods.sh, plugins/entry/category_links.sh, plugins/entry/moods.sh, plugins/fortune.sh, plugins/postformat/tidy.sh, plugins/recent_entries.sh, plugins/rss.sh, plugins/zyx_articles.sh, nb:
+	- Implemented cache system to improve speed.
+	- Changed order of the build process, entry archives have higher priority.
 
-	* nb, default/templates/category_archive.htm,
-	  default/templates/main_index.htm,
-	  default/templates/main_links.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/blog_status.sh,
-	  plugins/calendar.sh, plugins/zyx_articles.sh,
-	  plugins/archive/master_index.sh,
-	  plugins/archive/monthly/monthly-cal.sh: Integrated $BASE_URL into
-	  the template's links, to improve relative links.
+2004-11-30  n1xt3r  <n1xt3r@pilot>
 
-2004-10-31 16:11  n1xt3r
+	* default/blog.conf, docs/nanoblogger.html, nb, plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/entry/category_links.sh, plugins/fortune.sh, plugins/postformat/tidy.sh, plugins/recent_entries.sh, plugins/rss.sh, plugins/zyx_articles.sh:
+	- Updated support for comments section, added visuals.
+	- Updated Documentation of DATE_FORMAT and unset it in defaults.
 
-	* nb, default/blog.conf, default/templates/main_index.htm,
-	  docs/nanoblogger.html, plugins/blog_status.sh,
-	  plugins/calendar.sh, plugins/zyx_articles.sh,
-	  plugins/archive/monthly/monthly-cal.sh: - Improved default of
-	  date format, more portable.  - Vastly improved regex in grep
-	  commands, more portable.
+2004-11-17  n1xt3r  <n1xt3r@pilot>
 
-2004-10-30 22:02  n1xt3r
+	* nb: - Date format defaults to the system's date format.
+	- Fixed resetting of the title variable, when using the --title option.
 
-	* ChangeLog, nb, docs/nanoblogger.html: - Improved table of
-	  contents, numbered sections.	- Added tips for easier invocation
-	  of "nb".
+2004-11-16  n1xt3r  <n1xt3r@pilot>
 
-2004-10-20 23:26  n1xt3r
+	* default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, nb:
+	Aaron Madlon-Kay <amake@mac.com>: Fixed favicon links and zero based category creation.
 
-	* nb, docs/nanoblogger.html: Ken Foskey <foskey@optushome.com.au>:
-	  Added example for remote publishing section of manual.
+2004-11-15  n1xt3r  <n1xt3r@pilot>
 
-2004-10-19 23:06  n1xt3r
+	* plugins/blog_links.sh, plugins/entry/category_links.sh, nb:
+	Brian Clayton <brian@servon.com>: Categories get sorted in a configurable manner.
 
-	* docs/nanoblogger.html: - Added PLUGIN_DIR to "Settings and
-	  Configuration" section of manual.  - Fixed some minor issues with
-	  CSS code of manual.
+	* default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, nb, plugins/entry/category_links.sh:
+	- Fixed bad path of favicon links in default templates.
+	- Major security bug fixed, that allowed for arbitrary code execution.
+	- Minor improvement in how configuration is updated.
 
-2004-10-19 02:58  n1xt3r
+2004-11-12  n1xt3r  <n1xt3r@pilot>
 
-	* ChangeLog, docs/nanoblogger.html: Updated the manual to match
-	  some major changes done to the code base.
+	* default/images/favicon.ico, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm:
+	Added favorite icon to default weblog and templates.
 
-2004-10-13 00:18  n1xt3r
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh:
+	Previous and next page navigation symbols are now configurable.
 
-	* nb, default/blog.conf, default/styles/mt_clean.css,
-	  default/styles/nb_default.css, default/styles/nb_rusted.css,
-	  default/styles/nb_smoke-signals.css,
-	  default/styles/nb_spring.css, default/templates/blog_status.htm,
-	  default/templates/main_index.htm, docs/nanoblogger.html,
-	  plugins/01_mymood.off, plugins/blog_status.sh,
-	  plugins/zyx_articles.sh, plugins/entry/auto_break.sh,
-	  plugins/entry/moods.sh: - Simplified plugins architecture to
-	  single and definiable plugins location.  - Removed config
-	  variable, ENABLE_PLUGINS.  - Added more flexibility to the regex
-	  for matching the mood variables.  - Added class for <pre> tags to
-	  the CSS files.
+2004-11-11  n1xt3r  <n1xt3r@pilot>
 
-2004-10-05 00:52  n1xt3r
+	* docs/nanoblogger.html, plugins/entry/base_url.sh, default/blog.conf, nb, ChangeLog:
+	Added new plugin that allows for easier link creation when editing an entry.
 
-	* ChangeLog, nb, default/atom.xml, default/index.html,
-	  default/index.xml, default/archives/cat_1.html,
-	  default/parts/2004-01.html, default/parts/archive_links.html,
-	  default/parts/blog_status.html, default/parts/cal-2004-01.html,
-	  default/parts/cal.html, default/parts/cat_1.html,
-	  default/parts/fortune.html, default/parts/recent_entries.html,
-	  default/templates/main_index.htm, docs/nanoblogger.html,
-	  plugins/articles.off, plugins/zyx_articles.sh: - Enabled the
-	  articles plugin by default.  - Added CSS to the user manual.
+2004-11-09  n1xt3r  <n1xt3r@pilot>
 
-2004-09-30 23:38  n1xt3r
+	* default/templates/permalink_entry.htm, docs/nanoblogger.html, plugins/blog_links.sh, plugins/postformat/tidy.sh, default/blog.conf:
+	- Fixed bad character encoding in the defaults of the tidy.sh plugin..
+	- Added language setting to "Settings and Configuration", section of manual.
 
-	* nb, default/data/cat_1.db, plugins/01_mymood.off,
-	  plugins/articles.off, plugins/archive/master_index.sh,
-	  plugins/entry/moods.sh: - (load_plugins): Increased robustness,
-	  can load plugins inside plugins.  - (make_page): Improved
-	  reusablity of code, can be called from plugins.  - Articles and
-	  the archive index, can now be validated.
+2004-11-08  n1xt3r  <n1xt3r@pilot>
 
-2004-09-29 18:23  n1xt3r
+	* plugins/archive/monthly/monthly-cal.sh, plugins/blog_links.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/entry/category_links.sh, plugins/rss.sh, plugins/zyx_articles.sh, default/archives/cat_1.html, default/archives/index.html, default/articles/example.txt, default/data/2004-01-18T17_12_12.txt, default/data/2004-11-07T18_52_16.txt, default/data/cat_1.db, default/parts/2004-01.html, default/parts/2004-11.html, default/parts/archive_links.html, default/parts/blog_status.html, default/parts/cal-2004-01.html, default/parts/cal-2004-11.html, default/parts/cal.html, default/parts/cat_1.html, default/parts/fortune.html, default/parts/recent_entries.html, default/templates/main_index.htm, docs/nanoblogger.html, plugins/atom.sh, default/atom.xml, default/blog.conf, default/index.html, default/index.xml, nb:
+	- Improved speed and use of sed commands, removed unecessary piping.
+	- Added many updates to the manual.
 
-	* default/blog.conf: Removed unecessary use of quotes where
-	  applicable.
+2004-11-03  n1xt3r  <n1xt3r@pilot>
 
-2004-09-29 18:17  n1xt3r
+	* default/blog.conf, default/templates/main_links.htm, plugins/zyx_articles.sh, nb:
+	Fixed bug that caused the wrong configuration file to load when BLOG_DIR was specified globally.
 
-	* ChangeLog, nb, plugins/01_mymood.off, plugins/articles.off,
-	  plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh,
-	  plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh,
-	  plugins/recent_entries.sh, plugins/rss.sh,
-	  plugins/archive/master_index.sh,
-	  plugins/archive/monthly/monthly-cal.sh,
-	  plugins/entry/auto_break.sh, plugins/entry/moods.sh,
-	  plugins/postformat/tidy.sh: - Defaults are set through use of
-	  parameter expansion.	- Added verbosity to loading plugins.
+2004-11-01  n1xt3r  <n1xt3r@pilot>
 
-2004-09-28 03:17  n1xt3r
+	* default/templates/month_archive.htm, default/templates/permalink.htm, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/zyx_articles.sh, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, nb:
+	Integrated $BASE_URL into the template's links, to improve relative links.
 
-	* nb, default/blog.conf: - Configuration variable, QUERY_ENTRIES
-	  renamed to more generalized QUERY_MODE.  (show_help): Replaced
-	  reference to QUERY_ENTRIES with "main index view".
+2004-10-31  n1xt3r  <n1xt3r@pilot>
 
-2004-09-28 01:09  n1xt3r
+	* default/blog.conf, default/templates/main_index.htm, docs/nanoblogger.html, plugins/archive/monthly/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/zyx_articles.sh, nb:
+	- Improved default of date format, more portable.
+	- Vastly improved regex in grep commands, more portable.
 
-	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh: (list_weblog): -
-	  Enhanced error messages to be more informative.  (build_weblog):
-	  - Main index pagination is governed by $MAX_ENTRIES and
-	  $QUERY_ENTRIES.
+	* docs/nanoblogger.html, nb, ChangeLog:
+	- Improved table of contents, numbered sections.
+	- Added tips for easier invocation of "nb".
 
-2004-09-27 01:06  n1xt3r
+2004-10-21  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/blog.conf, default/templates/main_index.htm,
-	  plugins/atom.sh, plugins/list_entries.sh, plugins/rss.sh: - Added
-	  date field to entries listing.  - Added configuration variable,
-	  QUERY_ENTRIES used for the default query.  - Fixed "current"
-	  query to equal entries within the current month.  - Features
-	  displaying entries by all, limit, or current day, month, or year
-	  to the main page.
+	* docs/nanoblogger.html, nb:
+	Ken Foskey <foskey@optushome.com.au>: Added example for remote publishing section of manual.
 
-2004-09-25 22:26  n1xt3r
+2004-10-20  n1xt3r  <n1xt3r@pilot>
 
-	* nb, plugins/archive/master_index.sh: Fixed inconsistencies
-	  between relative and absolute links of the archives.
+	* docs/nanoblogger.html:
+	- Added PLUGIN_DIR to "Settings and Configuration" section of manual.
+	- Fixed some minor issues with CSS code of manual.
 
-2004-09-23 03:16  n1xt3r
+2004-10-19  n1xt3r  <n1xt3r@pilot>
 
-	* default/data/2004-01-18T17_12_12.htm,
-	  default/data/2004-01-18T17_12_12.txt,
-	  default/templates/entry.htm,
-	  default/templates/permalink_entry.htm, plugins/entry/moods.sh:
-	  Cleaned up default directory.
+	* docs/nanoblogger.html, ChangeLog:
+	Updated the manual to match some major changes done to the code base.
 
-2004-09-23 02:31  n1xt3r
+2004-10-13  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/blog.conf, default/templates/category_archive.htm,
-	  default/templates/main_index.htm,
-	  default/templates/main_links.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/articles.off,
-	  plugins/blog_links.sh, plugins/calendar.sh,
-	  plugins/list_entries.sh, plugins/archive/monthly/monthly-cal.sh,
-	  plugins/entry/category_links.sh, plugins/entry/entry_catlinks.sh,
-	  plugins/entry/moods.sh: - Replaced $REL_URL with less ambigious
-	  $ARCHIVES_PATH variable.  - Replaced $BLOG_URL_MAIN with more
-	  precise $MAIN_LINK variable.	- Added configuration variable,
-	  ABSOLUTE_LINKS to toggle absolute links.
+	* default/blog.conf, default/styles/mt_clean.css, default/styles/nb_default.css, default/styles/nb_rusted.css, default/styles/nb_smoke-signals.css, default/styles/nb_spring.css, default/templates/blog_status.htm, default/templates/main_index.htm, docs/nanoblogger.html, nb, plugins/01_mymood.off, plugins/blog_status.sh, plugins/entry/auto_break.sh, plugins/entry/moods.sh, plugins/zyx_articles.sh:
+	- Simplified plugins architecture to single and definiable plugins location.
+	- Removed config variable, ENABLE_PLUGINS.
+	- Added more flexibility to the regex for matching the mood variables.
+	- Added class for <pre> tags to the CSS files.
 
-2004-09-15 22:56  n1xt3r
+2004-10-05  n1xt3r  <n1xt3r@pilot>
 
-	* nb, plugins/01_mymood.off, plugins/articles.off, plugins/atom.sh,
-	  plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh,
-	  plugins/list_entries.sh, plugins/rss.sh,
-	  plugins/archive/monthly/monthly-cal.sh,
-	  plugins/entry/entry_catlinks.sh, plugins/postformat/tidy.sh: -
-	  Changed default data file type from ".htm" to ".txt".  - Added
-	  ability to specify multiple entries to edit.	- Changed most
-	  plugins to use a faster command substitution where applicable.
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.html, default/parts/archive_links.html, default/parts/blog_status.html, default/parts/cal-2004-01.html, default/parts/cal.html, default/parts/cat_1.html, default/parts/fortune.html, default/parts/recent_entries.html, default/templates/main_index.htm, docs/nanoblogger.html, nb, plugins/articles.off, plugins/zyx_articles.sh:
+	- Enabled the articles plugin by default.
+	- Added CSS to the user manual.
 
-2004-09-13 12:11  n1xt3r
+2004-10-01  n1xt3r  <n1xt3r@pilot>
 
-	* nb, plugins/atom.sh, plugins/rss.sh,
-	  plugins/archive/master_index.sh: Fixed verbosity of page being
-	  generated, so that the message appears afterwards.
+	* default/data/cat_1.db, plugins/01_mymood.off, plugins/archive/master_index.sh, plugins/articles.off, plugins/entry/moods.sh, nb:
+	- (load_plugins): Increased robustness, can load plugins inside plugins.
+	- (make_page): Improved reusablity of code, can be called from plugins.
+	- Articles and the archive index, can now be validated.
 
-2004-09-13 11:58  n1xt3r
+2004-09-29  n1xt3r  <n1xt3r@pilot>
 
-	* plugins/: atom.sh, rss.sh, archive/master_index.sh: - Changed
-	  variable identities in Atom and Rss plugins so that they're
-	  unique.  - Changed command substitution to "$(..)" form in Atom
-	  and Rss plugins.
+	* default/blog.conf: Removed unecessary use of quotes where applicable.
 
-2004-09-12 22:14  n1xt3r
+	* plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/entry/auto_break.sh, plugins/entry/moods.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh, plugins/recent_entries.sh, plugins/rss.sh, nb, plugins/01_mymood.off, ChangeLog:
+	- Defaults are set through use of parameter expansion.
+	- Added verbosity to loading plugins.
 
-	* nb: (load_template), (read_metadata): - Noticeable speed increase
-	  in process time! - Replaced more command substitutions with
-	  "$(..)" form.
+2004-09-28  n1xt3r  <n1xt3r@pilot>
 
-2004-09-11 23:30  n1xt3r
+	* default/blog.conf, nb:
+	- Configuration variable, QUERY_ENTRIES renamed to more generalized QUERY_MODE.
+	(show_help): Replaced reference to QUERY_ENTRIES with "main index view".
 
-	* nb, default/templates/entry.htm,
-	  default/templates/main_index.htm,
-	  default/templates/permalink_entry.htm, plugins/calendar.sh,
-	  plugins/list_entries.sh, plugins/archive/master_index.sh:
-	  Switched command subsitution to "$(..)" form to improve speed and
-	  flexibility.
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh (list_weblog):
+	- Enhanced error messages to be more informative.
+	(build_weblog): - Main index pagination is governed by $MAX_ENTRIES and $QUERY_ENTRIES.
 
-2004-09-10 21:00  n1xt3r
+2004-09-27  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/templates/main_index.htm, plugins/blog_links.sh,
-	  plugins/calendar.sh, plugins/list_entries.sh,
-	  plugins/archive/master_index.sh, plugins/entry/entry_catlinks.sh:
-	  (make_page):	- Variables can be escaped and sourced during page
-	  generation.  - Relative links generated more dynamically.
+	* default/blog.conf, default/templates/main_index.htm, nb, plugins/atom.sh, plugins/list_entries.sh, plugins/rss.sh:
+	- Added date field to entries listing.
+	- Added configuration variable, QUERY_ENTRIES used for the default query.
+	- Fixed "current" query to equal entries within the current month.
+	- Features displaying entries by all, limit, or current day, month, or year to the main page.
 
-2004-09-07 11:46  n1xt3r
+2004-09-26  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/master_index.sh, nb:
+	Fixed inconsistencies between relative and absolute links of the archives.
+
+2004-09-23  n1xt3r  <n1xt3r@pilot>
+
+	* default/data/2004-01-18T17_12_12.htm, default/data/2004-01-18T17_12_12.txt, default/templates/entry.htm, default/templates/permalink_entry.htm, plugins/entry/moods.sh:
+	Cleaned up default directory.
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/entry/category_links.sh, plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh, default/blog.conf, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, nb, plugins/articles.off, plugins/blog_links.sh, plugins/calendar.sh, plugins/list_entries.sh:
+	- Replaced $REL_URL with less ambigious $ARCHIVES_PATH variable.
+	- Replaced $BLOG_URL_MAIN with more precise $MAIN_LINK variable.
+	- Added configuration variable, ABSOLUTE_LINKS to toggle absolute links.
+
+2004-09-16  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/atom.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/entry/entry_catlinks.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh, plugins/rss.sh, nb:
+	- Changed default data file type from ".htm" to ".txt".
+	- Added ability to specify multiple entries to edit.
+	- Changed most plugins to use a faster command substitution where applicable.
+
+2004-09-13  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/master_index.sh, plugins/rss.sh, nb, plugins/atom.sh:
+	Fixed verbosity of page being generated, so that the message appears afterwards.
+
+	* plugins/archive/master_index.sh, plugins/rss.sh, plugins/atom.sh:
+	- Changed variable identities in Atom and Rss plugins so that they're unique.
+	- Changed command substitution to "$(..)" form in Atom and Rss plugins.
+
+	* nb: (load_template), (read_metadata):
+	- Noticeable speed increase in process time!
+	- Replaced more command substitutions with "$(..)" form.
+
+2004-09-12  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/entry.htm, default/templates/main_index.htm, default/templates/permalink_entry.htm, plugins/archive/master_index.sh, plugins/calendar.sh, plugins/list_entries.sh, nb:
+	Switched command subsitution to "$(..)" form to improve speed and flexibility.
+
+2004-09-11  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/main_index.htm, nb, plugins/archive/master_index.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/entry/entry_catlinks.sh, plugins/list_entries.sh (make_page):
+	 - Variables can be escaped and sourced during page generation.
+	- Relative links generated more dynamically.
+
+2004-09-07  n1xt3r  <n1xt3r@pilot>
 
 	* plugins/01_mymood.off: Update mymood plugin to use $SCRATCH_FILE.
 
-2004-09-06 23:57  n1xt3r
+	* plugins/archive/master_index.sh:
+	Moved master archives index to archives/index.html.
 
-	* plugins/archive/master_index.sh: Moved master archives index to
-	  archives/index.html.
+	* default/templates/category_archive.htm, default/templates/main_index.htm, docs/nanoblogger.html, plugins/01_mymood.off, plugins/archive/master_index.sh, plugins/atom.sh, plugins/blog_links.sh, plugins/rss.sh, nb:
+	- Added alternate link to atom feed in main index's metadata.
+	- Implemnted a scratch file, eliminating multiple "rm -f" commands.
 
-2004-09-06 23:01  n1xt3r
+2004-09-04  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/templates/category_archive.htm,
-	  default/templates/main_index.htm, docs/nanoblogger.html,
-	  plugins/01_mymood.off, plugins/atom.sh, plugins/blog_links.sh,
-	  plugins/rss.sh, plugins/archive/master_index.sh: - Added
-	  alternate link to atom feed in main index's metadata.  -
-	  Implemnted a scratch file, eliminating multiple "rm -f" commands.
+	* default/templates/blog_status.htm, plugins/blog_status.sh:
+	Juraj Kubelka <Juraj.Kubelka@email.cz>:
+	Added better localization for weblog's status.
 
-2004-09-03 22:40  n1xt3r
+2004-09-01  n1xt3r  <n1xt3r@pilot>
 
-	* default/templates/blog_status.htm, plugins/blog_status.sh: Juraj
-	  Kubelka <Juraj.Kubelka@email.cz>: Added better localization for
-	  weblog's status.
+	* plugins/blog_links.sh:
+	Fixed bad references to old data files in links plugin, Peter Steiner <pesche@schlau.ch>.
 
-2004-08-31 23:09  n1xt3r
+2004-08-30  n1xt3r  <n1xt3r@pilot>
 
-	* plugins/blog_links.sh: Fixed bad references to old data files in
-	  links plugin, Peter Steiner <pesche@schlau.ch>.
+	* default/blog.conf, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, plugins/01_mymood.off, plugins/atom.sh, plugins/entry/moods.sh, plugins/rss.sh, nb:
+	Improved clarity and use of variable, BLOG_URL for absolute links.
 
-2004-08-30 00:47  n1xt3r
+2004-08-28  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/blog.conf, default/templates/category_archive.htm,
-	  default/templates/main_index.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/01_mymood.off,
-	  plugins/atom.sh, plugins/rss.sh, plugins/entry/moods.sh: Improved
-	  clarity and use of variable, BLOG_URL for absolute links.
+	* default/parts/archive_links.html, default/parts/blog_status.html, default/parts/cal-2004-01.html, default/parts/cal.html, default/parts/cat_1.html, default/parts/fortune.html, default/parts/news.html, default/parts/recent_entries.html, default/templates/category_archive.htm, default/templates/main_index.htm, default/templates/month_archive.htm, default/templates/permalink.htm, plugins/01_mymood.off, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/atom.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh, plugins/list_entries.sh, plugins/rss.sh, default/archives/cat_1.html, default/atom.xml, default/blog.conf, default/data/2004-01-18T17_12_12.htm, default/data/cat_1.db, default/index.html, default/index.xml, default/parts/2004-01.html, nb:
+	- Links are now generated in relative form, thanks to Peter Steiner <pesche@schlau.ch>.
+	- Moved data files to their own "data" directory.
+	- Moved all archives into one "archives" directory.
 
-2004-08-28 00:06  n1xt3r
+2004-08-23  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/atom.xml, default/blog.conf, default/index.html,
-	  default/index.xml, default/archives/cat_1.html,
-	  default/data/2004-01-18T17_12_12.htm, default/data/cat_1.db,
-	  default/parts/2004-01.html, default/parts/archive_links.html,
-	  default/parts/blog_status.html, default/parts/cal-2004-01.html,
-	  default/parts/cal.html, default/parts/cat_1.html,
-	  default/parts/fortune.html, default/parts/news.html,
-	  default/parts/recent_entries.html,
-	  default/templates/category_archive.htm,
-	  default/templates/main_index.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/01_mymood.off,
-	  plugins/atom.sh, plugins/blog_links.sh, plugins/calendar.sh,
-	  plugins/list_entries.sh, plugins/rss.sh,
-	  plugins/archive/master_index.sh,
-	  plugins/archive/monthly/monthly-cal.sh,
-	  plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh: - Links
-	  are now generated in relative form, thanks to Peter Steiner
-	  <pesche@schlau.ch>.  - Moved data files to their own "data"
-	  directory.  - Moved all archives into one "archives" directory.
+	* docs/nanoblogger.html, nb, plugins/01_mymood.off, plugins/entry/moods.sh, plugins/rss.sh:
+	- Updated Plugins section of user manual.
+	- Removed offending "%HTMLlat1;" line in RSS feeds.
+	- Removed some redundant and useless code from moods plugins.
 
-2004-08-23 01:42  n1xt3r
+	* default/templates/permalink.htm, nb, plugins/01_mymood.off, plugins/entry/moods.sh:
+	- MOODS_URL variable to set a central moods location for all weblogs.
+	- More strict regular expressions for mood variables.
 
-	* nb, docs/nanoblogger.html, plugins/01_mymood.off, plugins/rss.sh,
-	  plugins/entry/moods.sh: - Updated Plugins section of user manual.
-	  - Removed offending "%HTMLlat1;" line in RSS feeds.	- Removed
-	  some redundant and useless code from moods plugins.
+2004-08-20  n1xt3r  <n1xt3r@pilot>
 
-2004-08-22 22:29  n1xt3r
+	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, docs/nanoblogger.html:
+	Added CAL_CMD to specify the calendar command or wrapper script to use.
 
-	* nb, default/templates/permalink.htm, plugins/01_mymood.off,
-	  plugins/entry/moods.sh: - MOODS_URL variable to set a central
-	  moods location for all weblogs.  - More strict regular
-	  expressions for mood variables.
+	* default/blog.conf, default/templates/category_archive.htm, default/templates/month_archive.htm, default/templates/permalink.htm, nb:
+	Style sheet path changed from absolute to relative.
 
-2004-08-19 21:59  n1xt3r
+2004-08-17  n1xt3r  <n1xt3r@pilot>
 
-	* docs/nanoblogger.html, plugins/calendar.sh,
-	  plugins/archive/monthly/monthly-cal.sh: Added CAL_CMD to specify
-	  the calendar command or wrapper script to use.
+	* docs/nanoblogger.html, nb: - Added auto-detection of blog.conf.
+	- Fixed bad reference to the category's template in the manual.
 
-2004-08-19 21:36  n1xt3r
+2004-08-13  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/blog.conf, default/templates/category_archive.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm: Style sheet path changed from
-	  absolute to relative.
+	* default/blog.conf, default/templates/category_archive.htm, nb:
+	- Version changed to CVS-3.0.
+	- Added automatic pagination to the category archives.
 
-2004-08-17 00:22  n1xt3r
+2004-08-06  n1xt3r  <n1xt3r@pilot>
 
-	* nb, docs/nanoblogger.html: - Added auto-detection of blog.conf.
-	  - Fixed bad reference to the category's template in the manual.
+	* docs/nanoblogger.html, nb:
+	Made small correction to instructions for "Adding Support for Comments".
 
-2004-08-12 21:30  n1xt3r
+2004-07-31  n1xt3r  <n1xt3r@pilot>
 
-	* nb, default/blog.conf, default/templates/category_archive.htm: -
-	  Version changed to CVS-3.0.  - Added automatic pagination to the
-	  category archives.
+	* ChangeLog, default/atom.xml, default/index.html, default/index.xml, default/parts/blog_status.html, default/parts/fortune.html, default/parts/news.html, nb (show_help):
+	Changed help for makepage to say "web page" instead of "HTML page".
 
-2004-08-06 19:11  n1xt3r
+2004-07-24  n1xt3r  <n1xt3r@pilot>
 
-	* nb, docs/nanoblogger.html: Made small correction to instructions
-	  for "Adding Support for Comments".
+	* nb, ChangeLog: Fixed missing suffix bug for $NB_EditFile.
 
-2004-07-31 01:04  n1xt3r
+	* ChangeLog, nb: Cleaned up code for future release.
 
-	* ChangeLog, nb, default/atom.xml, default/index.html,
-	  default/index.xml, default/parts/blog_status.html,
-	  default/parts/fortune.html, default/parts/news.html: (show_help):
-	  Changed help for makepage to say "web page" instead of "HTML
-	  page".
+	* nb: VERSION changed to 2.9 for release.
 
-2004-07-24 01:17  n1xt3r
+2004-07-23  n1xt3r  <n1xt3r@pilot>
 
-	* ChangeLog, nb: Fixed missing suffix bug for $NB_EditFile.
+	* ChangeLog, docs/nanoblogger.html, nb:
+	- Configure option works with update option, instead of just updating blindly.
+	- Updated manual to include .nb.conf and how to set a default weblog directory.
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/blog.conf, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/2004-01.html, default/parts/archive_links.htm, default/parts/archive_links.html, default/parts/blog_status.htm, default/parts/blog_status.html, default/parts/cal-2004-01.htm, default/parts/cal-2004-01.html, default/parts/cal.htm, default/parts/cal.html, default/parts/cat_1.htm, default/parts/cat_1.html, default/parts/fortune.htm, default/parts/fortune.html, default/parts/main_links.htm, default/parts/news.htm, default/parts/news.html, default/parts/older_entries.htm, default/parts/older_entries.html, default/parts/recent_entries.htm, default/parts/recent_entries.html, default/parts/tidy.htm, default/parts/tidy.html, default/styles/nb_default.css, default/styles/nb_smoke-signals.css, default/styles/nb_spring.css, nb, plugins/archive/master_index.sh, plugins/list_entries.sh:
+	- Added a couple new CSS style sheets, including a new default.
+	- Entry's without title are now listed as "Untitled" in archives index page.
+	- Category header and links only appear when categories exist in archives index page.
+
+2004-07-21  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/styles/mt_clean.css, default/styles/nb_rusted.css, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:
+	- Renamed --message option to --body.
+	- Added "calendarday" class to stylesheets.
+
+2004-07-20  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh, ChangeLog, nb:
+	- Updated "exit on error" messages.
+	- Abstracted an entry's filename extenstion.
+
+2004-07-17  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html, nb:
+	(add_entry), (delete_blog): - Fixed adding aborted entries to categories.
+	- Fixed updating when deleting entries.
+	- Fixed missing option reference in error message.
+
+2004-07-14  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb:
+	Fixed verbosity, so that only lines requiring input are not effected.
+
+2004-07-12  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (create_weblog):
+	Fixed '--description' option, so it works.
+
+	* ChangeLog, nb (show_help):
+	Added missing parameters for options requiring them.
+
+2004-07-11  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Minor correction in "Managing Entries and Categories" section of manual.
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, docs/nanoblogger.html, nb:
+	- Added more help to default entry.
+	- Updated "Managing Entries and Categories" section of manual.
+	- Replaced old '--importfile' with new '--message' option.
+	- Added new '--desc' option to set description of an entry.
+
+2004-07-07  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html, nb:
+	- Added new tip to the "Tips and Tricks" section of manual.
+	- Improved layout of "Tips and Tricks" section of manual.
+
+	* default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/templates/main_index.htm, docs/nanoblogger.html, nb, plugins/archive/master_index.sh, plugins/blog_links.sh, plugins/blog_status.sh, ChangeLog:
+	- Cleaned up inconsistencies in terminology.
+	- Renamed variable, blog_update to weblog_update.
+
+2004-07-06  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html, nb:
+	- Updated "Importing Entries" section of manual.
+	- Updated terminology.
+
+2004-07-05  n1xt3r  <n1xt3r@pilot>
+
+	* docs/nanoblogger.html, ChangeLog: - More minor updates to the manual.
+	- Added "Importing Entries" section to the manual, due to popular demand.
+
+2004-07-03  n1xt3r  <n1xt3r@pilot>
+
+	* default/blog.conf, docs/nanoblogger.html:
+	- Updated "Installation" section of manual.
+	- Disabled autoformatting in default blog.conf.
+
+2004-06-26  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/fortune.sh:
+	Fixed "fortune -s: command not found" bug in fortune plugin.
+
+	* plugins/blog_status.sh, ChangeLog, default/blog.conf, docs/nanoblogger.html:
+	- Added New "Managing Entries and Categories" section to manual.
+	- Added some CSS code to manual to enhance readability.
+
+	Martin Slavík <msl@actinet.cz>
+	- blog_status.sh plugin: Fixed LAST_UPDATED to use DATE_FORMAT.
+
+2004-06-25  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/templates/month_archive.htm, nb:
+	(delete_blog), (find_categories):
+	- Fixed typo in command for deleting entry.
+	- Filtered CAT_LIST for cleaner update of categories.
+
+	* ChangeLog, default/atom.xml, default/blog.conf, default/index.html, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/fortune.htm, default/styles/nb_rusted.css, default/templates/main_index.htm, default/templates/month_archive.htm, nb, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/rss.sh:
+	- (find_categories): Replaced cat_num with routines for CAT_LIST.
+	- Vastly improved updating of categories through better utilization of CAT_LIST.
+
+	Martin Slavík <msl@actinet.cz>
+	- Added CAL_ARGS for blog.conf in calendar plugins to set arguments for cal.
+	- Removed empty <span> tags in calendar plugins.
+	- Improved CSS classes for calendar display.
+
+2004-06-24  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, plugins/archive/master_index.sh:
+	Changed master_index.sh plugin to create archive_links.htm for $PARTS_DIR.
+
+	* nb, plugins/01_mymood.off, plugins/entry/moods.sh, ChangeLog:
+	Changed alt in <img /> tag from $mood_img to $mood_var.
+
+2004-06-23  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/rss.sh, ChangeLog, nb:
+	- (build_archives): Categories built 1st.
+	- Fixed category updating in RSS plugin.
+
+2004-06-22  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/templates/entry.htm, nb:
+	- Fixed bad HTML in default entry.
+	- (build_archives): Fixed updating more than once bug.
+	- (edit_blog),(delete_blog),(move_blog): Improved category updating.
+	- (edit_blog): Removed code similar to find_categories().
+
+2004-06-21  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/templates/entry.htm, plugins/entry/auto_break.sh:
+	- Changed auto_break plugin to convert blank lines to <br /><br />.
+	- Added <br /> after title in the entry template.
+
+2004-06-18  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/permalink_entry.htm, nb, plugins/blog_links.sh:
+	- Fixed missing cat_links.tmp bug in blog_links.sh plugin.
+	- Fixed dead link to comments in permalink_entry.htm template.
+	- Changed version to CVS-2.9.
+
+	* ChangeLog, nb (build_archives):
+	Slightly improved monthly archive updating.
+
+	* ChangeLog, nb (find_categories):
+	cat_num set unconditionally, for proper updating.
+
+	* plugins/entry/moods.sh: Re-added moods.sh.
+
+	* ChangeLog, nb, plugins/blog_links.sh, plugins/entry/moods.sh:
+	- Removed make_placeholder function, no longer used.
+	- VERSION changed to 2.8 in preperation for release.
+
+2004-06-17  n1xt3r  <n1xt3r@pilot>
+
+	* docs/nanoblogger.html, plugins/archive/master_index.sh, plugins/atom.sh, plugins/blog_links.sh, plugins/entry/entry_catlinks.sh, plugins/rss.sh, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/cat_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/recent_entries.htm, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/atom.xml, default/templates/atom_entry.xml, default/templates/category_links.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/month_links.htm, default/templates/rdf.xml, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.xml, nb.conf:
+	- Updated Atom, RSS, and Blog links, no longer use templates.
+	- Updated Master archive plugin, only uses makepage.htm template.
+	- Removed templates associated with the old plugins.
+	- Updated Documentation to reflect changes.
+
+	* ChangeLog, default/templates/atom_entry.xml, docs/nanoblogger.html, nb, plugins/atom.sh:
+	- Code cleanup.
+	- Updated "Plugins" section of manual.
+	- Converted manual to xhtml.
+	- Added body content to atom feed.
+
+2004-06-16  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, plugins/rss.sh:
+	- Created new variable $x_id, sets the letter to prepend to html entry's id.
+	- (read_entry): Set NB_EntryID to equal $x_id$entry.
+	- $NB_EntryTime now gets set in rss plugin, where it's used.
+
+2004-06-15  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/rdf_catfeedentry.xml, ChangeLog:
+	Replaced NB_EntryID with NB_EntryTime.
+
+	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
+	- (read_entry): Removed NB_EntryDay.
+	- (read_entry): Prepended letter to NB_EntryID to follow w3c recommendations.
+	- Replaced NB_EntryDay with NB_EntryID in calendar.
+
+2004-06-14  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, docs/nanoblogger.html, nb, ChangeLog:
+	- Reverted NB_EntryID and NB_EntryDay back to normal.
+	- Updated "Tips and Tricks" section of manual.
+
+2004-06-12  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/atom.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb:
+	- (read_entry): New NB_EntryTime for rdf and atom plugins.
+	- (read_entry): NB_EntryID changed to 'a$NB_EntryTime' to create valid xhtml.
+	- (read_entry): NB_EntryDay changed to 'a$NB_EntryDay' to create valid xhtml.
+	- Updated "Installation", "Templates and Placeholders" and many other sections of manual.
+
+2004-06-11  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/entry_links.htm, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, ChangeLog, nb:
+	- Replaced LANG with LC_ALL in calendar plugin - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+	- Removed &nbsp; in calendar plugin (fixes strange utf-8 whitespace) - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+	- Replaced "$EDITOR" with $EDITOR, fixes problems with command options - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+
+2004-06-09  n1xt3r  <n1xt3r@pilot>
+
+	* nb, plugins/archive/master_index.sh, plugins/articles.off, plugins/atom.sh, plugins/rss.sh:
+	- Added new NB_TEMPLATE_DIR, replaces references to BLOG_DIR/TEMPLATE_DIR.
+	- Added new BLOG_TEMPLATE_DIR, for use in blog.conf.
+	- Added new USR_TEMPLATE_DIR, set with --templatedir option.
+	- Added new --templatedir option, to specify blog's template directory.
+	- (show_help): List --templatedir and info.
+
+2004-06-08  n1xt3r  <n1xt3r@pilot>
+
+	* default/blog.conf, ChangeLog:
+	Fixed BLOG_URL_MAIN: replaced index.$NB_FILETYPE with index.html, becuase NB_FILETYPE wasn't set yet.
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Installation" section of manual.
+
+	* ChangeLog, nb: - (load_config): USR_DATADIR overrides NB_DATA_DIR.
+	- Added new --datadir option that specifies different data directory to use.
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/entry/entry_catlinks.sh, plugins/archive/master_index.sh, plugins/blog_links.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/list_entries.sh, plugins/rss.sh, default/templates/entry_links.htm, default/templates/month_links.htm, plugins/atom.sh, nb, ChangeLog:
+	- New variable NB_DATA_DIR, provides a more flexible data path.
+	- Set NB_DATA_DIR to BLOG_DIR/ARCHIVES by default.
+	- FILE_BY_DIR replaced by MONTHLY_DIR.
+	- Set MONTHLY_DIR to ARCHIVES/monthly.
+	- Updated plugins and templates to work with the new variables.
+
+2004-06-07  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configuration" and "Credits" sections of manual.
+
+	* default/archives/cat_1.html, default/atom.xml, default/blog.conf, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/cat_links.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/older_entries.htm, default/templates/archive.htm, default/templates/atom.xml, default/templates/category_archive.htm, default/templates/entry.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf.xml, ChangeLog:
+	- Added new variable BLOG_URL_MAIN, for "main" link in templates.
+	- Added new variable PERMALINKS, toggles display of permalinks.
+	- Updated "main" link in default/templates to use BLOG_URL_MAIN.
+	- Updated default/blog.conf with BLOG_URL_MAIN and PERMALINKS.
+
+2004-06-01  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configurations" and "Plugins" sections of manual.
+
+2004-05-31  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/list_entries.sh, ChangeLog:
+	Replaced PERMALINKS with PERMALINKS_DIR.
+
+	* plugins/list_entries.sh, ChangeLog:
+	Replaced FULL_PERMALINKS with ENTRY_ARCHIVES.
+
+	* ChangeLog, default/blog.conf, docs/nanoblogger.html, nb:
+	- Renamed PERMALINKS to ENTRY_ARCHIVES.
+	- Updated "Settings and Configurations" section of manual.
+
+	* docs/nanoblogger.html, nb, plugins/list_entries.sh, ChangeLog:
+	- (query_db): added new parameter, db_offset.
+	- Resurrected NB_Older_Entries in list_entries plugin using db_offset.
+	- Minor update to docs.
+
+	* ChangeLog, default/blog.conf, docs/nanoblogger.html:
+	Updated "Requirements" and "Settings and Configuration" Sections of manual.
+
+	* nb, plugins/atom.sh, plugins/rss.sh:
+	- (query_db): Added new query_type, limit.
+	- Updated Atom and RSS plugins to use new query_type, limit.
+
+	* ChangeLog, default/blog.conf, nb, plugins/atom.sh, plugins/list_entries.sh, plugins/rss.sh:
+	- Renamed MAX_DISPLAY to MAX_ENTRIES.
+	- Renamed PERMALINKS to PERMALINKS_DIR.
+	- Renamed FULL_PERMALINKS to PERMALINKS.
+	- Renamed CAT_FEEDS to CATEGORY_FEEDS.
+
+2004-05-30  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb:
+	- Combined code from delete_blog into new function, find_categories.
+	- (delete_blog): Fixed data loss (replaced bad cat/sed command).
+	- (delete_blog): Now requires the mv command.
+	- (move_entry): Categories now get updated properly.
+	- (move_entry): Now tests if a category needs to be modified.
+	- (move_entry): Fixed data loss (removed unecessary sed command).
+
+2004-05-29  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/atom.xml: Removed xml:lang="en" from <feed> tag.
+
+	* default/templates/atom.xml, default/templates/rdf.xml, default/templates/rdf_catfeed.xml:
+	Updated RSS and Atom templates, set encoding back to BLOG_CHARSET.
+
+	* ChangeLog, nb: Minor code cleanup.
+
+	* ChangeLog, nb (move_entry): Removed unecessary code.
+
+	* ChangeLog, nb (move_entry):
+	Reversed for loops: for category in category list for entry in entry list done done.
+
+2004-05-28  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/rss.sh:
+	Filtered escaped characters in NB_ArchiveTitle.
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configuration".
+
+2004-05-27  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/makepage.htm: Added a meta-tag for the generator.
+
+	* ChangeLog, plugins/articles.off:
+	- Simplified format of an article source file.
+	- Added useful information in the comments of the plugin's code.
+
+2004-05-26  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Templates and Placeholders" and "Plugins" sections of the manual.
+
+	* ChangeLog, nb, plugins/blog_links.sh, plugins/category_links.sh:
+	- Replaced category_links plugin with more general, blog_links plugin.
+	- (build_blog): Moved code to generate links into new blog_links plugin.
+
+2004-05-25  n1xt3r  <n1xt3r@pilot>
+
+	* default/blog.conf, plugins/archive/master_index.sh, ChangeLog:
+	Moved AUTO_FORMAT & CAT_FEEDS into Plugin Variables section.
+
+	* ChangeLog, plugins/entry/auto_break.sh, plugins/entry/moods.sh:
+	Added checks for AUTO_FORMAT.
+
+	* ChangeLog, plugins/archive/master_index.sh:
+	Moved master_index plugin into archive plugins.
+
+	* plugins/entry/auto_break.sh, plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh (read_entry):
+	Moved code for category links into a new entry plugin.
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/master_index.sh:
+	- Removed AUTO_FORMAT and autoformat plugins.
+	- Renamed autoformat plugins to entry plugins.
+	- (build_archives): new load_plugins plugins/archive
+	- (read_entry): new load_plugins plugins/entry
+
+2004-05-23  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
+	Removed text filtering (conflict with quotes in HTML links).
+
+	* ChangeLog, docs/nanoblogger.html:
+	Minor updates to the documentation's layout.
+
+2004-05-21  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh:
+	- (read_metadata): Removed text filtering.
+	- Removed load_filters().
+	- Added text filtering to the atom and rss plugins.
+
+	* ChangeLog, nb (read_entry): Enabled filtering mode, escape_chars.
+
+2004-05-19  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/postformat/tidy.sh:
+	Fixed conflicting 'generator' tags - Paul Drain <pd@cipherfunk.org>.
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh:
+	- Set NB_SYND_FILETYPE default to xml - Paul Drain <pd@cipherfunk.org>.
+	- Updated rss and atom plugins to utilize NB_SYND_FILETYPE.
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated cgicomment and microblogger links.
+
+2004-05-16  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
+	Loads autoformat plugins from inside.
+
+	* ChangeLog, nb:
+	(make_archive),(build_archives),(edit_blog): Autoformat plugins no longer
+	overwrite (possibly destroy) the entry's metadata.
+
+2004-05-11  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Lots of minor updates to the documentation.
+
+2004-05-08  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (nb_main):
+	Removed prompt for directory creation, now done automatically.
+
+2004-05-06  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (nb_main):
+	Fixed "bye" typo in blog directory creation prompt.
+
+	* ChangeLog, nb (build_archives):
+	Replaced generation of "cat_n.db.htm" with "cat_n.htm" in $PARTS_DIR.
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/fortune.htm, default/parts/news.htm:
+	Updated support information in the default entry.
+
+	* nb (delete_blog): Added test for existance of entry's file.
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/fortune.htm, default/parts/news.htm:
+	Updated intro/help entry for default.
+
+2004-05-04  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/01_mymood.off: Fixed a broken sed command.
+
+	* ChangeLog, nb, plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh:
+	Converted sed substitute commands to shorthand for increase in speed.
+
+	* ChangeLog: Reverted auto formmating back to old behaviour.
+
+2004-05-02  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Tips and Tricks" section of manual.
+
+	* docs/nanoblogger.html:
+	Added "Settings and Configuration" section to the manual.
+
+	* default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/recent_entries.htm, default/atom.xml, default/index.html:
+	Updated default entry.
+
+	* default/atom.xml, default/index.html: Workaround for CVS bugs.
+
+	* ChangeLog, default/atom.xml, default/index.html, default/parts/older_entries.htm:
+	Repository update.
+
+2004-05-01  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/atom.xml, default/index.html:
+	Added missing default directories?
+
+	* ChangeLog, default/parts/cat_1.db.htm, default/parts/category_links.htm, default/parts/news.rdf, default/parts/tidy.html:
+	Removed obsolete files from default directory.
+
+	* ChangeLog, default/archives/cat_1.html, default/atom.xml, default/index.html, default/parts/cat_links.htm, default/parts/tidy.htm:
+	Updated NanoBlogger's Help entry in default.
+
+	* default/blog.conf, nb:
+	- (nb_main): Removed prompt for editor to simplify blog creation.
+	- Updated EDITOR comment in blog.conf
+
+	* default/blog.conf, nb: - (nb_main): Rephrased editor question.
+	- Rephrased EDITOR comment.
+
+	* docs/nanoblogger.html:
+	- Replaced "Usage" section with new "Getting Started" section.
+	- Renamed "Building the Blog" section to "Templates and Placeholders".
+	- Updated templates and plugin information.
+	- Cleaned up organization and removed unnecessary material in manual.
+
+2004-04-30  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/templates/rdf.xml, default/templates/rdf_catfeed.xml:
+	Improved XML parsing of RSS templates by removing charset declarations.
+
+2004-04-29  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb:
+	- Added filter to escape special characters, such as ampersand and quotes.
+	- Removed experimental autoformat plugin that escaped characters.
+
+2004-04-28  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog: Fixed over zealous conversions of line breaks to br tags.
+
+	* ChangeLog: Fixed line break conversions to include br tags.
+
+2004-04-24  n1xt3r  <n1xt3r@pilot>
+
+	* nb:
+	Changed version information to emphasize that this code is in CVS.
+
+2004-04-23  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/templates/rdf_catfeed.xml:
+	Updated category RSS/RDF template to reflect the changes made to rdf.xml.
+
+	* ChangeLog, nb (delete_blog):
+	Checks relation to category before writing to it.
+
+	* ChangeLog, nb:
+	- (nb_main): Fixed category so it really gets set to Untitled now.
+	- (edit_blog): Checks for empty DB_RESULTS before writing to category database.
+	- (build_archives): Fixed check for monthly archive updating.
+
+2004-04-22  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/master_index.sh, nb, ChangeLog:
+	NB_Month_Links gets generated correctly.
+
+2004-04-21  n1xt3r  <n1xt3r@pilot>
+
+	* nb (build_blog): Permalinks now get updated according to blog_update.
+
+	* nb, ChangeLog (build_blog):
+	Fixed logic in the order of code and process.
+
+	* nb, plugins/rss.sh, ChangeLog (build_blog):
+	Permalinks get built and updated correctly.
+
+2004-04-20  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, default/templates/rdf.xml:
+	- Added references for DOCTYPE and ENTITY.
+	- Added admin module and set admin:generatorAgent to NanoBlogger.
+
+2004-04-18  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
+	- NB_AtomEntryModDate was temporarily changed to NB_AtomEntryDate.
+	- Switched to make_placeholder to generate NB_Entries.
+	- Deleted files left in PARTS_DIR directory.
+
+	* ChangeLog, plugins/rss.sh:
+	- Switched to make_placeholder to generate NB_Entries.
+	- Deleted files left in PARTS_DIR directory.
+
+2004-04-17  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/rss.sh:
+	Fixed checks for category feeds and rss item file generation.
+
+	* nb, plugins/rss.sh: - Added support for category feeds to rss plugin.
+	- Removed all functions and code related to rss feeds in nb.
+
+	* ChangeLog, default/templates/rdf.xml, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, nb, plugins/rss.sh:
+	- (read_metadata): Added experimental support for content encoding.
+	- Added a plugin for RSS feeds.
+	- Modified rdf templates to include rdf:Seq.
+
+2004-04-10  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (show_help): Simplified wording in examples.
+
+	* nb, ChangeLog (show_help): Minor improvements made to help info.
+
+	* ChangeLog, nb (load_plugins):
+	user plugins are now loaded before global plugins.
+
+2004-04-09  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/atom.sh:
+	Removed call to make_page function to fix loading of user plugins.
+
+	* default/templates/atom.xml, default/templates/atom_entry.xml, plugins/atom.sh:
+	- Added BLOG_TZD in atom feed plugin.
+	- NB_AtomEntryModDate uses the find command.
+	- More changes and some fixes were made to the atom feed templates.
+
+	* ChangeLog, default/templates/atom.xml, default/templates/atom_entry.xml, plugins/atom.sh:
+	Added new plugin and templates for atom feed.
+
+	* ChangeLog, plugins/articles.off:
+	- Changed article format to metadata tags: TITLE, DESC, and BODY.
+
+2004-04-05  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (build_blog):
+	Fixed bug that caused all permalinks to be processed unconditionally.
+
+	* plugins/master_index.sh, plugins/postformat/tidy.sh:
+	- Replaced OUTPUT_FILE with MKPAGE_OUTFILE in tidy plugin.
+	- Replaced call to nb with load_template in master archive plugin.
+
+	* nb, plugins/articles.off, plugins/postformat/tidy.sh:
+	- Changed PLUGIN_OUTFILE to PLUGIN_NAME_OUTFILE.
+	- (make_page): Changed OUT_FILE to MKPAGE_OUTFILE.
+	- Added calls to autoformat and postformat plugins in articles plugins.
+
+2004-04-04  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/articles.off: New articles plugin:
+	- removed articles.list, uses .txt files in articles directory.
+	- 1st line in .txt file becomes title, the rest is the body.
+	- replaced call to nb with load_template.
+
+	* ChangeLog, nb, plugins/articles.off:
+	Removed articles/articles.list, replacing articles.off ...
+
+	* ChangeLog, nb (show_help):
+	added a line about specifying multiple blog id's.
+
+2004-04-02  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/entry.htm, ChangeLog:
+	Moved anchor, NB_EntryDay above NB_EntryDate in the entry template.
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:
+	Removed test for FULL_PERMALINKS from calendar plugins.
+
+	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
+	Created new anchor, NB_EntryDay and modified calendar plugins to create links to NB_EntryDay.
+
+2004-03-30  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, nb:
+	Fixed "a id=... name=... and W3C validator" bug.
+	- Dropped BLOG_TZD from NB_EntryID.
+	- Added BLOG_TZD to the feed templates.
+
+2004-03-26  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/archive/monthly/monthly-cal.sh:
+	Make NB_ArchiveTitle pretty, set to CAL_HEAD.
+
+	* ChangeLog, nb, plugins/archive/monthly/monthly-cal.sh:
+	Fixed bug in setting variable CALENDAR.
+
+	* ChangeLog, plugins/archive/monthly/monthly-cal.sh:
+	Applied Pavel's <Pavel@Janik.cz> nb-monthly-cal.diff patch.
+
+2004-03-25  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, plugins/articles.off, plugins/articles.sh:
+	Renamed articles.sh plugin to articles.off, so it's disabled by default.
+
+	* plugins/articles.sh: Added new plugin: articles.sh.
+
+	* plugins/master_index.sh, ChangeLog, nb, plugins/01_mymood.off:
+	- (build_blog): builds NB_Month_Links when blog_update's not set to all.
+	- minor code cleanup to mymood plugin.
+	- master index plugin now checks if blog_update is set to all.
+
+2004-03-24  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (make_page): Set NB_EntryTitle from usr_title.
+
+2004-03-22  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/master_index.sh: Added New_EntryFile to modification test.
+
+	* ChangeLog, plugins/master_index.sh:
+	Checks for modifications before building index.
+
+	* nb (build_blog):
+	archives are no longer built when blog_update is set to main.
+
+	* default/templates/category_links.htm, default/templates/month_links.htm:
+	Moved month and category totals so that there outside their links.
+
+2004-03-20  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/rdf_catfeed.xml, plugins/category_links.sh, ChangeLog, default/templates/entrycat_links.htm, nb:
+	- modified templates to link to cat_index.
+	- improved sort functionality to category's links based on title.
+	- fixed bug in NB_EntryCategories that limited category templates to 1 line.
+
+	* plugins/category_links.sh:
+	created new plugin for creating category links from master_index.sh.
+
+	* default/templates/category_links.htm, nb, plugins/master_index.sh:
+	- shortened category variables to cat_.
+	- NB_Main_Links was put back into nb.
+	- cleaned up category_links template and added link to feeds.
+	- removed unused code from master_index.sh.
+
+2004-03-18  n1xt3r  <n1xt3r@pilot>
+
+	* default/templates/rdf_catfeed.xml:
+	Updated link to point to category's index page.
+
+2004-03-17  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb:
+	- (build_blog): Removed useless check for directory's existance when using mkdir -p.
+	- (nb_main): Set cat_title to Untitled when usr_title isn't being used.
+	- (nb_main): Removed tests for empty cat_title.
+
+	* ChangeLog, default/blog.conf, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, nb, nb.conf:
+	- Added new build_catfeeds function to nb.
+	- Added new CAT_FEEDS variable to blog.conf.
+	- Added new RDF templates for category feeds.
+
+2004-03-14  n1xt3r  <n1xt3r@pilot>
+
+	* nb.conf, ChangeLog, nb: - Fixed BLOG_DIR bug.
+	- Improved clarification of BLOG_DIR setting in nb.conf.
+
+	* ChangeLog, default/blog.conf, nb:
+	- Applied nb-author-default.diff patch from Pavel Janik <Pavel@Janik.cz>.
+	- Improved legibility of conditional expressions (replaced OR with AND).
+	- (nb_main): cat_title is now set to "Untitled" when left empty.
+
+2004-03-12  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, nb (load_config): sets NB_EntryAuthor to USER.
+
+2004-03-11  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog: cvs funk
+
+	* nb (query_db): fixed a bad sed address.
+
+	* ChangeLog:
+	fixed sed command in query_db() to conform better to POSIX.
+
+2004-03-09  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Removed need to change BASE_DIR, added references to DATE_LOCALE and NB_EntryDescription.
+
+2004-03-08  n1xt3r  <n1xt3r@pilot>
+
+	* ChangeLog: 1st Update to ChangeLog a.ka. added a ChangeLog.
+
+	* ChangeLog: added a ChangeLog.
+
+	* nb (make_archive): Further simplifications made.
+
+	* nb (filter_dateformat): Fixed bug calling date command twice.
+
+	* plugins/blog_status.sh:
+	Changed to say 'Total entries: ' to avoid '1 entries' situation.
+
+	* nb: Check for user's .nb.conf from /home/kevin directory.
+
+	* default/blog.conf:
+	added configuration variable TIDY_ARGS to control tidy commands in tidy plugin.
+
+	* default/blog.conf, plugins/fortune.sh:
+	added configuration variable FORTUNE_FILE to define fortune files in the fortune plugin.
+
+	* plugins/archive/monthly/monthly-cal.sh:
+	DATE_LOCALE now takes effect on calendar output.
+
+	* nb: Simplified if statement and shifted move_num.
+
+2004-03-07  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/calendar.sh: changed to use DATE_LOCALE
+
+	* nb:
+	Replaced more references of /dev/null and used Pavel's suggestions to the tidy commands and arguments.
+
+	* plugins/postformat/tidy.sh:
+	Replaced more references of /dev/null with  and applied Pavel's suggestions to the tidy commands and arguments.  Fixed previously broken make_archive().  filter_dateformat() now checks for DATE_LOCALE before setting LANG to it.
+
+	* nb (make_pag):
+	Improved the usage of cat and sed (From Pavel Janik <Pavel@Janik.cz>).
+
+2004-03-06  n1xt3r  <n1xt3r@pilot>
+
+	* default/blog.conf:
+	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
+
+2004-03-05  n1xt3r  <n1xt3r@pilot>
+
+	* nb, plugins/01_mymood.off, plugins/mymood.off:
+	Renamed plugins/mymood.off to plugins/01_mymood.off, so it loads 1st!
+
+	* nb:
+	Replaced 'echo "" > $file' with '> $file'.  Changed check_blogdir() so that it only ckecks $BLOG_DIR, archives, and templates.
+
+	* nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	Replaced references of /dev/null with $PLUGIN_OUTFILE
+
+2004-03-04  n1xt3r  <n1xt3r@pilot>
+
+	* plugins/calendar.sh:
+	Updated calendar plugin to utilitize the NB_EntryID variable.
+
+	* plugins/archive/monthly/monthly-cal.sh:
+	Permanently committed missing file: monthly-cal.sh to repository.
+
+	* plugins/master_index.sh:
+	Permanently comitted missing files: master_index.sh and monthly-cal.sh to the repository.
+
+	* plugins/archive/monthly-cal.sh:
+	It helps to use the CVS remove command.
+
+	* plugins/list_entries.sh:
+	Updated list_entries.sh and monthly-cal.sh plugins so that they utilitize the new NB_EntryID variable.
+
+	* default/archives/cat_1.html, default/blog.conf, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/recent_entries.htm, default/styles/nb_rusted.css, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/main_index.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb, nb.conf, plugins/list_entries.sh, plugins/postformat/tidy.sh:
+	Moved code to generate a master archive index out into a plugin.  Replaced TXT_EDITOR with EDITOR, changed BASE_DIR to use the dirname command, added new BLOG_TZD to define a time zone, and added a new --verbose option.  Also improved regular expressions found in sed commands, stopped autoformat plugins from loading in make_page function, and probably more changes that slipped my mind.
+
+	* default/styles/mt_clean.css, default/styles/nb_rusted.css:
+	Initial import
+
+	* default/styles/mt_clean.css, default/styles/nb_rusted.css: New file.
+
+	* default/archives/cat_1.html, default/blog.conf, default/index.html, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	Initial import
+
+	* default/archives/cat_1.html, default/blog.conf, default/index.html, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	New file.
+
+	* COPYING, docs/nanoblogger.html, moods/moods.conf, moods/mymood.txt, moods/smilies/angry.gif, moods/smilies/cheesy.gif, moods/smilies/cool.gif, moods/smilies/cry.gif, moods/smilies/embarassed.gif, moods/smilies/grin.gif, moods/smilies/huh.gif, moods/smilies/kiss.gif, moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif, moods/smilies/rolleyes.gif, moods/smilies/sad.gif, nb, nb.conf:
+	Initial import
+
+	* COPYING, docs/nanoblogger.html, moods/moods.conf, moods/mymood.txt, moods/smilies/angry.gif, moods/smilies/cheesy.gif, moods/smilies/cool.gif, moods/smilies/cry.gif, moods/smilies/embarassed.gif, moods/smilies/grin.gif, moods/smilies/huh.gif, moods/smilies/kiss.gif, moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif, moods/smilies/rolleyes.gif, moods/smilies/sad.gif, nb, nb.conf:
+	New file.
 

@@ -42,7 +42,7 @@
 		}
 
 	.description {
-		font-family: verdana, arial serif;
+		font-family: verdana, arial, serif;
 		color:#e7f1ff;
 		font-size:small;
 		font-weight:bold;
@@ -100,6 +100,7 @@
 		font-size: small;
   		text-transform:uppercase;
 		color: #57933a;
+		margin-bottom:15px;
 		}
 
 	#menu {
