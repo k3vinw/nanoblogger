@@ -3,7 +3,7 @@
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 #TODO: fix (load_config) unconditional loading of default weblog's blog.conf
-#NOTES: because entries get stored in variables, it's possible to produce
+#NOTES: because entries get placed in variables, it's possible to produce
 # non-fatal errors when the entry contains incomplete command subsitutions.
 # e.g. ` and $(
 # nanoblogger's version.
@@ -271,10 +271,8 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 	if [ "$ENTRY_ARCHIVES" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
-		#NB_EntryPermalink="$ARCHIVES_DIR/$permalink_entry"
 		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
 	else
-		#NB_EntryPermalink="$ARCHIVES_DIR/$month.$NB_FILETYPE#$NB_EntryID"
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
 	load_plugins plugins/entry
@@ -933,7 +931,7 @@ cat <<-EOF
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 
-	 -c,-d,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
+	 -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
 
 	Examples:
 	

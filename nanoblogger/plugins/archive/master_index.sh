@@ -5,8 +5,8 @@ MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 
 OLD_BLOG_CSS="$BLOG_CSS"
 BLOG_CSS="../$BLOG_CSS"
-OLD_BLOG_URL_MAIN="$BLOG_URL_MAIN"
-BLOG_URL_MAIN="../$BLOG_URL_MAIN"
+OLD_MAIN_LINK="$MAIN_LINK"
+MAIN_LINK="../$MAIN_LINK"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
@@ -20,7 +20,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 		read_entry "$NB_DATA_DIR/$entry"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle="Untitled"
 		cat <<-EOF
-			<a href="$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="\${ARCHIVES_PATH}$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)
@@ -68,5 +68,5 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"
-BLOG_URL_MAIN="$OLD_BLOG_URL_MAIN"
+MAIN_LINK="$OLD_MAIN_LINK"
 
