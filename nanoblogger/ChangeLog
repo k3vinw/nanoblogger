@@ -1,3 +1,9 @@
+2004-04-18  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, plugins/rss.sh:
+	- Switched to make_placeholder to generate NB_Entries.
+	- Deleted files left in PARTS_DIR directory.
+
 2004-04-17  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/rss.sh:
