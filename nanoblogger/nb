@@ -42,9 +42,11 @@ PARTS_DIR="parts"
 x_id=e
 
 nb_edit(){
+# TODO: test with external editor (outside of script's process)
 EDIT_FILE="$1"
 $EDITOR "$EDIT_FILE"
-if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
+#if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
+if [ ! -f "$EDIT_FILE" ]; then
 	echo "press [enter] to continue."
 	read -p "$NB_PROMPT" enter_key
 fi
@@ -636,7 +638,6 @@ paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."
 add_entry(){
 New_EntryFile=$(NB_TimeStamp).$NB_DATATYPE
 NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
-nb_msg "processing new weblog entry ..."
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
@@ -646,7 +647,6 @@ if [ ! -z "$cat_num" ]; then
 fi
 [ "$build_newblog" = 1 ] && weblog_update=all
 build_weblog "$weblog_update"
-nb_msg "new weblog entry added to '$BLOG_TITLE'."
 }
 
 # edit $BLOG_CONF
@@ -712,7 +712,7 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	for cat_db in $cat_list; do
 		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
 	done
-	cat_num=; build_weblog; exit 0
+	cat_num=; [ ! -z "$UPDATE_LIST" ] && build_weblog; exit 0
 fi
 NUMVAR=$(echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
@@ -870,7 +870,7 @@ esac
 }
 
 # create a new entry, category or weblog directory
-create_weblog(){
+add_weblog(){
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
@@ -885,9 +885,10 @@ if [ ! -d "$BLOG_DIR" ]; then
 	case $choice in
 	[Yy]|"")
 		nb_msg "configuring new weblog ..."
-		nb_edit "$BLOG_DIR"/blog.conf;;
+		nb_edit "$BLOG_DIR"/blog.conf
+		exit 0;;
 	[Nn])
-		nb_msg "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later."
+		die "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later.";;
 	esac
 fi
 check_config
@@ -899,7 +900,7 @@ if [ ! -z "$cat_num" ]; then
 		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
-				nb_msg "creating new category id: $id, for '$BLOG_TITLE' ..."
+				nb_msg "creating new category id: $id ..."
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
 				else
@@ -913,17 +914,7 @@ if [ ! -z "$cat_num" ]; then
 				cat_total=`expr 1 + $cat_total`
 			fi
 		done
-		nb_msg "category database created for '$cat_title'."
-		echo "would you like to add a new entry to this category now? [Y/n]"
-		read -p "$NB_PROMPT" choice
-		case $choice in
-			[Yy]|"")
-				# continue
-				;;
-			[Nn])
-				build_weblog "$weblog_update"; exit 0
-				;;
-		esac
+		nb_msg "category database created for '$cat_title'."; exit 0
 	else
 		db_catquery=`cat_id`; check_catid
 	fi
@@ -1055,7 +1046,7 @@ while [ $# -gt 0 ]; do
 	# check for user's .nb.conf in their home directory
 	[ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
 	case "$1" in
-		-a|--add)		load_config; create_weblog;;
+		-a|--add)		load_config; add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-B|--body)		check_arg; usr_body="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;

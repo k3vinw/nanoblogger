@@ -78,6 +78,7 @@ build_rssfeed(){
 			NB_RSS2EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
 		#NB_RSS2EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
+		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
 		NB_RSS2EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<item>
@@ -86,7 +87,8 @@ build_rssfeed(){
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
 				<dc:creator>$NB_EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
-				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
+				<description>$NB_RSS2EntryExcerpt</description>
+				#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
 			</item>
 		EOF
 	done

@@ -172,7 +172,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>support for relative and absolute links</li>
 
-   <li>extensibility through parts (e.g. news.htm, 2003-06.htm)</li>
+   <li>extensibility through parts (e.g. index.html, 2003-06.htm)</li>
 
    <li>global configuration to set defaults (nb.conf)</li>
 
@@ -1071,16 +1071,15 @@ or
 $(< "$BLOG_DIR/intro.txt")
 	</pre>
    <p>
-	Note the use of left single quotes, they're important. Also, note that no processing is being done this way, you have to
-	add your own HTML.
+	Note that no processing is being done this way, you have to add your own HTML.
    </p>
 
    <p><b>Integrating Parts of your Weblog into a Site</b></p>
    <p>
      Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own
-     custom server-side scripts/includes. This is where the "parts/news.htm" file comes in. It contains all the current entries,
-     so adding a news/diary/blog section is just a matter of adding the code to include "parts/news.htm" into the page. So, now
-     you can have a simple weblog-like page, that's updated whenever news.htm changes.
+     custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries,
+     so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page. So, now
+     you can have a simple weblog-like page, that's updated whenever index.html changes.
    </p>
 
  <h2><a name="14" id="14">14. Credits</a></h2>
