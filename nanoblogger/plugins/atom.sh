@@ -24,10 +24,10 @@ build_atomfeed(){
 	query_db limit "$db_catquery" "$LIMIT_ITEMS"
 	ARCHIVE_LIST="$DB_RESULTS"
 	for entry in $ARCHIVE_LIST; do
-	        read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
+	        read_entry "$NB_DATA_DIR/$entry"
 		NB_AtomEntryDate=`echo "$NB_EntryID$BLOG_TZD"`
 		# non-portable find command!
-		#NB_AtomEntryModDate=`find "$BLOG_DIR/$ARCHIVES/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
+		#NB_AtomEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		NB_AtomEntryModDate="$NB_AtomEntryDate"
 		NB_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		#NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
@@ -35,7 +35,7 @@ build_atomfeed(){
 		make_placeholder "$template" atom_entries.tmp "$output_file"
 	done
 	touch "$BLOG_DIR"/atom_entries.tmp
-	cat "$BLOG_DIR"/atom_entries.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
+	cat "$BLOG_DIR"/atom_entries.tmp > "$BLOG_DIR/$PARTS_DIR/$output_file"
 	rm -f "$BLOG_DIR"/atom_entries.tmp
 	}
 

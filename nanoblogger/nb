@@ -16,17 +16,17 @@ NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
 # prompt to use when asking something.
 NB_PROMPT=": "
 
-# the archives directory name
-ARCHIVES="archives"
-
 # Current path
 CURR_PATH="$PWD"
 
-# directory name to store archived pages to
-FILE_BY_DIR="monthly"
+# directory name to store archives
+ARCHIVES="archives"
 
 # directory name to store parts of blog for portabilty and modularity
 PARTS_DIR="parts"
+
+# directory name to store monthly archives
+MONTHLY_DIR="$ARCHIVES/monthly"
 
 # the permalinks directory (automatically created)
 PERMALINKS_DIR="$ARCHIVES/permalinks"
@@ -83,6 +83,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ ! -z "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load blog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
+# set data directory to user's blog archives
+NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
 # if BLOG_AUTHOR is not specified, use $USER (even when empty)
 [ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
 # fallback on vi as the default editor
@@ -119,7 +121,7 @@ echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 check_blogdir(){
 [ -z "$BLOG_DIR" ] && die "no blog directory specified! bye."
 [ ! -d "$BLOG_DIR" ] && die "blog directory '$BLOG_DIR' doesn't exist! bye."
-[ ! -d "$BLOG_DIR/$ARCHIVES" ] && die "blog's archive directory '$BLOG_DIR/$ARCHIVES' doesn't exist! bye."
+[ ! -d "$NB_DATA_DIR" ] && die "blog's data directory '$NB_DATA_DIR' doesn't exist! bye."
 [ ! -d "$BLOG_DIR/$TEMPLATE_DIR" ] && die "blog's templates directory '$BLOG_DIR/$TEMPLATE_DIR' doesn't exist!. bye."
 }
 
@@ -129,7 +131,7 @@ db_query="$1"
 db_catquery="$2"
 db_limit="$3"
 db_offset="$4"
-cd "$BLOG_DIR"/"$ARCHIVES"
+cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = "nocat" ]; then
 	db_catquery=
@@ -167,7 +169,7 @@ else
 	DB_RESULTS=`cat_db |filter_query`
 fi
 # if we get back what we put in, it should be nullified to reduce errors
-if [ "$DB_RESULTS" = "$BLOG_DIR/$ARCHIVES/*.htm" ]; then
+if [ "$DB_RESULTS" = "$NB_DATA_DIR/*.htm" ]; then
 	DB_RESULTS=
 fi
 db_query=; cd "$CURR_PATH"
@@ -193,7 +195,7 @@ fi
 check_catid(){
 cat_list=`cat_id`
 for cat_db in $cat_list; do
-	[ ! -f "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" ] &&
+	[ ! -f "$NB_DATA_DIR/$cat_db" ] &&
 		die "invalid category id('s): $cat_num"
 done
 [ ! -z "$cat_num" ] && [ -z "$cat_list" ] && die "must specify a valid category id!"
@@ -218,16 +220,16 @@ rm -f "$BLOG_DIR"/nb_template.tmp
 load_plugins(){
 PLUGINS_DIR="$1"
 if [ "$ENABLE_PLUGINS" = "1" ]; then
-	[ ! -d "$BASE_DIR"/"$PLUGINS_DIR" ] &&
+	[ ! -d "$BASE_DIR/$PLUGINS_DIR" ] &&
 		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! bye."
 	# loads plugins in alpha-numeric order (0-9, a-z)
-	#[ -d "$BLOG_DIR"/"$PLUGINS_DIR" ] && nb_msg "loading user $PLUGINS_DIR ..."
-	[ -d "$BLOG_DIR"/"$PLUGINS_DIR" ] &&
-		for plugin in "$BLOG_DIR"/"$PLUGINS_DIR"/*.sh; do
+	#[ -d "$BLOG_DIR/$PLUGINS_DIR" ] && nb_msg "loading user $PLUGINS_DIR ..."
+	[ -d "$BLOG_DIR/$PLUGINS_DIR" ] &&
+		for plugin in "$BLOG_DIR/$PLUGINS_DIR"/*.sh; do
 			[ -f "$plugin" ] && . "$plugin"
 		done
 	#nb_msg "loading global $PLUGINS_DIR ..."
-	for plugin in "$BASE_DIR"/"$PLUGINS_DIR"/*.sh; do
+	for plugin in "$BASE_DIR/$PLUGINS_DIR"/*.sh; do
 		[ -f "$plugin" ] && . "$plugin"
 	done
 fi
@@ -258,7 +260,7 @@ if [ -f "$ENTRY_FILE" ]; then
 		permalink_entry=`chg_suffix $entry`
 		NB_EntryPermalink="$BLOG_URL/$PERMALINKS_DIR/$permalink_entry"
 	else
-		NB_EntryPermalink="$BLOG_URL/$ARCHIVES/$FILE_BY_DIR/$month.$NB_FILETYPE#$NB_EntryID"
+		NB_EntryPermalink="$BLOG_URL/$MONTHLY_DIR/$month.$NB_FILETYPE#$NB_EntryID"
 	fi
 	load_plugins plugins/entry
 fi
@@ -310,25 +312,25 @@ make_placeholder(){
 TEMPLATE_FILE="$1"
 TEMP_FILE="$2"
 OUTPUT_FILE="$3"
-load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$TEMPLATE_FILE"
+load_template "$BLOG_DIR/$TEMPLATE_DIR/$TEMPLATE_FILE"
 if [ ! -z "$BLOG_HTML" ]; then
-	echo "$BLOG_HTML" >> "$BLOG_DIR"/"$TEMP_FILE"
+	echo "$BLOG_HTML" >> "$BLOG_DIR/$TEMP_FILE"
 	BLOG_HTML=
-	cat "$BLOG_DIR"/"$TEMP_FILE" > "$BLOG_DIR"/"$PARTS_DIR"/"$OUTPUT_FILE"
+	cat "$BLOG_DIR/$TEMP_FILE" > "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"
 fi
-touch "$BLOG_DIR"/"$PARTS_DIR"/"$OUTPUT_FILE"
-PLACEHOLDER=`cat "$BLOG_DIR"/"$PARTS_DIR"/"$OUTPUT_FILE"`
+touch "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"
+PLACEHOLDER=`cat "$BLOG_DIR/$PARTS_DIR/$OUTPUT_FILE"`
 }
 
 # create a permalink page for an entry
 build_permalink(){
 permalink_entry=`chg_suffix $entry`
 if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
-	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$entry" ] && [ "$BLOG_DIR"/"$ARCHIVES"/"$entry" -nt \
+	if [ -f "$NB_DATA_DIR/$entry" ] && [ "$NB_DATA_DIR/$entry" -nt \
 		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry" ]; then
-		echo "$BLOG_HTML" > "$BLOG_DIR"/"$PARTS_DIR"/"$entry"
-		make_page "$BLOG_DIR"/"$PARTS_DIR"/"$entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-		"$BLOG_DIR"/"$PERMALINKS_DIR"/"$permalink_entry"
+		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
+		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry"
 	fi
 fi
 }
@@ -342,8 +344,8 @@ output_file="$4"
 query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
-	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
-	load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$template"
+	read_entry "$NB_DATA_DIR/$entry"
+	load_template "$BLOG_DIR/$TEMPLATE_DIR/$template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$BLOG_DIR"/archives.tmp
 		build_permalink
@@ -354,7 +356,7 @@ for entry in $ARCHIVE_LIST; do
 	fi
 done
 touch "$BLOG_DIR"/archives.tmp
-cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
+cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR/$PARTS_DIR/$output_file"
 rm -f "$BLOG_DIR"/archives.tmp
 }
 
@@ -364,8 +366,8 @@ build_monthlyarchive(){
 		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".htm
 		NB_ArchiveTitle="$month"
 		load_plugins plugins/archive/monthly
-		make_page "$BLOG_DIR"/"$PARTS_DIR"/"$month".htm "$BLOG_DIR/$TEMPLATE_DIR/$MONTH_TEMPLATE" \
-		"$BLOG_DIR"/"$ARCHIVES"/"$FILE_BY_DIR"/"$month".$NB_FILETYPE
+		make_page "$BLOG_DIR/$PARTS_DIR/$month".htm "$BLOG_DIR/$TEMPLATE_DIR/$MONTH_TEMPLATE" \
+		"$BLOG_DIR/$MONTHLY_DIR/$month.$NB_FILETYPE"
 	fi
 }
 # create all the monthly archives
@@ -396,13 +398,13 @@ db_catquery=`cat_id`
 [ ! -z "$db_catquery" ] && db_categories="$db_catquery"
 if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
-		if [ -f "$BLOG_DIR/$ARCHIVES/$cat_arch" ]; then
+		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			cat_archindex=`chg_suffix "$cat_arch"`
 			cat_archpart=`chg_suffix "$cat_arch" htm`
-			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_arch"`
+			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
 			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archpart"
-			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archpart" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-			"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
+			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
+			"$BLOG_DIR/$ARCHIVES/$cat_archindex"
 		fi
 	done
 fi
@@ -422,17 +424,17 @@ else
 	for Mod_Entry in $Edit_EntryFile $DEL_LIST $UPDATE_LIST; do
 		if [ ! -z "$Mod_Entry" ]; then
 			# update relative permalinks
-			if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
+			if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$NB_DATA_DIR/$Mod_Entry" ]; then
 				entry="$Mod_Entry"
-				read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
-				load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$PERMALINKENTRY_TEMPLATE"
+				read_entry "$NB_DATA_DIR/$entry"
+				load_template "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
 				if [ ! -z "$BLOG_HTML" ]; then
-					echo "$BLOG_HTML" > "$BLOG_DIR"/"$PARTS_DIR"/"$Mod_Entry"
+					echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$Mod_Entry"
 					BLOG_HTML=
 				fi
 				permalink_file=`chg_suffix "$Mod_Entry"`
-				make_page "$BLOG_DIR"/"$PARTS_DIR"/"$Mod_Entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-				"$BLOG_DIR"/"$PERMALINKS_DIR"/"$permalink_file"
+				make_page "$BLOG_DIR/$PARTS_DIR/$Mod_Entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+				"$BLOG_DIR/$PERMALINKS_DIR/$permalink_file"
 			fi
 			# update relative monthly archives
 			mod_month=`echo "$Mod_Entry" |cut -c1-7`
@@ -446,13 +448,13 @@ else
 				for cat_db in $db_categories; do
 					cat_archindex=`chg_suffix "$cat_db"`
 					cat_archpart=`chg_suffix "$cat_db" htm`
-					cat_entryvar=`grep "$Mod_Entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
+					cat_entryvar=`grep "$Mod_Entry" "$NB_DATA_DIR/$cat_db"`
 					if [ ! -z "$cat_entryvar" ]; then
 						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_archpart"
-						NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
-						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archpart" \
+						NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
+						make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" \
 						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-						"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
+						"$BLOG_DIR/$ARCHIVES/$cat_archindex"
 					fi
 				done
 				last_dbcat="$db_categories"
@@ -471,11 +473,11 @@ blog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 db_catquery=`cat_id`; check_catid
 if [ "$blog_update" = "all" ]; then
 	# clear parts directory for clean build of archive links
-	rm -fr "$BLOG_DIR"/"$PARTS_DIR"/*
+	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
 	# clear monthly archives so only months based on the current archives exist
-	rm -fr "$BLOG_DIR"/"$ARCHIVES/$FILE_BY_DIR"/*
+	rm -fr "$BLOG_DIR/$MONTHLY_DIR"/*
 	# clear permalinks if they exist
-	rm -fr "$BLOG_DIR"/"$PERMALINKS_DIR"/*
+	rm -fr "$BLOG_DIR/$PERMALINKS_DIR"/*
 fi
 load_plugins plugins
 # build the archives
@@ -484,11 +486,11 @@ nb_msg "generating index pages ..."
 if [ "$blog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 	mkdir -p "$BLOG_DIR/$PERMALINKS_DIR"
 	make_archive "$blog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
-	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
+	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-make_page "$BLOG_DIR"/"$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
+make_page "$BLOG_DIR/$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
 
 # function to add a new entry
@@ -497,11 +499,11 @@ New_EntryFile=`NB_TimeStamp`.htm
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
 	for cat_db in $db_catquery ; do 
-		echo "$New_EntryFile" >> "$BLOG_DIR/$ARCHIVES"/"$cat_db"
+		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
 nb_msg "processing blog entry ..."
-write_entry "$BLOG_DIR"/"$ARCHIVES"/"$New_EntryFile"
+write_entry "$NB_DATA_DIR/$New_EntryFile"
 build_blog "$blog_update"
 nb_msg "blog entry added to '$BLOG_TITLE'."
 }
@@ -528,14 +530,14 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 	query_db "$db_query" "$db_catquery"
 	if [ ! -z "$usr_title" ]; then
 		nb_msg "changing title to '$usr_title' for category id: $cat_num ..."
-		echo "$usr_title" > "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
-		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
+		echo "$usr_title" > "$NB_DATA_DIR/$db_catquery"
+		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$NB_DATA_DIR/$db_catquery"
 		find_catlinks(){
-			ENTRY_LIST=`sed 1d "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"`
+			ENTRY_LIST=`sed 1d "$NB_DATA_DIR/$db_catquery"`
 			query_db "$db_query"
 			for cat_entry in $ENTRY_LIST; do
 				for cat_db in $db_categories; do
-					echo $cat_db `grep $cat_entry "$BLOG_DIR"/"$ARCHIVES"/$cat_db`
+					echo $cat_db `grep $cat_entry "$NB_DATA_DIR"/$cat_db`
 				done
 			done |grep " " |cut -d" " -f 1 |sort -u |sed -e '/cat_/ s///; /[.]db/ s///'
 			}
@@ -551,11 +553,11 @@ NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"
 Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
-[ ! -f "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile" ] && die "invalid entry id: $NUMVAR"
-"$EDITOR" "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
-if [ -N "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile" ]; then
+[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $NUMVAR"
+"$EDITOR" "$NB_DATA_DIR/$Edit_EntryFile"
+if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 	nb_msg "processing blog entry id: $NUMVAR ..."
-	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
+	read_entry "$NB_DATA_DIR/$Edit_EntryFile"
 	cat_num=; build_blog
 else
 	die "no changes were made! bye."
@@ -575,7 +577,7 @@ UPDATE_CATLIST="$1"
 for relative_entry in $UPDATE_CATLIST; do
 	query_db "$db_query"
 	for cat_db in $db_categories; do
-		cat_var=`grep "$relative_entry" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
 		build_catlist
 	done
 done
@@ -608,7 +610,7 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 	nb_msg "deleting category id('s): $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
-		rm -f "$BLOG_DIR/$ARCHIVES/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"`
+		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"`
 	done
 	find_categories "$UPDATE_LIST"
 	build_blog; exit 0
@@ -623,38 +625,38 @@ fi
 query_db "$db_query" "$cat_list"; ENTRY_LIST="$DB_RESULTS" # save DB_RESULTS now, because they'll change
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	[ ! -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
+	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
 done
 nb_msg "deleting blog entry id('s): $delete_num$cat_msg ..."
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile" ]; then
+	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
 		DEL_LIST="$Delete_EntryFile"
 		[ "$DEL_LIST" != "$OLD_DELLIST" ] && DEL_LIST="$OLD_DELLIST $Delete_EntryFile"
 		OLD_DELLIST="$DEL_LIST"
 		find_categories "$DEL_LIST"
 		if [ ! -z "$cat_list" ]; then
 			for cat_db in $cat_list; do
-				cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
 				if [ ! -z "$cat_mod" ]; then
-					sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" \
-					> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db".tmp
-					mv "$BLOG_DIR"/"$ARCHIVES"/"$cat_db".tmp "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
+					> "$NB_DATA_DIR/$cat_db".tmp
+					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi
 			done
 		else
 			for cat_db in $db_categories; do
-				cat_mod=`grep "$Delete_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
 				if [ ! -z "$cat_mod" ]; then
-					sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" \
-					> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db".tmp
-					mv "$BLOG_DIR"/"$ARCHIVES"/"$cat_db".tmp "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
+					> "$NB_DATA_DIR/$cat_db".tmp
+					mv "$NB_DATA_DIR".tmp "$NB_DATA_DIR/$cat_db"
 				fi
 			done
-			rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
+			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
 			Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
-			if [ -f "$BLOG_DIR"/"$PERMALINKS_DIR"/"$Delete_PermalinkFile" ]; then
-				rm -f "$BLOG_DIR"/"$PERMALINKS_DIR"/"$Delete_PermalinkFile"
+			if [ -f "$BLOG_DIR/$PERMALINKS_DIR/$Delete_PermalinkFile" ]; then
+				rm -f "$BLOG_DIR/$PERMALINKS_DIR/$Delete_PermalinkFile"
 			fi
 		fi
 	fi
@@ -673,8 +675,8 @@ if [ "$db_query" = "cat" ]; then
 	cat_total=`echo "$db_categories" |grep "" -c`
 	while [ "$id" != "$cat_total" ]; do
 		id=`expr 1 + $id`
-		if [ -f "$BLOG_DIR/$ARCHIVES/cat_$id.db" ]; then
-			echo " $id, `sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db`"
+		if [ -f "$NB_DATA_DIR/cat_$id.db" ]; then
+			echo " $id, `sed -n 1p "$NB_DATA_DIR"/cat_"$id".db`"
 		else
 			cat_total=`expr 1 + $cat_total`
 		fi
@@ -687,16 +689,16 @@ echo "ID, Title [Category]"
 id=0
 for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
-		cat_var=`grep "$entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
+		cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 		if [ ! -z "$cat_var" ]; then
-			cat_title=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
+			cat_title=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
 			[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
 			oldcat_title="$cat_title,"
 		fi
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
 	[ ! -z "$cat_title" ] && NB_Category="[$cat_title]"
-	read_metadata TITLE "$BLOG_DIR"/"$ARCHIVES"/"$entry"; NB_EntryTitle="$NB_Metadata"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 	id=`expr 1 + $id`
 	echo " $id, $NB_EntryTitle $NB_Category"
 	oldcat_title=; cat_title=; NB_Category=
@@ -711,7 +713,7 @@ NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'
 query_db
 for entry_id in $NUMVAR; do
 	Move_EntryFile=`echo "$DB_RESULTS" |sed -n "$entry_id"p`
-	[ ! -f "$BLOG_DIR"/"$ARCHIVES"/"$Move_EntryFile" ] && die "invalid entry id('s): $move_num"
+	[ ! -f "$NB_DATA_DIR/$Move_EntryFile" ] && die "invalid entry id('s): $move_num"
 done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
 nb_msg "moving blog entry id('s): $move_num, to category id('s): $cat_num ..."
@@ -719,12 +721,12 @@ UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
 	Move_EntryFile="$entry_id"
-	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Move_EntryFile" ]; then
+	if [ -f "$NB_DATA_DIR/$Move_EntryFile" ]; then
 		if [ ! -z "$db_catquery" ]; then
 			for cat_db in $db_categories; do
-				cat_mod=`grep "$Move_EntryFile" "$BLOG_DIR/$ARCHIVES/$cat_db"`
+				cat_mod=`grep "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"`
 				if [ -z "$cat_mod" ]; then
-					echo "$Move_EntryFile" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+					echo "$Move_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 				fi
 			done
 		fi
@@ -796,7 +798,7 @@ if [ ! -z "$cat_num" ]; then
 		cat_total=`echo "$db_categories" |grep "" -c`
 		while [ "$id" != "$cat_total" ]; do
 			id=`expr 1 + $id`
-			if [ ! -f "$BLOG_DIR/$ARCHIVES/cat_$id.db" ]; then
+			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
 				echo "creating new category id: $id, for '$BLOG_TITLE' ..."
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
@@ -805,7 +807,7 @@ if [ ! -z "$cat_num" ]; then
 					read -p "$NB_PROMPT" cat_title
 					[ -z "$cat_title" ] && cat_title="Untitled"
 				fi
-				echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db
+				echo "$cat_title" > "$NB_DATA_DIR"/cat_"$id".db
 				cat_num="$id"; db_catquery=`cat_id`; check_catid; cat_total="$id"
 			else
 				cat_total=`expr 1 + $cat_total`

@@ -15,7 +15,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$blog_update" = "all" ]; then
 	ENTRY_LIST="$DB_RESULTS"
 	for entry in $ENTRY_LIST; do
 		month=`echo "$entry" |cut -c1-7`
-		read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"; load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$ENTRYLINKS_TEMPLATE"
+		read_entry "$NB_DATA_DIR/$entry"; load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$ENTRYLINKS_TEMPLATE"
 		make_placeholder "$ENTRYLINKS_TEMPLATE" entry_links.tmp entry_links.htm
 	done; month=
 	NB_Entry_Links="$PLACEHOLDER"

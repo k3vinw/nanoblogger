@@ -1,5 +1,8 @@
 2004-06-07  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configuration" and "Credits" sections of manual.
+
 	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/blog.conf, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/cat_links.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/older_entries.htm, default/templates/archive.htm, default/templates/atom.xml, default/templates/category_archive.htm, default/templates/entry.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf.xml, ChangeLog:
 	- Added new variable BLOG_URL_MAIN, for "main" link in templates.
 	- Added new variable PERMALINKS, toggles display of permalinks.
