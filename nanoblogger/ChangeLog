@@ -1,4 +1,12 @@
+2004-04-24  n1xt3r  <n1xt3r@scorcher>
+
+	* nb:
+	Changed version information to emphasize that this code is in CVS.
+
 2004-04-23  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, default/templates/rdf_catfeed.xml:
+	Updated category RSS/RDF template to reflect the changes made to rdf.xml.
 
 	* ChangeLog, nb (delete_blog):
 	Checks relation to category before writing to it.
