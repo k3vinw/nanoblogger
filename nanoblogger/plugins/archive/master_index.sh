@@ -1,7 +1,8 @@
 # NanoBlogger Plugin that creates a master archive index
 
-# centralize modification variables
+# concatenate modification variables
 MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
+
 OLD_BLOG_CSS="$BLOG_CSS"
 BLOG_CSS="../$BLOG_CSS"
 OLD_BLOG_URL_MAIN="$BLOG_URL_MAIN"
@@ -61,9 +62,11 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	NB_EntryTitle="Archives"
 	NB_Entries="$NB_Archive_Links"
 	nb_msg "$MKPAGE_OUTFILE"
-	load_template "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
-	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-        load_plugins plugins/postformat
+	for template in "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"; do
+		load_template "$template"
+		echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+	done
+	load_plugins plugins/postformat
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"

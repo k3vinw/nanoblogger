@@ -3,7 +3,6 @@
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 #TODO: fix (load_config) unconditional loading of default weblog's blog.conf
-#TODO: fix inconsistenceis in relative links for different node levels
 # nanoblogger's version.
 VERSION="CVS-3.0"
 
@@ -268,10 +267,10 @@ if [ -f "$ENTRY_FILE" ]; then
 	if [ "$ENTRY_ARCHIVES" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
 		#NB_EntryPermalink="$ARCHIVES_DIR/$permalink_entry"
-		NB_EntryPermalink="$REL_URL$permalink_entry"
+		NB_EntryPermalink="${REL_URL}$permalink_entry"
 	else
 		#NB_EntryPermalink="$ARCHIVES_DIR/$month.$NB_FILETYPE#$NB_EntryID"
-		NB_EntryPermalink="$REL_URL$month.$NB_FILETYPE#$NB_EntryID"
+		NB_EntryPermalink="${REL_URL}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
 	load_plugins plugins/entry
 fi
@@ -310,10 +309,16 @@ NB_Entries=`cat "$MKPAGE_SRCFILE"`
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
-load_template "$SCRATCH_FILE"
-echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
+cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
+Preserved_Entries="$NB_Entries"
+NB_Entries="\$NB_Entries"
+pass=0; for template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
+	pass=`expr 1 + $pass`
+	[ "$pass" = "2" ] && NB_Entries="$Preserved_Entries"
+	load_template "$template"
+	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+done
 load_plugins plugins/postformat
 }
 
@@ -420,7 +425,6 @@ page_outfile="$4"
 
 query_db all "$page_category"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
-
 if [ "$total_items" -gt "$page_items" ]; then
 	nb_msg "paginating $page_outfile ..."
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
@@ -442,20 +446,20 @@ if [ "$total_items" -gt "$page_items" ]; then
 		> "$SCRATCH_FILE"
 		echo '<br />' >> "$SCRATCH_FILE"
 		[ "$prev_num" = "1" ] &&
-			echo '<a href="'$REL_URL$page_outfile'">[prev]</a>' >> "$SCRATCH_FILE"
+			echo '<a href="'$page_outfile'">[prev]</a>' >> "$SCRATCH_FILE"
 		[ "$prev_num" -gt "1" ] &&
-			echo '<a href="'$REL_URL$prev_page'">[prev]</a>' >> "$SCRATCH_FILE"
+			echo '<a href="'$prev_page'">[prev]</a>' >> "$SCRATCH_FILE"
 		for ((i=1; i <= $total_pages; i++)); do
 			[ "$i" = "1" ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
 				echo '['$i']' >> "$SCRATCH_FILE"
 			else
-				echo '<a href="'$REL_URL$page'">['$i']</a>' >> "$SCRATCH_FILE"
+				echo '<a href="'$page'">['$i']</a>' >> "$SCRATCH_FILE"
 			fi
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-			echo '<a href="'$REL_URL$next_page'">[next]</a>' >> "$SCRATCH_FILE"
+			echo '<a href="'$next_page'">[next]</a>' >> "$SCRATCH_FILE"
 		NB_PageLinks=`cat "$SCRATCH_FILE"`
 		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
@@ -524,7 +528,6 @@ fi
 # generate the weblog files
 build_weblog(){
 # set base for relative links
-REL_URL=
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$weblog_update" ] && weblog_update="current"
 # query database and check for categories
