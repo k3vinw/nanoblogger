@@ -504,13 +504,8 @@ if [ "$FULL_PERMALINKS" = "1" ]; then
 	[ -d "$BLOG_DIR/$PERMALINKS" ] || mkdir -p "$BLOG_DIR/$PERMALINKS"
 fi
 # build main index and feed
-for template in "$ENTRY_TEMPLATE" "$FEEDENTRY_TEMPLATE"; do
-	if [ "$template" = "$ENTRY_TEMPLATE" ]; then
-		make_archive current nocat "$template" news.htm
-	else
-		make_archive current nocat "$template" news."$NB_SYND_FILETYPE"
-	fi
-done
+make_archive current nocat "$ENTRY_TEMPLATE" news.htm
+make_archive current nocat "$FEEDENTRY_TEMPLATE" news."$NB_SYND_FILETYPE"
 if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
@@ -520,8 +515,7 @@ make_page "$BLOG_DIR"/"$PARTS_DIR"/news.$NB_SYND_FILETYPE "$BLOG_DIR/$TEMPLATE_D
 "$BLOG_DIR"/index.$NB_SYND_FILETYPE
 }
 
-# process entry metadata into time-stamped text-file
-# and store in the archives for future processing
+# process entry metadata into time-stamped text-file and store in the archives for future processing
 add_entry(){
 New_EntryFile=`NB_TimeStamp`.htm
 if [ ! -z "$cat_num" ]; then
