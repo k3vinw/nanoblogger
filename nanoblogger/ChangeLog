@@ -1,3 +1,16 @@
+2004-04-17  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/rss.sh:
+	Fixed checks for category feeds and rss item file generation.
+
+	* nb, plugins/rss.sh: - Added support for category feeds to rss plugin.
+	- Removed all functions and code related to rss feeds in nb.
+
+	* ChangeLog, default/templates/rdf.xml, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, nb, plugins/rss.sh:
+	- (read_metadata): Added experimental support for content encoding.
+	- Added a plugin for RSS feeds.
+	- Modified rdf templates to include rdf:Seq.
+
 2004-04-10  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, nb (show_help): Simplified wording in examples.
