@@ -237,7 +237,7 @@ NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s/
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
 }
 
-# read entry and process through template
+# read an entry
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
@@ -255,21 +255,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryPermalink="$BLOG_URL/$ARCHIVES/$FILE_BY_DIR/$month.$NB_FILETYPE#$NB_EntryID"
 	fi
-	# find related categories and create a list of links
-	query_db
-	PLACEHOLDER=; > "$BLOG_DIR"/cat_links.tmp
-	cat_bytitle(){ for cat_db in $db_categories; do echo "`sed -n 1p $BLOG_DIR/$ARCHIVES/$cat_db` | $cat_db"; done; }
-	CAT_TITLES=`cat_bytitle |sort -u |cut -d"|" -f 2`
-	for entry_cat in $CAT_TITLES; do
-		cat_var=`grep "$entry" "$BLOG_DIR"/"$ARCHIVES"/"$entry_cat"`
-		if [ ! -z "$cat_var" ]; then
-			cat_title=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$entry_cat"`
-			cat_index=`chg_suffix "$entry_cat"`; cat_feed=`chg_suffix "$entry_cat" "$NB_SYND_FILETYPE"`
-			make_placeholder "$ENTRYCATLINKS_TEMPLATE" cat_links.tmp entrycat_links.htm
-		fi
-	done
-	NB_EntryCategories="$PLACEHOLDER"
-	rm -f "$BLOG_DIR"/cat_links.tmp "$BLOG_DIR"/"$PARTS_DIR"/entrycat_links.htm
+	load_plugins plugins/entry
 fi
 }
 
@@ -310,8 +296,8 @@ cat "$MKPAGE_TMPLFILE" > "$MKPAGE_OUTFILE".tmp
 load_template "$MKPAGE_OUTFILE".tmp
 echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
-load_plugins plugins/postformat
 rm -f "$MKPAGE_OUTFILE".tmp
+load_plugins plugins/postformat
 }
 
 # create a temporary place-holder from a template
@@ -352,7 +338,6 @@ query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
-	[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 	load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$BLOG_DIR"/archives.tmp
@@ -426,6 +411,7 @@ fi
 
 # create monthly archives, update any modified parts, and build a master archive index
 build_archives(){
+load_plugins plugins/archive
 if [ "$blog_update" = "all" ]; then
 	cycle_months_for build_monthlyarchive
 else
@@ -440,7 +426,6 @@ else
 			if [ "$FULL_PERMALINKS" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
 				entry="$Mod_Entry"
 				read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
-				[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 				load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$PERMALINKENTRY_TEMPLATE"
 				if [ ! -z "$BLOG_HTML" ]; then
 					echo "$BLOG_HTML" > "$BLOG_DIR"/"$PARTS_DIR"/"$Mod_Entry"
@@ -579,7 +564,6 @@ Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
 if [ -N "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile" ]; then
 	nb_msg "processing blog entry id: $NUMVAR ..."
 	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
-	[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 	cat_num=; build_blog
 else
 	die "no changes were made! bye."
