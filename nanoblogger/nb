@@ -28,8 +28,8 @@ FILE_BY_DIR="monthly"
 # directory name to store parts of blog for portabilty and modularity
 PARTS_DIR="parts"
 
-# the permalinks directory
-PERMALINKS="$ARCHIVES/permalinks"
+# the permalinks directory (automatically created)
+PERMALINKS_DIR="$ARCHIVES/permalinks"
 
 # the plugins dir
 PLUGINS_DIR="plugins"
@@ -139,7 +139,7 @@ fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	filter_limit(){
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
-		[ -z "$db_limit" ] && db_limit="$MAX_DISPLAY"
+		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
 		[ ! -z "$db_limit" ] && sed -n 1,"$db_limit"p; db_limit=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
@@ -153,7 +153,7 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 				sed 1d "$cat_db"
 		done
 		}
-# list amount of entries based on what the user set in MAX_DISPLAY
+# list amount of entries based on db_limit
 if [ "$db_query" = "all" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = "current" ]; then
@@ -249,9 +249,9 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
 	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-	if [ "$FULL_PERMALINKS" = "1" ]; then
+	if [ "$PERMALINKS" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
-		NB_EntryPermalink="$BLOG_URL/$PERMALINKS/$permalink_entry"
+		NB_EntryPermalink="$BLOG_URL/$PERMALINKS_DIR/$permalink_entry"
 	else
 		NB_EntryPermalink="$BLOG_URL/$ARCHIVES/$FILE_BY_DIR/$month.$NB_FILETYPE#$NB_EntryID"
 	fi
@@ -320,10 +320,10 @@ build_permalink(){
 permalink_entry=`chg_suffix $entry`
 if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$entry" ] && [ "$BLOG_DIR"/"$ARCHIVES"/"$entry" -nt \
-		"$BLOG_DIR/$PERMALINKS/$permalink_entry" ]; then
+		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry" ]; then
 		echo "$BLOG_HTML" > "$BLOG_DIR"/"$PARTS_DIR"/"$entry"
 		make_page "$BLOG_DIR"/"$PARTS_DIR"/"$entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-		"$BLOG_DIR"/"$PERMALINKS"/"$permalink_entry"
+		"$BLOG_DIR"/"$PERMALINKS_DIR"/"$permalink_entry"
 	fi
 fi
 }
@@ -417,7 +417,7 @@ else
 	for Mod_Entry in $Edit_EntryFile $DEL_LIST $UPDATE_LIST; do
 		if [ ! -z "$Mod_Entry" ]; then
 			# update relative permalinks
-			if [ "$FULL_PERMALINKS" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
+			if [ "$PERMALINKS" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
 				entry="$Mod_Entry"
 				read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
 				load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$PERMALINKENTRY_TEMPLATE"
@@ -427,7 +427,7 @@ else
 				fi
 				permalink_file=`chg_suffix "$Mod_Entry"`
 				make_page "$BLOG_DIR"/"$PARTS_DIR"/"$Mod_Entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-				"$BLOG_DIR"/"$PERMALINKS"/"$permalink_file"
+				"$BLOG_DIR"/"$PERMALINKS_DIR"/"$permalink_file"
 			fi
 			# update relative monthly archives
 			mod_month=`echo "$Mod_Entry" |cut -c1-7`
@@ -471,14 +471,14 @@ if [ "$blog_update" = "all" ]; then
 	# clear monthly archives so only months based on the current archives exist
 	rm -fr "$BLOG_DIR"/"$ARCHIVES/$FILE_BY_DIR"/*
 	# clear permalinks if they exist
-	rm -fr "$BLOG_DIR"/"$PERMALINKS"/*
+	rm -fr "$BLOG_DIR"/"$PERMALINKS_DIR"/*
 fi
 load_plugins plugins
 # build the archives
 nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
-if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
-	mkdir -p "$BLOG_DIR/$PERMALINKS"
+if [ "$blog_update" != "main" ] && [ "$PERMALINKS" = "1" ]; then
+	mkdir -p "$BLOG_DIR/$PERMALINKS_DIR"
 	make_archive "$blog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
@@ -649,8 +649,8 @@ for entry_id in $NUMVAR; do
 			done
 			rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
 			Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
-			if [ -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile" ]; then
-				rm -f "$BLOG_DIR"/"$PERMALINKS"/"$Delete_PermalinkFile"
+			if [ -f "$BLOG_DIR"/"$PERMALINKS_DIR"/"$Delete_PermalinkFile" ]; then
+				rm -f "$BLOG_DIR"/"$PERMALINKS_DIR"/"$Delete_PermalinkFile"
 			fi
 		fi
 	fi

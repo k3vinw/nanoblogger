@@ -1,5 +1,8 @@
 # NanoBlogger Atom Feed Plugin
 
+LIMIT_ITEMS="10"
+[ -z "$LIMIT_ITEMS" ] && LIMIT_ITEMS="$MAX_ENTRIES"
+
 ATOMFEED_TEMPLATE="$BLOG_DIR/$TEMPLATE_DIR/atom.xml"
 ATOMENTRY_TEMPLATE="atom_entry.xml"
 
@@ -18,6 +21,7 @@ build_atomfeed(){
 	db_catquery="$2"
 	template="$3"
 	output_file="$4"
+	db_limit="$LIMIT_ITEMS"
 	query_db "$query_type" "$db_catquery" "$db_limit"
 	ARCHIVE_LIST="$DB_RESULTS"
 	for entry in $ARCHIVE_LIST; do
@@ -38,7 +42,7 @@ build_atomfeed(){
 
 
 nb_msg "generating atom feed ..."
-build_atomfeed current nocat "$ATOMENTRY_TEMPLATE" atom."$NB_SYND_FILETYPE"
+build_atomfeed "$query_type" nocat "$ATOMENTRY_TEMPLATE" atom."$NB_SYND_FILETYPE"
 rm -f "$BLOG_DIR/$PARTS_DIR/atom.$NB_SYND_FILETYPE"
 NB_Entries="$PLACEHOLDER"
 

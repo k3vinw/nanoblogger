@@ -1,3 +1,13 @@
+2004-05-30  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, nb:
+	- Combined code from delete_blog into new function, find_categories.
+	- (delete_blog): Fixed data loss (replaced bad cat/sed command).
+	- (delete_blog): Now requires the mv command.
+	- (move_entry): Categories now get updated properly.
+	- (move_entry): Now tests if a category needs to be modified.
+	- (move_entry): Fixed data loss (removed unecessary sed command).
+
 2004-05-29  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/atom.xml: Removed xml:lang="en" from <feed> tag.
@@ -10,7 +20,7 @@
 	* ChangeLog, nb (move_entry): Removed unecessary code.
 
 	* ChangeLog, nb (move_entry):
-	Fixed corruption cuased to category's database.
+	Reversed for loops: for category in category list for entry in entry list done done.
 
 2004-05-28  n1xt3r  <n1xt3r@bluefalcon>
 
