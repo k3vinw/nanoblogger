@@ -13,9 +13,9 @@
  xmlns:admin="http://webns.net/mvcb/"
 >
 <channel rdf:about="/index.xml">
-<title>My Blog's Title</title>
+<title>My Weblog's Title</title>
 <link>/index.html</link>
-<description>My Blog's Description</description>
+<description>My Weblog's Description</description>
 <dc:language>en-us</dc:language>
 <dc:creator>n1xt3r</dc:creator>
 <admin:generatorAgent rdf:resource="http://home.columbus.rr.com/n1xt3r/nanoblogger/" />

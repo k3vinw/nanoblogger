@@ -843,7 +843,7 @@ cat <<-EOF
 	 -l, --list <all,cat,current>		list entries or categories
 	 					(defaults to current entries).
 	 --makepage <source> <output>		specify source and output file to create
-	 					html page.
+	 					web page.
 	 -m, --move <ID>			move an entry to a specified category (for
 	 					'--category').
 	 -n, --author <text>			set author of entry (for '--add').

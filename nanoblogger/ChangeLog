@@ -1,3 +1,7 @@
+2004-07-24 01:17  n1xt3r
+
+	* ChangeLog, nb: Fixed missing suffix bug for $NB_EditFile.
+
 2004-07-23 23:04  n1xt3r
 
 	* ChangeLog, nb: Cleaned up code for future release.

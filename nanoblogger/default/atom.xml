@@ -3,9 +3,9 @@
 xmlns="http://purl.org/atom/ns#"
 xmlns:dc="http://purl.org/dc/elements/1.1/"
 >
-<title mode="escaped">My Blog's Title</title>
+<title mode="escaped">My Weblog's Title</title>
 <link rel="alternate" type="text/html" href="/index.html"/>
-<modified>2004-07-22T19:18:18-04:00</modified>
+<modified>2004-07-25T19:41:55-04:00</modified>
 <author>
 <name>n1xt3r</name>
 <url>/index.html</url>
