@@ -116,6 +116,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
 # check if we want absolute links
 [ "$ABSOLUTE_LINKS" = "1" ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
+# default entry display, fallbacks to limit
+[ -z "$QUERY_ENTRIES" ] && QUERY_ENTRIES="max"
 }
 
 # filter custom date format for a new entry
@@ -150,6 +152,7 @@ db_query="$1"
 db_catquery="$2"
 db_limit="$3"
 db_offset="$4"
+current_month=`date "+%Y-%m"`
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = "nocat" ]; then
@@ -181,8 +184,8 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 if [ "$db_query" = "all" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = "current" ]; then
-	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
-elif [ "$db_query" = "limit" ]; then
+	db_query="$current_month"; DB_RESULTS=`cat_db |filter_query |filter_limit`
+elif [ "$db_query" = "max" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
 else
 	DB_RESULTS=`cat_db |filter_query`
@@ -344,7 +347,7 @@ make_archive(){
 query_type="$1"
 db_catquery="$2"
 archive_template="$3"
-PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$4"
+PARTS_FILE="$4"
 db_limit="$5"
 db_offset="$6"
 query_db "$query_type" "$db_catquery" "$db_limit" "$db_offset"
@@ -367,7 +370,7 @@ done
 # create archive of current month
 build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
-		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".$NB_FILETYPE
+		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE
 		NB_ArchiveTitle="$month"
 		load_plugins plugins/archive/monthly
 		make_page "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
@@ -421,11 +424,13 @@ CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 
 # divide larger archives into multiple pages
 paginate(){
-page_category="$1"
-page_items="$2"
-page_template="$3"
-page_outfile="$4"
-query_db all "$page_category"
+page_query="$1"
+page_catquery="$2"
+page_items="$3"
+page_template="$4"
+page_outdir="$5"
+page_outfile="$6"
+query_db "$page_query" "$page_catquery"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 if [ "$total_items" -gt "$page_items" ]; then
 	nb_msg "paginating $page_outfile ..."
@@ -462,15 +467,15 @@ if [ "$total_items" -gt "$page_items" ]; then
 		! [ "$next_num" -gt "$total_pages" ] &&
 			echo '<a href="'$next_page'">&gt;&gt;</a>' >> "$SCRATCH_FILE"
 		NB_PageLinks="$(<$SCRATCH_FILE)"
-		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
+		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
-		"$BLOG_DIR/$ARCHIVES_DIR/$arch_page"
+		"$page_outdir/$arch_page"
 		NB_PageLinks=
 	done
 else
-	make_archive all "$db_catquery" "$ENTRY_TEMPLATE" "$page_outfile"
+	make_archive "$page_query" "$db_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$page_outfile"
 	make_page "$BLOG_DIR/$PARTS_DIR/$page_outfile" "$NB_TEMPLATE_DIR/$page_template" \
-	"$BLOG_DIR/$ARCHIVES_DIR/$page_outfile"
+	"$page_outdir/$page_outfile"
 fi
 }
 
@@ -482,7 +487,7 @@ if [ ! -z "$db_categories" ]; then
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
 			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
-			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$NB_ArchivePrefix.$NB_FILETYPE"
+			paginate all "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
 	done
 fi
@@ -544,14 +549,13 @@ load_plugins plugins
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != "main" ] && build_archives
 if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
-	make_archive "$weblog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
+	make_archive "$weblog_update" nocat "$PERMALINKENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
 nb_msg "generating main index page ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
-make_archive current nocat "$ENTRY_TEMPLATE" news.$NB_FILETYPE
-make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
+paginate "$QUERY_ENTRIES" nocat "$PAGE_MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
 }
 
 # add a new entry
@@ -705,10 +709,11 @@ if [ "$db_query" = "cat" ]; then
 		fi
 	done; exit 0
 fi
-[ -z "$db_query" ] && db_query="current"
+# fallback to entries listed by limit
+[ -z "$db_query" ] && db_query="$QUERY_ENTRIES"
 query_db "$db_query" "$db_catquery"
 [ -z "$DB_RESULTS" ] && die "no entries to list for '$BLOG_TITLE'! goodbye."
-nb_msg "ID, Title [Category]"
+nb_msg "ID, Title - [Category] - Date"
 id=0
 for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
@@ -720,10 +725,11 @@ for entry in $DB_RESULTS; do
 		fi
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
-	[ ! -z "$cat_title" ] && NB_Category="[$cat_title]"
+	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
+	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$NB_Metadata"
 	id=`expr 1 + $id`
-	echo " $id, $NB_EntryTitle $NB_Category"
+	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
 	oldcat_title=; cat_title=; NB_Category=
 done
 }
@@ -911,8 +917,8 @@ cat <<-EOF
 	 -e, --edit <ID,cat>			edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
-	 -l, --list <all,cat,current>		list entries or categories
-	 					(defaults to current entries).
+	 -l, --list <all,cat,current,max>	list entries or categories
+	 					(defaults to \$QUERY_ENTRIES).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.
 	 -m, --move <ID>			move an entry to a specified category (for
@@ -926,8 +932,8 @@ cat <<-EOF
 	 -t, --title <text>			set title of entry/category/page
 	 					(for '--add', '--category', and
 	 					'--makepage').
-	 -u, --update <all,current,main>	force update of weblog (defaults to
-	 					current).
+	 -u, --update <all,current,main,max>	force update of weblog (defaults to
+	 					\$QUERY_ENTRIES).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 

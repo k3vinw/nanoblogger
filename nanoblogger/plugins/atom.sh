@@ -1,8 +1,7 @@
 # NanoBlogger Atom Feed Plugin
 
 # Limit number of items to include in feed
-LIMIT_ITEMS="10"
-[ -z "$LIMIT_ITEMS" ] && LIMIT_ITEMS="$MAX_ENTRIES"
+[ -z "$LIMIT_ITEMS" ] && LIMIT_ITEMS="10"
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 
@@ -39,7 +38,7 @@ nb_msg "$MKPAGE_OUTFILE"
 # generate feed entries
 build_atomfeed(){
 	db_catquery="$1"
-	query_db limit "$db_catquery" "$LIMIT_ITEMS"
+	query_db max "$db_catquery" "$LIMIT_ITEMS"
 	ARCHIVE_LIST="$DB_RESULTS"
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
