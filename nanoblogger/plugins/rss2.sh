@@ -27,8 +27,8 @@ esc_chars(){
 make_rssfeed(){
 	feed_outfile="$1"
 	MKPAGE_OUTFILE="$feed_outfile"
-	RSS2_FEED_URL="$BLOG_URL/$NB_RSS2File"
-	[ ! -z "$NB_RSS2CatFile" ] && RSS2_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSS2CatFile"
+	BLOG_FEED_URL="$BLOG_URL"
+	[ ! -z "$NB_ArchiveFile" ] && BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_ArchiveFile"
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
@@ -39,7 +39,7 @@ make_rssfeed(){
 		>
 		<channel>
 			<title>$BLOG_TITLE</title>
-			<link>$RSS2_FEED_URL</link>
+			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
 			<dc:language>$BLOG_LANG</dc:language>
 			<dc:creator>$NB_EntryAuthor</dc:creator>
@@ -102,6 +102,7 @@ build_rss_catfeeds(){
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					#NB_RSS2CatFile=`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
 					NB_RSS2CatFile=`echo "$cat_db" |sed -e 's/[\.]db/-rss.'$NB_SYND_FILETYPE'/g'`
+					NB_ArchiveFile=`chg_suffix "$cat_db" "$NB_FILETYPE"`
 					NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
 					nb_msg "generating rss $NB_RSS2Ver feed for category ..."
 					build_rssfeed "$cat_db"
