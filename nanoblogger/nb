@@ -113,7 +113,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # fallback to AUTO_TZD
 [ -z "$BLOG_TZD" ] && BLOG_TZD="$AUTO_TZD"
 # fallback to MAX_ENTRIES
-: ${PAGE_MAX_ENTRIES:$MAX_ENTRIES}
+[ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
 }
 
 # filter custom date format for a new entry
@@ -162,7 +162,7 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 		db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
-		[ -z "$db_offset" ] && db_offset="1" #; db_offset=`expr 1 + $db_offset`
+		: ${db_offset:=1}
 		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p; db_limit=; db_offset=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
