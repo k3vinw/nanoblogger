@@ -9,9 +9,11 @@
 
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 
-if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
-	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" cal $CAL_ARGS`
-	[ ! -z "$CALENDAR" ] || CALENDAR=`cal $CAL_ARGS`
+[ -z "$CAL_CMD" ] && CAL_CMD="cal"
+
+if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
+	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS`
+	[ ! -z "$CALENDAR" ] || CALENDAR=`$CAL_CMD $CAL_ARGS`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 	DAYS=`echo "$CALENDAR" |sed 1,2d`
