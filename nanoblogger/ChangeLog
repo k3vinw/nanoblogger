@@ -1,3 +1,10 @@
+2004-07-23  state  <state@bluefalcon>
+
+	* ChangeLog, default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/blog.conf, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/2004-01.html, default/parts/archive_links.htm, default/parts/archive_links.html, default/parts/blog_status.htm, default/parts/blog_status.html, default/parts/cal-2004-01.htm, default/parts/cal-2004-01.html, default/parts/cal.htm, default/parts/cal.html, default/parts/cat_1.htm, default/parts/cat_1.html, default/parts/fortune.htm, default/parts/fortune.html, default/parts/main_links.htm, default/parts/news.htm, default/parts/news.html, default/parts/older_entries.htm, default/parts/older_entries.html, default/parts/recent_entries.htm, default/parts/recent_entries.html, default/parts/tidy.htm, default/parts/tidy.html, default/styles/nb_default.css, default/styles/nb_smoke-signals.css, default/styles/nb_spring.css, nb, plugins/archive/master_index.sh, plugins/list_entries.sh:
+	- Added a couple new CSS style sheets, including a new default.
+	- Entry's without title are now listed as "Untitled" in archives index page.
+	- Category header and links only appear when categories exist in archives index page.
+
 2004-07-21  state  <state@bluefalcon>
 
 	* ChangeLog, default/styles/mt_clean.css, default/styles/nb_rusted.css, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:

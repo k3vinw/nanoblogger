@@ -70,15 +70,15 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
     <li>easy editing and management of entries</li>
 
-    <li>archiving by month</li>
+    <li>archiving by category, entry, and month</li>
 
-    <li>category support</li>
+    <li>support for multiple categories</li>
 
     <li>permalinks</li>
 
     <li>RSS syndication (comes with RSS 1.0 (RDF) format)</li>
 
-    <li>a fully functional web site, using templates and stylesheets for easy customizations</li>
+    <li>templates and CSS style sheets for full control of appearance</li>
 
     <li>placeholders for easy template manipulation</li>
 
@@ -86,7 +86,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
     <li>auto-formatting, e.g. line breaks translate to HTML</li>
 
-    <li>keeps "clippings" (parts cut out) of the weblog for extra portability and modularity (e.g. news.htm, 2003-06.htm)</li>
+    <li>extensibility through parts (e.g. news.htm, 2003-06.htm)</li>
 
     <li>per-weblog configuration via a seperate config file (blog.conf)</li>
 
@@ -138,13 +138,22 @@ nb --blogdir [myblog_dir] --add
 where <em>myblog_dir</em> is a non-existant directory. This is will create a new directory, copy the default files over, and then
 let you edit the weblog's configuration. Multiple weblogs can be created this way.  Running the same command again on an existing weblog
 directory will add a new entry.
+
+    <p>To set a default weblog directory:</p>
+
+	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
+1. create and edit .nb.conf in your $HOME directory:
+	vi $HOME/.nb.conf
+2. set BLOG_DIR to your weblog directory:
+	BLOG_DIR="$HOME/public_html/[myblog_dir]"
+	</pre>
   </blockquote>
 
   <h2><a name="cr6" id="cr6">Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
   <pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb --blogdir [myblog_dir] --configure
+nb --blogdir [myblog_dir] --configure -u all
   </pre>
-  This opens <em>blog.conf</em> from the weblog directory for editing.
+  This opens <em>blog.conf</em> from the weblog directory for editing and updates all of the weblog.
 
   <p><b>Setting the Editor</b></p>
 

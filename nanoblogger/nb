@@ -467,6 +467,7 @@ fi
 
 # generate the weblog files
 build_weblog(){
+[ "$config_weblog" = "1" ] && nb_msg "applying changes to '$BLOG_TITLE' ..."
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$weblog_update" ] && weblog_update="current"
 # query database and check for categories
@@ -512,12 +513,12 @@ nb_msg "new weblog entry added to '$BLOG_TITLE'."
 
 # edit $BLOG_CONF
 config_weblog(){
+config_weblog="1"
 if [ -f "$BLOG_CONF" ]; then
 	$EDITOR "$BLOG_CONF"
 	# check if file's been modified since opened
 	[ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
-	load_config; nb_msg "applying changes to '$BLOG_TITLE' ..."
-	check_blogdir; build_weblog; exit 0
+	load_config
 else
 	die "config file, '$BLOG_CONF' doesn't exist! goodbye."
 fi
@@ -729,8 +730,8 @@ create_weblog(){
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
 	build_newblog="1"
-	mkdir -p "$BLOG_DIR"
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
+	mkdir -p "$BLOG_DIR"
 	nb_msg "copying default weblog files ..."
 	cp -R "$BASE_DIR"/default/* "$BLOG_DIR"
 	# but prompt for configuration.
@@ -834,7 +835,7 @@ cat <<-EOF
 	 -B, --body <text>			set body of entry (for '--add').
 	 -c, --category	<ID,cat>		specify category (for '--add', '--delete',
 	 					'--edit', '--list' and '--update').
-	 --configure				configure weblog.
+	 --configure				configure weblog (for '--update').
 	 --datadir <directory>			specify weblog's data directory.
 	 -d, --delete <ID,cat>			delete an entry or category.
 	 -D, --desc <text>			set description of entry (for '--add').
@@ -865,7 +866,7 @@ cat <<-EOF
 
 	Examples:
 	
-	 specify the weblog directory to create or add new entry to
+	 specify the weblog directory to create or add new entry
 	 	nb -b ~/public_html/weblog -a
 
 	 create new category and titles it "News"
@@ -877,11 +878,8 @@ cat <<-EOF
 	 remove entry 2 from category 1
 	 	nb -b ~/public_html/weblog -c 1 -d 2
 
-	 edit the title of category number 1
-	 	nb -b ~/public_html/weblog -c 1 -t Humor -e cat
-
 	 sets author, title, and body for new entry
-	 	nb -b ~/public_html/weblog -n myname -t 'my title' -B 'My message!' -a
+	 	nb -b ~/public_html/weblog -n myname -t 'My Title' -B 'My message!' -a
 
 	More info:
 	 URL: http://home.columbus.rr.com/n1xt3r/nanoblogger/
