@@ -1,5 +1,7 @@
 2004-05-04  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/01_mymood.off: Fixed a broken sed command.
+
 	* ChangeLog, nb, plugins/01_mymood.off, plugins/archive/monthly/monthly-cal.sh, plugins/articles.off, plugins/autoformat/moods.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/postformat/tidy.sh:
 	Converted sed substitute commands to shorthand for increase in speed.
 
