@@ -1,3 +1,8 @@
+2004-05-28  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configuration".
+
 2004-05-27  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/makepage.htm: Added a meta-tag for the generator.
