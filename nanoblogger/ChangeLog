@@ -1,5 +1,8 @@
 2004-06-18  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, nb (find_categories):
+	cat_num set unconditionally, for proper updating.
+
 	* plugins/entry/moods.sh: Re-added moods.sh.
 
 	* ChangeLog, nb, plugins/blog_links.sh, plugins/entry/moods.sh:

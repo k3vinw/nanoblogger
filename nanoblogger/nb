@@ -433,10 +433,11 @@ else
 			fi
 			# update relative monthly archives
 			mod_month=`echo "$Mod_Entry" |cut -c1-7`
-			if [ "$mod_month" != "$this_month" ]; then
+			if [ "$mod_month" != "$this_month" ] && [ "$mod_month" != "$last_month" ]; then
 				month="$mod_month"
 				query_db "$month"; build_monthlyarchive
 			fi
+			last_month="$mod_month"
 			query_db
 			# update relative categories
 			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
