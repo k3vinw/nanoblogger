@@ -234,7 +234,7 @@ read_metadata(){
 MTAG="$1"
 META_FILE="$2"
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e 's/^'$MTAG'[\:][ ]//'`
-[ "$MTAG" != "BODY" ] ||
+[ "$MTAG" = "BODY" ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
 }
 

@@ -1,3 +1,8 @@
+2004-04-04  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb (show_help):
+	added a line about specifying multiple blog id's.
+
 2004-04-02  n1xt3r  <n1xt3r@scorcher>
 
 	* default/templates/entry.htm, ChangeLog:
