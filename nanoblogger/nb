@@ -83,7 +83,7 @@ load_config(){
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
-[ -d "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
+[ -d "$BLOG_DIR/$DATA_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
 # USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
 [ -d "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
@@ -96,6 +96,8 @@ load_config(){
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
+# default to lynx for browser
+: ${BROWSER:=lynx}
 # default to vi for editor
 : ${EDITOR:=vi}
 # default to txt for datatype suffix
@@ -241,15 +243,19 @@ done
 # filter content through a template
 load_template(){
 BLOG_FILE="$1"
-# prefix text/html with an X in front of each line
-BLOG_TEMPLATE=`sed -e '/^/ s//X/' < "$BLOG_FILE"`
-# remove X's and source variables into a temp file
-cat > "$SCRATCH_FILE" <<-EOF
-	sed -e '/^X/ s///' <<TMPL
-		$BLOG_TEMPLATE
-	TMPL
-EOF
-BLOG_HTML=$(. "$SCRATCH_FILE")
+if [ -f "$BLOG_FILE" ]; then
+	# prefix text/html with an X in front of each line
+	BLOG_TEMPLATE=`sed -e '/^/ s//X/' < "$BLOG_FILE"`
+	# remove X's and source variables into a temp file
+	cat > "$SCRATCH_FILE" <<-EOF
+		sed -e '/^X/ s///' <<TMPL
+			$BLOG_TEMPLATE
+		TMPL
+	EOF
+	BLOG_HTML=$(. "$SCRATCH_FILE")
+else
+	die "template file, '$BLOG_FILE' doesn't exist! goodbye."
+fi
 }
 
 # load plugins from $PLUGINS_DIR
@@ -321,14 +327,15 @@ make_page(){
 MKPAGE_SRCFILE="$1"
 MKPAGE_TMPLFILE="$2"
 MKPAGE_OUTFILE="$3"
-[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title; usr_title=
+[ ! -z "$usr_title" ] && MKPAGE_TITLE="$usr_title"
+[ ! -z "$MKPAGE_TITLE" ] && NB_EntryTitle="$MKPAGE_TITLE"
 if [ ! -z "$usr_srcfile" ]; then
 	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
 	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
-[ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! goodbye."
+[ ! -f "$MKPAGE_SRCFILE" ] && die "source file, '$MKPAGE_SRCFILE' doesn't exist! goodbye."
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
-[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
+[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file, '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 if [ "$weblog_update" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
@@ -346,7 +353,7 @@ if [ "$weblog_update" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; th
 		[ -f "$mkp_plugin" ] && . "$mkp_plugin"
 	done
 fi
-MKPAGE_CONTENT=; NB_EntryTitle=
+MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
 }
 
 # create individual page for an entry
@@ -705,6 +712,7 @@ for entry_id in $NUMVAR; do
 			if [ -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile" ]; then
 				rm -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
 			fi
+			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
 	fi
 done
@@ -836,7 +844,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 		nb_msg "configuring new weblog ..."
 		$EDITOR "$BLOG_DIR"/blog.conf;;
 	[Nn])
-		nb_msg "weblog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
+		nb_msg "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later."
 	esac
 fi
 check_config
@@ -942,6 +950,7 @@ cat <<-EOF
 	 					(defaults to max).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.
+	 --manual				view the manual.
 	 -m, --move <ID>			move an entry to a specified category (for
 	 					'--category').
 	 -n, --author <text>			set author of entry (for '--add').
@@ -1021,6 +1030,7 @@ while [ $# -gt 0 ]; do
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
 					check_config; make_page;;
+		--manual)		load_config; $BROWSER "$BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_config; move_entry;;
 		-p|--preview)		check_config; preview_weblog;;

@@ -1,10 +1,16 @@
 # NanoBlogger Atom Feed Plugin
 
-# Limit number of items to include in feed
+# limit number of items to include in feed
 : ${LIMIT_ITEMS:=10}
+# filename of atom feed
+NB_AtomFile="atom.$NB_SYND_FILETYPE"
+# atom feed version
+NB_AtomVer="0.3"
+# atom feed's alternate link
+NB_AtomAltLink='<link rel="alternate" type="application/atom+xml" title="Atom $NB_AtomVer" href="${BASE_URL}$NB_AtomFile" />'
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
-# Make links temporarily absolute
+# make links temporarily absolute
 ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
 [ "$ABSOLUTE_LINKS" = "1" ] && ARCHIVES_URL=""
 OLD_BASE_URL="$BASE_URL"
@@ -17,11 +23,11 @@ esc_chars(){
 
 # make atom feed
 make_atomfeed(){
-MKPAGE_OUTFILE="$BLOG_DIR/atom.$NB_SYND_FILETYPE"
+MKPAGE_OUTFILE="$BLOG_DIR/$NB_AtomFile"
 
 cat > "$MKPAGE_OUTFILE" <<-EOF
 	<?xml version="1.0" encoding="$BLOG_CHARSET"?>
-	<feed version="0.3"
+	<feed version="$NB_AtomVer"
 		xmlns="http://purl.org/atom/ns#"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
 	>
@@ -94,7 +100,7 @@ build_atomfeed(){
 	}
 
 
-nb_msg "generating atom feed ..."
+nb_msg "generating atom $NB_AtomVer feed ..."
 build_atomfeed nocat
 make_atomfeed
 BASE_URL="$OLD_BASE_URL"

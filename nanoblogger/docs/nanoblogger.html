@@ -760,13 +760,13 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">generates articles found in the "articles" directory</td>
        <td align="left">$NB_ArticleLinks</td>
        <td align="left">$ARTICLE_DIR/article_title.$ARTICLE_SUFFIX</td>
-       <td align="left">requires makepage.htm template</td>
+       <td align="left">requires makepage.htm template, should be last plugin to load</td>
      </tr>
      <tr>
        <td align="left">atom.sh</td>
        <td align="left">adds an atom feed</td>
        <td align="left">LIMIT_ITEMS</td>
-       <td align="left">atom.$NB_SYND_FILETYPE</td>
+       <td align="left">$NB_AtomFile, $NB_AtomAltLink</td>
        <td align="left">none</td>
      </tr>
      <tr>
@@ -841,9 +841,16 @@ nb [-b blog_dir] -c 1 -d cat
      </tr>
      <tr>
        <td align="left">rss.sh</td>
-       <td align="left">adds rss feeds</td>
+       <td align="left">adds rss 1.0 feeds</td>
        <td align="left">LIMIT_ITEMS</td>
-       <td align="left">index.$NB_SYND_FILETYPE, $ARCHIVES_DIR/cat_N.$NB_SYND_FILETYPE</td>
+       <td align="left">$NB_RSSFile, $ARCHIVES_DIR/$NB_ArchivePrefix.$NB_SYND_FILETYPE, $NB_RSSAltLink</td>
+       <td align="left">none</td>
+     </tr>
+     <tr>
+       <td align="left">rss2.sh</td>
+       <td align="left">adds rss 2.0 feeds</td>
+       <td align="left">LIMIT_ITEMS</td>
+       <td align="left">$NB_RSS2File, $ARCHIVES_DIR/$NB_ArchivePrefix-$NB_RSS2File.$NB_SYND_FILETYPE, $NB_RSS2AltLink</td>
        <td align="left">none</td>
      </tr>
    </table>
