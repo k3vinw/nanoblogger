@@ -1,3 +1,8 @@
+2004-03-11  n1xt3r  <n1xt3r@sourceforge.net>
+
+	* ChangeLog, nb:
+	fixed sed command in query_db() to conform better to POSIX.
+
 2004-03-09  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* ChangeLog, docs/nanoblogger.html:
