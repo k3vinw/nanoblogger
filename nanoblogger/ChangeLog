@@ -1,5 +1,8 @@
 2004-05-01  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.rdf, default/parts/cat_links.htm, default/parts/tidy.htm:
+	Updated NanoBlogger's Help entry in default.
+
 	* default/blog.conf, nb:
 	- (nb_main): Removed prompt for editor to simplify blog creation.
 	- Updated EDITOR comment in blog.conf
