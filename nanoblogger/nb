@@ -139,7 +139,7 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	filter_limit(){
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 		[ ! -z "$db_limit" ] || db_limit="$MAX_DISPLAY"
-		[ -z "$db_limit" ] || sed -n 0,"$db_limit"p; db_limit=
+		[ -z "$db_limit" ] || sed -n 1,"$db_limit"p; db_limit=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
 	# list all entries
