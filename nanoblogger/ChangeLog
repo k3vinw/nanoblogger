@@ -1,5 +1,8 @@
 2004-05-31  n1xt3r  <n1xt3r@bluefalcon>
 
+	* plugins/list_entries.sh, ChangeLog:
+	Replaced FULL_PERMALINKS with ENTRY_ARCHIVES.
+
 	* ChangeLog, default/blog.conf, docs/nanoblogger.html, nb:
 	- Renamed PERMALINKS to ENTRY_ARCHIVES.
 	- Updated "Settings and Configurations" section of manual.
