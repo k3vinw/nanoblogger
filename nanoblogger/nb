@@ -413,15 +413,6 @@ cycle_months_for(){
 	done
 }
 
-# function to build category feeds
-build_catfeeds(){
-if [ "$CAT_FEEDS" = "1" ]; then
-	make_archive current "$cat_arch" "$CATFEEDENTRY_TEMPLATE" "$cat_archfeed"
-	make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archfeed" "$BLOG_DIR/$TEMPLATE_DIR/$CATFEED_TEMPLATE" \
-	"$BLOG_DIR"/"$ARCHIVES"/"$cat_archfeed"
-fi
-}
-
 build_catarchives(){
 # build category archives
 [ ! -z "$blog_update" ] && [ "$blog_update" = "all" ] || db_categories=
@@ -431,13 +422,11 @@ if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$BLOG_DIR/$ARCHIVES/$cat_arch" ]; then
 			cat_archindex=`chg_suffix "$cat_arch"`
-			cat_archfeed=`chg_suffix "$cat_arch" "$NB_SYND_FILETYPE"`
 			cat_archpart=`chg_suffix "$cat_arch" htm`
 			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_arch"`
 			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archpart"
 			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archpart" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 			"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
-			build_catfeeds
 		fi
 	done
 fi
@@ -481,7 +470,6 @@ else
 			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
 				for cat_db in $db_categories; do
 					cat_archindex=`chg_suffix "$cat_db"`
-					cat_archfeed=`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
 					cat_entryvar=`grep "$Mod_Entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
 					if [ ! -z "$cat_entryvar" ]; then
 						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_db".htm
@@ -489,7 +477,6 @@ else
 						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_db".htm \
 						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 						"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
-						build_catfeeds
 					fi
 				done
 				last_dbcat="$db_categories"
@@ -526,14 +513,11 @@ nb_msg "generating index pages ..."
 [ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
 # build main index
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-#make_archive current nocat "$FEEDENTRY_TEMPLATE" news."$NB_SYND_FILETYPE" encode_text="1"
 if [ "$blog_update" = "all" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
 make_page "$BLOG_DIR"/"$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
-#make_page "$BLOG_DIR"/"$PARTS_DIR"/news.$NB_SYND_FILETYPE "$BLOG_DIR/$TEMPLATE_DIR/$MAINFEED_TEMPLATE" \
-#"$BLOG_DIR"/index.$NB_SYND_FILETYPE
 }
 
 # process entry metadata into time-stamped text-file and store in the archives for future processing
@@ -646,9 +630,7 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 	nb_msg "deleting category id('s): $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
-		cat_feed="$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
-		rm -f "$BLOG_DIR/$ARCHIVES/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"` \
-		"$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
+		rm -f "$BLOG_DIR/$ARCHIVES/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"`
 	done
 	for relative_entry in $UPDATE_LIST; do
 		query_db "$db_query"
