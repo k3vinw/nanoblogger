@@ -1,3 +1,11 @@
+2004-07-11  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, docs/nanoblogger.html, nb:
+	- Added more help to default entry.
+	- Updated "Managing Entries and Categories" section of manual.
+	- Replaced old '--importfile' with new '--message' option.
+	- Added new '--desc' option to set description of an entry.
+
 2004-07-07  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html, nb:
