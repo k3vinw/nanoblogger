@@ -12,8 +12,17 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	NB_Entry_Links=$(
 	for entry in $ENTRY_LIST; do
 		month=`echo "$entry" |cut -c1-7`
-		read_entry "$NB_DATA_DIR/$entry"
+		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
+		if [ "$ENTRY_ARCHIVES" = 1 ]; then
+			permalink_entry=`chg_suffix $entry`
+			NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
+		else
+			NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
+		fi
+		# load category links plugin
+		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
+			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
 			<a href="\${ARCHIVES_PATH}$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
