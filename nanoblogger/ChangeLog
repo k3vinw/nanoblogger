@@ -1,3 +1,11 @@
+2004-05-27  n1xt3r  <n1xt3r@bluefalcon>
+
+	* default/templates/makepage.htm: Added a meta-tag for the generator.
+
+	* ChangeLog, plugins/articles.off:
+	- Simplified format of an article source file.
+	- Added useful information in the comments of the plugin's code.
+
 2004-05-26  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:
