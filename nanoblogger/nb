@@ -113,7 +113,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # fallback to AUTO_TZD
 [ -z "$BLOG_TZD" ] && BLOG_TZD="$AUTO_TZD"
 # fallback to MAX_ENTRIES
-[ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
+: ${PAGE_MAX_ENTRIES:$MAX_ENTRIES}
 }
 
 # filter custom date format for a new entry
