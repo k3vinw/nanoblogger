@@ -1,4 +1,23 @@
+2004-04-05  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/master_index.sh, plugins/postformat/tidy.sh:
+	- Replaced OUTPUT_FILE with MKPAGE_OUTFILE in tidy plugin.
+	- Replaced call to nb with load_template in master archive plugin.
+
+	* nb, plugins/articles.off, plugins/postformat/tidy.sh:
+	- Changed PLUGIN_OUTFILE to PLUGIN_NAME_OUTFILE.
+	- (make_page): Changed OUT_FILE to MKPAGE_OUTFILE.
+	- Added calls to autoformat and postformat plugins in articles plugins.
+
 2004-04-04  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/articles.off: New articles plugin:
+	- removed articles.list, uses .txt files in articles directory.
+	- 1st line in .txt file becomes title, the rest is the body.
+	- replaced call to nb with load_template.
+
+	* ChangeLog, articles/articles.list, nb, plugins/articles.off:
+	Removed articles/articles.list, replacing articles.off ...
 
 	* ChangeLog, nb (show_help):
 	added a line about specifying multiple blog id's.
