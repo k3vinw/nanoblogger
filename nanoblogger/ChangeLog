@@ -1,4 +1,8 @@
-2004-05-19  n1xt3r  <n1xt3r@scorcher>
+2004-05-21  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, nb (read_entry): Enabled filtering mode, escape_chars.
+
+2004-05-19  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/postformat/tidy.sh:
 	Fixed conflicting 'generator' tags - Paul Drain <pd@cipherfunk.org>.
@@ -10,7 +14,7 @@
 	* ChangeLog, docs/nanoblogger.html:
 	Updated cgicomment and microblogger links.
 
-2004-05-16  n1xt3r  <n1xt3r@scorcher>
+2004-05-16  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
 	Loads autoformat plugins from inside.
@@ -19,17 +23,17 @@
 	(make_archive),(build_archives),(edit_blog): Autoformat plugins no longer
 	overwrite (possibly destroy) the entry's metadata.
 
-2004-05-11  n1xt3r  <n1xt3r@scorcher>
+2004-05-11  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:
 	Lots of minor updates to the documentation.
 
-2004-05-08  n1xt3r  <n1xt3r@scorcher>
+2004-05-08  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (nb_main):
 	Removed prompt for directory creation, now done automatically.
 
-2004-05-06  n1xt3r  <n1xt3r@scorcher>
+2004-05-06  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (nb_main):
 	Fixed "bye" typo in blog directory creation prompt.
@@ -45,7 +49,7 @@
 	* ChangeLog, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/fortune.htm, default/parts/news.htm:
 	Updated intro/help entry for default.
 
-2004-05-04  n1xt3r  <n1xt3r@scorcher>
+2004-05-04  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/01_mymood.off: Fixed a broken sed command.
 
@@ -55,7 +59,7 @@
 	* ChangeLog, plugins/autoformat/auto_break.sh:
 	Reverted auto formmating back to old behaviour.
 
-2004-05-02  n1xt3r  <n1xt3r@scorcher>
+2004-05-02  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:
 	Updated "Tips and Tricks" section of manual.
@@ -71,7 +75,7 @@
 	* ChangeLog, default/atom.xml, default/index.html, default/parts/older_entries.htm:
 	Repository update.
 
-2004-05-01  n1xt3r  <n1xt3r@scorcher>
+2004-05-01  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/atom.xml, default/index.html:
 	Added missing default directories?
@@ -95,18 +99,18 @@
 	- Updated templates and plugin information.
 	- Cleaned up organization and removed unnecessary material in manual.
 
-2004-04-30  n1xt3r  <n1xt3r@scorcher>
+2004-04-30  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/templates/rdf.xml, default/templates/rdf_catfeed.xml:
 	Improved XML parsing of RSS templates by removing charset declarations.
 
-2004-04-29  n1xt3r  <n1xt3r@scorcher>
+2004-04-29  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb, plugins/autoformat/01_escape_chars.off:
 	- Added filter to escape special characters, such as ampersand and quotes.
 	- Removed experimental autoformat plugin that escaped characters.
 
-2004-04-28  n1xt3r  <n1xt3r@scorcher>
+2004-04-28  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/autoformat/auto_break.sh:
 	Fixed over zealous conversions of line breaks to br tags.
@@ -114,12 +118,12 @@
 	* ChangeLog, plugins/autoformat/auto_break.sh:
 	Fixed line break conversions to include br tags.
 
-2004-04-24  n1xt3r  <n1xt3r@scorcher>
+2004-04-24  n1xt3r  <n1xt3r@bluefalcon>
 
 	* nb:
 	Changed version information to emphasize that this code is in CVS.
 
-2004-04-23  n1xt3r  <n1xt3r@scorcher>
+2004-04-23  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/templates/rdf_catfeed.xml:
 	Updated category RSS/RDF template to reflect the changes made to rdf.xml.
@@ -132,12 +136,12 @@
 	- (edit_blog): Checks for empty DB_RESULTS before writing to category database.
 	- (build_archives): Fixed check for monthly archive updating.
 
-2004-04-22  n1xt3r  <n1xt3r@scorcher>
+2004-04-22  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/master_index.sh, nb, ChangeLog:
 	NB_Month_Links gets generated correctly.
 
-2004-04-21  n1xt3r  <n1xt3r@scorcher>
+2004-04-21  n1xt3r  <n1xt3r@bluefalcon>
 
 	* nb (build_blog): Permalinks now get updated according to blog_update.
 
@@ -147,13 +151,13 @@
 	* nb, plugins/rss.sh, ChangeLog (build_blog):
 	Permalinks get built and updated correctly.
 
-2004-04-20  n1xt3r  <n1xt3r@scorcher>
+2004-04-20  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/templates/rdf.xml:
 	- Added references for DOCTYPE and ENTITY.
 	- Added admin module and set admin:generatorAgent to NanoBlogger.
 
-2004-04-18  n1xt3r  <n1xt3r@scorcher>
+2004-04-18  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
 	- NB_AtomEntryModDate was temporarily changed to NB_AtomEntryDate.
@@ -164,7 +168,7 @@
 	- Switched to make_placeholder to generate NB_Entries.
 	- Deleted files left in PARTS_DIR directory.
 
-2004-04-17  n1xt3r  <n1xt3r@scorcher>
+2004-04-17  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/rss.sh:
 	Fixed checks for category feeds and rss item file generation.
@@ -177,7 +181,7 @@
 	- Added a plugin for RSS feeds.
 	- Modified rdf templates to include rdf:Seq.
 
-2004-04-10  n1xt3r  <n1xt3r@scorcher>
+2004-04-10  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (show_help): Simplified wording in examples.
 
@@ -186,7 +190,7 @@
 	* ChangeLog, nb (load_plugins):
 	user plugins are now loaded before global plugins.
 
-2004-04-09  n1xt3r  <n1xt3r@scorcher>
+2004-04-09  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/atom.sh:
 	Removed call to make_page function to fix loading of user plugins.
@@ -202,7 +206,7 @@
 	* ChangeLog, plugins/articles.off:
 	- Changed article format to metadata tags: TITLE, DESC, and BODY.
 
-2004-04-05  n1xt3r  <n1xt3r@scorcher>
+2004-04-05  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (build_blog):
 	Fixed bug that caused all permalinks to be processed unconditionally.
@@ -216,20 +220,20 @@
 	- (make_page): Changed OUT_FILE to MKPAGE_OUTFILE.
 	- Added calls to autoformat and postformat plugins in articles plugins.
 
-2004-04-04  n1xt3r  <n1xt3r@scorcher>
+2004-04-04  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/articles.off: New articles plugin:
 	- removed articles.list, uses .txt files in articles directory.
 	- 1st line in .txt file becomes title, the rest is the body.
 	- replaced call to nb with load_template.
 
-	* ChangeLog, articles/articles.list, nb, plugins/articles.off:
+	* ChangeLog, nb, plugins/articles.off:
 	Removed articles/articles.list, replacing articles.off ...
 
 	* ChangeLog, nb (show_help):
 	added a line about specifying multiple blog id's.
 
-2004-04-02  n1xt3r  <n1xt3r@scorcher>
+2004-04-02  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/entry.htm, ChangeLog:
 	Moved anchor, NB_EntryDay above NB_EntryDate in the entry template.
@@ -240,14 +244,14 @@
 	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
 	Created new anchor, NB_EntryDay and modified calendar plugins to create links to NB_EntryDay.
 
-2004-03-30  n1xt3r  <n1xt3r@scorcher>
+2004-03-30  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, nb:
 	Fixed "a id=... name=... and W3C validator" bug.
 	- Dropped BLOG_TZD from NB_EntryID.
 	- Added BLOG_TZD to the feed templates.
 
-2004-03-26  n1xt3r  <n1xt3r@scorcher>
+2004-03-26  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/archive/monthly/monthly-cal.sh:
 	Make NB_ArchiveTitle pretty, set to CAL_HEAD.
@@ -258,24 +262,23 @@
 	* ChangeLog, plugins/archive/monthly/monthly-cal.sh:
 	Applied Pavel's <Pavel@Janik.cz> nb-monthly-cal.diff patch.
 
-2004-03-25  n1xt3r  <n1xt3r@scorcher>
+2004-03-25  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, plugins/articles.off, plugins/articles.sh:
 	Renamed articles.sh plugin to articles.off, so it's disabled by default.
 
-	* articles/articles.list, plugins/articles.sh:
-	Added new plugin: articles.sh.
+	* plugins/articles.sh: Added new plugin: articles.sh.
 
 	* plugins/master_index.sh, ChangeLog, nb, plugins/01_mymood.off:
 	- (build_blog): builds NB_Month_Links when blog_update's not set to all.
 	- minor code cleanup to mymood plugin.
 	- master index plugin now checks if blog_update is set to all.
 
-2004-03-24  n1xt3r  <n1xt3r@scorcher>
+2004-03-24  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (make_page): Set NB_EntryTitle from usr_title.
 
-2004-03-22  n1xt3r  <n1xt3r@scorcher>
+2004-03-22  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/master_index.sh: Added New_EntryFile to modification test.
 
@@ -288,7 +291,7 @@
 	* default/templates/category_links.htm, default/templates/month_links.htm:
 	Moved month and category totals so that there outside their links.
 
-2004-03-20  n1xt3r  <n1xt3r@scorcher>
+2004-03-20  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/rdf_catfeed.xml, plugins/category_links.sh, ChangeLog, default/templates/entrycat_links.htm, nb:
 	- modified templates to link to cat_index.
@@ -304,12 +307,12 @@
 	- cleaned up category_links template and added link to feeds.
 	- removed unused code from master_index.sh.
 
-2004-03-18  n1xt3r  <n1xt3r@scorcher>
+2004-03-18  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/rdf_catfeed.xml:
 	Updated link to point to category's index page.
 
-2004-03-17  n1xt3r  <n1xt3r@scorcher>
+2004-03-17  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb:
 	- (build_blog): Removed useless check for directory's existance when using mkdir -p.
@@ -321,7 +324,7 @@
 	- Added new CAT_FEEDS variable to blog.conf.
 	- Added new RDF templates for category feeds.
 
-2004-03-14  n1xt3r  <n1xt3r@scorcher>
+2004-03-14  n1xt3r  <n1xt3r@bluefalcon>
 
 	* nb.conf, ChangeLog, nb: - Fixed BLOG_DIR bug.
 	- Improved clarification of BLOG_DIR setting in nb.conf.
@@ -331,11 +334,11 @@
 	- Improved legibility of conditional expressions (replaced OR with AND).
 	- (nb_main): cat_title is now set to "Untitled" when left empty.
 
-2004-03-12  n1xt3r  <n1xt3r@scorcher>
+2004-03-12  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb (load_config): sets NB_EntryAuthor to USER.
 
-2004-03-11  n1xt3r  <n1xt3r@scorcher>
+2004-03-11  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog: cvs funk
 
@@ -344,12 +347,12 @@
 	* ChangeLog:
 	fixed sed command in query_db() to conform better to POSIX.
 
-2004-03-09  n1xt3r  <n1xt3r@scorcher>
+2004-03-09  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:
 	Removed need to change BASE_DIR, added references to DATE_LOCALE and NB_EntryDescription.
 
-2004-03-08  n1xt3r  <n1xt3r@scorcher>
+2004-03-08  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog: 1st Update to ChangeLog a.ka. added a ChangeLog.
 
@@ -375,7 +378,7 @@
 
 	* nb: Simplified if statement and shifted move_num.
 
-2004-03-07  n1xt3r  <n1xt3r@scorcher>
+2004-03-07  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/calendar.sh: changed to use DATE_LOCALE
 
@@ -388,7 +391,7 @@
 	* nb (make_pag):
 	Improved the usage of cat and sed (From Pavel Janik <Pavel@Janik.cz>).
 
-2004-03-06  n1xt3r  <n1xt3r@scorcher>
+2004-03-06  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/blog.conf:
 	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
@@ -399,7 +402,7 @@
 	* plugins/autoformat/01_escape_chars.off, plugins/autoformat/01_escape_chars.sh:
 	Replaced 01_escape_chars.sh with 01_escape_chars.off, to disable it becuase of too many problems.
 
-2004-03-05  n1xt3r  <n1xt3r@scorcher>
+2004-03-05  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/autoformat/01_escape_chars.sh:
 	Added new autoformat plugin, escape_chars that escapes characters: & and " to their respective HTML entities.
@@ -413,7 +416,7 @@
 	* nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	Replaced references of /dev/null with $PLUGIN_OUTFILE
 
-2004-03-04  n1xt3r  <n1xt3r@scorcher>
+2004-03-04  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/calendar.sh:
 	Updated calendar plugin to utilitize the NB_EntryID variable.

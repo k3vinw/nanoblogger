@@ -228,14 +228,6 @@ if [ "$ENABLE_PLUGINS" = "1" ]; then
 fi
 }
 
-esc_chars(){ sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'; }
-strip_html(){ sed -e :a -e 's/<[^>]*>//g; /</N; //ba'; }
-
-load_filters(){
-	[ "$encode_text" = "1" ] && ENCODE_FILTER="strip_html"
-	[ "$escape_chars" = "1" ] && ENCODE_FILTER="esc_chars"
-	}
-
 # read file's metadata
 read_metadata(){
 MTAG="$1"
@@ -243,15 +235,12 @@ META_FILE="$2"
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
 [ "$MTAG" = "BODY" ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
-load_filters
-[ ! -z "$ENCODE_FILTER" ] && NB_Metadata=`echo "$NB_Metadata" |$ENCODE_FILTER`
 }
 
 # read entry and process through template
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
-	escape_chars="1"
 	month=`echo "$entry" |cut -c1-7`
 	NB_EntryDay=`echo "$entry" |cut -c1-10`
 	NB_EntryID=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`

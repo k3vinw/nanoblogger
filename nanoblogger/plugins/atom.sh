@@ -8,6 +8,11 @@ ATOMENTRY_TEMPLATE="atom_entry.xml"
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 
+# escape special characters to help create valid xml feeds
+esc_chars(){
+	sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
+	}
+
 build_atomfeed(){
 	query_type="$1"
 	db_catquery="$2"
@@ -22,6 +27,8 @@ build_atomfeed(){
 		# non-portable find command!
 		#NB_AtomEntryModDate=`find "$BLOG_DIR/$ARCHIVES/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		NB_AtomEntryModDate="$NB_AtomEntryDate"
+		NB_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
+		NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
 		make_placeholder "$template" atom_entries.tmp "$output_file"
 	done
 	touch "$BLOG_DIR"/atom_entries.tmp
