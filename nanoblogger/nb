@@ -217,14 +217,14 @@ done
 load_template(){
 BLOG_FILE="$1"
 # prefix text/html with an X in front of each line
-BLOG_TEMPLATE=`sed -e '/^/ s//X/' <"$BLOG_FILE"`
+BLOG_TEMPLATE=$(sed -e '/^/ s//X/' <"$BLOG_FILE")
 # remove X's and source variables into a temp file
 cat > "$SCRATCH_FILE" <<-EOF
 	sed -e '/^X/ s///' <<TMPL
 		$BLOG_TEMPLATE
 	TMPL
 EOF
-BLOG_HTML=`. "$SCRATCH_FILE"`
+BLOG_HTML=$(. "$SCRATCH_FILE")
 }
 
 # load plugins from BASE_DIR/plugins and BLOG_DIR/plugins
@@ -248,9 +248,9 @@ fi
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
+NB_Metadata=$(sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///')
 [ "$MTAG" = "BODY" ] &&
-NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
+NB_Metadata=$(sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d')
 }
 
 # read an entry
@@ -382,10 +382,10 @@ cycle_months_for(){
 	curr_year=`date +%Y`
 	curr_month=`date +%m`
 	# build archives seperated monthly and yearly
-	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort -ru`
+	ENTRY_YEARS=$(echo "$MASTER_LIST" |cut -c1-4 |sort -ru)
 	for yearn in $ENTRY_YEARS; do
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed -n 1p`
+			ENTRY_LIST=$(echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed -n 1p)
 			for entry_month in $ENTRY_LIST; do
 				month="$yearn-$monthn"
 				query_db "$month"
@@ -416,7 +416,7 @@ for relative_entry in $UPDATE_CATLIST; do
 done
 [ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
 if [ "$weblog_update" = "all" ]; then query_db; CAT_LIST="$db_categories"; fi
-CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
+CAT_LIST=$(for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u)
 }
 
 # divide larger archives into multiple pages
@@ -482,7 +482,7 @@ db_categories="$CAT_LIST"
 if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
-			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
+			NB_ArchiveTitle=$(sed -n 1p "$NB_DATA_DIR/$cat_arch")
 			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
 			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
@@ -503,7 +503,7 @@ else
 	query_db "$month"; build_monthlyarchive
 
 	# update relative monthly archives
-	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
+	MOD_MONTHS=$(echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru)
 	for mod_month in $MOD_MONTHS; do
 		if [ "$mod_month" != "$this_month" ]; then
 			month="$mod_month"
@@ -558,7 +558,7 @@ make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPL
 
 # add a new entry
 add_entry(){
-New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
+New_EntryFile=$(NB_TimeStamp).$NB_DATATYPE
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 nb_msg "processing new weblog entry ..."
 write_entry "$NB_DATA_DIR/$New_EntryFile"
@@ -602,7 +602,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 		die "no changes were made! goodbye."
 	fi
 fi
-NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=$(echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 [ -z "$NUMVAR" ] && die "must specify a valid entry id."
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"
@@ -634,10 +634,10 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 	done
 	cat_num=; build_weblog; exit 0
 fi
-NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=$(echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 if [ ! -z "$cat_list" ]; then
-	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+	CATNUMVAR=$(echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 	[ -z "$CATNUMVAR" ] &&
 		die "must specify a single category when deleting entries from a category!"
 fi
@@ -647,7 +647,7 @@ for entry_id in $NUMVAR; do
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
 done
 nb_msg "deleting weblog entry id('s): $delete_num$cat_msg ..."
-UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
+UPDATE_LIST=$(for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done)
 find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
@@ -724,7 +724,7 @@ done
 
 # move entries into other categories
 move_entry(){
-NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=$(echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 query_db
 for entry_id in $NUMVAR; do
@@ -733,7 +733,7 @@ for entry_id in $NUMVAR; do
 done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
 nb_msg "moving weblog entry id('s): $move_num, to category id('s): $cat_num ..."
-UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
+UPDATE_LIST=$(for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done)
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
 	Move_EntryFile="$entry_id"
