@@ -1,5 +1,12 @@
 2004-05-19  n1xt3r  <n1xt3r@scorcher>
 
+	* plugins/postformat/tidy.sh:
+	Fixed conflicting 'generator' tags - Paul Drain <pd@cipherfunk.org>.
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh:
+	- Set NB_SYND_FILETYPE default to xml - Paul Drain <pd@cipherfunk.org>.
+	- Updated rss and atom plugins to utilize NB_SYND_FILETYPE.
+
 	* ChangeLog, docs/nanoblogger.html:
 	Updated cgicomment and microblogger links.
 

@@ -228,12 +228,12 @@ if [ "$ENABLE_PLUGINS" = "1" ]; then
 fi
 }
 
-escape_chars(){ sed -e '{1,$ s/[\&]/\&amp;/g; s/[\"]/\&quot;/g; }'; }
+esc_chars(){ sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'; }
 strip_html(){ sed -e :a -e 's/<[^>]*>//g; /</N; //ba'; }
 
-load_encode_filters(){
+load_filters(){
 	[ "$encode_text" = "1" ] && ENCODE_FILTER="strip_html"
-	[ "$escape_chars" = "1" ] && ENCODE_FILTER="escape_chars"
+	[ "$escape_chars" = "1" ] && ENCODE_FILTER="esc_chars"
 	}
 
 # read file's metadata
@@ -243,7 +243,7 @@ META_FILE="$2"
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
 [ "$MTAG" = "BODY" ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
-load_encode_filters
+load_filters
 [ ! -z "$ENCODE_FILTER" ] && NB_Metadata=`echo "$NB_Metadata" |$ENCODE_FILTER`
 }
 
@@ -251,6 +251,7 @@ load_encode_filters
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
+	escape_chars="1"
 	month=`echo "$entry" |cut -c1-7`
 	NB_EntryDay=`echo "$entry" |cut -c1-10`
 	NB_EntryID=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
@@ -358,7 +359,6 @@ query_type="$1"
 db_catquery="$2"
 template="$3"
 output_file="$4"
-encode_filter="$5"
 query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
