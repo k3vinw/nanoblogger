@@ -512,7 +512,7 @@ nb_msg "generating index pages ..."
 [ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
 if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	mkdir -p "$BLOG_DIR/$PERMALINKS"
-	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
+	make_archive "$blog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
