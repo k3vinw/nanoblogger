@@ -137,6 +137,7 @@ else
 	db_categories="$db_catquery"
 fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
+	# list amount of entries based on db_limit
 	filter_limit(){
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
@@ -153,10 +154,11 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 				sed 1d "$cat_db"
 		done
 		}
-# list amount of entries based on db_limit
 if [ "$db_query" = "all" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = "current" ]; then
+	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
+elif [ "$db_query" = "limit" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
 else
 	DB_RESULTS=`cat_db |filter_query`
