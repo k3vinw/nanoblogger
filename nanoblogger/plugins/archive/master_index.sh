@@ -21,7 +21,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle="Untitled"
 		cat <<-EOF
 			<a href="$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
-			`[ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }'`<br />
+			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)
 
