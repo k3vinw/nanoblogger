@@ -1,4 +1,25 @@
+2004-03-20  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/category_links.sh:
+	created new plugin for creating category links from master_index.sh.
+
+	* default/templates/category_links.htm, nb, plugins/master_index.sh:
+	- shortened category variables to cat_.
+	- NB_Main_Links was put back into nb.
+	- cleaned up category_links template and added link to feeds.
+	- removed unused code from master_index.sh.
+
+2004-03-18  n1xt3r  <n1xt3r@scorcher>
+
+	* default/templates/rdf_catfeed.xml:
+	Updated link to point to category's index page.
+
 2004-03-17  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb:
+	- (build_blog): Removed useless check for directory's existance when using mkdir -p.
+	- (nb_main): Set cat_title to Untitled when usr_title isn't being used.
+	- (nb_main): Removed tests for empty cat_title.
 
 	* ChangeLog, default/blog.conf, default/templates/rdf_catfeed.xml, default/templates/rdf_catfeedentry.xml, nb, nb.conf:
 	- Added new build_catfeeds function to nb.

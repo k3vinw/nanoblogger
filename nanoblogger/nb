@@ -133,7 +133,7 @@ cd "$BLOG_DIR"/"$ARCHIVES"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = "nocat" ]; then
 	db_catquery=
-	db_categories=`for category in cat_*.db; do echo "$category"; done`
+	db_categories=`for cat_db in cat_*.db; do echo "$cat_db"; done`
 else
 	db_categories="$db_catquery"
 fi
@@ -149,9 +149,9 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list all entries including categorized entries
 	cat_db(){
 		[ -z "$db_catquery" ] && list_db
-		for category in $db_categories; do
-			[ ! -z "$category" ] &&
-				sed 1d "$category"
+		for cat_db in $db_categories; do
+			[ ! -z "$cat_db" ] &&
+				sed 1d "$cat_db"
 		done
 		}
 # list amount of entries based on what the user set in MAX_DISPLAY
@@ -259,16 +259,17 @@ if [ -f "$ENTRY_FILE" ]; then
 	# find related categories and create a list of links
 	query_db
 	PLACEHOLDER=; > "$BLOG_DIR"/cat_links.tmp
-	for entry_cat in $db_categories; do
+	cat_bytitle(){ for cat_db in $db_categories; do echo "`sed -n 1p $BLOG_DIR/$ARCHIVES/$cat_db` | $cat_db"; done; }
+	CAT_TITLES=`cat_bytitle |sort -u |cut -d"|" -f 2`
+	for entry_cat in $CAT_TITLES; do
 		cat_var=`grep "$entry" "$BLOG_DIR"/"$ARCHIVES"/"$entry_cat"`
 		if [ ! -z "$cat_var" ]; then
 			cat_title=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$entry_cat"`
-			cat_index=`chg_suffix "$entry_cat"`; cat_feed=`chg_suffix "$category" "$NB_SYND_FILETYPE"`
+			cat_index=`chg_suffix "$entry_cat"`; cat_feed=`chg_suffix "$entry_cat" "$NB_SYND_FILETYPE"`
 			make_placeholder "$ENTRYCATLINKS_TEMPLATE" cat_links.tmp entrycat_links.htm
 		fi
 	done
-	[ ! -z "$db_categories" ] &&
-		NB_EntryCategories=`echo "$PLACEHOLDER" |sort -u`
+	NB_EntryCategories="$PLACEHOLDER"
 	rm -f "$BLOG_DIR"/cat_links.tmp "$BLOG_DIR"/"$PARTS_DIR"/entrycat_links.htm
 fi
 }
@@ -405,9 +406,9 @@ cycle_months_for(){
 # function to build category feeds
 build_catfeeds(){
 if [ "$CAT_FEEDS" = "1" ]; then
-	make_archive current "$category" "$CATFEEDENTRY_TEMPLATE" "$cat_feed"
-	make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_feed" "$BLOG_DIR/$TEMPLATE_DIR/$CATFEED_TEMPLATE" \
-	"$BLOG_DIR"/"$ARCHIVES"/"$cat_feed"
+	make_archive current "$cat_arch" "$CATFEEDENTRY_TEMPLATE" "$cat_archfeed"
+	make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archfeed" "$BLOG_DIR/$TEMPLATE_DIR/$CATFEED_TEMPLATE" \
+	"$BLOG_DIR"/"$ARCHIVES"/"$cat_archfeed"
 fi
 }
 
@@ -417,15 +418,15 @@ build_catarchives(){
 db_catquery=`cat_id`
 [ ! -z "$db_catquery" ] && db_categories="$db_catquery"
 if [ ! -z "$db_categories" ]; then
-	for category in $db_categories; do
-		if [ -f "$BLOG_DIR/$ARCHIVES/$category" ]; then
-			cat_index=`chg_suffix "$category"`
-			cat_feed=`chg_suffix "$category" "$NB_SYND_FILETYPE"`
-			cat_part=`chg_suffix "$category" htm`
-			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$category"`
-			make_archive all "$category" "$ENTRY_TEMPLATE" "$cat_part"
-			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_part" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-			"$BLOG_DIR"/"$ARCHIVES"/"$cat_index"
+	for cat_arch in $db_categories; do
+		if [ -f "$BLOG_DIR/$ARCHIVES/$cat_arch" ]; then
+			cat_archindex=`chg_suffix "$cat_arch"`
+			cat_archfeed=`chg_suffix "$cat_arch" "$NB_SYND_FILETYPE"`
+			cat_archpart=`chg_suffix "$cat_arch" htm`
+			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_arch"`
+			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archpart"
+			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archpart" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
+			"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
 			build_catfeeds
 		fi
 	done
@@ -469,15 +470,15 @@ else
 			# update relative categories
 			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
 				for cat_db in $db_categories; do
-					cat_index=`chg_suffix "$cat_db"`
-					cat_feed=`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
+					cat_archindex=`chg_suffix "$cat_db"`
+					cat_archfeed=`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
 					cat_entryvar=`grep "$Mod_Entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
 					if [ ! -z "$cat_entryvar" ]; then
 						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_db".htm
 						NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
 						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_db".htm \
 						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-						"$BLOG_DIR"/"$ARCHIVES"/"$cat_index"
+						"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
 						build_catfeeds
 					fi
 				done
