@@ -625,7 +625,7 @@ query_db; db_query="$1"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = "cat" ]; then
 	[ -z "$db_categories" ] && die "no categories to list for '$BLOG_TITLE'! bye."
-	echo "ID, Title"
+	nb_msg "ID, Title"
 	id=0
 	cat_total=`echo "$db_categories" |grep "" -c`
 	while [ "$id" != "$cat_total" ]; do
@@ -640,7 +640,7 @@ fi
 [ -z "$db_query" ] && db_query="current"
 query_db "$db_query" "$db_catquery"
 [ -z "$DB_RESULTS" ] && die "no entries to list for '$BLOG_TITLE'! bye."
-echo "ID, Title [Category]"
+nb_msg "ID, Title [Category]"
 id=0
 for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
@@ -730,18 +730,18 @@ create_weblog(){
 if [ ! -d "$BLOG_DIR" ]; then
 	build_newblog="1"
 	mkdir -p "$BLOG_DIR"
-	echo "creating weblog directory '$BLOG_DIR' ..."
-	echo "copying default weblog files ..."
+	nb_msg "creating weblog directory '$BLOG_DIR' ..."
+	nb_msg "copying default weblog files ..."
 	cp -R "$BASE_DIR"/default/* "$BLOG_DIR"
 	# but prompt for configuration.
 	echo "would you like to configure the new weblog now? [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 	[Yy]|"")
-		echo "configuring new weblog ..."
+		nb_msg "configuring new weblog ..."
 		$EDITOR "$BLOG_DIR"/blog.conf;;
 	[Nn])
-		echo "weblog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
+		nb_msg "weblog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 	esac
 fi
 check_blogdir; load_config
@@ -753,7 +753,7 @@ if [ ! -z "$cat_num" ]; then
 		while [ "$id" != "$cat_total" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
-				echo "creating new category id: $id, for '$BLOG_TITLE' ..."
+				nb_msg "creating new category id: $id, for '$BLOG_TITLE' ..."
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
 				else
@@ -767,7 +767,7 @@ if [ ! -z "$cat_num" ]; then
 				cat_total=`expr 1 + $cat_total`
 			fi
 		done
-		echo "category database created for '$cat_title'."
+		nb_msg "category database created for '$cat_title'."
 		echo "would you like to add a new entry to this category now? [Y/n]"
 		read -p "$NB_PROMPT" choice
 		case $choice in
@@ -782,7 +782,7 @@ if [ ! -z "$cat_num" ]; then
 		db_catquery=`cat_id`; check_catid
 	fi
 fi
-echo "creating new entry for '$BLOG_TITLE'$cat_msg ..."
+nb_msg "creating new entry for '$BLOG_TITLE'$cat_msg ..."
 # read user specified attributes for entry
 [ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
@@ -868,19 +868,19 @@ cat <<-EOF
 	 specify the weblog directory to create or add new entry to
 	 	nb -b ~/public_html/weblog -a
 
-	 creates new category and titles it "News"
+	 create new category and titles it "News"
 	 	nb -b ~/public_html/weblog -t "News" -c new -a
 
-	 adds new entry to category 1
+	 add new entry to category 1
 	 	nb -b ~/public_html/weblog -c 1 -a
 
-	 removes entry 2 from category 1
+	 remove entry 2 from category 1
 	 	nb -b ~/public_html/weblog -c 1 -d 2
 
-	 edits the title of category number 1
+	 edit the title of category number 1
 	 	nb -b ~/public_html/weblog -c 1 -t Humor -e cat
 
-	 creates new entry from set message (skips editor)
+	 create new entry using the message option
 	 	nb -b ~/public_html/weblog -n myname -t 'my title' -M 'My message!' -a
 
 	More info:

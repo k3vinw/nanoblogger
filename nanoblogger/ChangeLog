@@ -1,5 +1,8 @@
 2004-07-12  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, nb (create_weblog):
+	Fixed '--description' option, so it works.
+
 	* ChangeLog, nb (show_help):
 	Added missing parameters for options requiring them.
 
