@@ -467,7 +467,6 @@ fi
 
 # generate the weblog files
 build_weblog(){
-[ "$config_weblog" = "1" ] && nb_msg "applying changes to '$BLOG_TITLE' ..."
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$weblog_update" ] && weblog_update="current"
 # query database and check for categories
@@ -513,7 +512,6 @@ nb_msg "new weblog entry added to '$BLOG_TITLE'."
 
 # edit $BLOG_CONF
 config_weblog(){
-config_weblog="1"
 if [ -f "$BLOG_CONF" ]; then
 	$EDITOR "$BLOG_CONF"
 	# check if file's been modified since opened
