@@ -1,5 +1,8 @@
 2004-05-25  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, plugins/archive/master_index.sh:
+	Moved master_index plugin into archive plugins.
+
 	* plugins/entry/auto_break.sh, plugins/entry/entry_catlinks.sh, plugins/entry/moods.sh (read_entry):
 	Moved code for category links into a new entry plugin.
 
