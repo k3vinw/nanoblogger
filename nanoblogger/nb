@@ -575,7 +575,6 @@ for relative_entry in $UPDATE_CATLIST; do
 		build_catlist
 	done
 done
-[ ! -z "$CAT_LIST" ] &&
 cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e '/cat_/ s///g; /[.]db/ s///g'`
 }
 
@@ -976,7 +975,7 @@ while [ $# -gt 0 ]; do
 		-u|--update)		blog_update="$2"; shift
 					check_blogdir; build_blog "$blog_update";; 
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
-		-V|--version)		echo "NanoBlogger-CVS $VERSION"; exit 0;;
+		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
 		*)
 					sanity_check
