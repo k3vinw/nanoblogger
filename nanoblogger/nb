@@ -1,4 +1,4 @@
-#! /bin/sh --posix
+#! /bin/bash
 ############################################################
 #  NanoBlogger 2.9 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
@@ -388,7 +388,7 @@ cycle_months_for(){
 # helps update relative categories
 find_categories(){
 UPDATE_CATLIST="$1"
-CAT_LIST=
+#CAT_LIST=
 	build_catlist(){
 	if [ ! -z "$cat_var" ]; then
 		CAT_LIST="$cat_db"
@@ -495,15 +495,15 @@ make_page "$BLOG_DIR/$PARTS_DIR"/news.htm "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BL
 # add a new entry
 add_entry(){
 New_EntryFile=`NB_TimeStamp`.htm
+NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
+nb_msg "processing new weblog entry ..."
+write_entry "$NB_DATA_DIR/$New_EntryFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
 	for cat_db in $db_catquery ; do 
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-nb_msg "processing new weblog entry ..."
-NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
-write_entry "$NB_DATA_DIR/$New_EntryFile"
 [ "$build_newblog" = "1" ] && weblog_update="all"
 build_weblog "$weblog_update"
 nb_msg "new weblog entry added to '$BLOG_TITLE'."
@@ -584,12 +584,11 @@ for entry_id in $NUMVAR; do
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
 done
 nb_msg "deleting weblog entry id('s): $delete_num$cat_msg ..."
+UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
+find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
-		DEL_LIST="$Delete_EntryFile"
-		[ "$DEL_LIST" != "$OLD_DELLIST" ] && DEL_LIST="$OLD_DELLIST $Delete_EntryFile"
-		OLD_DELLIST="$DEL_LIST"; UPDATE_LIST="$DEL_LIST"
 		if [ ! -z "$cat_list" ]; then
 			for cat_db in $cat_list; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
@@ -902,12 +901,8 @@ invalid_opt=`echo "$argument" |grep '^[--]$*'`
 [ ! -z "$invalid_opt" ] && argument=
 }
 while [ $# -gt 0 ]; do
-	if [ $# -gt 1 ]; then
-		argument=$2
-	else
-		bad_argument=$1
-		argument=
-	fi
+	[ $# -gt 1 ] && argument=$2
+	bad_argument=$1
 	load_config
 	case "$1" in
 		-a|--add)		create_weblog;;
