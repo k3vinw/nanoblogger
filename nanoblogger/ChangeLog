@@ -1,5 +1,11 @@
 2004-06-25  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, default/templates/month_archive.htm, nb:
+	(delete_blog), (find_categories):
+	- Fixed delete bug when deleting entry from category.
+	- Fixed update bug when deleting a category.
+	- Filtered CAT_LIST for cleaner update of categories.
+
 	* ChangeLog, default/archives/monthly/2004-01.html, default/atom.xml, default/blog.conf, default/index.html, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/fortune.htm, default/styles/nb_rusted.css, default/templates/main_index.htm, default/templates/month_archive.htm, nb, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/rss.sh:
 	- (find_categories): Replaced cat_num with routines for CAT_LIST.
 	- Vastly improved updating of categories through better utilization of CAT_LIST.
