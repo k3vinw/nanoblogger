@@ -1,3 +1,10 @@
+2004-03-30  n1xt3r  <n1xt3r@scorcher>
+
+	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, nb:
+	Fixed "a id=... name=... and W3C validator" bug.
+	- Dropped BLOG_TZD from NB_EntryID.
+	- Added BLOG_TZD to the feed templates.
+
 2004-03-26  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/archive/monthly/monthly-cal.sh:
