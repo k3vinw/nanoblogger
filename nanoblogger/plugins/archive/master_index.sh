@@ -3,11 +3,6 @@
 # concatenate modification variables
 MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 
-OLD_BLOG_CSS="$BLOG_CSS"
-BLOG_CSS="../$BLOG_CSS"
-OLD_MAIN_LINK="$MAIN_LINK"
-MAIN_LINK="../$MAIN_LINK"
-
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	nb_msg "generating archive index page ..."
@@ -65,7 +60,4 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	NB_Entries="$NB_Archive_Links"
 	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
-
-BLOG_CSS="$OLD_BLOG_CSS"
-MAIN_LINK="$OLD_MAIN_LINK"
 

@@ -113,7 +113,11 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # default to AUTO_TZD for iso dates
 : ${BLOG_TZD:=$AUTO_TZD}
 # check if we want absolute links
-[ "$ABSOLUTE_LINKS" = 1 ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
+if [ "$ABSOLUTE_LINKS" = 1 ]; then
+	BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
+else
+	BASE_URL="../"
+fi
 # default to max filter for query mode
 : ${QUERY_MODE:=max}
 # defaults for maximum entries to display on each page
@@ -169,11 +173,11 @@ fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
-		[ "$db_limit" = 0 ] && grep -v '[.]' # regexp hack for non-GNU versions
+		[ "$db_limit" = 0 ] && grep "." # regexp hack for non-GNU versions
 		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
 		db_limit=; db_offset=
 		}
-        filter_query(){ grep "$db_query" |sort -ru; }
+        filter_query(){ grep "$db_query." |sort -ru; } # "." allows for empty $db_query
 	# list all entries
         list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
 	# include categorized entries
@@ -555,6 +559,7 @@ if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
+[ "$ABSOLUTE_LINKS" != "1" ] && BASE_URL=""
 nb_msg "generating main index page('s) ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
@@ -701,7 +706,7 @@ if [ "$db_query" = cat ]; then
 	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
 	nb_msg "ID, Title"
 	id=0
-	cat_total=`echo "$db_categories" |grep "[\.]db" -c`
+	cat_total=`echo "$db_categories" |grep -c "[\.]db"`
 	while [ "$id" != "$cat_total" ]; do
 		id=`expr 1 + $id`
 		if [ -f "$NB_DATA_DIR/cat_$id.db" ]; then
@@ -826,7 +831,7 @@ check_blogdir; load_config
 if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
 		query_db; id=0
-		cat_total=`echo "$db_categories" |grep "[\.]db" -c`
+		cat_total=`echo "$db_categories" |grep -c "[\.]db"`
 		while [ "$id" != "$cat_total" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
@@ -921,7 +926,7 @@ cat <<-EOF
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
 	 -l, --list <all,cat,current,max>	list entries or categories
-	 					(defaults to main index view).
+	 					(defaults to max).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.
 	 -m, --move <ID>			move an entry to a specified category (for
@@ -936,7 +941,7 @@ cat <<-EOF
 	 					(for '--add', '--category', and
 	 					'--makepage').
 	 -u, --update <all,current,main,max>	force update of weblog (defaults to
-	 					to main index view).
+	 					to current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 

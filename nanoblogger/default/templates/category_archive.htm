@@ -5,17 +5,17 @@
 
 <title>$BLOG_TITLE: $NB_ArchiveTitle Archives</title>
 
-<link rel="stylesheet" href="../$BLOG_CSS" type="text/css" />
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <!-- Related link to category feed, for when it exists -->
 <!-- <link rel="alternate" type="application/rss+xml" title="RSS" href="$NB_ArchivePrefix.$NB_SYND_FILETYPE" /> -->
-<link rel="alternate" type="application/rss+xml" title="RSS" href="../index.$NB_SYND_FILETYPE" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="${BASE_URL}index.$NB_SYND_FILETYPE" />
 
 </head>
 
 <body>
 
 <div id="banner">
-<h1><a href="../$MAIN_LINK" accesskey="1">$BLOG_TITLE</a></h1>
+<h1><a href="${BASE_URL}$MAIN_LINK" accesskey="1">$BLOG_TITLE</a></h1>
 <span class="description">$BLOG_DESCRIPTION</span>
 </div>
 
@@ -24,7 +24,7 @@
 <div class="blog">
 
 <div id="menu">
-	<a href="../$MAIN_LINK">Main</a>
+	<a href="${BASE_URL}$MAIN_LINK">Main</a>
 </div>
 
 </div>

@@ -8,16 +8,16 @@
 
 <title>$BLOG_TITLE</title>
 
-<link rel="stylesheet" href="$BLOG_CSS" type="text/css" />
-<link rel="alternate" type="application/rss+xml" title="RSS" href="index.$NB_SYND_FILETYPE" />
-<link rel="alternate" type="application/atom+xml" title="Atom" href="atom.$NB_SYND_FILETYPE" />
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="${BASE_URL}index.$NB_SYND_FILETYPE" />
+<link rel="alternate" type="application/atom+xml" title="Atom" href="${BASE_URL}atom.$NB_SYND_FILETYPE" />
 
 </head>
 
 <body>
 
 <div id="banner">
-<h1><a href="$MAIN_LINK" accesskey="1">$BLOG_TITLE</a></h1>
+<h1><a href="${BASE_URL}$MAIN_LINK" accesskey="1">$BLOG_TITLE</a></h1>
 <span class="description">$BLOG_DESCRIPTION</span>
 </div>
 
@@ -68,12 +68,12 @@ Archives
 </div>
 
 <div class="side">
-<a href="$ARCHIVES_DIR/index.$NB_FILETYPE">Master Archive Index</a><br />
+<a href="${BASE_URL}$ARCHIVES_DIR/index.$NB_FILETYPE">Master Archive Index</a><br />
 $NB_Month_Links
 </div>
 
 <div class="syndicate">
-Syndicate this site: <a href="index.$NB_SYND_FILETYPE">RSS</a>, <a href="atom.$NB_SYND_FILETYPE">Atom</a>
+Syndicate this site: <a href="${BASE_URL}index.$NB_SYND_FILETYPE">RSS</a>, <a href="${BASE_URL}atom.$NB_SYND_FILETYPE">Atom</a>
 </div>
 
 <div class="sidetitle">
