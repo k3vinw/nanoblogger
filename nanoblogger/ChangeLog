@@ -1,5 +1,9 @@
 2004-07-07  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, docs/nanoblogger.html, nb:
+	- Added new tip to the "Tips and Tricks" section of manual.
+	- Improved layout of "Tips and Tricks" section of manual.
+
 	* default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/index.xml, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cal.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/templates/main_index.htm, docs/nanoblogger.html, nb, plugins/archive/master_index.sh, plugins/blog_links.sh, plugins/blog_status.sh, ChangeLog:
 	- Cleaned up inconsistencies in terminology.
 	- Renamed variable, blog_update to weblog_update.

@@ -502,6 +502,7 @@ if [ ! -z "$cat_num" ]; then
 	done
 fi
 nb_msg "processing new weblog entry ..."
+NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 [ "$build_newblog" = "1" ] && weblog_update="all"
 build_weblog "$weblog_update"
@@ -553,20 +554,6 @@ if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 else
 	die "no changes were made! bye."
 fi
-}
-
-# import file as a new entry
-import_file(){
-[ ! -f "$entry_file" ] && die "import file '$entry_file', doesn't exist! bye."
-[ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
-[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
-if [ -z "$NB_EntryAuthor$NB_EntryTitle" ]; then
-	NB_EntryAuthor="Anonymous"; NB_EntryTitle="Untitled"
-fi
-NB_EntryBody=`cat "$entry_file"`
-# create new timestamp
-NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
-add_entry; exit 0
 }
 
 # delete entry or category by id number
@@ -795,11 +782,11 @@ if [ ! -z "$cat_num" ]; then
 		db_catquery=`cat_id`; check_catid
 	fi
 fi
+echo "creating new entry for '$BLOG_TITLE'$cat_msg ..."
 # read user specified attributes for entry
 [ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
 [ ! -z "$db_catquery" ] && cat_msg=" in category id('s): $cat_num"
-echo "creating new entry for '$BLOG_TITLE'$cat_msg ..."
 if [ -z "$NB_EntryAuthor" ]; then
 	echo "enter author's name [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
@@ -809,13 +796,15 @@ if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-echo "editing in '$EDITOR' ..."
-$EDITOR "$NB_EditFile"
-# load content of edited file into entry variable NB_EntryBody
-if [ -f "$NB_EditFile" ]; then
-	NB_EntryBody=`cat "$NB_EditFile"`
+if [ -z "$usr_message" ]; then
+	echo "editing in '$EDITOR' ..."
+	$EDITOR "$NB_EditFile"
+	# load content of edited file into entry variable NB_EntryBody
+	if [ -f "$NB_EditFile" ]; then
+		NB_EntryBody=`cat "$NB_EditFile"`
+	fi
 else
-	die "can't continue, because your text-file wasn't saved! bye."
+	NB_EntryBody="$usr_message"
 fi
 # prompt for descritption
 if [ -z "$NB_EntryDescription" ]; then
@@ -840,37 +829,35 @@ cat <<-EOF
 	Options:
 	 -a, --add				create new entry, category, or weblog
 	 					(directory).
-	 -b, --blogdir				specify weblog directory.
-	 -c, --category	<new,number>		specify category (for '--add',
-	 					'--delete', '--edit', '--list' and
-	 					'--update').
+	 -b, --blogdir <directory>		specify weblog directory.
+	 -c, --category	<new,number>		specify category (for '--add', '--delete',
+	 					'--edit', '--list' and '--update').
 	 --configure				configure weblog.
 	 --datadir <directory>			specify weblog's data directory.
 	 -d, --delete <cat,number>		delete an entry or category.
+	 -D, --desc [description]		set description of entry (for '--add').
 	 -e, --edit <cat,number>		edit an entry or category.
-	 -f, --blogconf <file>			specify an alternate configuration
-	 					file.
+	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
-	 -i, --importfile <file>		specify file to import as new entry
 	 -l, --list <all,cat,current>		list entries or categories
 	 					(defaults to current entries).
-	 --makepage <source> <output>		specify source and output file to
-	 					create html page.
-	 -m, --move <number>			move an entry to a specified category
-	 					(for '--category').
-	 -n, --author				author attribute of entry (for
-	 					'--importfile' and '--add').
+	 --makepage <source> <output>		specify source and output file to create
+	 					html page.
+	 -M, --message [message]		set body of entry as message (for '--add').
+	 -m, --move <number>			move an entry to a specified category (for
+	 					'--category').
+	 -n, --author [author]			set author of entry (for '--add').
 	 -p, --preview				run command to preview weblog.
 	 -P, --publish				run command to publish weblog.
 	 --template <file>			specify file to load as template (for
 	 					'--makepage').
 	 --templatedir <directory>		specify weblog's template directory.
-	 -t, --title				title attribute of entry/category/page
-	 					(for '--add', '--category',
-	 					'--importfile', and '--makepage').
+	 -t, --title [title]			set title of entry/category/page
+	 					(for '--add', '--category', and
+	 					'--makepage').
 	 -u, --update <all,current,main>	force update of weblog (defaults to
 	 					current).
-	 -v, --verbose				toggle level of verbosity (on=1/off=0).
+	 -v, --verbose [1=on/0=off]		toggle level of verbosity.
 	 -V, --version				display version information.
 
 	 -c,-d,-m accepts multiple numbers seperated by commas (e.g. 1,2,3).
@@ -892,8 +879,8 @@ cat <<-EOF
 	 edits the title of category number 1
 	 	nb -b ~/public_html/weblog -c 1 -t Humor -e cat
 
-	 creates new entry and uses the file 'message.txt' as it's content
-	 	nb -b ~/public_html/weblog -n myname -t 'my title' -i message.txt
+	 creates new entry from set message (skips editor)
+	 	nb -b ~/public_html/weblog -n myname -t 'my title' -M 'My message!' -a
 
 	More info:
 	 URL: http://home.columbus.rr.com/n1xt3r/nanoblogger/
@@ -928,17 +915,17 @@ while [ $# -gt 0 ]; do
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_blogdir; delete_weblog;;
+		-D|--desc)		check_arg; usr_desc="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_blogdir; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-i|--importfile)	check_arg; entry_file="$2"
-					check_blogdir; import_file;;
 		-l|--list)		db_query="$2"; shift
 					check_blogdir; list_weblog "$db_query";;
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
 					check_blogdir; make_page;;
+		-M|--message)		check_arg; usr_message="$2"; shift;;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_blogdir; move_entry;;
 		-p|--preview)		check_blogdir; preview_weblog;;

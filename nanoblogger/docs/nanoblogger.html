@@ -232,9 +232,14 @@ nb --blogdir [myblog_dir] --configure
 
   <h2><a name="cr7" id="cr7">Managing Entries and Categories</a></h2>
 
-  Commands for managing entries and categories.
+  Commands to manage entries and categories.
 
   <h3>Managing Entries</h3>
+
+  <b>Entry ID's</b>
+  <blockquote>
+	The last entry added, always has an ID of "1", ID's count up from there until the first entry.  Thus, older entries have ID's that are not constant and are subject to change.  An entry will have a different ID for each category it belongs in.  The ID must be specified before the action.  When modifying entries from a category, ID's for both category and entry must be specified.
+  </blockquote>
 
   <b>Creating Entries</b>
   <blockquote>
@@ -243,9 +248,19 @@ nb --blogdir [myblog_dir] --configure
 nb [-b blog_dir] -a
 	</pre>
 
+	Adding a new entry to a category:
+	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
+nb [-b blog_dir] -c 1 -a
+	</pre>
+
 	Setting title and author for new entry:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb [-b blog_dir] -t "New Entry" -n entry_author -a
+nb [-b blog_dir] -t "New Entry" -n [entry_author] -a
+	</pre>
+
+	Setting title, author, and body for new entry:
+	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
+nb [-b blog_dir] -t "New Entry" -n [entry_author] -M "This is my message." -a
 	</pre>
   </blockquote>
 
@@ -318,6 +333,12 @@ nb [-b blog_dir] -c 1 -d 1
 
   <h3>Managing Categories</h3>
 
+  <b>Category ID's</b>
+  <blockquote>
+  	Category ID's count up from "1".  A category's ID remains constant until that category is deleted.  Deleting a category will free up that category's ID for use by a new category upon creation.
+  </blockquote>
+
+  <b>Category Commands</b>
   <blockquote>
   	Creating a new category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
