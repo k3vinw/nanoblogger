@@ -357,12 +357,10 @@ for entry in $ARCHIVE_LIST; do
 		NB_EntryCategoryTitle=
 	fi
 done
-if [ -f "$BLOG_DIR"/archives.tmp ]; then
-       cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
-else
+if [ ! -f "$BLOG_DIR"/archives.tmp ]; then
        > "$BLOG_DIR"/archives.tmp
-       cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 fi
+cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 rm -f "$BLOG_DIR"/archives.tmp
 }
 
@@ -662,11 +660,11 @@ for entry_id in $NUMVAR; do
 	done
 	if [ ! -z "$cat_list" ]; then
 		for cat_db in $cat_list; do
-			sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 	else
 		for cat_db in $db_categories; do
-			sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 		rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
 		Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
@@ -739,7 +737,7 @@ for entry_id in $UPDATE_LIST; do
 		if [ ! -z "$db_catquery" ]; then
 			query_db "$db_query" "$db_catquery"
 			for cat_db in $db_categories; do
-				sed -e '/'$Move_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Move_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 				echo "$Move_EntryFile" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 			done
 		fi
@@ -992,7 +990,7 @@ while [ $# -gt 0 ]; do
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
 					check_blogdir; make_page;;
-		-m|--move)		check_arg; move_num="$2"
+		-m|--move)		check_arg; move_num="$2"; shift
 					check_blogdir; move_entry;;
 		-p|--preview)		check_blogdir; preview_blog;;
 		-P|--publish)		check_blogdir; publish_blog;;
