@@ -126,7 +126,7 @@ fi
 }
 
 # deconfigure, clear some auto-default variables
-deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; }
+deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; }
 
 # filter custom date format for a new entry
 filter_dateformat(){
@@ -818,7 +818,7 @@ build_weblog
 
 preview_weblog(){
 [ -z "$BLOG_PREVIEW_CMD" ] && die "BLOG_PREVIEW_CMD is not set! goodbye."
-nb_msg "running '$BLOG_PREVIEW_CMD' ..."
+nb_msg "previewing weblog ..."
 $BLOG_PREVIEW_CMD
 }
 
@@ -835,7 +835,7 @@ esac
 
 publish_weblog(){
 [ -z "$BLOG_PUBLISH_CMD" ] && die "BLOG_PUBLISH_CMD is not set! goodbye."
-nb_msg "running '$BLOG_PUBLISH_CMD' ..."
+nb_msg "publishing weblog ..."
 $BLOG_PUBLISH_CMD
 }
 
