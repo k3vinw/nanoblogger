@@ -453,6 +453,25 @@ page_items="$3"
 page_template="$4"
 page_outdir="$5"
 page_outfile="$6"
+	update_pages(){
+		build_pagelist(){
+		if [ ! -z "$page_num" ]; then
+			[ -z "$PAGE_LIST" ] && PAGE_LIST="page$page_num"
+			[ "$PAGE_LIST" != "$OLD_PAGELIST" ] && PAGE_LIST="$OLD_PAGELIST page$page_num"
+			OLD_PAGELIST="$PAGE_LIST"
+		fi
+		}
+		query_db max "$page_catquery" "$end" "$begin"
+		for entry_mod in $UPDATE_LIST; do
+			page_match=`echo "$DB_RESULTS" |grep "$entry_mod"`
+			[ ! -z "$page_match" ] && build_pagelist
+		done
+	PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
+	}
+	page_bynumber(){
+		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
+		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" "$page_outdir/$arch_page"
+	}
 query_db "$page_query" "$page_catquery"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
@@ -488,11 +507,16 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 			fi
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-			echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
+				echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
 		NB_PageLinks=$(< "$SCRATCH_FILE")
-		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
-		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
-		"$page_outdir/$arch_page"
+		if [ ! -z "$UPDATE_LIST" -a ! -z "$Edit_EntryFile" ]; then
+			update_pages
+			for page_mod in $PAGE_LIST; do
+				[ "page$page_num" = "$page_mod" ] && page_bynumber
+			done
+		else
+		page_bynumber
+		fi
 		NB_PageLinks=
 	done
 else
@@ -561,7 +585,6 @@ else
 fi
 }
 
-# generate the weblog files
 build_weblog(){
 # set base for relative links
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
