@@ -830,37 +830,37 @@ cat <<-EOF
 	 -a, --add				create new entry, category, or weblog
 	 					(directory).
 	 -b, --blogdir <directory>		specify weblog directory.
-	 -c, --category	<new,number>		specify category (for '--add', '--delete',
+	 -c, --category	<new,ID>		specify category (for '--add', '--delete',
 	 					'--edit', '--list' and '--update').
 	 --configure				configure weblog.
 	 --datadir <directory>			specify weblog's data directory.
-	 -d, --delete <cat,number>		delete an entry or category.
-	 -D, --desc [description]		set description of entry (for '--add').
-	 -e, --edit <cat,number>		edit an entry or category.
+	 -d, --delete <cat,ID>			delete an entry or category.
+	 -D, --desc <text>			set description of entry (for '--add').
+	 -e, --edit <cat,ID>			edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
 	 -l, --list <all,cat,current>		list entries or categories
 	 					(defaults to current entries).
 	 --makepage <source> <output>		specify source and output file to create
 	 					html page.
-	 -M, --message [message]		set body of entry as message (for '--add').
-	 -m, --move <number>			move an entry to a specified category (for
+	 -M, --message <text>			set body of entry as message (for '--add').
+	 -m, --move <ID>			move an entry to a specified category (for
 	 					'--category').
-	 -n, --author [author]			set author of entry (for '--add').
+	 -n, --author <text>			set author of entry (for '--add').
 	 -p, --preview				run command to preview weblog.
 	 -P, --publish				run command to publish weblog.
 	 --template <file>			specify file to load as template (for
 	 					'--makepage').
 	 --templatedir <directory>		specify weblog's template directory.
-	 -t, --title [title]			set title of entry/category/page
+	 -t, --title <text>			set title of entry/category/page
 	 					(for '--add', '--category', and
 	 					'--makepage').
 	 -u, --update <all,current,main>	force update of weblog (defaults to
 	 					current).
-	 -v, --verbose [1=on/0=off]		toggle level of verbosity.
+	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 
-	 -c,-d,-m accepts multiple numbers seperated by commas (e.g. 1,2,3).
+	 -c,-d,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
 
 	Examples:
 	
