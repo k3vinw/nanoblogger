@@ -944,6 +944,8 @@ cat <<-EOF
 	 -v, --verbose				toggle level of verbosity (on=1/off=0).
 	 -V, --version				display version information.
 
+	 -c,-d,-m accepts multiple numbers seperated by commas (e.g. 1,2,3).
+
 	Examples:
 	
 	 specify the blog directory to create or add a new entry to

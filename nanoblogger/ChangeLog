@@ -1,5 +1,8 @@
 2004-04-02  n1xt3r  <n1xt3r@scorcher>
 
+	* default/templates/entry.htm, ChangeLog:
+	Moved anchor, NB_EntryDay above NB_EntryDate in the entry template.
+
 	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:
 	Removed test for FULL_PERMALINKS from calendar plugins.
 
