@@ -13,7 +13,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 
 	[ -z "$DATE_LOCALE" ] || CALENDAR=`LANG="$DATE_LOCALE" cal`
 	[ ! -z "$CALENDAR" ] || CALENDAR=`cal`
-	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e 's/^[ ]*//g'`
+	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
 	WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 	DAYS=`echo "$CALENDAR" |sed 1,2d`
 	NUM_DAY_LINES=`echo "$DAYS" |grep -n "" |cut -c1`
@@ -34,7 +34,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	for line in $NUM_DAY_LINES ; do
 		DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 		echo '<tr>' >> "$PLUGIN_OUTFILE"
-		echo "$DN_LINES" | sed 's/  [ \t]/<td align="center"><span class="calendar">\'$html_nbsp'\<\/span><\/td>\ /g; s/[0-9]//g' >> "$PLUGIN_OUTFILE"
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><span class="calendar">\'$html_nbsp'\<\/span><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 		for dn in $DN_LINES ; do
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
@@ -42,7 +42,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 				NB_EntryDay=`echo "$entry" |cut -c1-10`
 				entry_year=`echo $entry |cut -c1-4`
 				entry_month=`echo $entry |cut -c6-7`
-				entry_day=`echo $entry |cut -c9-10 |sed -e 's/^0//g'`
+				entry_day=`echo $entry |cut -c9-10 |sed -e '/^0/ s///g'`
 				curr_month=`date +%m`
 				curr_year=`date +%Y`
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then

@@ -171,7 +171,7 @@ db_query=; cd "$CURR_PATH"
 # convert category number to existing category database
 cat_id(){
 if [ ! -z "$cat_num" ]; then
-	cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e 's/,/ /g; /[A-Z,a-z\)\.-]/d'` 
+	cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'` 
 	query_db
 	if [ ! -z "$cat_query" ]; then
 		for cat_id in $cat_query; do
@@ -198,10 +198,10 @@ done
 load_template(){
 BLOG_FILE="$1"
 # prefix text/html with an X in front of each line
-BLOG_TEMPLATE=`sed -e 's/^/X/' <"$BLOG_FILE"`
+BLOG_TEMPLATE=`sed -e '/^/ s//X/' <"$BLOG_FILE"`
 # remove X's and source variables into a temp file
 cat > "$BLOG_DIR"/nb_template.tmp <<EOF
-	sed -e 's/^X//' <<-TMPL
+	sed -e '/^X/ s///' <<-TMPL
 	$BLOG_TEMPLATE
 	TMPL
 EOF
@@ -240,7 +240,7 @@ load_encode_filters(){
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e 's/^'$MTAG'[\:][ ]//'`
+NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
 [ "$MTAG" = "BODY" ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
 load_encode_filters
@@ -253,7 +253,7 @@ ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
 	month=`echo "$entry" |cut -c1-7`
 	NB_EntryDay=`echo "$entry" |cut -c1-10`
-	NB_EntryID=`echo "$entry" |sed -e 's/\_/\:/g; s/[\.]htm//g'`
+	NB_EntryID=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
 	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
@@ -568,7 +568,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 				for cat_db in $db_categories; do
 					echo $cat_db `grep $cat_entry "$BLOG_DIR"/"$ARCHIVES"/$cat_db`
 				done
-			done |grep " " |cut -d" " -f 1 |sort -u |sed -e 's/cat_//; s/[.]db//'
+			done |grep " " |cut -d" " -f 1 |sort -u |sed -e '/cat_/ s///; /[.]db/ s///'
 		}
 		cat_num=`find_catlinks`
 		UPDATE_LIST="$DB_RESULTS"
@@ -577,7 +577,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 		die "no changes were made! bye."
 	fi
 fi
-NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e 's/\,/ /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id."
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"
@@ -639,13 +639,13 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 			build_catlist
 		done
 	done
-	cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e 's/cat_//g; s/.db//g'`
+	cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e '/cat_/ s///g; /[.]db/ s///g'`
 	build_blog; exit 0
 fi
-NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e 's/\,/ /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 if [ ! -z "$cat_list" ]; then
-	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e 's/\,/ /g; /[A-Z,a-z\)\.\-]/d'`
+	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 	[ -z "$CATNUMVAR" ] &&
 		die "must specify a single category when deleting entries from a category!"
 fi
@@ -684,7 +684,7 @@ for entry_id in $NUMVAR; do
 		fi
 	fi
 done
-cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e 's/cat_//g; s/.db//g'`
+cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e '/cat_/ s///g; /[.]db/ s///g'`
 build_blog
 }
 
@@ -732,7 +732,7 @@ max_num=$id; [ -z "$max_num" ] && max_num=0
 
 # move entries into other categories
 move_entry(){
-NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e 's/\,/ /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 query_db
 for entry_id in $NUMVAR; do
