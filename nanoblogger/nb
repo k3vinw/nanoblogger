@@ -402,6 +402,15 @@ cycle_months_for(){
 	done
 }
 
+# function to build category feeds
+build_catfeeds(){
+if [ "$CAT_FEEDS" = "1" ]; then
+	make_archive current "$category" "$CATFEEDENTRY_TEMPLATE" "$category_feed"
+	make_page "$BLOG_DIR"/"$PARTS_DIR"/"$category_feed" "$BLOG_DIR/$TEMPLATE_DIR/$CATFEED_TEMPLATE" \
+	"$BLOG_DIR"/"$ARCHIVES"/"$category_feed"
+fi
+}
+
 build_catarchives(){
 # build category archives
 [ ! -z "$blog_update" ] && [ "$blog_update" = "all" ] || db_categories=
@@ -411,12 +420,13 @@ if [ ! -z "$db_categories" ]; then
 	for category in $db_categories; do
 		if [ -f "$BLOG_DIR/$ARCHIVES/$category" ]; then
 			category_index=`chg_suffix "$category"`
+			category_feed=`chg_suffix "$category" "$NB_SYND_FILETYPE"`
 			category_part=`chg_suffix "$category" htm`
-			#category_feed=`chg_suffix "$category" rdf`
 			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$category"`
 			make_archive all "$category" "$ENTRY_TEMPLATE" "$category_part"
 			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$category_part" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 			"$BLOG_DIR"/"$ARCHIVES"/"$category_index"
+			build_catfeeds
 		fi
 	done
 fi
@@ -460,6 +470,7 @@ else
 			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
 				for cat_db in $db_categories; do
 					category_index=`chg_suffix "$cat_db"`
+					category_feed=`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
 					cat_entryvar=`grep "$Mod_Entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
 					if [ ! -z "$cat_entryvar" ]; then
 						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_db".htm
@@ -467,6 +478,7 @@ else
 						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_db".htm \
 						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 						"$BLOG_DIR"/"$ARCHIVES"/"$category_index"
+						build_catfeeds
 					fi
 				done
 				last_dbcat="$db_categories"
@@ -622,8 +634,9 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 	nb_msg "deleting category id('s): $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
-		#category_feed="$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db" rdf`
-		rm -f "$BLOG_DIR/$ARCHIVES/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"`
+		category_feed="$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
+		rm -f "$BLOG_DIR/$ARCHIVES/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"` \
+		"$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db" "$NB_SYND_FILETYPE"`
 	done
 	for relative_entry in $UPDATE_LIST; do
 		query_db "$db_query"
@@ -827,14 +840,11 @@ if [ ! -z "$cat_num" ]; then
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
 				else
-					echo "please enter a title for the new category"
+					cat_title="Untitled"
+					echo "please enter the new category's title [$cat_title]"
 					read -p "$NB_PROMPT" cat_title
 				fi
-				if [ -z "$cat_title" ]; then
-					echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db
-				else
-					echo "Untitled" > "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db
-				fi
+				echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db
 				cat_num="$id"; db_catquery=`cat_id`; check_catid; cat_total="$id"
 			else
 				cat_total=`expr 1 + $cat_total`

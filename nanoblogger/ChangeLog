@@ -1,5 +1,8 @@
 2004-03-14  n1xt3r  <n1xt3r@scorcher>
 
+	* nb.conf, ChangeLog, nb: - Fixed BLOG_DIR bug.
+	- Improved clarification of BLOG_DIR setting in nb.conf.
+
 	* ChangeLog, default/blog.conf, nb:
 	- Applied nb-author-default.diff patch from Pavel Janik <Pavel@Janik.cz>.
 	- Improved legibility of conditional expressions (replaced OR with AND).
