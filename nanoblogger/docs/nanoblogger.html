@@ -130,15 +130,15 @@ Programs:
 </blockquote>
 <b>Setting the Author's Name</b>
 <blockquote>
-	<em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting <em>BLOG_AUTHOR</em> will override this behaviour.
+	<em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting <em>BLOG_AUTHOR</em> will override this behavior.
 </blockquote>
 <b>Setting the Number of Entries to Display</b>
 <blockquote>
 	<em>MAX_ENTRIES</em> sets the maximum number of entries to display on the main page. This must be set to a number higher than zero.
 </blockquote>
-<b>Enabling Permalinks</b>
+<b>Building Individual Archives for Each Entry</b>
 <blockquote>
-	Setting <em>PERMALINKS</em> to equal "1", enables archiving of individual entries and reconfigures the links of the entries to point to their individual archives.
+	Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables individual archiving of each entry and reconfigures the links of the entries to point to their individual archives.  Note that this will increase the rebuild time since more pages will have to be generated.
 </blockquote>
 <b>Setting Actions for Previewing and Publishing</b>
 <blockquote>
@@ -146,7 +146,7 @@ Programs:
 </blockquote>
 <b>Global Configuration</b>
 <blockquote>
-	NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may ovveride settings in <em>nb.conf</em>.  Typically one would set <em>BLOG_DIR</em> here as a default blog directory to use.  NanoBlogger also looks for this file under, <em>$HOME/.nb.conf</em>.
+	NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may override settings in <em>nb.conf</em>.  Typically one would set <em>BLOG_DIR</em> here as a default blog directory to use.  NanoBlogger also looks for this file under, <em>$HOME/.nb.conf</em>.
 </blockquote>
 
 <h2><a name="cr7">Templates and Placeholders</a></h2>

@@ -1,5 +1,10 @@
 2004-05-31  n1xt3r  <n1xt3r@bluefalcon>
 
+	* docs/nanoblogger.html, nb, plugins/list_entries.sh, ChangeLog:
+	- (query_db): added new parameter, db_offset.
+	- Resurrected NB_Older_Entries in list_entries plugin using db_offset.
+	- Minor update to docs.
+
 	* ChangeLog, default/blog.conf, docs/nanoblogger.html:
 	Updated "Requirements" and "Settings and Configuration" Sections of manual.
 

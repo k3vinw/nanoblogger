@@ -254,7 +254,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
 	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-	if [ "$PERMALINKS" = "1" ]; then
+	if [ "$ENTRY_ARCHIVES" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
 		NB_EntryPermalink="$BLOG_URL/$PERMALINKS_DIR/$permalink_entry"
 	else
@@ -422,7 +422,7 @@ else
 	for Mod_Entry in $Edit_EntryFile $DEL_LIST $UPDATE_LIST; do
 		if [ ! -z "$Mod_Entry" ]; then
 			# update relative permalinks
-			if [ "$PERMALINKS" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
+			if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
 				entry="$Mod_Entry"
 				read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
 				load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$PERMALINKENTRY_TEMPLATE"
@@ -481,7 +481,7 @@ load_plugins plugins
 # build the archives
 nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
-if [ "$blog_update" != "main" ] && [ "$PERMALINKS" = "1" ]; then
+if [ "$blog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 	mkdir -p "$BLOG_DIR/$PERMALINKS_DIR"
 	make_archive "$blog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
