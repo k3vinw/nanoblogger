@@ -736,8 +736,8 @@ case $choice in
 esac
 }
 
-# create a new entry or weblog directory
-nb_main(){
+# create a new entry, category  or weblog directory
+create_weblog(){
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! bye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
@@ -921,7 +921,7 @@ while [ $# -gt 0 ]; do
 	fi
 	load_config
 	case "$1" in
-		-a|--add)		nb_main;;
+		-a|--add)		create_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		config_weblog;;

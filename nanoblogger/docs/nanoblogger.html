@@ -110,13 +110,13 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
 1. create a new weblog directory using nanoblogger (skip the configuration):
-	nb -b [blog_dir] -a
+	nb [-b blog_dir] -a
 
 2. copy the old archives (data) directory over to the new weblog directory:
 	cp -r [old_blog_dir]/archives [newblog_dir]
 
 3. edit the new weblog.conf to your likings and rebuild the weblog:
-	nb -b [blog_dir] -u all
+	nb [-b blog_dir] -u all
 	</pre>
 
   <h2><a name="cr4" id="cr4">Requirements</a></h2>Programs:
@@ -142,7 +142,7 @@ directory will add a new entry.
 
   <h2><a name="cr6" id="cr6">Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
   <pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb --blogdir myblog_dir --configure
+nb --blogdir [myblog_dir] --configure
   </pre>
   This opens <em>blog.conf</em> from the weblog directory for editing.
 
@@ -240,12 +240,12 @@ nb --blogdir myblog_dir --configure
   <blockquote>
   	Adding a new entry:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -a
+nb [-b blog_dir] -a
 	</pre>
 
 	Setting title and author for new entry:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -t "New Entry" -n entry_author -a
+nb [-b blog_dir] -t "New Entry" -n entry_author -a
 	</pre>
   </blockquote>
 
@@ -253,17 +253,17 @@ nb -b [blog_dir] -t "New Entry" -n entry_author -a
   <blockquote>
   	Listing current entries:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -l
+nb [-b blog_dir] -l
 	</pre>
 
 	Listing all entries:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -l all
+nb [-b blog_dir] -l all
 	</pre>
 
 	Listing entries for a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -l
+nb [-b blog_dir] -c 1 -l
 	</pre>
   </blockquote>
 
@@ -271,12 +271,12 @@ nb -b [blog_dir] -c 1 -l
   <blockquote>
   	Editing the last entry created:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -e 1
+nb [-b blog_dir] -e 1
 	</pre>
 	
 	Editing an entry from a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -e 1
+nb [-b blog_dir] -c 1 -e 1
 	</pre>
   </blockquote>
 
@@ -284,17 +284,17 @@ nb -b [blog_dir] -c 1 -e 1
   <blockquote>
   	Moving an entry to a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -m 1
+nb [-b blog_dir] -c 1 -m 1
 	</pre>
 
 	Moving an entry to multiple categories:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1,2,3 -m 1
+nb [-b blog_dir] -c 1,2,3 -m 1
 	</pre>
 
 	Moving multiple entries to a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -m 1,2,3
+nb [-b blog_dir] -c 1 -m 1,2,3
 	</pre>
   </blockquote>
 
@@ -302,17 +302,17 @@ nb -b [blog_dir] -c 1 -m 1,2,3
   <blockquote>
   	Deleting an entry:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -d 1
+nb [-b blog_dir] -d 1
 	</pre>
 
 	Deleting multiple entries:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -d 1,2,3
+nb [-b blog_dir] -d 1,2,3
 	</pre>
 
 	Deleting an entry from a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -d 1
+nb [-b blog_dir] -c 1 -d 1
 	</pre>
   </blockquote>
 
@@ -321,27 +321,27 @@ nb -b [blog_dir] -c 1 -d 1
   <blockquote>
   	Creating a new category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c new -a
+nb [-b blog_dir] -c new -a
 	</pre>
 
 	Setting the title for a new category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -t "New Category" -c new -a
+nb [-b blog_dir] -t "New Category" -c new -a
 	</pre>
 
 	Listing available categories:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -l cat
+nb [-b blog_dir] -l cat
 	</pre>
 
   	Editing a category's title:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -t "News" -e cat
+nb [-b blog_dir] -c 1 -t "News" -e cat
 	</pre>
 
 	Deleting a category:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -c 1 -d cat
+nb [-b blog_dir] -c 1 -d cat
 	</pre>
   </blockquote>
 
@@ -808,7 +808,7 @@ ENTRY_ARCHIVES="1"
 
         <li>Rebuild your weblog to reflect the changes:
 		<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -u all
+nb [-b blog_dir] -u all
 		</pre>
 	</li>
 
@@ -892,27 +892,36 @@ This is my new entry ...
 
 	Update the weblog with the new entries:
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
-nb -b [blog_dir] -u all
+nb [-b blog_dir] -u all
 	</pre>
   </blockquote>
 
   <h2><a name="cr13" id="cr13">Tips and Tricks</a></h2>
 
-  <ul>
-    <li>To add an introduction, create a text file in your weblog directory called, "intro.txt". Edit the text file to say
+    <b>Set a Default Weblog Directory</b>
+    <blockquote>
+    	By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to.
+    	Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em> and set <em>BLOG_DIR</em> to your weblog directory.
+    </blockquote>
+
+    <b>Add an introduction to your Weblog</b>
+    <blockquote>
+	Create a text file in your weblog directory called, "intro.txt". Edit the text file to say
 	what you want, then add the following to the main template:<br />
 	<pre style="background: #CCCCCC; padding: 2mm; border-style: ridge">
 `cat "$BLOG_DIR"/intro.txt`
 	</pre>
 	Note the use of left single quotes, they're important. Also, note that no processing is being done this way, you have to
 	add your own HTML.
-    </li>
+    </blockquote>
 
-    <li>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own
+    <b>Integrating Parts of your Weblog into a Site</b>
+    <blockquote>
+    Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own
     custom server-side scripts/includes. This is where the "parts/news.htm" file comes in. It contains all the current entries,
     so adding a news/diary/blog section is just a matter of adding the code to include "parts/news.htm" into the page. So, now
-    you can have a simple weblog-like page, that's updated whenever news.htm changes.</li>
-  </ul>
+    you can have a simple weblog-like page, that's updated whenever news.htm changes.
+    </blockquote>
 
   <h2><a name="cr14" id="cr14">Credits</a></h2>Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik
   &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and
