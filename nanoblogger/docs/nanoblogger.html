@@ -1,0 +1,476 @@
+<html>
+<head>
+<title>NanoBlogger Manual</title>
+</head>
+
+<body bgcolor="white">
+
+<hr>
+<h1>NanoBlogger Manual</h1>
+<h2>by <a href="mailto:un1xt3r_at_fastmail_dot_fm">n1xt3r</a> (Kevin Wood)</h2>
+
+<p><hr>
+<em>This document explains how to install and use NanoBlogger.</em>
+</p><hr>
+<p>
+<b>Table of Contents</b>
+<ul>
+<li><a href="#cr1">Introduction</a>
+<li><a href="#cr2">Features</a>
+<li><a href="#cr3">Installation</a>
+<li><a href="#cr4">Requirements</a>
+<li><a href="#cr5">Usage</a>
+<li><a href="#cr6">Building The Blog</a>
+<li><a href="#cr7">Plugins</a>
+<li><a href="#cr8">Publishing Your Blog to a Remote Site</a>
+<li><a href="#cr9">Tips and Tricks</a>
+<li><a href="#cr10">Credits</a>
+</ul>
+<p />
+
+<h2><a name="cr1">Introduction</a></h2>
+NanoBlogger is a small weblog engine written in Bash that uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.<br />
+<p />
+
+<h2><a name="cr2">Features</a></h2>
+<ul>
+<li>intuitive commandline interface</li>
+<li>support for multiple blogs</li>
+<li>easy editing and management of entries</li>
+<li>archiving by month</li>
+<li>category support</li>
+<li>permalinks</li>
+<li>RSS syndication (comes with RSS 1.0 (RDF) format)</li>
+<li>a fully functional web site, using templates and stylesheets for easy customizations</li>
+<li>placeholders for easy template manipulation</li>
+<li>plugins for calendar, recent entries, blog status, etc.</li>
+<li>auto-formatting, e.g. line breaks translate to HTML</li>
+<li>keeps "clippings" (parts cut out) of the blog for extra portability and modularity (e.g. news.htm, 2003-06.htm)</li>
+<li>per-blog configuration via a config file (blog.conf)
+<li>no dependency on any javascript, server-side scripting, or server-side includes</li>
+<li>no dependency on any external database (uses flat-file)</li>
+<li>some small effort at shell portability</li>
+</ul>
+<p />
+
+<h2><a name="cr3">Installation</a></h2>
+<p />
+To install nanoblogger, download the tar archive from the web site[1].  Then from the commandline type "tar xzf nanoblogger-XXX.tar.gz where "XXX" equals the version number.  You will need to edit the BASE_DIR variable if it's not installed to your home directory or if you decide to change it's location.<br />
+<p><b>Upgrading</b></p>
+When upgrading nanoblogger, there's three basic things that need to be considered, and they are: archives, templates, and configuration.  These are the three things that should be backed up and may require some minor adjustments before they work well with the new version.  Here are some steps you can take to help ease the transition.
+<ul>
+	<li>
+		make a g-zipped tar archive of your blog directory: "tar czf oldblog_dir.tar.gz [blog_dir]"
+	</li>
+	<li>
+		rename your blog directory and create a new one using nanoblogger: "nb -b [blog_dir] -a" (skip the configuration)
+	</li>
+	<li>
+		copy the archives directory over to the new blog directory: "cp -r [oldblog_dir]/archives [newblog_dir]"
+	</li>
+	<li>
+		now you can copy blog.conf and your templates back over and rebuild the blog: "nb -b [blog_dir] -u all"
+	</li>
+</ul>
+
+<h2><a name="cr4">Requirements</a></h2>
+<p />
+programs required other than bash:
+<blockquote>
+	cat, cp, cut, date, expr, grep, mkdir, read, rm, sed, sort, touch, trap
+</blockquote>
+<p>
+For online publishing you'll need some kind of shell or FTP access to your web server.
+</p>
+
+<h2><a name="cr5">Usage</a></h2>
+<p />
+NanoBlogger is designed to work off-line, but the contents created are intended to be published online.  To create a blog, use <em>nb --blogdir myblog --add</em>.  Where <em>"myblog"</em> is the local path to your new blog.  This is will setup a new directory and open the blog's configuration for editing.  To setup your blog for a remote site, edit the blog's BLOG_URL variable to point to the remote path, then refer to the section: "Publishing a blog to a remote web site" for further details.<br />
+<p />
+
+<b>Synopsis</b>
+<blockquote>
+	nb [<u>-b blogdir</u>] [<u>options</u>]
+</blockquote>
+Try "nb --help" for all available options.
+<p />
+For each blog there's a user defined configuration file called "blog.conf".  This file controls the behavior of a blog.  It allows you to change such things as, how many entries to display on the front page.  It's also where you set the title, description, and the URL for your blog. The DATE_FORMAT variable can be customized to change the date format of a new entry.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  Read the man pages of the date command to see more on how to customize the format of a date.<br />
+<p />
+
+<h2><a name="cr6">Building The Blog</a></h2>
+<p />
+Entries are kept inside the blog's "archives" directory as time-stamped filenames.  NanoBlogger uses the filename to determine how to sort the entries into the archives.<br />
+<p />
+
+NanoBlogger features "clippings", which is a directory consisting of the parts that build your blog.  They contain preformatted versions of your recent entries as well as other things that might be part of your blog, e.g. output from a plugin.  Thus, allowing for a certain amount of modularity with server-side scripting languages such as PHP, for further processing.<br />
+
+<blockquote>
+	NanoBlogger creates the following web pages:<br />
+	<ul>
+		<li>index.html</li>
+		<li>index.rdf</li>
+		<li>archives/cat_[N].html (only when categories exist)</li>
+		<li>archives/monthly/[YYYY-MM].html</li>
+		<li>archives/permalinks/[YYYY-MM-HH_MM_SS].htm (only when full permalinks are enabled)</li>
+	</ul>
+	The web pages are regenerated each time you add, edit, or delete an entry.
+	<p>
+	Enabling full permalinks, causes each entry to have it's own web page.  To enable full permalinks in your blog, edit blog.conf and set FULL_PERMALINKS equal to 1.  Make sure that the permalinks have been generated, you may have to rebuild your blog.  The entries' permalinks should've automatically been changed,  if you experience any problems, have a look at the "entry.htm" template.  Look at the "href" line and make sure that it's only set to equal "$NB_EntryPermalink".  If it's not then change it and rebuild your blog again.
+	</p>
+</blockquote>
+
+<blockquote>
+	<table border="1" cellspacing="4" cellpadding="2">
+	<caption>The blog's appearance is controlled by the following templates:</caption>
+	<tr>
+	<th align="left">templates</th>
+	<th align="left">description</th>
+	</tr>
+	<tr>
+	<td align="left">archive.htm</td>
+	<td align="left">controls look of the master archive page</td>
+	</tr>
+	<tr>
+	<td align="left">archive_links.htm</td>
+	<td align="left">controls look of the master archive links</td>
+	</tr>
+	<tr>
+	<td align="left">category.htm</td>
+	<td align="left">controls look of the categories pages</td>
+	</tr>
+	<tr>
+	<td align="left">category_links.htm</td>
+	<td align="left">the links to the categories</td>
+	</tr>
+	<tr>
+	<td align="left">entry.htm</td>
+	<td align="left">controls look of your blog entries</td>
+	</tr>
+	<tr>
+	<td align="left">entry_links.htm</td>
+	<td align="left">controls look of the entry links</td>
+	</tr>
+	<tr>
+	<td align="left">entrycat_links.htm</td>
+	<td align="left">controls look of the entry category links</td>
+	</tr>
+	<tr>
+	<td align="left">main_index.htm</td>
+	<td align="left">controls look of the blog's main page</td>
+	</tr>
+	<tr>
+	<td align="left">main_links.htm</td>
+	<td align="left">contains user defined links</td>
+	</tr>
+	<tr>
+	<td align="left">makepage.htm</td>
+	<td align="left">default template used by makepage option</td>
+	</tr>
+	<tr>
+	<td align="left">month_archive.htm</td>
+	<td align="left">controls look of the monthly archive pages</td>
+	</tr>
+	<tr>
+	<td align="left">month_links.htm</td>
+	<td align="left">controls look of the monthly archive links</td>
+	</tr>
+	<tr>
+	<td align="left">permalink.htm</td>
+	<td align="left">controls look of the permalink pages</td>
+	</tr>
+	<tr>
+	<td align="left">permalink_entry.htm</td>
+	<td align="left">controls look of a blog entry within a permalink page</td>
+	</tr>
+	<tr>
+	<td align="left">rdf_entry.xml</td>
+	<td align="left">controls look of each individual news item in the rss feed</td>
+	</tr>
+	<tr>
+	<td align="left">rdf.xml</td>
+	<td align="left">controls look and format of rss feed (index.rdf)</td>
+	</tr>
+	</table>
+	<br />
+	In addition there's a stylesheet called, "blog_style.css".<br />
+</blockquote>
+
+<blockquote>
+	<table border="1" cellspacing="4" cellpadding="2">
+	<caption>The entry template includes the following placeholders:</caption>
+	<tr>
+	<th align="left">placeholders</th>
+	<th align="left">description</th>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryAuthor</td>
+	<td align="left">author of entry</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryCategories</td>
+	<td align="left">entry's category links</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryBody</td>
+	<td>entry's content</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryDate</td>
+	<td align="left">entry's posted time</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryID</td>
+	<td align="left">entry's id</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryPermalink</td>
+	<td align="left">entry's permalink</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_EntryTitle</td>
+	<td align="left">entry's title</td>
+	</tr>
+	</table>
+	<br />
+	<table border="1" cellspacing="4" cellpadding="2">
+	<caption>The main template includes the following placeholders:</caption>
+	<tr>
+	<th align="left">placeholders</th>
+	<th align="left">description</th>
+	</tr>
+	<tr>
+	<td align="left">$BLOG_CHARSET</td>
+	<td align="left">blog's character set</td>
+	</tr>
+	<tr>
+	<td align="left">$BLOG_CONTACT</td>
+	<td align="left">blog's contact info</td>
+	</tr>
+	<tr>
+	<td align="left">$BLOG_DESCRIPTION</td>
+	<td align="left">blog's description</td>
+	</tr>
+	<tr>
+	<td align="left">$BLOG_TITLE</td>
+	<td align="left">blog's title</td>
+	</tr>
+	<tr>
+	<td align="left">$BLOG_URL</td>
+	<td align="left">blog's URL</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_Archive_Links</td>
+	<td align="left">links to archives</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_Category_Links</td>
+	<td align="left">links to categories</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_Main_Links</td>
+	<td align="left">user defined links</td>
+	</tr>
+	<tr>
+	<td align="left">$NB_Entries</td>
+	<td align="left">all the current entries</td>
+	</tr>
+	</table>
+</blockquote>
+
+All the placeholders are reinterpreted by the shell as variables when a template is sourced, making the templates capable of a few shell scripting tricks themselves.  As a simple example, you could place this in your template: "Last Modified: `date`", and it would display the time your page was last modified, using the date command.  Thus greatly enhancing the power of the templates, making it possible to create your own script and replace my "Last Modified" example with your own script.<br />
+<p />
+
+<p><b>Format of an Entry</b></p>
+The entry format is made up of pieces of metadata.  Each piece of metadata is of the format KEY: VALUE, then a carriage return that separates one piece from the next.  The order of the metadata pieces is not important.
+
+<p>Example:</p>
+<blockquote>
+TITLE: A New Entry<br />
+AUTHOR: foo<br />
+DATE: January 30 2004, 12:00 PM<br />
+-----<br />
+BODY:<br />
+This is my new entry ...<br />
+-----<br />
+</blockquote>
+
+<h2><a name="cr7">Plugins</a></h2>
+<p />
+
+Plugins work by creating placeholders for the templates, allowing a great deal of control in how the plugins output is placed in the template.  The variable, ENABLE_PLUGINS, in blog.conf toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
+<p />
+
+Additionally there are some plugins specific to the formatting of entries, and are referred to as auto-format plugins, which allows for automatic placement of HTML elements, such as placing paragraph breaks inside blank lines.  The variable, AUTO_FORMAT, in blog.conf toggles this feature on/off, but requires ENABLE_PLUGINS to be toggled on.<br />
+<p />
+
+To use a new plugin, you need to identify it's unique placeholder and add it to your template.<br />
+
+<blockquote>
+	<table border="1" cellspacing="4" cellpadding="2">
+	<caption>The plugins included and what placeholders they create (most are enabled by default and setup in the templates):</caption>
+	<tr>
+	<th align="left">plugins</th>
+	<th align="left">description</th>
+	<th align="left">placeholders</th>
+	<th align="left">special requirements</th>
+	</tr>
+	<tr>
+	<td align="left">archive/monthly_cal.sh</td>
+	<td align="left">adds a calendar with links to each monthly archive</td>
+	<td align="left">$NB_Monthly_Calendar</td>
+	<td align="left">cal</td>
+	</tr>
+	<tr>
+	<td align="left">autoformat/auto_break.sh</td>
+	<td align="left">adds paragraph breaks to blank lines of entries</td>
+	<td align="left">$NB_EntryBody</td>
+	<td align="left">none</td>
+	</tr>
+	<tr>
+	<td align="left">autoformat/moods.sh</td>
+	<td align="left">adds ability to use mood variables inside a blog's entry</td>
+	<td align="left">$NB_EntryBody</td>
+	<td align="left">copy moods directory to blog's directory</td>
+	</tr>
+	<tr>
+	<td align="left">blog_status.sh</td>
+	<td align="left">generates blog statistics</td>
+	<td align="left">$NB_Blog_Status</td>
+	<td align="left">none</td>
+	</tr>
+	<tr>
+	<td align="left">calendar.sh</td>
+	<td align="left">adds a calendar with links based on the current month</td>
+	<td align="left">$NB_Calendar</td>
+	<td align="left">cal</td>
+	</tr>
+	<tr>
+	<td align="left">fortune.sh</td>
+	<td align="left">uses fortune to generate random quotes</td>
+	<td align="left">$NB_Fortune</td>
+	<td align="left">fortune</td>
+	</tr>
+	<tr>
+	<td align="left">list_entries.sh</td>
+	<td align="left">generates list of entries recent or old</td>
+	<td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
+	<td align="left">none</td>
+	</tr>
+	<tr>
+	<td align="left">mymood.sh</td>
+	<td align="left">adds ability for user to set a mood status in their blog</td>
+	<td align="left">$NB_My_Mood</td>
+	<td align="left">copy moods directory to blog's directory</td>
+	</tr>
+	<tr>
+	<td align="left">postformat/tidy.sh</td>
+	<td align="left">validates HTML code</td>
+	<td align="left">$NB_Tidy</td>
+	<td align="left">HTML tidy</td>
+	</tr>
+	</table>
+</blockquote>
+
+To disable a plugin, rename the plugin's extension from ".sh" to ".off".  This will move the plugin off of the radar, the next time NanoBlogger is run.<br />
+<br />
+
+<h2><a name="cr8">Publishing Your Blog to a Remote Site</a></h2>
+<p />
+
+<b>FTP:</b><br />
+Any FTP client should do, but I'd recommend ncftp.  Be sure to use recursive mode when uploading your blog directory. e.g. "ftp myblog.com, put -r [your_blog_dir]"
+<p />
+
+<b>Other methods:</b><br />
+If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), rsync or WebDAV.
+
+<h2><a name="cr9">Tips and Tricks</a></h2>
+<p />
+
+<ul>
+	<li>
+		<p>
+		Update your blog quickly with the "--update main" option. This option skips the processing of entries and is great for making quick changes to the main page when you don't have any new entries.  e.g. use "nb -u main myblog" to just update the calendar
+		</p>
+	</li>
+
+	<li>
+		<p>
+		To add an introduction, create a text file in your blog called, "intro.txt".  Edit the text file to say what you want, then add the following to the main template: 
+			<p>‘cat "$BLOG_DIR"/intro.txt‘</p> Note the use of left single quotes, they're important.  Also, note that no processing is being done this way, you have to add your own HTML.
+		</p>
+	</li>
+	
+	<li>
+		<p>
+		Remember the "clippings" feature?  Say you already have a web site full of your own custom server-side scripts/includes.  This is where the "news.htm" file comes in.  It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "news.htm" into the page.  So, now you can have a simple blog-like page, that's updated whenever news.htm changes.
+		</p>
+	</li>
+
+	<li>
+		<p>
+		If the WEB_BROWSER you set is being overridden and this is undesirable, check for the environment variable, BROWSER.  This is standard on Debian systems and takes precedence over your WEB_BROWSER setting.  As a workaround, make sure that BROWSER is set to the web browser you want to use or replace WEB_BROWSER with BROWSER in the blog's config file, "blog.conf".  The same could apply for the TXT_EDITOR variable as well.
+		</p>
+	</li>
+
+	<li>
+<p><b>Adding Comment support to Your Blog</b></p>
+There's many ways you could accomplish this, but I chose to go with a perl based solution, because most web server's already support it.  The program I found is called CGIComment [2] and was easy to integrate into my blog.  The cool thing about CGIComment is it's ability to append comments to any HTML document.
+<p />
+Here are the steps to enable comments:
+	<ul>
+		<li>
+			Enable full permalinks in blog.conf. Set FULL_PERMALINKS to "1".
+		</li>
+		<li>
+			Set BLOG_URL_ACTION in blog.conf to "http://myblog.com/cgi-bin/cgicomment.pl?article=".
+		</li>
+		<li>
+			Edit templates/entry.htm, add: &#60;a href="$BLOG_URL_ACTION$PERMALINKS/$permalink_entry"&#62;Comments&#60;/a&#62;
+		</li>
+		<li>
+			Rebuild your blog to reflect the changes. e.g. "nb -b [your_blog_dir] -u all"
+		</li>
+		<li>
+			Unpack CGIComment (e.g. tar xzf CGIComment-1.0.tar.gz) one directory above that of your blog.
+		</li>
+		<li>
+			Edit cgi-bin/cgicomment.conf and set BASE_DIR to "../cgicomment" and ARTICLEDIR to "../[your_blog_dir]".
+		</li>
+		<li>
+			Edit cgi-bin/ccadmin.pl and change the default password.
+		</li>
+		<li>
+			If necessary, recursively upload the "cgi-bin" and "cgicomment" directories one level above your blog directory.
+		</li>
+		<li>
+			Check that "cgicomment" and "cgi-bin" have read &amp; write permissions (e.g. chmod -R 775 cgi-bin cgicomment).
+		</li>
+		<li>
+			Check that "cgicomment.pl" and "ccadmin.pl" are set executable (e.g. chmod 755 ccadmin.pl cgicomment.pl).
+		</li>
+		<li>
+			If necessary, upload your blog directory.
+		</li>
+	</ul>
+
+	<p>
+	When you have comments working you can download my modified set of CGIComment templates[1] that have been designed to integrate with NanoBlogger's default stylesheets.
+	</p>
+
+	</li>
+</ul>
+<p />
+
+<h2><a name="cr10">Credits</a></h2>
+<p />
+Thanks to Adrien "ze" Urban for many code enhancements and suggestions.<br />
+<p />
+Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.<br />
+<p />
+<a href="http://home.columbus.rr.com/n1xt3r/downloads/">1. http://home.columbus.rr.com/n1xt3r/downloads/</a><br />
+<a href="http://triskam.virtualave.net/cgicomment.html">2. http://triskam.virtualave.net/cgicomment.html</a><br />
+<a href="http://www.ibiblio.org/propaganda/microblogger">3. http://www.ibiblio.org/propaganda/microblogger</a><br />
+
+</body>
+</html>
