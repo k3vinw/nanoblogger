@@ -1,3 +1,9 @@
+2004-06-21  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/templates/entry.htm, plugins/entry/auto_break.sh:
+	- Changed auto_break plugin to convert blank lines to <br /><br />.
+	- Added <br /> after title in the entry template.
+
 2004-06-18  n1xt3r  <n1xt3r@bluefalcon>
 
 	* default/templates/permalink_entry.htm, nb, plugins/blog_links.sh:

@@ -31,8 +31,7 @@
 <dc:date>2004-01-18T17:12:12-04:00</dc:date>
 <dc:creator>n1xt3r</dc:creator>
 <dc:subject>NanoBlogger Help</dc:subject>
-<description><![CDATA[<p>The basic syntax is: <code>nb [-b blogdir] [options]</code>
-</p><p>
+<description><![CDATA[<p>The basic syntax is: <code>nb [-b blogdir] [options]</code></p>
 <b>How to ...</b>
 <ul>
 <li>create a new blog directory = <code>nb --blogdir [blog_dir] --add</code></li>
@@ -46,6 +45,8 @@
 <li>delete an old entry = <code>nb --delete [entry_id]</code></li>
 <li>specify a different blog directory = <code>nb --blogdir [blog_dir] [options]</code></li>
 </ul>
-Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.</p>]]></description>
+<p>
+Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.
+</p>]]></description>
 </item>
 </rdf:RDF>

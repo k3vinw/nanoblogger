@@ -1,6 +1,6 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 2.8 Copyright 2004 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 2.9 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 
 # nanoblogger's version.
@@ -386,6 +386,27 @@ cycle_months_for(){
 	done
 }
 
+# helps update relative categories
+find_categories(){
+UPDATE_CATLIST="$1"
+	build_catlist(){
+	if [ ! -z "$cat_var" ]; then
+		CAT_LIST="$cat_db"
+		[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
+		OLD_CATLIST="$CAT_LIST"
+	fi
+	}
+# find related categories for a given set of entries
+for relative_entry in $UPDATE_CATLIST; do
+	query_db "$db_query"
+	for cat_db in $db_categories; do
+		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
+		build_catlist
+	done
+done
+cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e '/cat_/ s///g; /[.]db/ s///g'`
+}
+
 # build category archives
 build_catarchives(){
 [ ! -z "$blog_update" ] && [ "$blog_update" = "all" ] || db_categories=
@@ -414,47 +435,30 @@ else
 	# rebuild current month archive
 	month=`date "+%Y-%m"`; this_month="$month"
 	query_db "$month"; build_monthlyarchive
+
 	# update modified parts of blog (deleted, edited, or moved)
 	nb_msg "checking for related parts ..."
-	for Mod_Entry in $Edit_EntryFile $DEL_LIST $UPDATE_LIST; do
-		if [ ! -z "$Mod_Entry" ]; then
-			# update relative entry archives
-			if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$NB_DATA_DIR/$Mod_Entry" ]; then
-				entry="$Mod_Entry"
-				read_entry "$NB_DATA_DIR/$entry"
-				load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
-				if [ ! -z "$BLOG_HTML" ]; then
-					echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$Mod_Entry"
-					BLOG_HTML=
-				fi
-				permalink_file=`chg_suffix "$Mod_Entry"`
-				make_page "$BLOG_DIR/$PARTS_DIR/$Mod_Entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-				"$BLOG_DIR/$PERMALINKS_DIR/$permalink_file"
+	# update relative monthly archives
+	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
+	for mod_month in $MOD_MONTHS; do
+		if [ "$mod_month" != "$this_month" ]; then
+			month="$mod_month"
+			query_db "$month"; build_monthlyarchive
+		fi
+	done
+	# update relative entry archives
+	for mod_entry in $UPDATE_LIST; do
+		if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$NB_DATA_DIR/$mod_entry" ]; then
+			entry="$mod_entry"
+			read_entry "$NB_DATA_DIR/$entry"
+			load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
+			if [ ! -z "$BLOG_HTML" ]; then
+				echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$mod_entry"
+				BLOG_HTML=
 			fi
-			# update relative monthly archives
-			mod_month=`echo "$Mod_Entry" |cut -c1-7`
-			if [ "$mod_month" != "$this_month" ] && [ "$mod_month" != "$last_month" ]; then
-				month="$mod_month"
-				query_db "$month"; build_monthlyarchive
-			fi
-			last_month="$mod_month"
-			query_db
-			# update relative categories
-			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
-				for cat_db in $db_categories; do
-					cat_archindex=`chg_suffix "$cat_db"`
-					cat_archpart=`chg_suffix "$cat_db" htm`
-					cat_entryvar=`grep "$Mod_Entry" "$NB_DATA_DIR/$cat_db"`
-					if [ ! -z "$cat_entryvar" ]; then
-						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_archpart"
-						NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
-						make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" \
-						"$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-						"$BLOG_DIR/$ARCHIVES/$cat_archindex"
-					fi
-				done
-				last_dbcat="$db_categories"
-			fi
+			permalink_file=`chg_suffix "$mod_entry"`
+			make_page "$BLOG_DIR/$PARTS_DIR/$mod_entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+			"$BLOG_DIR/$PERMALINKS_DIR/$permalink_file"
 		fi
 	done
 fi
@@ -527,17 +531,8 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 		nb_msg "changing title to '$usr_title' for category id: $cat_num ..."
 		echo "$usr_title" > "$NB_DATA_DIR/$db_catquery"
 		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$NB_DATA_DIR/$db_catquery"
-		find_catlinks(){
-			ENTRY_LIST=`sed 1d "$NB_DATA_DIR/$db_catquery"`
-			query_db "$db_query"
-			for cat_entry in $ENTRY_LIST; do
-				for cat_db in $db_categories; do
-					echo $cat_db `grep $cat_entry "$NB_DATA_DIR"/$cat_db`
-				done
-			done |grep " " |cut -d" " -f 1 |sort -u |sed -e '/cat_/ s///; /[.]db/ s///'
-			}
-		cat_num=`find_catlinks`
 		UPDATE_LIST="$DB_RESULTS"
+		find_categories "$UPDATE_LIST"
 		build_blog; exit 0
 	else
 		die "no changes were made! bye."
@@ -553,30 +548,11 @@ $EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
 if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 	nb_msg "processing blog entry id: $NUMVAR ..."
 	read_entry "$NB_DATA_DIR/$Edit_EntryFile"
-	cat_num=; build_blog
+	UPDATE_LIST="$Edit_EntryFile"
+	find_categories "$UPDATE_LIST"; build_blog
 else
 	die "no changes were made! bye."
 fi
-}
-
-# find related categories for a given set of entries
-find_categories(){
-UPDATE_CATLIST="$1"
-	build_catlist(){
-	if [ ! -z "$cat_var" ]; then
-		CAT_LIST="$cat_db"
-		[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
-		OLD_CATLIST="$CAT_LIST"
-	fi
-	}
-for relative_entry in $UPDATE_CATLIST; do
-	query_db "$db_query"
-	for cat_db in $db_categories; do
-		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
-		build_catlist
-	done
-done
-cat_num=`for cat_id in $CAT_LIST; do echo "$cat_id"; done | sort -u |sed -e '/cat_/ s///g; /[.]db/ s///g'`
 }
 
 # import file as a new entry
@@ -616,7 +592,7 @@ if [ ! -z "$cat_list" ]; then
 	[ -z "$CATNUMVAR" ] &&
 		die "must specify a single category when deleting entries from a category!"
 fi
-query_db "$db_query" "$cat_list"; ENTRY_LIST="$DB_RESULTS" # save DB_RESULTS now, because they'll change
+query_db "$db_query" "$cat_list"; ENTRY_LIST="$DB_RESULTS"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id('s): $delete_num"
@@ -627,8 +603,8 @@ for entry_id in $NUMVAR; do
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
 		DEL_LIST="$Delete_EntryFile"
 		[ "$DEL_LIST" != "$OLD_DELLIST" ] && DEL_LIST="$OLD_DELLIST $Delete_EntryFile"
-		OLD_DELLIST="$DEL_LIST"
-		find_categories "$DEL_LIST"
+		OLD_DELLIST="$DEL_LIST"; UPDATE_LIST="$DEL_LIST"
+		find_categories "$UPDATE_LIST"
 		if [ ! -z "$cat_list" ]; then
 			for cat_db in $cat_list; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
@@ -726,7 +702,8 @@ for entry_id in $UPDATE_LIST; do
 		fi
 	fi
 done
-find_categories "$UPDATE_LIST"; build_blog
+find_categories "$UPDATE_LIST"
+build_blog
 }
 
 preview_blog(){

@@ -5,7 +5,7 @@ xmlns:dc="http://purl.org/dc/elements/1.1/"
 >
 <title mode="escaped">My Blog's Title</title>
 <link rel="alternate" type="text/html" href="/index.html"/>
-<modified>2004-06-17T19:30:16-04:00</modified>
+<modified>2004-06-21T22:32:47-04:00</modified>
 <author>
 <name>n1xt3r</name>
 <url>/index.html</url>
@@ -24,8 +24,7 @@ xmlns:dc="http://purl.org/dc/elements/1.1/"
 <dc:subject>NanoBlogger Help</dc:subject>
 <content type="application/xhtml+xml" xml:lang="en" xml:space="preserve" mode="escaped">
 <![CDATA[
-<p>The basic syntax is: <code>nb [-b blogdir] [options]</code>
-</p><p>
+<p>The basic syntax is: <code>nb [-b blogdir] [options]</code></p>
 <b>How to ...</b>
 <ul>
 <li>create a new blog directory = <code>nb --blogdir [blog_dir] --add</code></li>
@@ -39,7 +38,9 @@ xmlns:dc="http://purl.org/dc/elements/1.1/"
 <li>delete an old entry = <code>nb --delete [entry_id]</code></li>
 <li>specify a different blog directory = <code>nb --blogdir [blog_dir] [options]</code></li>
 </ul>
-Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.</p>
+<p>
+Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.
+</p>
 ]]>
 </content>
 
