@@ -1,5 +1,7 @@
 2004-04-10  n1xt3r  <n1xt3r@scorcher>
 
+	* nb, ChangeLog (show_help): Minor improvements made to help info.
+
 	* ChangeLog, nb (load_plugins):
 	user plugins are now loaded before global plugins.
 

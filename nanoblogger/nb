@@ -949,13 +949,13 @@ cat <<-EOF
 
 	Examples:
 	
-	 specify the blog directory to create or add a new entry to
+	 specify the blog directory to create or add new entry to
 	 	nb -b ~/public_html/blog -a
 
-	 creates a new category and titles it "News"
+	 creates new category and titles it "News"
 	 	nb -b ~/public_html/blog -t "News" -c new -a
 
-	 adds a new entry to category 1
+	 adds new entry to category 1
 	 	nb -b ~/public_html/blog -c 1 -a
 
 	 removes entry 2 from category 1
@@ -964,7 +964,7 @@ cat <<-EOF
 	 edits the title of category number 1
 	 	nb -b ~/public_html/blog -c 1 -t Humor -e cat
 
-	 creates a new entry and uses the file 'message.txt' as it's content
+	 creates new entry and uses the file 'message.txt' as it's content
 	 	nb -b ~/public_html/blog -n myname -t 'my title' -i message.txt
 
 	More info:
