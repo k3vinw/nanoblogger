@@ -1,3 +1,12 @@
+2004-06-08  n1xt3r  <n1xt3r@bluefalcon>
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/entry/entry_catlinks.sh, plugins/archive/master_index.sh, plugins/blog_links.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/list_entries.sh, plugins/rss.sh, default/templates/entry_links.htm, default/templates/month_links.htm, plugins/atom.sh, nb, ChangeLog:
+	- New variable NB_DATA_DIR, provides a more flexible data path.
+	- Set NB_DATA_DIR to BLOG_DIR/ARCHIVES by default.
+	- FILE_BY_DIR replaced by MONTHLY_DIR.
+	- Set MONTHLY_DIR to ARCHIVES/monthly.
+	- Updated plugins and templates to work with the new variables.
+
 2004-06-07  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:

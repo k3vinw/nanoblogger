@@ -85,6 +85,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory to user's blog archives
 NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
+# USR_DATADIR overrides NB_DATA_DIR
+[ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # if BLOG_AUTHOR is not specified, use $USER (even when empty)
 [ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
 # fallback on vi as the default editor
@@ -878,6 +880,7 @@ cat <<-EOF
 	 					'--delete', '--edit', '--list' and
 	 					'--update').
 	 --configure				configure blog.
+	 --datadir				specify blog's data directory.
 	 -d, --delete <cat,number>		delete an existing entry or category.
 	 -e, --edit <cat,number>		edit an existing entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration
@@ -956,6 +959,7 @@ while [ $# -gt 0 ]; do
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		config_blog;;
+		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_blogdir; delete_blog;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
