@@ -294,17 +294,12 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
-	if [ "$ENABLE_CACHE" = 1 ]; then
-		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
-			read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-			load_plugins entry/body
-			echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
-		else
-			NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
-		fi
-	else
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
+		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
+	else
+		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
 	fi
 	load_plugins entry
 fi
@@ -553,13 +548,7 @@ build_catarchives
 if [ "$weblog_update" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
-	# update cache
-	query_db all
-	> "$SCRATCH_FILE".cache_list
-	for entry in $DB_RESULTS; do
-		[ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ] &&
-			echo "$entry" >> "$SCRATCH_FILE".cache_list
-	done
+	update_cache add "$UPDATE_LIST"
 	[ ! -z "$UPDATE_LIST" ] && echo "$UPDATE_LIST" >> "$SCRATCH_FILE".cache_list
 	UPDATE_LIST=$(< "$SCRATCH_FILE.cache_list")
 	# rebuild current month archive
@@ -590,6 +579,29 @@ else
 fi
 }
 
+# update the cache
+update_cache(){
+cache_update="$1"
+CACHE_LIST="$2"
+cache_limit="$3"
+nb_msg "updating cache ..."
+if [ "$cache_update" = add ] && [ ! -z "$CACHE_LIST" ]; then
+	> "$SCRATCH_FILE".cache_list
+	for cache_entry in $CACHE_LIST; do
+		#echo "adding $cache_entry to CACHE_LIST ..."
+		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+	done
+	CACHE_LIST=$(< "$SCRATCH_FILE.cache_list")
+else
+	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery" "$cache_limit"
+	for cache_entry in $DB_RESULTS; do	
+		#echo "updating $cache_entry in cache ..."
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+	done
+fi
+}
+
 # build the weblog
 build_weblog(){
 # set base for relative links
@@ -598,15 +610,16 @@ weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
-[ "$weblog_update" = cache ] && { rm -fr "$BLOG_DIR/$CACHE_DIR"/*.*; weblog_update=all; }
 if [ "$weblog_update" = all ]; then
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
 fi
+#[ "$weblog_update" = cache ] && { weblog_update=all; update_cache all; }
+update_cache all
 load_plugins
+update_cache all
 # build the archives
-ENABLE_CACHE=1
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != main ] && build_archives
 if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
@@ -614,9 +627,10 @@ if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
+update_cache "$QUERY_MODE"
 [ "$ABSOLUTE_LINKS" != 1 ] && BASE_URL="./"
 nb_msg "generating main index page(s) ..."
-ENABLE_CACHE=0; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
+ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
 }
 
