@@ -25,6 +25,7 @@ build_atomfeed(){
 	ARCHIVE_LIST="$DB_RESULTS"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
+		NB_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
 		NB_AtomEntryDate=`echo "$NB_EntryTime$BLOG_TZD"`
 		# non-portable find command!
 		#NB_AtomEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
