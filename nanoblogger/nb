@@ -339,8 +339,8 @@ touch "$BLOG_DIR"/"$PARTS_DIR"/"$OUTPUT_FILE"
 PLACEHOLDER=`cat "$BLOG_DIR"/"$PARTS_DIR"/"$OUTPUT_FILE"`
 }
 
-# process entries into their own pages
-build_permalinks(){
+# create a permalink page for an entry
+build_permalink(){
 permalink_entry=`chg_suffix $entry`
 if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 	if [ -f "$BLOG_DIR"/"$ARCHIVES"/"$entry" ] && [ "$BLOG_DIR"/"$ARCHIVES"/"$entry" -nt \
@@ -362,10 +362,12 @@ encode_filter="$5"
 query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
-	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"; load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$template"
+	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
+	[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
+	load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$BLOG_DIR"/archives.tmp
-		build_permalinks
+		build_permalink
 		BLOG_HTML=
 		PLACEHOLDER=
 		NB_EntryCategories=
@@ -449,6 +451,7 @@ else
 			if [ "$FULL_PERMALINKS" = "1" ] && [ -f "$BLOG_DIR"/"$ARCHIVES"/"$Mod_Entry" ]; then
 				entry="$Mod_Entry"
 				read_entry "$BLOG_DIR"/"$ARCHIVES"/"$entry"
+				[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 				load_template "$BLOG_DIR"/"$TEMPLATE_DIR"/"$PERMALINKENTRY_TEMPLATE"
 				if [ ! -z "$BLOG_HTML" ]; then
 					echo "$BLOG_HTML" > "$BLOG_DIR"/"$PARTS_DIR"/"$Mod_Entry"
@@ -531,7 +534,6 @@ if [ ! -z "$cat_num" ]; then
 	done
 fi
 # load autoformat plugins
-[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 nb_msg "processing blog entry ..."
 write_entry "$BLOG_DIR"/"$ARCHIVES"/"$New_EntryFile"
 build_blog "$blog_update"
@@ -587,12 +589,8 @@ Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
 "$EDITOR" "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
 if [ -N "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile" ]; then
 	nb_msg "processing blog entry id: $NUMVAR ..."
-	# load autoformat plugins
-	if [ "$AUTO_FORMAT" = "1" ]; then
-		read_entry "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
-		load_plugins plugins/autoformat
-		write_entry "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
-	fi
+	read_entry "$BLOG_DIR"/"$ARCHIVES"/"$Edit_EntryFile"
+	[ "$AUTO_FORMAT" = "1" ] && load_plugins plugins/autoformat
 	cat_num=; build_blog
 else
 	die "no changes were made! bye."
