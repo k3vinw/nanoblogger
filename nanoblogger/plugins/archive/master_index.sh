@@ -62,9 +62,9 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	# set title for makepage template
 	NB_EntryTitle="Archives"
 	NB_Entries="$NB_Archive_Links"
-	nb_msg "$MKPAGE_OUTFILE"
 	load_template "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+	nb_msg "$MKPAGE_OUTFILE"
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"

@@ -14,7 +14,7 @@ esc_chars(){
 # make atom feed
 make_atomfeed(){
 MKPAGE_OUTFILE="$BLOG_DIR/atom.$NB_SYND_FILETYPE"
-nb_msg "$MKPAGE_OUTFILE"
+
 cat > "$MKPAGE_OUTFILE" <<-EOF
 	<?xml version="1.0" encoding="$BLOG_CHARSET"?>
 	<feed version="0.3"
@@ -33,6 +33,7 @@ cat > "$MKPAGE_OUTFILE" <<-EOF
 
 	</feed>
 EOF
+nb_msg "$MKPAGE_OUTFILE"
 }
 
 # generate feed entries

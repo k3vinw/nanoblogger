@@ -308,7 +308,6 @@ fi
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-nb_msg "$MKPAGE_OUTFILE"
 # preserve content of body
 PLACEHOLDER=$(<"$MKPAGE_SRCFILE")
 load_template "$MKPAGE_SRCFILE"
@@ -322,6 +321,7 @@ for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
 	load_template "$mkpage_template"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 done
+nb_msg "$MKPAGE_OUTFILE"
 load_plugins plugins/postformat
 }
 
