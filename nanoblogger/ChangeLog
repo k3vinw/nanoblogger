@@ -1,3 +1,8 @@
+2004-05-08  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb (nb_main):
+	Removed prompt for directory creation, now done automatically.
+
 2004-05-06  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, nb (nb_main):

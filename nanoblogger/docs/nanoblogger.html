@@ -107,13 +107,25 @@ For online publishing you'll need some kind of shell or FTP access to your web s
 <blockquote>
 	DATE_FORMAT controls the look of a new entry's date.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Please note that this setting has no effect on previous entries.  Read the man pages of the date command to see more on how to customize the format of the date command's output.
 </blockquote>
-<b>Setting the Address</b>
+<b>Setting the Web Address</b>
 <blockquote>
-	BLOG_URL is used as the address for the blog.  Typically, you would set this to a remote address such as: "http://myblogurl.com".  If you wish to browse your blog locally you can set this to an address like this: "file:///home/bloguser/blogdir".  Replacing "myblogurl", "bloguser", and "myblogdir" with the actual location of your blog.
+	BLOG_URL is used as the address for the blog.  Typically, you would set this to a remote address such as: "http://myblogurl.com".  Replacing <em>myblogurl.com</em> with the actual address to your blog.
+</blockquote>
+<b>Setting the Style Sheet</b>
+<blockquote>
+	BLOG_CSS is used as the link to the style sheet in the default set of templates.  It provides an easy way to edit or switch the style sheet's location without having to edit each template.  It should be set in a similar fashion to BLOG_URL.
+</blockquote>
+<b>Setting the Author's Name</b>
+<blockquote>
+	BLOG_AUTHOR can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting BLOG_AUTHOR will override this behaviour.
 </blockquote>
 <b>Enabling Full Permalinks</b>
 <blockquote>
 	FULL_PERMALINKS determines whether permalinks are linked back to the monthly archives or linked to an entry's individual archive.  The default is to leave FULL_PERMALINKS off and link back to the monthly archives.  Enabling FULL_PERMALINKS will increase the time needed to generate your blog.
+</blockquote>
+<b>Setting Actions for Previewing and Publishing</b>
+<blockquote>
+	BLOG_PREVIEW_CMD and BLOG_PUBLISH_CMD may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.
 </blockquote>
 <b>Global Configuration</b>
 <blockquote>
@@ -121,6 +133,7 @@ For online publishing you'll need some kind of shell or FTP access to your web s
 </blockquote>
 
 <h2><a name="cr7">Templates and Placeholders</a></h2>
+Templates are located in the blog's sub-directory, templates.
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
@@ -290,9 +303,6 @@ For online publishing you'll need some kind of shell or FTP access to your web s
 	</table>
 </blockquote>
 
-All the placeholders are reinterpreted by the shell as variables when a template is sourced, making the templates capable of a few shell scripting tricks themselves.  As a simple example, you could place this in your template: "Last Modified: `date`", and it would display the time your page was last modified, using the date command.  Thus greatly enhancing the power of the templates, making it possible to create your own script and replace my "Last Modified" example with your own script.<br />
-<p />
-
 <p><b>Format of an Entry</b></p>
 The entry format is made up of pieces of metadata.  Each piece of metadata is of the format KEY: VALUE, then a carriage return that separates one piece from the next.  The order of the metadata pieces is not important.
 
@@ -328,14 +338,14 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	<tr>
 	<th align="left">plugins</th>
 	<th align="left">description</th>
-	<th align="left">placeholders/destination</th>
-	<th align="left">special requirements/notes</th>
+	<th align="left">targets</th>
+	<th align="left">notes</th>
 	</tr>
 	<tr>
 	<td align="left">archive/monthly_cal.sh</td>
-	<td align="left">adds a calendar with links to each monthly archive</td>
+	<td align="left">adds a calendar with links for each monthly archive</td>
 	<td align="left">$NB_Monthly_Calendar</td>
-	<td align="left">cal</td>
+	<td align="left">requires cal</td>
 	</tr>
 	<tr>
 	<td align="left">atom.sh</td>
@@ -345,27 +355,27 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	</tr>
 	<tr>
 	<td align="left">autoformat/auto_break.sh</td>
-	<td align="left">adds paragraph breaks to blank lines of entries</td>
+	<td align="left">converts blank lines to html paragraph breaks</td>
 	<td align="left">$NB_EntryBody</td>
 	<td align="left">none</td>
 	</tr>
 	<tr>
 	<td align="left">autoformat/moods.sh</td>
-	<td align="left">adds ability to use mood variables inside a blog's entry</td>
+	<td align="left">converts mood variables into icons</td>
 	<td align="left">$NB_EntryBody</td>
 	<td align="left">copy moods directory to blog's directory</td>
 	</tr>
 	<tr>
 	<td align="left">blog_status.sh</td>
-	<td align="left">generates blog statistics</td>
+	<td align="left">generates some statistics</td>
 	<td align="left">$NB_Blog_Status</td>
 	<td align="left">none</td>
 	</tr>
 	<tr>
 	<td align="left">calendar.sh</td>
-	<td align="left">adds a calendar with links based on the current month</td>
+	<td align="left">adds a calendar with links for the current month</td>
 	<td align="left">$NB_Calendar</td>
-	<td align="left">cal</td>
+	<td align="left">requires cal</td>
 	</tr>
 	<tr>
 	<td align="left">category_links.sh</td>
@@ -375,9 +385,9 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	</tr>
 	<tr>
 	<td align="left">fortune.sh</td>
-	<td align="left">uses fortune to generate random quotes</td>
+	<td align="left">generates random quotes</td>
 	<td align="left">$NB_Fortune</td>
-	<td align="left">fortune</td>
+	<td align="left">requires fortune</td>
 	</tr>
 	<tr>
 	<td align="left">list_entries.sh</td>
@@ -393,7 +403,7 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	</tr>
 	<tr>
 	<td align="left">mymood.sh</td>
-	<td align="left">adds ability for user to set a mood status in their blog</td>
+	<td align="left">adds ability to display your mood</td>
 	<td align="left">$NB_My_Mood</td>
 	<td align="left">copy moods directory to blog's directory</td>
 	</tr>
@@ -401,7 +411,7 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	<td align="left">postformat/tidy.sh</td>
 	<td align="left">validates HTML code</td>
 	<td align="left">$NB_Tidy</td>
-	<td align="left">HTML tidy</td>
+	<td align="left">requires tidy</td>
 	</tr>
 	<tr>
 	<td align="left">rss.sh</td>
@@ -412,7 +422,7 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 	</table>
 </blockquote>
 
-To disable a plugin, rename the plugin's extension from ".sh" to ".off".  This will move the plugin off of the radar, the next time NanoBlogger is run.<br />
+To disable a plugin, rename the plugin's extension from ".sh" to ".off".
 <br />
 
 <h2><a name="cr9">Publishing Your Blog to a Remote Site</a></h2>
@@ -445,18 +455,6 @@ If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), 
 	<li>
 		<p>
 		Remember the "clippings" feature?  Say you already have a web site full of your own custom server-side scripts/includes.  This is where the "news.htm" file comes in.  It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "news.htm" into the page.  So, now you can have a simple blog-like page, that's updated whenever news.htm changes.
-		</p>
-	</li>
-
-	<li>
-		<p>
-		BLOG_PREVIEW_CMD can be used to set a command to run when you want to preview your blog.
-		</p>
-	</li>
-
-	<li>
-		<p>
-		BLOG_PUBLISH_CMD can be used to set a command to run when you want to publish your blog.
 		</p>
 	</li>
 
