@@ -114,6 +114,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$BLOG_TZD" ] && BLOG_TZD="$AUTO_TZD"
 # fallback to MAX_ENTRIES
 [ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
+# check if we want absolute links
+[ "$ABSOLUTE_LINKS" = "1" ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
 }
 
 # filter custom date format for a new entry
@@ -270,10 +272,10 @@ if [ -f "$ENTRY_FILE" ]; then
 	if [ "$ENTRY_ARCHIVES" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
 		#NB_EntryPermalink="$ARCHIVES_DIR/$permalink_entry"
-		NB_EntryPermalink="${REL_URL}$permalink_entry"
+		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
 	else
 		#NB_EntryPermalink="$ARCHIVES_DIR/$month.$NB_FILETYPE#$NB_EntryID"
-		NB_EntryPermalink="${REL_URL}$month.$NB_FILETYPE#$NB_EntryID"
+		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
 	fi
 	load_plugins plugins/entry
 fi
@@ -549,7 +551,7 @@ if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 fi
 # build main index
 nb_msg "generating main index page ..."
-REL_URL="$ARCHIVES_DIR/"
+ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 make_archive current nocat "$ENTRY_TEMPLATE" news.$NB_FILETYPE
 make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
@@ -606,7 +608,11 @@ db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"; ENTRY_LIST="$DB_RESULTS"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $edit_num"
+	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id('s): $edit_num"
+done
+>"$SCRATCH_FILE"
+for entry_id in $NUMVAR; do
+	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
 	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
