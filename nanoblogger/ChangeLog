@@ -1,4 +1,11 @@
+2004-05-02  n1xt3r  <n1xt3r@scorcher>
+
+	* default/parts/older_entries.htm: Repository update.
+
 2004-05-01  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, default/atom.xml, default/index.html:
+	Added missing default directories?
 
 	* ChangeLog, default/parts/cat_1.db.htm, default/parts/category_links.htm, default/parts/news.rdf, default/parts/tidy.html:
 	Removed obsolete files from default directory.
@@ -354,14 +361,13 @@
 	* plugins/list_entries.sh:
 	Updated list_entries.sh and monthly-cal.sh plugins so that they utilitize the new NB_EntryID variable.
 
-	* default/archives.html, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/recent_entries.htm, default/styles/nb_rusted.css, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/main_index.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb, nb.conf, plugins/list_entries.sh, plugins/postformat/tidy.sh:
+	* default/archives.html, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/recent_entries.htm, default/styles/nb_rusted.css, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/main_index.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb, nb.conf, plugins/list_entries.sh, plugins/postformat/tidy.sh:
 	Moved code to generate a master archive index out into a plugin.  Replaced TXT_EDITOR with EDITOR, changed BASE_DIR to use the dirname command, added new BLOG_TZD to define a time zone, and added a new --verbose option.  Also improved regular expressions found in sed commands, stopped autoformat plugins from loading in make_page function, and probably more changes that slipped my mind.
 
-	* default/archives/monthly/2004-01.html, default/styles/mt_clean.css, default/styles/nb_rusted.css:
+	* default/styles/mt_clean.css, default/styles/nb_rusted.css:
 	Initial import
 
-	* default/archives/monthly/2004-01.html, default/styles/mt_clean.css, default/styles/nb_rusted.css:
-	New file.
+	* default/styles/mt_clean.css, default/styles/nb_rusted.css: New file.
 
 	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/autoformat/auto_break.sh, plugins/autoformat/moods.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	Initial import
