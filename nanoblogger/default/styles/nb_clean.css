@@ -13,6 +13,12 @@
 		padding: 0px;
 	}
 
+	blockquote {
+		background-color:#EEE;
+		padding:2mm;
+		border-left:5px solid #BBB;
+		}
+
 	pre {
 		background:#EEE;
 		padding: 2mm;
@@ -26,6 +32,7 @@
 		font-weight:normal;
   		padding:15px;
                 border-top:4px double #666;
+		border-bottom:1px solid #666;
 		}
 
 	#banner a,
@@ -62,8 +69,9 @@
 	#links {
 		padding:15px;
 		border:1px solid #FFF;
-		width:200px;
+		width:180px;
 		background: #FFF;
+		border-right: 1px dotted #999;
 		}
 
 	.blog {
@@ -264,14 +272,17 @@
 
 	.intro {
 		font-family:palatino, georgia, verdana, arial, sans-serif;
-		border:1px solid #000;
-		background:#EEE;
+		border-bottom:1px solid #999;
+		border-left:1px solid #999;
 		color:#333;
 		font-size:small;
 		font-weight:normal;
   		line-height:180%;
-		padding:10px;
-		margin-bottom:15px;
+		padding-top:0px;
+		padding-left:10px;
+		padding-right:10px;
+		padding-bottom:10px;
+		margin-bottom:45px;
 		}
 
 	.intro a,
@@ -282,4 +293,5 @@
 		font-weight: normal;
 		text-decoration: underline;
 		color:#333;
+		}
 	
