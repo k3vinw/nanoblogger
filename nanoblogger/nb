@@ -12,7 +12,7 @@ BASE_DIR=`dirname $0`
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
-NB_TimeStamp(){ date +%Y-%m-%dT%H_%M_%S; }
+NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
 
 # prompt to use when asking something.
 NB_PROMPT=": "
@@ -70,7 +70,7 @@ NB_EditFile="/tmp/nb_entry$$.htm"
 tmp_files="$NB_EditFile"
 [ -z "$tmp_files" ] || trap "rm -f $tmp_files; exit" 0 1 2 3 15
 
-# loads user's blog.conf or fall back on default
+# loads user's blog.conf or fall back on defaults
 load_config(){
 # always load global configs
 . "$BASE_DIR"/nb.conf
@@ -100,7 +100,6 @@ filter_dateformat(){
 FILTER_VAR="$1"
 [ ! -z "$FILTER_VAR" ] || FILTER_VAR="%B %d, %Y %l:%M %p"
 # it would've been nice to use the date command's description feature here
-#FILTER_VAR=`echo date +"$FILTER_VAR" |sed -e 's/[ ]/_/g; s/_/ /'`; echo `$FILTER_VAR` |sed -e 's/_/ /g'
 LANG="$DATE_LOCALE" date +"$FILTER_VAR"
 }
 
@@ -114,7 +113,7 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
-# check for BLOG_DIR and some important directories existance.
+# check for BLOG_DIR and the existance of some important sub-directories
 check_blogdir(){
 [ ! -z "$BLOG_DIR" ] || die "no blog directory specified! bye."
 [ -d "$BLOG_DIR" ] || die "blog directory '$BLOG_DIR' doesn't exist! bye."
@@ -256,7 +255,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	fi
 	# find related categories and create a list of links
 	query_db
-	PLACEHOLDER=; echo "" > "$BLOG_DIR"/cat_links.tmp
+	PLACEHOLDER=; > "$BLOG_DIR"/cat_links.tmp
 	for entry_cat in $db_categories; do
 		cat_var=`grep "$entry" "$BLOG_DIR"/"$ARCHIVES"/"$entry_cat"`
 		if [ ! -z "$cat_var" ]; then
@@ -267,7 +266,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	done
 	[ -z "$db_categories" ] ||
 		NB_EntryCategories=`echo "$PLACEHOLDER" |sort -u`
-	rm -f "$BLOG_DIR"/cat_links.tmp; rm -f "$BLOG_DIR"/"$PARTS_DIR"/entrycat_links.htm
+	rm -f "$BLOG_DIR"/cat_links.tmp "$BLOG_DIR"/"$PARTS_DIR"/entrycat_links.htm
 fi
 }
 
@@ -363,7 +362,7 @@ done
 if [ -f "$BLOG_DIR"/archives.tmp ]; then
 	cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 else
-	touch "$BLOG_DIR"/archives.tmp
+	> "$BLOG_DIR"/archives.tmp
 	cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 fi
 rm -f "$BLOG_DIR"/archives.tmp
@@ -877,23 +876,19 @@ if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-
 echo "editing in '$EDITOR' ..."
 "$EDITOR" "$NB_EditFile"
-
 # load content of edited file into entry variable NB_EntryBody
 if [ -f "$NB_EditFile" ]; then
 	NB_EntryBody=`cat "$NB_EditFile"`
 else
 	die "can't continue, because your text-file wasn't saved! bye."
 fi
-
 # let the user add a descritption
 if [ -z "$NB_EntryDescription" ]; then
 	echo "enter a short descriptive comment"
 	read -p "$NB_PROMPT" NB_EntryDescription
 fi
-
 # generate date format for entry's contents
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 add_entry
