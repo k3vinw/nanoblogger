@@ -8,7 +8,7 @@ MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 
 # check for blog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$blog_update" = "all" ]; then
-	nb_msg "generating master archive index ..."
+	#nb_msg "generating master archive index ..."
 	# make NB_Entry_Links placeholder for all entry links
 	> "$BLOG_DIR"/"$PARTS_DIR"/entry_links.htm; > "$BLOG_DIR"/entry_links.tmp
 	query_db all

@@ -1,5 +1,8 @@
 2004-05-25  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, plugins/entry/auto_break.sh, plugins/entry/moods.sh:
+	Added checks for AUTO_FORMAT.
+
 	* ChangeLog, plugins/archive/master_index.sh:
 	Moved master_index plugin into archive plugins.
 
