@@ -1,3 +1,8 @@
+2004-04-10  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb (load_plugins):
+	user plugins are now loaded before global plugins.
+
 2004-04-09  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/atom.sh:

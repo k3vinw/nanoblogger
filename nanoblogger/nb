@@ -916,7 +916,8 @@ cat <<-EOF
 	 					(directory).
 	 -b, --blogdir				specify blog directory.
 	 -c, --category	<new,number>		specify category (for '--add',
-	 					'--delete', '--edit', and '--list').
+	 					'--delete', '--edit', '--list' and
+	 					'--update').
 	 --configure				configure blog.
 	 -d, --delete <cat,number>		delete an existing entry or category.
 	 -e, --edit <cat,number>		edit an existing entry or category.
@@ -932,8 +933,8 @@ cat <<-EOF
 	 					category (for '--category').
 	 -n, --author				author attribute of entry (for
 	 					'--importfile' and '--add').
-	 -p, --preview				preview blog.
-	 -P, --publish				publish blog.
+	 -p, --preview				run preview blog command.
+	 -P, --publish				run publish blog command.
 	 --template <file>			specify file to load as template (for
 	 					'--makepage').
 	 -t, --title				title attribute of entry/category/page
