@@ -63,10 +63,10 @@ exit 1
 
 # die without it
 [ -d "$BASE_DIR" ] ||
-	die "`basename $0`: $BASE_DIR doesn't exist! bye."
+	die "`basename $0`: $BASE_DIR doesn't exist! goodbye."
 
 # entry's new file for editing
-NB_EditFile="/tmp/nb_entry$$.htm"
+NB_EditFile="/tmp/nb_entry$$.$NB_DATATYPE"
 
 # cleanup for special temp files
 tmp_files="$NB_EditFile"
@@ -104,6 +104,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$EDITOR" ] && EDITOR="vi"
 # fallback to $BLOG_URL
 [ -z "$BLOG_URL_ACTION" ] && BLOG_URL_ACTION="$BLOG_URL/"
+# fallback to htm
+[ -z "$NB_DATATYPE" ] && NB_DATATYPE="htm" 
 # fallback to html
 [ -z "$NB_FILETYPE" ] && NB_FILETYPE="html"
 # fallback to xml
@@ -132,10 +134,10 @@ echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 
 # die without a default directory structure
 check_blogdir(){
-[ -z "$BLOG_DIR" ] && die "no weblog directory specified! bye."
-[ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! bye."
-[ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! bye."
-[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. bye."
+[ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
+[ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
+[ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
+[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. goodbye."
 }
 
 # create list of entries based on a month or interval
@@ -163,13 +165,13 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
 	# list all entries
-        list_db(){ for files in *.htm; do echo "$files"; done; }
+        list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
 	# include categorized entries
 	cat_db(){
 		[ -z "$db_catquery" ] && list_db
 		for cat_db in $db_categories; do
 			[ ! -z "$cat_db" ] &&
-				sed 1d "$cat_db"
+				grep "[\.]$NB_DATATYPE" "$cat_db"
 		done
 		}
 if [ "$db_query" = "all" ]; then
@@ -182,7 +184,7 @@ else
 	DB_RESULTS=`cat_db |filter_query`
 fi
 # try to clear bad data
-if [ "$DB_RESULTS" = "$NB_DATA_DIR/*.htm" ]; then
+if [ "$DB_RESULTS" = "$NB_DATA_DIR/*.$NB_DATATYPE" ]; then
 	DB_RESULTS=
 fi
 db_query=; cd "$CURR_PATH"
@@ -232,7 +234,7 @@ load_plugins(){
 PLUGINS_DIR="$1"
 if [ "$ENABLE_PLUGINS" = "1" ]; then
 	[ ! -d "$BASE_DIR/$PLUGINS_DIR" ] &&
-		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! bye."
+		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! goodbye."
 	# loads plugins in alpha-numeric order (0-9, a-z)
 	[ -d "$BLOG_DIR/$PLUGINS_DIR" ] &&
 		for plugin in "$BLOG_DIR/$PLUGINS_DIR"/*.sh; do
@@ -301,10 +303,10 @@ if [ ! -z "$usr_srcfile" ]; then
 	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
 	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
-[ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! bye."
+[ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! goodbye."
 NB_Entries=`cat "$MKPAGE_SRCFILE"`
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
-[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! bye."
+[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 cat "$MKPAGE_TMPLFILE" > "$MKPAGE_OUTFILE".tmp
@@ -356,10 +358,10 @@ rm -f "$BLOG_DIR"/archives.tmp
 # create archive of current month
 build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
-		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".htm
+		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".$NB_FILETYPE
 		NB_ArchiveTitle="$month"
 		load_plugins plugins/archive/monthly
-		make_page "$BLOG_DIR/$PARTS_DIR/$month".htm "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
+		make_page "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
 		"$BLOG_DIR/$MONTHLY_DIR/$month.$NB_FILETYPE"
 	fi
 }
@@ -416,10 +418,9 @@ if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			cat_archindex=`chg_suffix "$cat_arch"`
-			cat_archpart=`chg_suffix "$cat_arch" htm`
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
-			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archpart"
-			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
+			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archindex"
+			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archindex" "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 			"$BLOG_DIR/$ARCHIVES/$cat_archindex"
 		fi
 	done
@@ -488,13 +489,13 @@ if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 fi
 # build main index
 nb_msg "generating main index page ..."
-make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-make_page "$BLOG_DIR/$PARTS_DIR"/news.htm "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
+make_archive current nocat "$ENTRY_TEMPLATE" news.$NB_FILETYPE
+make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
 
 # add a new entry
 add_entry(){
-New_EntryFile=`NB_TimeStamp`.htm
+New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 nb_msg "processing new weblog entry ..."
 write_entry "$NB_DATA_DIR/$New_EntryFile"
@@ -514,11 +515,11 @@ config_weblog(){
 if [ -f "$BLOG_CONF" ]; then
 	$EDITOR "$BLOG_CONF"
 	# check if file's been modified since opened
-	[ ! -N "$BLOG_CONF" ] && die "no changes were made! bye."
+	[ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
 	load_config; nb_msg "applying changes to '$BLOG_TITLE' ..."
 	check_blogdir; build_weblog; exit 0
 else
-	die "config file, '$BLOG_CONF' doesn't exist! bye."
+	die "config file, '$BLOG_CONF' doesn't exist! goodbye."
 fi
 }
 
@@ -536,7 +537,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 		UPDATE_LIST="$DB_RESULTS"
 		build_weblog; exit 0
 	else
-		die "no changes were made! bye."
+		die "no changes were made! goodbye."
 	fi
 fi
 NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
@@ -552,7 +553,7 @@ if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 	UPDATE_LIST="$Edit_EntryFile"
 	build_weblog
 else
-	die "no changes were made! bye."
+	die "no changes were made! goodbye."
 fi
 }
 
@@ -623,7 +624,7 @@ list_weblog(){
 query_db; db_query="$1"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = "cat" ]; then
-	[ -z "$db_categories" ] && die "no categories to list for '$BLOG_TITLE'! bye."
+	[ -z "$db_categories" ] && die "no categories to list for '$BLOG_TITLE'! goodbye."
 	nb_msg "ID, Title"
 	id=0
 	cat_total=`echo "$db_categories" |grep "" -c`
@@ -638,7 +639,7 @@ if [ "$db_query" = "cat" ]; then
 fi
 [ -z "$db_query" ] && db_query="current"
 query_db "$db_query" "$db_catquery"
-[ -z "$DB_RESULTS" ] && die "no entries to list for '$BLOG_TITLE'! bye."
+[ -z "$DB_RESULTS" ] && die "no entries to list for '$BLOG_TITLE'! goodbye."
 nb_msg "ID, Title [Category]"
 id=0
 for entry in $DB_RESULTS; do
@@ -689,7 +690,7 @@ build_weblog
 }
 
 preview_weblog(){
-[ -z "$BLOG_PREVIEW_CMD" ] && die "no BLOG_PREVIEW_CMD set for this weblog! bye."
+[ -z "$BLOG_PREVIEW_CMD" ] && die "BLOG_PREVIEW_CMD not set for this weblog! goodbye."
 nb_msg "running '$BLOG_PREVIEW_CMD' ..."
 $BLOG_PREVIEW_CMD
 }
@@ -706,7 +707,7 @@ esac
 }
 
 publish_weblog(){
-[ -z "$BLOG_PUBLISH_CMD" ] && die "no BLOG_PUBLISH_CMD set for this weblog! bye."
+[ -z "$BLOG_PUBLISH_CMD" ] && die "BLOG_PUBLISH_CMD not set for this weblog! goodbye."
 nb_msg "running '$BLOG_PUBLISH_CMD' ..."
 $BLOG_PUBLISH_CMD
 }
@@ -724,7 +725,7 @@ esac
 
 # create a new entry, category  or weblog directory
 create_weblog(){
-[ -z "$BLOG_DIR" ] && die "no weblog directory specified! bye."
+[ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
 	build_newblog="1"

@@ -1,3 +1,10 @@
+2004-07-17  state  <state@bluefalcon>
+
+	* ChangeLog, docs/nanoblogger.html, nb:
+	(add_entry), (delete_blog): - Fixed adding aborted entries to categories.
+	- Fixed updating when deleting entries.
+	- Fixed missing option reference in error message.
+
 2004-07-14  state  <state@bluefalcon>
 
 	* ChangeLog, nb:

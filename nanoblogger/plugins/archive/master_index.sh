@@ -22,7 +22,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	rm -f "$BLOG_DIR"/entry_links.tmp
 
 	# make NB_Archive_Links placeholder
-	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.htm <<-EOF
+	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.$NB_FILETYPE <<-EOF
 		<a name="category"></a>
 		<b>Browse by category</b>
 		<div>
@@ -41,7 +41,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 		$NB_Entry_Links
 		</div>
 	EOF
-	NB_Archive_Links=`cat "$BLOG_DIR/$PARTS_DIR"/archive_links.htm`
+	NB_Archive_Links=`cat "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE`
 
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/archives.$NB_FILETYPE"

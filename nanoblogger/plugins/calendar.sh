@@ -7,7 +7,7 @@
 # $NB_Calendar
 # </div>
 
-PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.htm"
+PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 
 if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" cal $CAL_ARGS`
