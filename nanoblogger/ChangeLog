@@ -1,5 +1,7 @@
 2004-04-10  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, nb (show_help): Simplified wording in examples.
+
 	* nb, ChangeLog (show_help): Minor improvements made to help info.
 
 	* ChangeLog, nb (load_plugins):

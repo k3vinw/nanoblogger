@@ -229,19 +229,26 @@ if [ "$ENABLE_PLUGINS" = "1" ]; then
 fi
 }
 
-# read a file's metadata
+strip_html(){ sed -e :a -e 's/<[^>]*>//g; /</N; //ba'; }
+
+load_encode_filters(){
+	[ "$encode_text" = "1" ] && ENCODE_FILTER="strip_html"
+	}
+
+# read file's metadata
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e 's/^'$MTAG'[\:][ ]//'`
 [ "$MTAG" = "BODY" ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
+load_encode_filters
+[ ! -z "$ENCODE_FILTER" ] && NB_Metadata=`echo "$NB_Metadata" |$ENCODE_FILTER`
 }
 
 # read entry and process through template
 read_entry(){
 ENTRY_FILE="$1"
-TEMPLATE="$2"
 if [ -f "$ENTRY_FILE" ]; then
 	month=`echo "$entry" |cut -c1-7`
 	NB_EntryDay=`echo "$entry" |cut -c1-10`
@@ -350,6 +357,7 @@ query_type="$1"
 db_catquery="$2"
 template="$3"
 output_file="$4"
+encode_filter="$5"
 query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
@@ -516,16 +524,16 @@ nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
 [ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
 [ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
-# build main index and feed
+# build main index
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-make_archive current nocat "$FEEDENTRY_TEMPLATE" news."$NB_SYND_FILETYPE"
+#make_archive current nocat "$FEEDENTRY_TEMPLATE" news."$NB_SYND_FILETYPE" encode_text="1"
 if [ "$blog_update" = "all" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
 make_page "$BLOG_DIR"/"$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
-make_page "$BLOG_DIR"/"$PARTS_DIR"/news.$NB_SYND_FILETYPE "$BLOG_DIR/$TEMPLATE_DIR/$MAINFEED_TEMPLATE" \
-"$BLOG_DIR"/index.$NB_SYND_FILETYPE
+#make_page "$BLOG_DIR"/"$PARTS_DIR"/news.$NB_SYND_FILETYPE "$BLOG_DIR/$TEMPLATE_DIR/$MAINFEED_TEMPLATE" \
+#"$BLOG_DIR"/index.$NB_SYND_FILETYPE
 }
 
 # process entry metadata into time-stamped text-file and store in the archives for future processing
