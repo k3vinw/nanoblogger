@@ -1,5 +1,8 @@
 2004-03-25  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/articles.off, plugins/articles.sh:
+	Renamed articles.sh plugin to articles.off, so it's disabled by default.
+
 	* articles/articles.list, plugins/articles.sh:
 	Added new plugin: articles.sh.
 
