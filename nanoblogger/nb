@@ -1,4 +1,4 @@
-#! /bin/sh --posix
+#! /bin/bash
 ############################################################
 #  NanoBlogger 2.9 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
@@ -627,7 +627,7 @@ if [ "$db_query" = "cat" ]; then
 	[ -z "$db_categories" ] && die "no categories to list for '$BLOG_TITLE'! goodbye."
 	nb_msg "ID, Title"
 	id=0
-	cat_total=`echo "$db_categories" |grep "" -c`
+	cat_total=`echo "$db_categories" |grep "[\.]db" -c`
 	while [ "$id" != "$cat_total" ]; do
 		id=`expr 1 + $id`
 		if [ -f "$NB_DATA_DIR/cat_$id.db" ]; then
@@ -749,7 +749,7 @@ check_blogdir; load_config
 if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = "new" ]; then
 		query_db; id=0
-		cat_total=`echo "$db_categories" |grep "" -c`
+		cat_total=`echo "$db_categories" |grep "[\.]db" -c`
 		while [ "$id" != "$cat_total" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
@@ -808,7 +808,7 @@ else
 fi
 [ ! -z "$usr_description" ] && NB_EntryDescription="$usr_description"
 # prompt for descritption
-if [ -z "$NB_EntryDescription" ]; then
+if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != "1" ]; then
 	echo "enter a short descriptive comment"
 	read -p "$NB_PROMPT" NB_EntryDescription
 fi
@@ -821,7 +821,7 @@ add_entry
 
 show_help(){
 cat <<-EOF
-	NanoBlogger - Small console weblog engine.
+	NanoBlogger - Console weblog engine.
 	Version $VERSION, by Kevin Wood <un1xt3r@fastmail.fm>
 
 	Usage:
@@ -914,7 +914,7 @@ while [ $# -gt 0 ]; do
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_blogdir; delete_weblog;;
-		-D|--desc)		check_arg; usr_description="$2"; shift;;
+		-D|--desc)		desc_var="1"; usr_description="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_blogdir; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
