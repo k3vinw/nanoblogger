@@ -44,27 +44,27 @@ build_atomfeed(){
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
-		Atom_EntryTime=$(echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g')
-		Atom_EntryDate=$(echo "$NB_EntryTime$BLOG_TZD")
+		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
+		Atom_EntryDate=`echo "$Atom_EntryTime$BLOG_TZD"`
 		# non-portable find command!
-		#Atom_EntryModDate=$(find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD")
+		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		Atom_EntryModDate="$Atom_EntryDate"
-		Atom_EntryTitle=$(echo "$NB_EntryTitle" |esc_chars)
+		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntrySubject=; cat_title=; oldcat_title=
 		for cat_db in $db_categories; do
-			cat_var=$(grep "$entry" "$NB_DATA_DIR/$cat_db")
+			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
-				cat_title=$(sed -n 1p "$NB_DATA_DIR/$cat_db")
+				cat_title=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
 				[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
 				oldcat_title="$cat_title,"
 			fi
 		done
 		if [ ! -z "$cat_title" ]; then
-			cat_title=$(echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars)
-			Atom_EntrySubject=$(echo '<dc:subject>'$cat_title'</dc:subject>')
+			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+			Atom_EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
-		#Atom_EntryExcerpt=$(echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars)
-		Atom_EntryExcerpt=$(echo "$NB_EntryBody" |sed -n '1,/^$/p')
+		#Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
+		Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p'`
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<entry>
 				<title mode="escaped">$Atom_EntryTitle</title>
@@ -75,7 +75,7 @@ build_atomfeed(){
 				<id>$BLOG_URL/$ARCHIVES_DIR/$NB_EntryPermalink</id>
 				<issued>$Atom_EntryDate</issued>
 				<modified>$Atom_EntryModDate</modified>
-				<created>$NB_AtomEntryDate</created>
+				<created>$Atom_EntryDate</created>
 				$Atom_EntrySubject
 				<content type="application/xhtml+xml" xml:lang="en" xml:space="preserve" mode="escaped">
 					<![CDATA[
@@ -86,7 +86,7 @@ build_atomfeed(){
 			</entry>
 		EOF
 	done
-	NB_AtomEntries=$(<"$SCRATCH_FILE")
+	NB_AtomEntries="$(<$SCRATCH_FILE)"
 	}
 
 

@@ -59,7 +59,7 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 	echo '</table>' >> "$PLUGIN_OUTFILE"
 
 	# The calendar's place-holder for the templates
-	NB_Calendar=$(<"$PLUGIN_OUTFILE")
+	NB_Calendar="$(<$PLUGIN_OUTFILE)"
 	load_template "$PLUGIN_OUTFILE"
 	echo "$BLOG_HTML" > "$PLUGIN_OUTFILE"
 fi

@@ -3,6 +3,9 @@
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 #TODO: fix (load_config) unconditional loading of default weblog's blog.conf
+#NOTES: because entries get stored in variables, it's possible to produce
+# non-fatal errors when the entry contains incomplete command subsitutions.
+# e.g. ` and $(
 # nanoblogger's version.
 VERSION="CVS-3.0"
 
@@ -41,7 +44,8 @@ TEMP_DIR="/tmp"
 VERBOSE="1"
 
 # automatically set time zone using 'date +%z'
-tzd_mm=`date +%z |cut -c4-5`; AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
+tzd_mm=`date +%z |cut -c4-5`
+AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 
 # letter to prepend to entry's html id tag
 x_id="e"
@@ -66,9 +70,8 @@ exit 1
 	die "`basename $0`: $BASE_DIR doesn't exist! goodbye."
 
 # cleanup for special temp files
-NB_EditFile="$TEMP_DIR/nb_entry$$.*"
 SCRATCH_FILE="$TEMP_DIR/nb_scratch$$"
-tmp_files="$NB_EditFile $SCRATCH_FILE"
+tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 [ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # loads global and user configurations
@@ -102,7 +105,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # fallback to vi
 [ -z "$EDITOR" ] && EDITOR="vi"
 # fallback to htm
-[ -z "$NB_DATATYPE" ] && NB_DATATYPE="htm" 
+[ -z "$NB_DATATYPE" ] && NB_DATATYPE="txt" 
 # fallback to html
 [ -z "$NB_FILETYPE" ] && NB_FILETYPE="html"
 # fallback to xml
@@ -191,7 +194,7 @@ db_query=; cd "$CURR_PATH"
 
 # convert category number to existing category database
 cat_id(){
-cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'` 
+cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`
 query_db
 if [ ! -z "$cat_query" ]; then
 	for cat_id in $cat_query; do
@@ -217,7 +220,7 @@ done
 load_template(){
 BLOG_FILE="$1"
 # prefix text/html with an X in front of each line
-BLOG_TEMPLATE=$(sed -e '/^/ s//X/' <"$BLOG_FILE")
+BLOG_TEMPLATE=`sed -e '/^/ s//X/' <"$BLOG_FILE"`
 # remove X's and source variables into a temp file
 cat > "$SCRATCH_FILE" <<-EOF
 	sed -e '/^X/ s///' <<TMPL
@@ -248,9 +251,9 @@ fi
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-NB_Metadata=$(sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///')
+NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
 [ "$MTAG" = "BODY" ] &&
-NB_Metadata=$(sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d')
+NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
 }
 
 # read an entry
@@ -308,16 +311,14 @@ fi
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-# preserve content of body
-PLACEHOLDER=$(<"$MKPAGE_SRCFILE")
+# preserve content of entries' text
+PAGE_CONTENT="$(<$MKPAGE_SRCFILE)"
 load_template "$MKPAGE_SRCFILE"
 echo "$BLOG_HTML" > "$MKPAGE_SRCFILE"
 cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
 NB_Entries="\$NB_Entries"
-pass=0
 for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
-	pass=`expr 1 + $pass`
-	[ "$pass" = "2" ] && NB_Entries="$PLACEHOLDER"
+	[ "$mkpage_template" = "$MKPAGE_OUTFILE" ] && NB_Entries="$PAGE_CONTENT"
 	load_template "$mkpage_template"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 done
@@ -382,10 +383,10 @@ cycle_months_for(){
 	curr_year=`date +%Y`
 	curr_month=`date +%m`
 	# build archives seperated monthly and yearly
-	ENTRY_YEARS=$(echo "$MASTER_LIST" |cut -c1-4 |sort -ru)
+	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort -ru`
 	for yearn in $ENTRY_YEARS; do
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=$(echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed -n 1p)
+			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed -n 1p`
 			for entry_month in $ENTRY_LIST; do
 				month="$yearn-$monthn"
 				query_db "$month"
@@ -398,7 +399,6 @@ cycle_months_for(){
 # helps update relative categories
 find_categories(){
 UPDATE_CATLIST="$1"
-#CAT_LIST=
 	build_catlist(){
 	if [ ! -z "$cat_var" ]; then
 		CAT_LIST="$cat_db"
@@ -416,7 +416,7 @@ for relative_entry in $UPDATE_CATLIST; do
 done
 [ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
 if [ "$weblog_update" = "all" ]; then query_db; CAT_LIST="$db_categories"; fi
-CAT_LIST=$(for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u)
+CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
 # divide larger archives into multiple pages
@@ -425,7 +425,6 @@ page_category="$1"
 page_items="$2"
 page_template="$3"
 page_outfile="$4"
-
 query_db all "$page_category"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 if [ "$total_items" -gt "$page_items" ]; then
@@ -433,7 +432,6 @@ if [ "$total_items" -gt "$page_items" ]; then
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr "$page_items" + "$y"`; echo "$y"; done |grep -c ""; }
 	total_pages=`get_pages`
-
 	end=0; page_num=0
 	while [ "$end" -lt "$total_items" ]; do
 		begin=`expr "$end" + 1`; end=`expr "$page_items" + "$end"`
@@ -446,12 +444,12 @@ if [ "$total_items" -gt "$page_items" ]; then
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
 		[ "$page_num" -gt "1" ] &&
 			arch_page=`chg_suffix "$arch_name-page$page_num".no`
-		> "$SCRATCH_FILE"
+		>"$SCRATCH_FILE"
 		echo '<br />' >> "$SCRATCH_FILE"
 		[ "$prev_num" = "1" ] &&
-			echo '<a href="'$page_outfile'">[prev]</a>' >> "$SCRATCH_FILE"
+			echo '<a href="'$page_outfile'">&lt;&lt;</a>' >> "$SCRATCH_FILE"
 		[ "$prev_num" -gt "1" ] &&
-			echo '<a href="'$prev_page'">[prev]</a>' >> "$SCRATCH_FILE"
+			echo '<a href="'$prev_page'">&lt;&lt;</a>' >> "$SCRATCH_FILE"
 		for ((i=1; i <= $total_pages; i++)); do
 			[ "$i" = "1" ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
@@ -462,8 +460,8 @@ if [ "$total_items" -gt "$page_items" ]; then
 			fi
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-			echo '<a href="'$next_page'">[next]</a>' >> "$SCRATCH_FILE"
-		NB_PageLinks=$(<"$SCRATCH_FILE")
+			echo '<a href="'$next_page'">&gt;&gt;</a>' >> "$SCRATCH_FILE"
+		NB_PageLinks="$(<$SCRATCH_FILE)"
 		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$arch_page"
@@ -482,7 +480,7 @@ db_categories="$CAT_LIST"
 if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
-			NB_ArchiveTitle=$(sed -n 1p "$NB_DATA_DIR/$cat_arch")
+			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
 			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
 			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
@@ -503,7 +501,7 @@ else
 	query_db "$month"; build_monthlyarchive
 
 	# update relative monthly archives
-	MOD_MONTHS=$(echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru)
+	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
 	for mod_month in $MOD_MONTHS; do
 		if [ "$mod_month" != "$this_month" ]; then
 			month="$mod_month"
@@ -559,7 +557,7 @@ make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPL
 # add a new entry
 add_entry(){
 New_EntryFile=$(NB_TimeStamp).$NB_DATATYPE
-NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
+NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
 nb_msg "processing new weblog entry ..."
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 if [ ! -z "$cat_num" ]; then
@@ -605,15 +603,19 @@ fi
 NUMVAR=$(echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d')
 [ -z "$NUMVAR" ] && die "must specify a valid entry id."
 db_catquery=`cat_id`; check_catid
-query_db "$db_query" "$db_catquery"
-Edit_EntryFile=`echo "$DB_RESULTS" |sed -n "$NUMVAR"p`
-[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $NUMVAR"
-$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
-if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
-	nb_msg "processing weblog entry id: $NUMVAR ..."
-	read_entry "$NB_DATA_DIR/$Edit_EntryFile"
-	UPDATE_LIST="$Edit_EntryFile"
-	build_weblog
+query_db "$db_query" "$db_catquery"; ENTRY_LIST="$DB_RESULTS"
+for entry_id in $NUMVAR; do
+	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
+	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id: $edit_num"
+	$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
+	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
+		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
+	fi
+done
+UPDATE_LIST="$(<$SCRATCH_FILE)"
+if [ ! -z "$UPDATE_LIST" ]; then
+	nb_msg "processing modified weblog entries ..."
+	find_categories "$UPDATE_LIST"; build_weblog
 else
 	die "no changes were made! goodbye."
 fi
@@ -865,7 +867,7 @@ if [ -z "$usr_body" ]; then
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
-		NB_EntryBody=$(<"$NB_EditFile")
+		NB_EntryBody="$(<$NB_EditFile)"
 	fi
 else
 	NB_EntryBody="$usr_body"
@@ -877,7 +879,7 @@ if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != "1" ]; then
 	read -p "$NB_PROMPT" NB_EntryDescription
 fi
 # generate date format for entry's content
-NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
+NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
 add_entry
 [ ! -z "$BLOG_PREVIEW_CMD" ] && preview_ask
 [ ! -z "$BLOG_PUBLISH_CMD" ] && publish_ask
