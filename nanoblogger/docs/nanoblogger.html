@@ -268,10 +268,10 @@ nb --blogdir [myblog_dir] --configure -u all
  <p><b>Setting the Date Format for New Entries</b></p>
 
  <p>
-   <em>DATE_FORMAT</em> specifies the date format to use for new entries. The default <em>DATE_FORMAT</em> uses
-   <code>"%m.%d.%Y %H:%M"</code> (a portable date string) which should produce: "11.07.2004 18:52". You can also specify the locale
-   to be used for date command (see the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous
-   entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.
+   <em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command.
+   You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). Please note that this setting
+   has no effect on previous entries. Read the man pages of the date command to see more on how to customize the format of the date
+   command's output.
  </p>
  <p>
    Example:
@@ -901,11 +901,17 @@ mput *
       Here are the steps to enable comments using CGIComment:
 
      <ul>
+       <li>Start with a directory structure similar to this:
+       		<pre>
+|----webroot_dir
+	|----cgi-bin (added later)
+	|----cgicomment (added later)
+	|----blog_dir
+		</pre>
        <li>Edit <em>blog.conf</em>, add or change:
 		<pre>
 BLOG_URL_ACTION="http://myblog.com/cgi-bin/cgicomment.pl?article="
 ENTRY_ARCHIVES="1"
-ABSOLUTE_LINKS="1"
 		</pre>
 	</li>
 
@@ -923,16 +929,15 @@ nb [-b blog_dir] -u all
 
         <li>Decompress CGIComment into the top-most directory of your site: 
 		<pre>
-cd /var/www
-mv /tmp/CGIComment-XX.tar.gz ./
+cd webroot_dir
 tar xzf CGIComment-XX.tar.gz
 		</pre>
 	</li>
 
-        <li>Edit <em>cgi-bin/cgicomment.conf</em>, add or change:
+        <li>Edit <em>cgi-bin/cgicomment.conf</em>, add or change (excluding quotation marks):
 		<pre>
-BASE_DIR="../cgicomment/"
-ARTICLEDIR="../[blog_dir]/"
+BASE_DIR=../cgicomment/
+ARTICLEDIR=../[blog_dir]/
 		</pre>
 	</li>
 

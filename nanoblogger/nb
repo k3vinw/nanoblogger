@@ -320,7 +320,7 @@ fi
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 # preserve content of the source, but let plugins modify it
-: ${MKPAGE_CONTENT:="$(<$MKPAGE_SRCFILE)"}
+: ${MKPAGE_CONTENT:="$(< $MKPAGE_SRCFILE)"}
 # escape content of $NB_Entries so no execution takes place
 NB_Entries="\$MKPAGE_CONTENT"
 load_template "$MKPAGE_TMPLFILE"
@@ -471,7 +471,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
 			echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
-		NB_PageLinks="$(<$SCRATCH_FILE)"
+		NB_PageLinks="$(< $SCRATCH_FILE)"
 		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
 		"$page_outdir/$arch_page"
@@ -622,7 +622,7 @@ for entry_id in $NUMVAR; do
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 	fi
 done
-UPDATE_LIST="$(<$SCRATCH_FILE)"
+UPDATE_LIST="$(< $SCRATCH_FILE)"
 if [ ! -z "$UPDATE_LIST" ]; then
 	nb_msg "processing modified weblog entries ..."
 	find_categories "$UPDATE_LIST"; build_weblog
@@ -880,7 +880,7 @@ if [ -z "$usr_body" ]; then
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
-		NB_EntryBody="$(<$NB_EditFile)"
+		NB_EntryBody="$(< $NB_EditFile)"
 	fi
 else
 	NB_EntryBody="$usr_body"

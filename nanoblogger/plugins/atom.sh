@@ -90,7 +90,7 @@ build_atomfeed(){
 			</entry>
 		EOF
 	done
-	NB_AtomEntries="$(<$SCRATCH_FILE)"
+	NB_AtomEntries="$(< $SCRATCH_FILE)"
 	}
 
 
