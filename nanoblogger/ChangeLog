@@ -1,4 +1,9 @@
-2004-03-08  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+2004-03-09  n1xt3r  <n1xt3r@sourceforge.net>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Removed need to change BASE_DIR, added references to DATE_LOCALE and NB_EntryDescription.
+
+2004-03-08  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* ChangeLog: 1st Update to ChangeLog a.ka. added a ChangeLog.
 
@@ -27,7 +32,7 @@
 	* nb:
 	simplified if statement and discovered that move_num wasn't being shifted anymore, so move_num is now shifted again.
 
-2004-03-07  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+2004-03-07  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* plugins/calendar.sh: changed to use DATE_LOCALE
 
@@ -37,7 +42,7 @@
 	* nb:
 	Applied Pavel's patch. The patch improves upon make_page() and removes a few uses of cat in commands which already used sed.
 
-2004-03-06  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+2004-03-06  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* default/blog.conf:
 	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
@@ -48,7 +53,7 @@
 	* plugins/autoformat/01_escape_chars.off, plugins/autoformat/01_escape_chars.sh:
 	Replaced 01_escape_chars.sh with 01_escape_chars.off, to disable it becuase of too many problems.
 
-2004-03-05  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+2004-03-05  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* plugins/autoformat/01_escape_chars.sh:
 	Added new autoformat plugin, escape_chars that escapes characters: & and " to their respective HTML entities.
@@ -62,7 +67,7 @@
 	* nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	Replaced references of /dev/null with $PLUGIN_OUTFILE
 
-2004-03-04  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+2004-03-04  n1xt3r  <n1xt3r@sourceforge.net>
 
 	* plugins/calendar.sh:
 	Updated calendar plugin to utilitize the NB_EntryID variable.
