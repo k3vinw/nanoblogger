@@ -1,5 +1,7 @@
 2004-03-08  n1xt3r  <n1xt3r@cvs.sourceforge.net>
 
+	* ChangeLog: 1st Update to ChangeLog a.ka. added a ChangeLog.
+
 	* ChangeLog: added a ChangeLog.
 
 	* nb: made further simplifications to make_archive().

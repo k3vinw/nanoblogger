@@ -43,7 +43,7 @@ NanoBlogger is a small weblog engine written in Bash that uses common unix tools
 <li>RSS syndication (comes with RSS 1.0 (RDF) format)</li>
 <li>a fully functional web site, using templates and stylesheets for easy customizations</li>
 <li>placeholders for easy template manipulation</li>
-<li>plugins for calendar, recent entries, blog status, etc.</li>
+<li>plugins for calendar, recent entries, blog status, fortunes, etc.</li>
 <li>auto-formatting, e.g. line breaks translate to HTML</li>
 <li>keeps "clippings" (parts cut out) of the blog for extra portability and modularity (e.g. news.htm, 2003-06.htm)</li>
 <li>per-blog configuration via a config file (blog.conf)
@@ -55,7 +55,7 @@ NanoBlogger is a small weblog engine written in Bash that uses common unix tools
 
 <h2><a name="cr3">Installation</a></h2>
 <p />
-To install nanoblogger, download the tar archive from the web site[1].  Then from the commandline type "tar xzf nanoblogger-XXX.tar.gz where "XXX" equals the version number.  You will need to edit the BASE_DIR variable if it's not installed to your home directory or if you decide to change it's location.<br />
+To install nanoblogger, download the tar archive from the web site[1].  Then from the commandline type "tar xzf nanoblogger-XXX.tar.gz where "XXX" equals the version number.<br />
 <p><b>Upgrading</b></p>
 When upgrading nanoblogger, there's three basic things that need to be considered, and they are: archives, templates, and configuration.  These are the three things that should be backed up and may require some minor adjustments before they work well with the new version.  Here are some steps you can take to help ease the transition.
 <ul>
@@ -94,7 +94,7 @@ NanoBlogger is designed to work off-line, but the contents created are intended 
 </blockquote>
 Try "nb --help" for all available options.
 <p />
-For each blog there's a user defined configuration file called "blog.conf".  This file controls the behavior of a blog.  It allows you to change such things as, how many entries to display on the front page.  It's also where you set the title, description, and the URL for your blog. The DATE_FORMAT variable can be customized to change the date format of a new entry.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  Read the man pages of the date command to see more on how to customize the format of a date.<br />
+For each blog there's a user defined configuration file called "blog.conf".  This file controls the behavior of a blog.  It allows you to change such things as, how many entries to display on the front page.  It's also where you set the title, description, and the URL for your blog. The DATE_FORMAT variable can be customized to change the date format of a new entry.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Read the man pages of the date command to see more on how to customize the format of a date.<br />
 <p />
 
 <h2><a name="cr6">Building The Blog</a></h2>
@@ -219,6 +219,10 @@ NanoBlogger features "clippings", which is a directory consisting of the parts t
 	<td align="left">entry's posted time</td>
 	</tr>
 	<tr>
+	<td align="left">$NB_EntryDescription</td>
+	<td align="left">entry's description</td>
+	</tr>
+	<tr>
 	<td align="left">$NB_EntryID</td>
 	<td align="left">entry's id</td>
 	</tr>
@@ -288,6 +292,7 @@ The entry format is made up of pieces of metadata.  Each piece of metadata is of
 TITLE: A New Entry<br />
 AUTHOR: foo<br />
 DATE: January 30 2004, 12:00 PM<br />
+DESC: the description of this entry<br />
 -----<br />
 BODY:<br />
 This is my new entry ...<br />
