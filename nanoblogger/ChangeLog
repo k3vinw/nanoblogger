@@ -1,5 +1,8 @@
 2004-04-05  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, nb (build_blog):
+	Fixed bug that caused all permalinks to be processed unconditionally.
+
 	* plugins/master_index.sh, plugins/postformat/tidy.sh:
 	- Replaced OUTPUT_FILE with MKPAGE_OUTFILE in tidy plugin.
 	- Replaced call to nb with load_template in master archive plugin.
