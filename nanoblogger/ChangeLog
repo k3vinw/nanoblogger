@@ -1,5 +1,8 @@
 2004-05-01  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, default/parts/cat_1.db.htm, default/parts/category_links.htm, default/parts/news.rdf, default/parts/tidy.html:
+	Removed obsolete files from default directory.
+
 	* ChangeLog, default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.html, default/atom.xml, default/index.html, default/index.rdf, default/parts/cat_links.htm, default/parts/tidy.htm:
 	Updated NanoBlogger's Help entry in default.
 
