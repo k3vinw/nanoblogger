@@ -23,7 +23,7 @@
 <li><a href="#cr6">Settings and Configuration</a>
 <li><a href="#cr7">Templates and Placeholders</a>
 <li><a href="#cr8">Plugins</a>
-<li><a href="#cr9">Publishing Your Blog to a Remote Site</a>
+<li><a href="#cr9">Publishing to a Remote Site</a>
 <li><a href="#cr10">Tips and Tricks</a>
 <li><a href="#cr11">Credits</a>
 </ul>
@@ -134,7 +134,7 @@ Programs:
 </blockquote>
 <b>Setting the Number of Entries to Display</b>
 <blockquote>
-	<em>MAX_ENTRIES</em> sets the maximum number of entries to display on the main page. This must be set to a number higher than zero.
+	<em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed as current.  This must be set to a number higher than zero.
 </blockquote>
 <b>Building Individual Archives for Each Entry</b>
 <blockquote>
@@ -363,88 +363,102 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
-	<caption>The plugins included and what placeholders they create (most are enabled by default and setup in the templates):</caption>
+	<caption>The main plugins (most are enabled by default):</caption>
 	<tr>
 	<th align="left">plugins</th>
 	<th align="left">description</th>
+	<th align="left">variables</th>
 	<th align="left">targets</th>
 	<th align="left">notes</th>
 	</tr>
 	<tr>
 	<td align="left">archive/master_index.sh</td>
 	<td align="left">creates a master index page of the archives</td>
+	<td align="left">none</td>
 	<td align="left">$BLOG_URL/archives.html</td>
 	<td align="left">requires templates</td>
 	</tr>
 	<tr>
 	<td align="left">archive/monthly/monthly_cal.sh</td>
 	<td align="left">adds a calendar with links for each active day</td>
+	<td align="left">none</td>
 	<td align="left">$NB_Monthly_Calendar</td>
 	<td align="left">requires cal</td>
 	</tr>
 	<tr>
 	<td align="left">atom.sh</td>
 	<td align="left">adds an atom feed</td>
+	<td align="left">LIMIT_ITEMS</td>
 	<td align="left">$BLOG_URL/atom.$NB_SYND_FILETYPE</td>
 	<td align="left">requires templates</td>
 	</tr>
 	<tr>
 	<td align="left">blog_links.sh</td>
 	<td align="left">generates some useful links</td>
+	<td align="left">none</td>
 	<td align="left">$NB_Main_Links, $NB_Month_Links, $NB_Category_Links</td>
 	<td align="left">requires templates</td>
 	</tr>
 	<tr>
 	<td align="left">blog_status.sh</td>
 	<td align="left">generates some statistics</td>
+	<td align="left">none</td>
 	<td align="left">$NB_Blog_Status</td>
 	<td align="left">none</td>
 	</tr>
 	<tr>
 	<td align="left">calendar.sh</td>
 	<td align="left">adds a calendar with links for each active day</td>
+	<td align="left">none</td>
 	<td align="left">$NB_Calendar</td>
 	<td align="left">requires cal</td>
 	</tr>
 	<tr>
 	<td align="left">entry/auto_break.sh</td>
 	<td align="left">converts blank lines to html paragraph breaks</td>
+	<td align="left">AUTO_FORMAT</td>
 	<td align="left">$NB_EntryBody</td>
 	<td align="left">none</td>
 	</tr>
 	<tr>
 	<td align="left">entry/moods.sh</td>
 	<td align="left">converts mood variables into equivalent images</td>
+	<td align="left">AUTO_FORMAT</td>
 	<td align="left">$NB_EntryBody</td>
 	<td align="left">copy moods directory to blog's directory</td>
 	</tr>
 	<tr>
 	<td align="left">fortune.sh</td>
 	<td align="left">generates random quotes</td>
+	<td align="left">FORTUNE_FILE</td>
 	<td align="left">$NB_Fortune</td>
 	<td align="left">requires fortune</td>
 	</tr>
 	<tr>
 	<td align="left">list_entries.sh</td>
 	<td align="left">adds links to recent or old entries</td>
+	<td align="left">LIST_N, LIST_OFFSET</td>
 	<td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
 	<td align="left">none</td>
 	</tr>
 	<tr>
 	<td align="left">mymood.sh</td>
 	<td align="left">adds ability to display your mood</td>
+	<td align="left">none</td>
 	<td align="left">$NB_My_Mood</td>
 	<td align="left">copy moods directory to blog's directory</td>
 	</tr>
 	<tr>
 	<td align="left">postformat/tidy.sh</td>
 	<td align="left">validates HTML code</td>
+	<td align="left">TIDY_ARGS</td>
 	<td align="left">$NB_Tidy</td>
 	<td align="left">requires tidy</td>
 	</tr>
 	<tr>
 	<td align="left">rss.sh</td>
 	<td align="left">adds rss feeds</td>
+	<td align="left">LIMIT_ITEMS</td>
 	<td align="left">$BLOG_URL/index.$NB_SYND_FILETYPE, $BLOG_URL/$ARCHIVES/cat_n.$NB_SYND_FILETYPE</td>
 	<td align="left">requires templates</td>
 	</tr>
@@ -453,7 +467,7 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 </blockquote>
 <br />
 
-<h2><a name="cr9">Publishing Your Blog to a Remote Site</a></h2>
+<h2><a name="cr9">Publishing to a Remote Site</a></h2>
 <p />
 
 <b>FTP:</b><br />
