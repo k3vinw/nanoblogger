@@ -1,5 +1,8 @@
 2004-06-08  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Installation" section of manual.
+
 	* ChangeLog, nb: - (load_config): USR_DATADIR overrides NB_DATA_DIR.
 	- Added new --datadir option that specifies different data directory to use.
 
