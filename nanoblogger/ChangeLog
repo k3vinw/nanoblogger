@@ -1,5 +1,13 @@
 2004-06-18  n1xt3r  <n1xt3r@bluefalcon>
 
+	* default/templates/permalink_entry.htm, nb, plugins/blog_links.sh:
+	- Fixed missing cat_links.tmp bug in blog_links.sh plugin.
+	- Fixed dead link to comments in permalink_entry.htm template.
+	- Changed version to CVS-2.9.
+
+	* ChangeLog, nb (build_archives):
+	Slightly improved monthly archive updating.
+
 	* ChangeLog, nb (find_categories):
 	cat_num set unconditionally, for proper updating.
 
