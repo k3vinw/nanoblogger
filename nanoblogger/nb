@@ -6,7 +6,7 @@
 # non-fatal errors when the entry contains incomplete command subsitutions.
 # e.g. ` and $(
 # nanoblogger's version.
-VERSION=CVS-3.0
+VERSION="CVS-3.0"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -29,9 +29,6 @@ DATA_DIR=data
 
 # directory to store parts of weblog
 PARTS_DIR=parts
-
-# the plugins directory name
-PLUGINS_DIR=plugins
 
 # the templates directory name
 TEMPLATE_DIR=templates
@@ -100,6 +97,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ ! -z "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
 # USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
+# where plugins are located and run by default
+: ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
 # default to vi for editor
@@ -238,22 +237,15 @@ EOF
 BLOG_HTML=$(. "$SCRATCH_FILE")
 }
 
-# load plugins from BASE_DIR/plugins and BLOG_DIR/plugins
+# load plugins from $PLUGIN_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-if [ "$ENABLE_PLUGINS" = 1 ]; then
-	[ ! -d "$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}" ] &&
-		die "directory '$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}' doesn't exist! goodbye."
-	# loads plugins in alpha-numeric order (0-9, a-z)
-	[ -d "$BLOG_DIR/$PLUGINS_DIR${PLUGIN_DIR}" ] &&
-		for plugin in "$BLOG_DIR/$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
-			[ -f "$plugin" ] && . "$plugin"
-		done
-	for plugin in "$BASE_DIR/$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
-		[ -f "$plugin" ] && . "$plugin"
+# loads plugins in alpha-numeric order (0-9, a-z)
+[ -d "$PLUGINS_DIR${PLUGIN_DIR}" ] &&
+	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
+		[ -f "$nb_plugin" ] && . "$nb_plugin"
 	done
-fi
 }
 
 # read file's metadata
@@ -331,7 +323,7 @@ for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
 done
 nb_msg "$MKPAGE_OUTFILE"
 # load postformat plugins, but with reusable functionality
-for mkp_plugin in "$BLOG_DIR/$PLUGINS_DIR"/postformat/*.sh "$BASE_DIR/$PLUGINS_DIR"/postformat/*.sh; do
+for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
 	[ -f "$mkp_plugin" ] && . "$mkp_plugin"
 done
 MKPAGE_CONTENT=

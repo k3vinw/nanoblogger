@@ -13,6 +13,12 @@
 		padding: 0px;
 	}
 
+	pre {
+		background:#EEE;
+		padding: 2mm;
+		border:1px solid #999;
+		}
+
 	#banner {
 		font-family: verdana, arial, sans-serif;
 		background-color:#57933a;
@@ -87,7 +93,7 @@
 	.blogbody a:hover {
 		font-weight: normal;
 		text-decoration: underline;
-	}
+		}
 
 	.title	{
 		font-family: verdana, arial, sans-serif;
@@ -135,7 +141,7 @@
 	.calendar a:hover {
 		font-weight: bold;
 		text-decoration: underline;
-	}
+		}
 
 
 	.calendarhead {	
@@ -278,9 +284,22 @@
 
 	.intro {
 		font-family: verdana, arial, sans-serif;
+		border:1px solid #57933a;
+		background:#EEE;
 		color:#333;
 		font-size:x-small;
 		font-weight:normal;
   		line-height:140%;
+		padding:10px;
 		margin-bottom:15px;
+		}
+
+	.intro a,
+	.intro a:link,
+	.intro a:visited,
+	.intro a:active,
+	.intro a:hover {
+		font-weight: normal;
+		text-decoration: underline;
+		color:#333;
 		}

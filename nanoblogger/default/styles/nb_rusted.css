@@ -13,6 +13,12 @@
 		padding: 0px;
 	}
 
+	pre {
+		background:#EEE;
+		padding: 2mm;
+		border:1px solid #999;
+		}
+
 	#banner {
 		font-family: verdana, arial, sans-serif;
 		background-color:#d34c09;
