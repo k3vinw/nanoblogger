@@ -39,7 +39,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
 			for entry in $MONTH_LINE ; do
-				NB_EntryID=`echo "$entry" |sed -e 's/\_/\:/g; s/[\.]htm//g'`"$BLOG_TZD"
+				NB_EntryID=`echo "$entry" |sed -e 's/\_/\:/g; s/[\.]htm//g'`
 				entry_year=`echo $entry |cut -c1-4`
 				entry_month=`echo $entry |cut -c6-7`
 				entry_day=`echo $entry |cut -c9-10 |sed -e 's/^0//g'`
