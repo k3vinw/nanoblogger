@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE rdf:RDF
-[
+<!DOCTYPE rdf:RDF [
 <!ENTITY % HTMLlat1 PUBLIC
  "-//W3C//ENTITIES Latin 1 for XHTML//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent">
-%HTMLlat1;
+ %HTMLlat1;
 ]>
-<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/"
-xmlns:admin="http://webns.net/mvcb/">
-  <channel rdf:about="/index.xml">
-    <title>My Blog's Title</title>
-    <link></link>
-    <description>My Blog's Description</description>
-    <dc:language>en-us</dc:language>
-    <dc:creator>n1xt3r</dc:creator>
-    <admin:generatorAgent rdf:resource="http://home.columbus.rr.com/n1xt3r/nanoblogger/" />
-    <items>
-      <rdf:Seq>
-        <rdf:li rdf:resource="/archives/monthly/2004-01.html#2004-01-18T17:12:12" />
-      </rdf:Seq>
-    </items>
-  </channel>
-  <item rdf:about="/archives/monthly/2004-01.html#2004-01-18T17:12:12">
-    <link>/archives/monthly/2004-01.html#2004-01-18T17:12:12</link>
-    <title>Welcome to NanoBlogger!</title>
-    <dc:date>2004-01-18T17:12:12-04:00</dc:date>
-    <dc:creator>n1xt3r</dc:creator>
-    <description>
-      <![CDATA[<p>The basic syntax is: <code>nb [-b blogdir] [options]</code>
+<rdf:RDF
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+<channel rdf:about="/index.xml">
+<title>My Blog's Title</title>
+<link>/index.html</link>
+<description>My Blog's Description</description>
+<dc:language>en-us</dc:language>
+<dc:creator>n1xt3r</dc:creator>
+<admin:generatorAgent rdf:resource="http://home.columbus.rr.com/n1xt3r/nanoblogger/" />
+<items>
+<rdf:Seq>
+<rdf:li rdf:resource="/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm" />
+</rdf:Seq>
+</items>
+</channel>
+<item rdf:about="/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm">
+<link>/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm</link>
+<title>Welcome to NanoBlogger!</title>
+<dc:date>2004-01-18T17:12:12-04:00</dc:date>
+<dc:creator>n1xt3r</dc:creator>
+<dc:subject>NanoBlogger Help</dc:subject>
+<description><![CDATA[<p>The basic syntax is: <code>nb [-b blogdir] [options]</code>
 </p><p>
 <b>How to ...</b>
 <ul>
@@ -43,7 +46,6 @@ xmlns:admin="http://webns.net/mvcb/">
 <li>delete an old entry = <code>nb --delete [entry_id]</code></li>
 <li>specify a different blog directory = <code>nb --blogdir [blog_dir] [options]</code></li>
 </ul>
-Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.</p>]]>
-</description>
-  </item>
+Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.</p>]]></description>
+</item>
 </rdf:RDF>

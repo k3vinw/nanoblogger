@@ -1,3 +1,11 @@
+2004-06-17  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/templates/atom_entry.xml, docs/nanoblogger.html, nb, plugins/atom.sh:
+	- Code cleanup.
+	- Updated "Plugins" section of manual.
+	- Converted manual to xhtml.
+	- Added body content to atom feed.
+
 2004-06-16  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, plugins/rss.sh:

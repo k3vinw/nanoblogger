@@ -46,8 +46,9 @@
   </ul>
 
   <h2><a name="cr1" id="cr1">Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It
-  uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.<br />
-  <b>Synopsis</b>
+  uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+
+  <p><b>Synopsis</b></p>
 
   <blockquote>
     <pre>
@@ -131,62 +132,84 @@ let you edit the blog's configuration. Run the same command again to add another
   <h2><a name="cr6" id="cr6">Settings and Configuration</a></h2>To edit the blog's configuration invoke:
   <pre>
 nb --blogdir myblog_dir --configure
-</pre>This opens <em>blog.conf</em> from the blog directory for editing.<b>Setting the Editor</b>
+</pre>This opens <em>blog.conf</em> from the blog directory for editing.
+
+  <p><b>Setting the Editor</b></p>
 
   <blockquote>
     The editor defaults to the <em>EDITOR</em> variable in your shell's environment, but falls back on vi when no <em>EDITOR</em>
     is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the
     <em>EDITOR</em> variable in your shell's environment.
-  </blockquote><b>Setting the Date Format for New Entries</b>
+  </blockquote>
+
+  <p><b>Setting the Date Format for New Entries</b></p>
 
   <blockquote>
     <em>DATE_FORMAT</em> controls the look of a new entry's date. The default <em>DATE_FORMAT</em> uses "%B %d, %Y %l:%M %p" and
     produces something like this: "August 05, 2003 12:53 AM". You can also specify the locale to be used for date command (see
     the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous entries. Read the man pages of
     the date command to see more on how to customize the format of the date command's output.
-  </blockquote><b>Setting the Web Address</b>
+  </blockquote>
+
+  <p><b>Setting the Web Address</b></p>
 
   <blockquote>
     <em>BLOG_URL</em> is used as the address for the blog. Typically, you would set this to a remote address such as:
     "http://myblogurl.com". Replacing <em>myblogurl.com</em> with the actual address to your blog.
-  </blockquote><b>Setting the Link for "Main"</b>
+  </blockquote>
+
+  <p><b>Setting the Link for "Main"</b></p>
 
   <blockquote>
     <em>BLOG_URL_MAIN</em> is used as the navigational link for "main". The default is set to "$BLOG_URL/index.html", for easier
     local navigation.
-  </blockquote><b>Setting the Style Sheet</b>
+  </blockquote>
+
+  <p><b>Setting the Style Sheet</b></p>
 
   <blockquote>
     <em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates. It provides an easy way to edit or
     switch the style sheet's location without having to edit each template. It should be set in a similar fashion to
     <em>BLOG_URL_MAIN</em>, 'BLOG_CSS="$BLOG_URL/styles/nb_rusted.css"'. Style sheets are located in the <em>styles</em>
     directory.
-  </blockquote><b>Setting the Author's Name</b>
+  </blockquote>
+
+  <p><b>Setting the Author's Name</b></p>
 
   <blockquote>
     <em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER
     variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.
-  </blockquote><b>Setting the Number of Entries to Display</b>
+  </blockquote>
+
+  <p><b>Setting the Number of Entries to Display</b></p>
 
   <blockquote>
     <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed as current. This must be set to a number higher
     than zero.
-  </blockquote><b>Toggling the Display of Permalinks</b>
+  </blockquote>
+
+  <p><b>Toggling the Display of Permalinks</b></p>
 
   <blockquote>
     <em>PERMALINKS</em> toggles display of permalinks along-side an entry. The default is set to "1", display permalinks.
-  </blockquote><b>Building Individual Archives for Each Entry</b>
+  </blockquote>
+
+  <p><b>Building Individual Archives for Each Entry</b></p>
 
   <blockquote>
     Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables individual archiving of each entry and reconfigures the links of the
     entries to point to their individual archives. Note that this will increase the rebuild time since more pages will have to be
     generated.
-  </blockquote><b>Setting Actions for Previewing and Publishing</b>
+  </blockquote>
+
+  <p><b>Setting Actions for Previewing and Publishing</b></p>
 
   <blockquote>
     <em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their
     respective options, <em>--preview</em> and <em>--publish</em>.
-  </blockquote><b>Global Configuration</b>
+  </blockquote>
+
+  <p><b>Global Configuration</b></p>
 
   <blockquote>
     NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs. The global
@@ -210,57 +233,15 @@ nb --blogdir myblog_dir --configure
       </tr>
 
       <tr>
-        <td align="left">atom.xml*</td>
-
-        <td align="left">controls look and format of the main atom feed</td>
-      </tr>
-
-      <tr>
-        <td align="left">atom_entry.xml*</td>
-
-        <td align="left">controls look of the entries in the atom feed</td>
-      </tr>
-
-      <tr>
-        <td align="left">archive.htm*</td>
-
-        <td align="left">controls look of the master archive page</td>
-      </tr>
-
-      <tr>
-        <td align="left">archive_links.htm*</td>
-
-        <td align="left">controls look of the master archive links</td>
-      </tr>
-
-      <tr>
         <td align="left">category.htm</td>
 
         <td align="left">controls look of the categories pages</td>
       </tr>
 
       <tr>
-        <td align="left">category_links.htm*</td>
-
-        <td align="left">the links to the categories</td>
-      </tr>
-
-      <tr>
         <td align="left">entry.htm</td>
 
         <td align="left">controls look of your blog entries</td>
-      </tr>
-
-      <tr>
-        <td align="left">entry_links.htm</td>
-
-        <td align="left">controls look of the entry links</td>
-      </tr>
-
-      <tr>
-        <td align="left">entrycat_links.htm*</td>
-
-        <td align="left">controls look of the entry category links</td>
       </tr>
 
       <tr>
@@ -288,45 +269,15 @@ nb --blogdir myblog_dir --configure
       </tr>
 
       <tr>
-        <td align="left">month_links.htm</td>
-
-        <td align="left">controls look of the monthly archive links*</td>
-      </tr>
-
-      <tr>
         <td align="left">permalink.htm</td>
 
-        <td align="left">controls look of the permalink pages</td>
+        <td align="left">controls look of an entry's archive page</td>
       </tr>
 
       <tr>
         <td align="left">permalink_entry.htm</td>
 
-        <td align="left">controls look of a blog entry within a permalink page</td>
-      </tr>
-
-      <tr>
-        <td align="left">rdf_catfeed_entry.xml*</td>
-
-        <td align="left">controls look of the news items in a category's rss feed</td>
-      </tr>
-
-      <tr>
-        <td align="left">rdf_catfeed.xml*</td>
-
-        <td align="left">controls look and format of a category's rss feed</td>
-      </tr>
-
-      <tr>
-        <td align="left">rdf_entry.xml*</td>
-
-        <td align="left">controls look of the news item in the rss feed</td>
-      </tr>
-
-      <tr>
-        <td align="left">rdf.xml*</td>
-
-        <td align="left">controls look and format of rss feed</td>
+        <td align="left">controls look of an entry within it's archive page</td>
       </tr>
     </table>* = used by plugin
   </blockquote>
@@ -518,10 +469,7 @@ nb --blogdir myblog_dir --configure
     <blockquote>
       Postformat plugins are stored in the plugins/postformat directory and are loaded after each page generated.
     </blockquote>
-
-  </blockquote>
-  
-  Plugins typically work by creating placeholders for the templates, but are in no way limited to creating
+  </blockquote>Plugins typically work by creating placeholders for the templates, but are in no way limited to creating
   placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. The variable,
   <em>ENABLE_PLUGINS</em>, in <em>blog.conf</em> toggles the use of plugins on/off. Create plugins that run specifically for your
   blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
@@ -554,7 +502,7 @@ nb --blogdir myblog_dir --configure
 
         <td align="left">$BLOG_URL/archives.html</td>
 
-        <td align="left">requires templates</td>
+        <td align="left">requires makepage.htm template</td>
       </tr>
 
       <tr>
@@ -578,7 +526,7 @@ nb --blogdir myblog_dir --configure
 
         <td align="left">$BLOG_URL/atom.$NB_SYND_FILETYPE</td>
 
-        <td align="left">requires templates</td>
+        <td align="left">none</td>
       </tr>
 
       <tr>
@@ -590,7 +538,7 @@ nb --blogdir myblog_dir --configure
 
         <td align="left">$NB_Main_Links, $NB_Month_Links, $NB_Category_Links</td>
 
-        <td align="left">requires templates</td>
+        <td align="left">requires main_links.htm template</td>
       </tr>
 
       <tr>
@@ -698,7 +646,7 @@ nb --blogdir myblog_dir --configure
 
         <td align="left">$BLOG_URL/index.$NB_SYND_FILETYPE, $BLOG_URL/$ARCHIVES/cat_n.$NB_SYND_FILETYPE</td>
 
-        <td align="left">requires templates</td>
+        <td align="left">none</td>
       </tr>
     </table>To disable a plugin, rename the plugin's extension from ".sh" to ".off".
   </blockquote><br />
