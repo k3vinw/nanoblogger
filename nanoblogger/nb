@@ -511,7 +511,7 @@ rm -f "$BLOG_DIR"/main_links.tmp; PLACEHOLDER=
 # build the archives
 nb_msg "generating index pages ..."
 load_plugins plugins
-build_archives
+[ "$blog_update" != "main" ] && build_archives
 [ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
 # build main index and feed
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
