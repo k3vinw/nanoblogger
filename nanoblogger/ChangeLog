@@ -1,4 +1,13 @@
+2004-07-03  n1xt3r  <n1xt3r@bluefalcon>
+
+	* default/blog.conf, docs/nanoblogger.html:
+	- Updated "Installation" section of manual.
+	- Disabled autoformatting in default blog.conf.
+
 2004-06-26  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, plugins/fortune.sh:
+	Fixed "fortune -s: command not found" bug in fortune plugin.
 
 	* plugins/blog_status.sh, ChangeLog, default/blog.conf, docs/nanoblogger.html:
 	- Added New "Managing Entries and Categories" section to manual.
