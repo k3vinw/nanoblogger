@@ -87,8 +87,7 @@ build_rssfeed(){
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
 				<dc:creator>$NB_EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
-				<description>$NB_RSS2EntryExcerpt</description>
-				#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
+				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
 			</item>
 		EOF
 	done

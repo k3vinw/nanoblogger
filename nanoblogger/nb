@@ -133,7 +133,8 @@ fi
 }
 
 # deconfigure, clear some auto-default variables
-deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; }
+deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; \
+	NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; }
 
 # filter custom date format for a new entry
 filter_dateformat(){
@@ -216,9 +217,8 @@ elif [ "$db_query" = max ]; then
 else
 	DB_RESULTS=`cat_db |filter_query`
 fi
-# clear DB_RESULTS on mismatch
-DB_RESET=`echo "$DB_RESULTS" |grep -c "*.$NB_DATATYPE"`
-[ "$DB_RESET" -ge 1 ] && DB_RESULTS=
+# make sure results actually match something
+DB_RESULTS=`echo "$DB_RESULTS" |grep "..[\.]$NB_DATATYPE"`
 db_query=; cd "$CURR_PATH"
 }
 
@@ -309,7 +309,6 @@ if [ -f "$ENTRY_FILE" ]; then
 	else
 		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
 	fi
-	#load_plugins entry
 fi
 }
 
@@ -558,7 +557,13 @@ if [ "$weblog_update" = all ]; then
 else
 	# rebuild current month archive
 	month=`date "+%Y-%m"`; this_month="$month"
-	query_db "$month"; build_monthlyarchive
+	if [ -z "$weblog_update" ]; then
+		query_db "$month"; build_monthlyarchive
+	# or update archives based on a query match
+	else
+		db_query="$weblog_update"; query_db "$db_query"
+		UPDATE_LIST="$DB_RESULTS"
+	fi
 
 	# update relative monthly archives
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
@@ -606,7 +611,6 @@ fi
 
 # build the weblog
 build_weblog(){
-weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$weblog_update" ] && weblog_update="current"
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
@@ -766,7 +770,7 @@ build_weblog
 
 # list entries and categories
 list_weblog(){
-query_db; db_query="$1"
+query_db; db_query="$usr_query"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = cat ]; then
 	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
@@ -982,7 +986,7 @@ cat <<-EOF
 	 -e, --edit <ID,cat>			edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
-	 -l, --list <all,cat,current,max>	list entries or categories
+	 -l, --list <all,cat,current,date,max>	list entries or categories
 	 					(defaults to max).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.
@@ -998,12 +1002,16 @@ cat <<-EOF
 	 -t, --title <text>			set title of entry/category/page
 	 					(for '--add', '--category', and
 	 					'--makepage').
-	 -u, --update <all,current,main,max>	force update of weblog (defaults to
+	 -u, --update <all,current,date,main,max>
+	 					force update of weblog (defaults to
 	 					current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 
 	 -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
+	 
+	 --list and --update accepts regular expressions to match dates of entries.
+	 date = YYYY-MM-DD, YYYY-MM, ^YYYY
 
 	Examples:
 	
@@ -1061,7 +1069,7 @@ while [ $# -gt 0 ]; do
 					check_config; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-l|--list)		db_query="$2"; shift
+		-l|--list)		usr_query="$2"; shift
 					check_config; list_weblog "$db_query";;
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
