@@ -47,12 +47,7 @@ if cal > "$PLUGIN_OUTFILE" 2>&1 ; then
 				curr_year=`date +%Y`
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
 				set_link="1"
-				if [ "$FULL_PERMALINKS" = "1" ] ; then
-					permalink_entry=`chg_suffix $entry`
-					dn='<a href="'$BLOG_URL'/'$PERMALINKS'/'$permalink_entry'">'$dn'</a>'
-				else
-					dn='<a href="'$BLOG_URL'/'$ARCHIVES'/'$FILE_BY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryDay'">'$dn'</a>'
-				fi
+				dn='<a href="'$BLOG_URL'/'$ARCHIVES'/'$FILE_BY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryDay'">'$dn'</a>'
 				echo '<td align="center"><span>'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done
