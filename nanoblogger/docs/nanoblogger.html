@@ -13,12 +13,6 @@
 		background:#FFFFFF;
 		}
 
-		A 		{ color: #57933a; text-decoration: none; font-weight:bold} 
-		A:link		{ color: #57933a; text-decoration: none; font-weight:bold} 
-		A:visited	{ color: #57933a; text-decoration: none; font-weight:bold} 
-		A:active	{ color: #7fd754; } 
-		A:hover		{ color: #7fd754; } 
-
 table {
 	color:#333; 
 	font-size:10px;
@@ -155,15 +149,19 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>support for multiple weblogs</li>
 
+   <li>support for multiple categories</li>
+
    <li>easy editing and management of entries</li>
 
    <li>archiving by category, entry, and month</li>
 
-   <li>support for multiple categories</li>
+   <li>pagination</li>
 
    <li>permalinks</li>
 
    <li>RSS syndication (comes with RSS 1.0 (RDF) format)</li>
+
+   <li>Atom syndication (comes with 0.3 format)</li>
 
    <li>templates and CSS style sheets for full control of appearance</li>
 
@@ -173,15 +171,19 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 
    <li>auto-formatting, e.g. line breaks translate to HTML</li>
 
+   <li>support for relative and absolute links</li>
+
    <li>extensibility through parts (e.g. news.htm, 2003-06.htm)</li>
 
-   <li>per-weblog configuration via a seperate config file (blog.conf)</li>
+   <li>global configuration to set defaults (nb.conf)</li>
 
-   <li>auto detects config file (blog.conf) from current working directory</li>
+   <li>per-weblog configuration to override global defaults (blog.conf)</li>
+
+   <li>auto-detection of weblog directories containing config file (blog.conf)</li>
 
    <li>no dependency on any javascript, server-side scripting, or server-side includes</li>
 
-   <li>no need for MySQL or any other special database (uses flat-file)</li>
+   <li>no dependency on any special database (uses flat-file)</li>
 
    <li>some small effort at shell portability</li>
  </ul>
@@ -195,7 +197,7 @@ nb [<u>-b blog_dir</u>] [<u>options</u>]
 	</pre>
 
  <p><b>Upgrading</b></p>
-  Three easy steps to upgrading.  Any customizations made will
+  Three basic steps to upgrading.  Any customizations made will
   have to be copied over manually, such as modified templates.
 
 	<pre>
@@ -269,10 +271,16 @@ nb --blogdir [myblog_dir] --configure -u all
    "http://myblogurl.com". Replacing <em>myblogurl.com</em> with the actual address to your weblog.
  </p>
 
+ <p><b>Enabling Generation of Absolute Links</b></p>
+
+ <p>
+   <em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to disabled.
+ </p>
+
  <p><b>Setting the Link for "Main"</b></p>
 
  <p>
-   <em>BLOG_URL_MAIN</em> is used as the navigational link for "main". The default is set to "$BLOG_URL/index.html", for easier
+   <em>MAIN_LINK</em> is used as the navigational link for "main". The default is set to "index.html", for easier
    local navigation.
  </p>
 
@@ -281,7 +289,7 @@ nb --blogdir [myblog_dir] --configure -u all
  <p>
    <em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates. It provides an easy way to edit or
    switch the style sheet's location without having to edit each template. It should be set in a similar fashion to
-   <em>BLOG_URL_MAIN</em>, 'BLOG_CSS="$BLOG_URL/styles/nb_rusted.css"'. Style sheets are located in the <em>styles</em>
+   <em>MAIN_LINK</em>, 'BLOG_CSS="styles/nb_rusted.css"'. Style sheets are located in the <em>styles</em>
    directory.
  </p>
 
@@ -292,17 +300,22 @@ nb --blogdir [myblog_dir] --configure -u all
    variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.
  </p>
 
- <p><b>Setting the Number of Entries to Display</b></p>
+ <p><b>Setting the Maximum Number of Entries to Display on the Main Page</b></p>
 
  <p>
-   <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed as current. This must be set to a number higher
-   than zero.
+   <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page.
  </p>
 
- <p><b>Toggling the Display of Permalinks</b></p>
+ <p><b>Setting the Maximum Number of Entries to Display for each Page</b></p>
+ 
+ <p>
+   <em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to <em>MAX_ENTRIES</em>.
+ </p>
+
+ <p><b>Toggling the Display of Permanent Links</b></p>
 
  <p>
-   <em>PERMALINKS</em> toggles display of permalinks along-side an entry. The default is set to "1", display permalinks.
+   <em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display the entry's permanent link.
  </p>
 
  <p><b>Building Individual Archives for Each Entry</b></p>
@@ -576,7 +589,7 @@ nb [-b blog_dir] -c 1 -d cat
          <td align="left">blog's character set</td>
       </tr>
       <tr>
-         <td align="left">$BLOG_URL_MAIN</td>
+         <td align="left">$MAIN_LINK</td>
          <td align="left">blog's "main" link</td>
       </tr>
       <tr>
@@ -671,21 +684,28 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">archive/master_index.sh</td>
        <td align="left">creates a master index page of the archives</td>
        <td align="left">none</td>
-       <td align="left">$BLOG_URL/archives.html</td>
+       <td align="left">$ARCHIVES_DIR/index.html</td>
        <td align="left">requires makepage.htm template</td>
      </tr>
      <tr>
        <td align="left">archive/monthly/monthly_cal.sh</td>
-       <td align="left">adds a calendar with links for each active day</td>
+       <td align="left">generates a calendar with links for each active day</td>
        <td align="left">none</td>
        <td align="left">$NB_Monthly_Calendar</td>
        <td align="left">requires cal</td>
      </tr>
      <tr>
+       <td align="left">articles.sh*</td>
+       <td align="left">generates articles from source</td>
+       <td align="left">$NB_ArticleLinks</td>
+       <td align="left">$ARTICLE_DIR/article_title.$NB_FILETYPE</td>
+       <td align="left">none</td>
+     </tr>
+     <tr>
        <td align="left">atom.sh</td>
        <td align="left">adds an atom feed</td>
        <td align="left">LIMIT_ITEMS</td>
-       <td align="left">$BLOG_URL/atom.$NB_SYND_FILETYPE</td>
+       <td align="left">atom.$NB_SYND_FILETYPE</td>
        <td align="left">none</td>
      </tr>
      <tr>
@@ -704,7 +724,7 @@ nb [-b blog_dir] -c 1 -d cat
      </tr>
      <tr>
        <td align="left">calendar.sh</td>
-       <td align="left">adds a calendar with links for each active day</td>
+       <td align="left">generates a calendar with links for each active day</td>
        <td align="left">CAL_CMD, CAL_ARGS</td>
        <td align="left">$NB_Calendar</td>
        <td align="left">requires cal</td>
@@ -717,8 +737,15 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">none</td>
      </tr>
      <tr>
+       <td align="left">entry/category_links.sh</td>
+       <td align="left">generates category links</td>
+       <td align="left">none</td>
+       <td align="left">$NB_EntryCategories</td>
+       <td align="left">none</td>
+     </tr>
+     <tr>
        <td align="left">entry/moods.sh</td>
-       <td align="left">converts mood variables into equivalent images</td>
+       <td align="left">converts mood variables into smiley icons</td>
        <td align="left">AUTO_FORMAT, MOODS_URL</td>
        <td align="left">$NB_EntryBody</td>
        <td align="left">copy moods directory to weblog's directory</td>
@@ -731,14 +758,14 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">requires fortune</td>
      </tr>
      <tr>
-       <td align="left">list_entries.sh</td>
-       <td align="left">adds links to recent or old entries</td>
+       <td align="left">recent_entries.sh</td>
+       <td align="left">generates links to recent and old entries</td>
        <td align="left">LIST_N, LIST_OFFSET</td>
        <td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
        <td align="left">none</td>
      </tr>
      <tr>
-       <td align="left">mymood.sh</td>
+       <td align="left">mymood.sh*</td>
        <td align="left">adds ability to display your mood</td>
        <td align="left">MOODS_URL</td>
        <td align="left">$NB_My_Mood</td>
@@ -755,12 +782,13 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">rss.sh</td>
        <td align="left">adds rss feeds</td>
        <td align="left">LIMIT_ITEMS</td>
-       <td align="left">$BLOG_URL/index.$NB_SYND_FILETYPE, $BLOG_URL/$ARCHIVES/cat_n.$NB_SYND_FILETYPE</td>
+       <td align="left">index.$NB_SYND_FILETYPE, $ARCHIVES_DIR/cat_N.$NB_SYND_FILETYPE</td>
        <td align="left">none</td>
      </tr>
    </table>
-   To disable a plugin, rename the plugin's extension from ".sh" to ".off".
+   * = actual name may vary.
  </div>
+   To disable a plugin, rename the plugin's extension from ".sh" to ".off".
 
  <h2><a name="cr10" id="cr10">Publishing</a></h2>
 
@@ -810,7 +838,7 @@ ENTRY_ARCHIVES="1"
 
         <li>Edit <em>templates/entry.htm</em> and <em>templates/permalink_entry.htm</em>, add:
 		<pre>
-&lt;a href="$BLOG_URL_ACTION$PERMALINKS_DIR/$permalink_entry"&gt;Comments&lt;/a&gt;
+&lt;a href="$BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_entry"&gt;Comments&lt;/a&gt;
 		</pre>
 	</li>
 
@@ -946,7 +974,7 @@ $(<"$BLOG_DIR/intro.txt")
  </p>
 
  <p>
-   <a href="http://home.columbus.rr.com/n1xt3r/downloads/">1. http://home.columbus.rr.com/n1xt3r/downloads/</a><br />
+   <a href="http://nanoblogger.sf.net/downloads/">1. http://nanoblogger.sf.net/downloads/</a><br />
    <a href="http://freshmeat.net/projects/cgicomment/">2. http://freshmeat.net/projects/cgicomment/</a><br />
    <a href="http://freshmeat.net/projects/microblogger">3. http://freshmeat.net/projects/microblogger</a><br />
  </p>

@@ -1,3 +1,31 @@
+2004-10-13 00:18  n1xt3r
+
+	* nb, default/blog.conf, default/styles/mt_clean.css,
+	  default/styles/nb_default.css, default/styles/nb_rusted.css,
+	  default/styles/nb_smoke-signals.css,
+	  default/styles/nb_spring.css, default/templates/blog_status.htm,
+	  default/templates/main_index.htm, docs/nanoblogger.html,
+	  plugins/01_mymood.off, plugins/blog_status.sh,
+	  plugins/zyx_articles.sh, plugins/entry/auto_break.sh,
+	  plugins/entry/moods.sh: - Simplified plugins architecture to
+	  single and definiable plugins location.  - Removed config
+	  variable, ENABLE_PLUGINS.  - Added more flexibility to the regex
+	  for matching the mood variables.  - Added class for <pre> tags to
+	  the CSS files.
+
+2004-10-05 00:52  n1xt3r
+
+	* ChangeLog, nb, default/atom.xml, default/index.html,
+	  default/index.xml, default/archives/2004-01.html,
+	  default/archives/cat_1.html, default/parts/2004-01.html,
+	  default/parts/archive_links.html, default/parts/blog_status.html,
+	  default/parts/cal-2004-01.html, default/parts/cal.html,
+	  default/parts/cat_1.html, default/parts/fortune.html,
+	  default/parts/recent_entries.html,
+	  default/templates/main_index.htm, docs/nanoblogger.html,
+	  plugins/articles.off, plugins/zyx_articles.sh: - Enabled the
+	  articles plugin by default.  - Added CSS to the user manual.
+
 2004-09-30 23:38  n1xt3r
 
 	* nb, default/data/cat_1.db, plugins/01_mymood.off,
