@@ -1,3 +1,8 @@
+2004-03-26  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, plugins/archive/monthly/monthly-cal.sh:
+	Applied Pavel's <Pavel@Janik.cz> nb-monthly-cal.diff patch.
+
 2004-03-25  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/articles.off, plugins/articles.sh:

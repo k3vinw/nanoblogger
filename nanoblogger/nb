@@ -377,8 +377,8 @@ make_monthlylink(){
 build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
 		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".htm
-		load_plugins plugins/archive/monthly
 		NB_ArchiveTitle="$month"
+		load_plugins plugins/archive/monthly
 		make_page "$BLOG_DIR"/"$PARTS_DIR"/"$month".htm "$BLOG_DIR/$TEMPLATE_DIR/$MONTH_TEMPLATE" \
 		"$BLOG_DIR"/"$ARCHIVES"/"$FILE_BY_DIR"/"$month".$NB_FILETYPE
 	fi
