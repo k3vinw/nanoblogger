@@ -259,8 +259,9 @@ read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
 	month=`echo "$entry" |cut -c1-7`
-	NB_EntryDay=`echo "$entry" |cut -c1-10`
-	NB_EntryID=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
+	NB_EntryDay=a`echo "$entry" |cut -c1-10`
+	NB_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]htm//g'`
+	NB_EntryID="a$NB_EntryTime"
 	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"

@@ -1,3 +1,10 @@
+2004-06-11  n1xt3r  <n1xt3r@bluefalcon>
+
+	* default/templates/entry_links.htm, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, ChangeLog, nb:
+	- Replaced LANG with LC_ALL in calendar plugin - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+	- Removed &nbsp; in calendar plugin (fixes strange utf-8 whitespace) - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+	- Replaced "$EDITOR" with $EDITOR, fixes problems with command options - Juraj Kubelka <Juraj.Kubelka@email.cz>.
+
 2004-06-09  n1xt3r  <n1xt3r@bluefalcon>
 
 	* nb, plugins/archive/master_index.sh, plugins/articles.off, plugins/atom.sh, plugins/rss.sh:

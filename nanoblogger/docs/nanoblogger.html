@@ -62,19 +62,19 @@ NanoBlogger is a small weblog engine written in Bash for the command line.  It u
 <p />
 To install nanoblogger, download the tar archive from the web site[1].  Then from the commandline type "tar xzf nanoblogger-XXX.tar.gz where "XXX" equals the version number.<br />
 <p><b>Upgrading</b></p>
-When upgrading nanoblogger, there's three basic things that need to be considered, and they are: archives, templates, and configuration.  These are the three things that should be backed up and may require some minor adjustments before they work well with the new version.  Here are some steps you can take to help ease the transition.
+When upgrading nanoblogger, there's three basic things that need to be considered: archives, templates, and configuration.  These three things also may require some minor adjustments before they work well with the new version.  Here are some steps you can take to help ease the transition.
 <ul>
 	<li>
-		make a g-zipped tar archive of your blog directory: "tar czf oldblog_dir.tar.gz [blog_dir]"
+		create a new blog directory using nanoblogger: "nb -b [blog_dir] -a" (skip the configuration)
 	</li>
 	<li>
-		rename your blog directory and create a new one using nanoblogger: "nb -b [blog_dir] -a" (skip the configuration)
+		copy the old <em>archives</em> (data) directory over to the new blog directory: "cp -r [oldblog_dir]/archives [newblog_dir]"
 	</li>
 	<li>
-		copy the <em>archives</em> (data) directory over to the new blog directory: "cp -r [oldblog_dir]/archives [newblog_dir]"
+		copy the old <em>templates</em> directory over to the new blog directory: "cp -r [oldblog_dir]/templates [newblog_dir]".
 	</li>
 	<li>
-		make the required changes (if any) to your templates, refer to the default templates for helpful hints.
+		make the required changes (if any) to your templates.  Refer to the "Templates and Placeholders" section
 	</li>
 	<li>
 		edit the new <em>blog.conf</em> to your likings and rebuild the blog: "nb -b [blog_dir] -u all"
@@ -108,7 +108,7 @@ Programs:
 <blockquote>
 	To create a new blog invoke:
 	<pre>nb --blogdir myblog_dir --add</pre>
-	where "myblog_dir" is a non-existant directory. This is will create a new directory, copy the default files over, and then let you edit the blog's configuration.  Run the same command again to add a new entry.
+	where "myblog_dir" is a non-existant directory. This is will create a new directory, copy the default files over, and then let you edit the blog's configuration.  Run the same command again to add another entry.
 </blockquote>
 
 <h2><a name="cr6">Settings and Configuration</a></h2>
@@ -129,15 +129,15 @@ Programs:
 </blockquote>
 <b>Setting the Link for "Main"</b>
 <blockquote>
-	<em>BLOG_URL_MAIN</em> is used as the navigational link for "main".  The default is set to $BLOG_URL/index.html,  for easier local navigation.
+	<em>BLOG_URL_MAIN</em> is used as the navigational link for "main".  The default is set to "$BLOG_URL/index.html",  for easier local navigation.
 </blockquote>
 <b>Setting the Style Sheet</b>
 <blockquote>
-	<em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates.  It provides an easy way to edit or switch the style sheet's location without having to edit each template.  It should be set in a similar fashion to <em>BLOG_URL</em>.
+	<em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates.  It provides an easy way to edit or switch the style sheet's location without having to edit each template.  It should be set in a similar fashion to <em>BLOG_URL_MAIN</em>, 'BLOG_CSS="$BLOG_URL/styles/nb_rusted.css"'.  Style sheets are located in the <em>styles</em> directory.
 </blockquote>
 <b>Setting the Author's Name</b>
 <blockquote>
-	<em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting <em>BLOG_AUTHOR</em> will override this behavior.
+	<em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER variable.  Setting <em>BLOG_AUTHOR</em> will override this behavior.
 </blockquote>
 <b>Setting the Number of Entries to Display</b>
 <blockquote>
@@ -157,7 +157,7 @@ Programs:
 </blockquote>
 <b>Global Configuration</b>
 <blockquote>
-	NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may override settings in <em>nb.conf</em>.  Typically one would set <em>BLOG_DIR</em> here as a default blog directory to use.  NanoBlogger also looks for this file under, <em>$HOME/.nb.conf</em>.
+	NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may override settings in <em>nb.conf</em>.  Typically one would set <em>BLOG_DIR</em> here as a default blog directory to use.  This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.
 </blockquote>
 
 <h2><a name="cr7">Templates and Placeholders</a></h2>
@@ -167,88 +167,88 @@ Templates are located in the blog's sub-directory, templates.
 	<table border="1" cellspacing="4" cellpadding="2">
 	<caption>The blog's appearance is controlled by the following templates:</caption>
 	<tr>
-	<th align="left">templates</th>
-	<th align="left">description</th>
+		<th align="left">templates</th>
+		<th align="left">description</th>
 	</tr>
 	<tr>
-	<td align="left">atom.xml*</td>
-	<td align="left">controls look and format of the main atom feed</td>
+		<td align="left">atom.xml*</td>
+		<td align="left">controls look and format of the main atom feed</td>
 	</tr>
 	<tr>
-	<td align="left">atom_entry.xml*</td>
-	<td align="left">controls look of the entries in the atom feed</td>
+		<td align="left">atom_entry.xml*</td>
+		<td align="left">controls look of the entries in the atom feed</td>
 	</tr>
 	<tr>
-	<td align="left">archive.htm*</td>
-	<td align="left">controls look of the master archive page</td>
+		<td align="left">archive.htm*</td>
+		<td align="left">controls look of the master archive page</td>
 	</tr>
 	<tr>
-	<td align="left">archive_links.htm*</td>
-	<td align="left">controls look of the master archive links</td>
+		<td align="left">archive_links.htm*</td>
+		<td align="left">controls look of the master archive links</td>
 	</tr>
 	<tr>
-	<td align="left">category.htm</td>
-	<td align="left">controls look of the categories pages</td>
+		<td align="left">category.htm</td>
+		<td align="left">controls look of the categories pages</td>
 	</tr>
 	<tr>
-	<td align="left">category_links.htm*</td>
-	<td align="left">the links to the categories</td>
+		<td align="left">category_links.htm*</td>
+		<td align="left">the links to the categories</td>
 	</tr>
 	<tr>
-	<td align="left">entry.htm</td>
-	<td align="left">controls look of your blog entries</td>
+		<td align="left">entry.htm</td>
+		<td align="left">controls look of your blog entries</td>
 	</tr>
 	<tr>
-	<td align="left">entry_links.htm</td>
-	<td align="left">controls look of the entry links</td>
+		<td align="left">entry_links.htm</td>
+		<td align="left">controls look of the entry links</td>
 	</tr>
 	<tr>
-	<td align="left">entrycat_links.htm*</td>
-	<td align="left">controls look of the entry category links</td>
+		<td align="left">entrycat_links.htm*</td>
+		<td align="left">controls look of the entry category links</td>
 	</tr>
 	<tr>
-	<td align="left">main_index.htm</td>
-	<td align="left">controls look of the blog's main page</td>
+		<td align="left">main_index.htm</td>
+		<td align="left">controls look of the blog's main page</td>
 	</tr>
 	<tr>
-	<td align="left">main_links.htm*</td>
-	<td align="left">contains user defined links</td>
+		<td align="left">main_links.htm*</td>
+		<td align="left">contains user defined links</td>
 	</tr>
 	<tr>
-	<td align="left">makepage.htm</td>
-	<td align="left">default template used by makepage option</td>
+		<td align="left">makepage.htm</td>
+		<td align="left">default template used by makepage option</td>
 	</tr>
 	<tr>
-	<td align="left">month_archive.htm</td>
-	<td align="left">controls look of the monthly archive pages</td>
+		<td align="left">month_archive.htm</td>
+		<td align="left">controls look of the monthly archive pages</td>
 	</tr>
 	<tr>
-	<td align="left">month_links.htm</td>
-	<td align="left">controls look of the monthly archive links*</td>
+		<td align="left">month_links.htm</td>
+		<td align="left">controls look of the monthly archive links*</td>
 	</tr>
 	<tr>
-	<td align="left">permalink.htm</td>
-	<td align="left">controls look of the permalink pages</td>
+		<td align="left">permalink.htm</td>
+		<td align="left">controls look of the permalink pages</td>
 	</tr>
 	<tr>
-	<td align="left">permalink_entry.htm</td>
-	<td align="left">controls look of a blog entry within a permalink page</td>
+		<td align="left">permalink_entry.htm</td>
+		<td align="left">controls look of a blog entry within a permalink page</td>
 	</tr>
 	<tr>
-	<td align="left">rdf_catfeed_entry.xml*</td>
-	<td align="left">controls look of the news items in a category's rss feed</td>
+		<td align="left">rdf_catfeed_entry.xml*</td>
+		<td align="left">controls look of the news items in a category's rss feed</td>
 	</tr>
 	<tr>
-	<td align="left">rdf_catfeed.xml*</td>
-	<td align="left">controls look and format of a category's rss feed</td>
+		<td align="left">rdf_catfeed.xml*</td>
+		<td align="left">controls look and format of a category's rss feed</td>
 	</tr>
 	<tr>
-	<td align="left">rdf_entry.xml*</td>
-	<td align="left">controls look of the news item in the rss feed</td>
+		<td align="left">rdf_entry.xml*</td>
+		<td align="left">controls look of the news item in the rss feed</td>
 	</tr>
 	<tr>
-	<td align="left">rdf.xml*</td>
-	<td align="left">controls look and format of rss feed</td>
+		<td align="left">rdf.xml*</td>
+		<td align="left">controls look and format of rss feed</td>
 	</tr>
 	</table>
 	* = used by plugin
@@ -258,40 +258,40 @@ Templates are located in the blog's sub-directory, templates.
 	<table border="1" cellspacing="4" cellpadding="2">
 	<caption>The entry template includes the following placeholders:</caption>
 	<tr>
-	<th align="left">placeholders</th>
-	<th align="left">description</th>
+		<th align="left">placeholders</th>
+		<th align="left">description</th>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryAuthor</td>
-	<td align="left">author of entry</td>
+		<td align="left">$NB_EntryAuthor</td>
+		<td align="left">author of entry</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryCategories*</td>
-	<td align="left">entry's category links</td>
+		<td align="left">$NB_EntryCategories*</td>
+		<td align="left">entry's category links</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryBody</td>
-	<td>entry's content</td>
+		<td align="left">$NB_EntryBody</td>
+		<td>entry's content</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryDate</td>
-	<td align="left">entry's posted time</td>
+		<td align="left">$NB_EntryDate</td>
+		<td align="left">entry's posted time</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryDescription</td>
-	<td align="left">entry's description</td>
+		<td align="left">$NB_EntryDescription</td>
+		<td align="left">entry's description</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryID</td>
-	<td align="left">entry's id</td>
+		<td align="left">$NB_EntryID</td>
+		<td align="left">entry's id</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryPermalink</td>
-	<td align="left">entry's permalink</td>
+		<td align="left">$NB_EntryPermalink</td>
+		<td align="left">entry's permalink</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_EntryTitle</td>
-	<td align="left">entry's title</td>
+		<td align="left">$NB_EntryTitle</td>
+		<td align="left">entry's title</td>
 	</tr>
 	</table>
 	* = generated by plugin
@@ -301,44 +301,48 @@ Templates are located in the blog's sub-directory, templates.
 	<table border="1" cellspacing="4" cellpadding="2">
 	<caption>The main template includes the following placeholders:</caption>
 	<tr>
-	<th align="left">placeholders</th>
-	<th align="left">description</th>
+		<th align="left">placeholders</th>
+		<th align="left">description</th>
 	</tr>
 	<tr>
-	<td align="left">$BLOG_CHARSET</td>
-	<td align="left">blog's character set</td>
+		<td align="left">$BLOG_CHARSET</td>
+		<td align="left">blog's character set</td>
 	</tr>
 	<tr>
-	<td align="left">$BLOG_CONTACT</td>
-	<td align="left">blog's contact info</td>
+		<td align="left">$BLOG_URL_MAIN</td>
+		<td align="left">blog's "main" link</td>
 	</tr>
 	<tr>
-	<td align="left">$BLOG_DESCRIPTION</td>
-	<td align="left">blog's description</td>
+		<td align="left">$BLOG_CONTACT</td>
+		<td align="left">blog's contact info</td>
 	</tr>
 	<tr>
-	<td align="left">$BLOG_TITLE</td>
-	<td align="left">blog's title</td>
+		<td align="left">$BLOG_DESCRIPTION</td>
+		<td align="left">blog's description</td>
 	</tr>
 	<tr>
-	<td align="left">$BLOG_URL</td>
-	<td align="left">blog's URL</td>
+		<td align="left">$BLOG_TITLE</td>
+		<td align="left">blog's title</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_Month_Links*</td>
-	<td align="left">links to the monthly archives</td>
+		<td align="left">$BLOG_URL</td>
+		<td align="left">blog's URL</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_Category_Links*</td>
-	<td align="left">links to categories</td>
+		<td align="left">$NB_Month_Links*</td>
+		<td align="left">links to the monthly archives</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_Main_Links*</td>
-	<td align="left">user defined links</td>
+		<td align="left">$NB_Category_Links*</td>
+		<td align="left">links to categories</td>
 	</tr>
 	<tr>
-	<td align="left">$NB_Entries</td>
-	<td align="left">all the current entries</td>
+		<td align="left">$NB_Main_Links*</td>
+		<td align="left">user defined links</td>
+	</tr>
+	<tr>
+		<td align="left">$NB_Entries</td>
+		<td align="left">all the current entries</td>
 	</table>
 	* = generated by plugin
 </blockquote>
@@ -367,111 +371,108 @@ Entries are kept inside the blog's "archives" directory as time-stamped filename
 Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders.  Placeholders allow for a great deal of control in how the plugins output is placed in the template.  The variable, <em>ENABLE_PLUGINS</em>, in <em>blog.conf</em> toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
 <p />
 
-Additionally there are some plugins specific to the formatting of entries, and are referred to as auto-format plugins, which allows for automatic placement of HTML elements, such as placing paragraph breaks inside blank lines.  The variable, <em>AUTO_FORMAT</em>, in <em>blog.conf</em> toggles this feature on/off, but requires <em>ENABLE_PLUGINS</em> to be toggled on.<br />
-<p />
-
-To use a some of the new plugins, you may need to identify it's unique placeholder/destination and add it to your template accordingly.<br />
+Some plugins may require you to identify it's unique placeholder/destination and manually add it to your templates.
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
 	<caption>The main plugins (most are enabled by default):</caption>
 	<tr>
-	<th align="left">plugins</th>
-	<th align="left">description</th>
-	<th align="left">variables</th>
-	<th align="left">targets</th>
-	<th align="left">notes</th>
+		<th align="left">plugins</th>
+		<th align="left">description</th>
+		<th align="left">variables</th>
+		<th align="left">targets</th>
+		<th align="left">notes</th>
 	</tr>
 	<tr>
-	<td align="left">archive/master_index.sh</td>
-	<td align="left">creates a master index page of the archives</td>
-	<td align="left">none</td>
-	<td align="left">$BLOG_URL/archives.html</td>
-	<td align="left">requires templates</td>
+		<td align="left">archive/master_index.sh</td>
+		<td align="left">creates a master index page of the archives</td>
+		<td align="left">none</td>
+		<td align="left">$BLOG_URL/archives.html</td>
+		<td align="left">requires templates</td>
 	</tr>
 	<tr>
-	<td align="left">archive/monthly/monthly_cal.sh</td>
-	<td align="left">adds a calendar with links for each active day</td>
-	<td align="left">none</td>
-	<td align="left">$NB_Monthly_Calendar</td>
-	<td align="left">requires cal</td>
+		<td align="left">archive/monthly/monthly_cal.sh</td>
+		<td align="left">adds a calendar with links for each active day</td>
+		<td align="left">none</td>
+		<td align="left">$NB_Monthly_Calendar</td>
+		<td align="left">requires cal</td>
 	</tr>
 	<tr>
-	<td align="left">atom.sh</td>
-	<td align="left">adds an atom feed</td>
-	<td align="left">LIMIT_ITEMS</td>
-	<td align="left">$BLOG_URL/atom.$NB_SYND_FILETYPE</td>
-	<td align="left">requires templates</td>
+		<td align="left">atom.sh</td>
+		<td align="left">adds an atom feed</td>
+		<td align="left">LIMIT_ITEMS</td>
+		<td align="left">$BLOG_URL/atom.$NB_SYND_FILETYPE</td>
+		<td align="left">requires templates</td>
 	</tr>
 	<tr>
-	<td align="left">blog_links.sh</td>
-	<td align="left">generates some useful links</td>
-	<td align="left">none</td>
-	<td align="left">$NB_Main_Links, $NB_Month_Links, $NB_Category_Links</td>
-	<td align="left">requires templates</td>
+		<td align="left">blog_links.sh</td>
+		<td align="left">generates some useful links</td>
+		<td align="left">none</td>
+		<td align="left">$NB_Main_Links, $NB_Month_Links, $NB_Category_Links</td>
+		<td align="left">requires templates</td>
 	</tr>
 	<tr>
-	<td align="left">blog_status.sh</td>
-	<td align="left">generates some statistics</td>
-	<td align="left">none</td>
-	<td align="left">$NB_Blog_Status</td>
-	<td align="left">none</td>
+		<td align="left">blog_status.sh</td>
+		<td align="left">generates some statistics</td>
+		<td align="left">none</td>
+		<td align="left">$NB_Blog_Status</td>
+		<td align="left">none</td>
 	</tr>
 	<tr>
-	<td align="left">calendar.sh</td>
-	<td align="left">adds a calendar with links for each active day</td>
-	<td align="left">none</td>
-	<td align="left">$NB_Calendar</td>
-	<td align="left">requires cal</td>
+		<td align="left">calendar.sh</td>
+		<td align="left">adds a calendar with links for each active day</td>
+		<td align="left">none</td>
+		<td align="left">$NB_Calendar</td>
+		<td align="left">requires cal</td>
 	</tr>
 	<tr>
-	<td align="left">entry/auto_break.sh</td>
-	<td align="left">converts blank lines to html paragraph breaks</td>
-	<td align="left">AUTO_FORMAT</td>
-	<td align="left">$NB_EntryBody</td>
-	<td align="left">none</td>
+		<td align="left">entry/auto_break.sh</td>
+		<td align="left">converts blank lines to html paragraph breaks</td>
+		<td align="left">AUTO_FORMAT</td>
+		<td align="left">$NB_EntryBody</td>
+		<td align="left">none</td>
 	</tr>
 	<tr>
-	<td align="left">entry/moods.sh</td>
-	<td align="left">converts mood variables into equivalent images</td>
-	<td align="left">AUTO_FORMAT</td>
-	<td align="left">$NB_EntryBody</td>
-	<td align="left">copy moods directory to blog's directory</td>
+		<td align="left">entry/moods.sh</td>
+		<td align="left">converts mood variables into equivalent images</td>
+		<td align="left">AUTO_FORMAT</td>
+		<td align="left">$NB_EntryBody</td>
+		<td align="left">copy moods directory to blog's directory</td>
 	</tr>
 	<tr>
-	<td align="left">fortune.sh</td>
-	<td align="left">generates random quotes</td>
-	<td align="left">FORTUNE_FILE</td>
-	<td align="left">$NB_Fortune</td>
-	<td align="left">requires fortune</td>
+		<td align="left">fortune.sh</td>
+		<td align="left">generates random quotes</td>
+		<td align="left">FORTUNE_FILE</td>
+		<td align="left">$NB_Fortune</td>
+		<td align="left">requires fortune</td>
 	</tr>
 	<tr>
-	<td align="left">list_entries.sh</td>
-	<td align="left">adds links to recent or old entries</td>
-	<td align="left">LIST_N, LIST_OFFSET</td>
-	<td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
-	<td align="left">none</td>
+		<td align="left">list_entries.sh</td>
+		<td align="left">adds links to recent or old entries</td>
+		<td align="left">LIST_N, LIST_OFFSET</td>
+		<td align="left">$NB_Recent_Entries, $NB_Older_Entries</td>
+		<td align="left">none</td>
 	</tr>
 	<tr>
-	<td align="left">mymood.sh</td>
-	<td align="left">adds ability to display your mood</td>
-	<td align="left">none</td>
-	<td align="left">$NB_My_Mood</td>
-	<td align="left">copy moods directory to blog's directory</td>
+		<td align="left">mymood.sh</td>
+		<td align="left">adds ability to display your mood</td>
+		<td align="left">none</td>
+		<td align="left">$NB_My_Mood</td>
+		<td align="left">copy moods directory to blog's directory</td>
 	</tr>
 	<tr>
-	<td align="left">postformat/tidy.sh</td>
-	<td align="left">validates HTML code</td>
-	<td align="left">TIDY_ARGS</td>
-	<td align="left">$NB_Tidy</td>
-	<td align="left">requires tidy</td>
+		<td align="left">postformat/tidy.sh</td>
+		<td align="left">validates HTML code</td>
+		<td align="left">TIDY_ARGS</td>
+		<td align="left">$NB_Tidy</td>
+		<td align="left">requires tidy</td>
 	</tr>
 	<tr>
-	<td align="left">rss.sh</td>
-	<td align="left">adds rss feeds</td>
-	<td align="left">LIMIT_ITEMS</td>
-	<td align="left">$BLOG_URL/index.$NB_SYND_FILETYPE, $BLOG_URL/$ARCHIVES/cat_n.$NB_SYND_FILETYPE</td>
-	<td align="left">requires templates</td>
+		<td align="left">rss.sh</td>
+		<td align="left">adds rss feeds</td>
+		<td align="left">LIMIT_ITEMS</td>
+		<td align="left">$BLOG_URL/index.$NB_SYND_FILETYPE, $BLOG_URL/$ARCHIVES/cat_n.$NB_SYND_FILETYPE</td>
+		<td align="left">requires templates</td>
 	</tr>
 	</table>
 	To disable a plugin, rename the plugin's extension from ".sh" to ".off".
@@ -501,13 +502,13 @@ If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), 
 	<li>
 		<p>
 		To add an introduction, create a text file in your blog called, "intro.txt".  Edit the text file to say what you want, then add the following to the main template: 
-			<p><pre>cat "$BLOG_DIR"/intro.txt</pre></p> Note the use of left single quotes, they're important.  Also, note that no processing is being done this way, you have to add your own HTML.
+			<p><pre>`cat "$BLOG_DIR"/intro.txt`</pre></p> Note the use of left single quotes, they're important.  Also, note that no processing is being done this way, you have to add your own HTML.
 		</p>
 	</li>
 	
 	<li>
 		<p>
-		Remember the "clippings" feature?  Say you already have a web site full of your own custom server-side scripts/includes.  This is where the "news.htm" file comes in.  It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "news.htm" into the page.  So, now you can have a simple blog-like page, that's updated whenever news.htm changes.
+		Many parts of the blog get stored in the <em>parts</em> directory.  Say you already have a web site full of your own custom server-side scripts/includes.  This is where the "parts/news.htm" file comes in.  It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "parts/news.htm" into the page.  So, now you can have a simple blog-like page, that's updated whenever news.htm changes.
 		</p>
 	</li>
 
