@@ -1,3 +1,11 @@
+2004-04-02  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh:
+	Removed test for FULL_PERMALINKS from calendar plugins.
+
+	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
+	Created new anchor, NB_EntryDay and modified calendar plugins to create links to NB_EntryDay.
+
 2004-03-30  n1xt3r  <n1xt3r@scorcher>
 
 	* default/templates/rdf_catfeedentry.xml, default/templates/rdf_entry.xml, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, ChangeLog, nb:
