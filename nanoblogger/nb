@@ -128,6 +128,7 @@ query_db(){
 db_query="$1"
 db_catquery="$2"
 db_limit="$3"
+db_offset="$4"
 cd "$BLOG_DIR"/"$ARCHIVES"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = "nocat" ]; then
@@ -140,8 +141,10 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
+		db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
-		[ ! -z "$db_limit" ] && sed -n 1,"$db_limit"p; db_limit=
+		[ -z "$db_offset" ] && db_offset="0"; db_offset=`expr 1 + $db_offset`
+		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p; db_limit=; db_offset=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
 	# list all entries
@@ -457,7 +460,6 @@ else
 		fi
 	done
 fi
-echo "$NB_Month_Links" > "$BLOG_DIR"/"$PARTS_DIR"/month_links.htm
 build_catarchives
 }
 

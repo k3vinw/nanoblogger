@@ -1,5 +1,8 @@
 2004-05-31  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, default/blog.conf, docs/nanoblogger.html:
+	Updated "Requirements" and "Settings and Configuration" Sections of manual.
+
 	* nb, plugins/atom.sh, plugins/rss.sh:
 	- (query_db): Added new query_type, limit.
 	- Updated Atom and RSS plugins to use new query_type, limit.
