@@ -1,3 +1,8 @@
+2004-04-09  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, plugins/articles.off:
+	- Changed article format to metadata tags: TITLE, DESC, and BODY.
+
 2004-04-05  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, nb (build_blog):
