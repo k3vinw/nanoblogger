@@ -509,7 +509,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 		! [ "$next_num" -gt "$total_pages" ] &&
 				echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
 		NB_PageLinks=$(< "$SCRATCH_FILE")
-		if [ ! -z "$UPDATE_LIST" -a ! -z "$Edit_EntryFile" ]; then
+		if [ ! -z "$UPDATE_LIST" -a ! -z "$edit_num" ]; then
 			update_pages
 			for page_mod in $PAGE_LIST; do
 				[ "page$page_num" = "$page_mod" ] && page_bynumber
@@ -908,11 +908,11 @@ if [ ! -z "$cat_num" ]; then
 		db_catquery=`cat_id`; check_catid
 	fi
 fi
-nb_msg "creating new entry for '$BLOG_TITLE'$cat_msg ..."
+[ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
+nb_msg "creating new entry in '$BLOG_DIR'$cat_msg ..."
 # read user specified attributes for entry
 [ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title; usr_title=
-[ ! -z "$db_catquery" ] && cat_msg=" in category id(s): $cat_num"
 if [ -z "$NB_EntryAuthor" ]; then
 	echo "enter author's name [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
