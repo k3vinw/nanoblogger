@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="2.9"
+VERSION="CVS-3.0"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -61,7 +61,7 @@ EOF
 exit 1
 }
 
-# die without it
+# die without the base directory
 [ -d "$BASE_DIR" ] ||
 	die "`basename $0`: $BASE_DIR doesn't exist! goodbye."
 
@@ -110,6 +110,8 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$NB_SYND_FILETYPE" ] && NB_SYND_FILETYPE="xml"
 # fallback to AUTO_TZD
 [ -z "$BLOG_TZD" ] && BLOG_TZD="$AUTO_TZD"
+# fallback to MAX_ENTRIES
+[ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
 }
 
 # filter custom date format for a new entry
@@ -158,7 +160,7 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 		db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
-		[ -z "$db_offset" ] && db_offset="0"; db_offset=`expr 1 + $db_offset`
+		[ -z "$db_offset" ] && db_offset="1" #; db_offset=`expr 1 + $db_offset`
 		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p; db_limit=; db_offset=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
@@ -334,7 +336,9 @@ query_type="$1"
 db_catquery="$2"
 template="$3"
 output_file="$4"
-query_db "$query_type" "$db_catquery" "$db_limit"
+db_limit="$5"
+db_offset="$6"
+query_db "$query_type" "$db_catquery" "$db_limit" "$db_offset"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
@@ -409,17 +413,75 @@ if [ "$weblog_update" = "all" ]; then query_db; CAT_LIST="$db_categories"; fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
+# divide larger archives into multiple pages
+#TODO: test in other UNIX/Bash environments
+paginate(){
+page_category="$1"
+page_items="$2"
+page_template="$3"
+page_outfile="$4"
+
+query_db all "$page_category"
+total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+
+if [ "$total_items" -gt "$page_items" ]; then
+	nb_msg "paginating $page_outfile ..."
+	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
+		y=`expr "$page_items" + "$y"`; echo "$y"; done |grep -c ""; }
+	total_pages=`get_pages`
+
+	end=0; page_num=0
+	while [ "$end" -lt "$total_items" ]; do
+		begin=`expr "$end" + 1`; end=`expr "$page_items" + "$end"`
+		page_num=`expr "$page_num" + 1`
+		prev_num=`expr "$page_num" - 1`
+		next_num=`expr "$page_num" + 1`
+		arch_page="$page_outfile"
+		arch_name=`echo "$page_outfile" |cut -d"." -f 1`
+		prev_page=`chg_suffix "$arch_name-page$prev_num".no`
+		next_page=`chg_suffix "$arch_name-page$next_num".no`
+		[ "$page_num" -gt "1" ] &&
+			arch_page=`chg_suffix "$arch_name-page$page_num".no`
+		> "$BLOG_DIR"/page_links.tmp
+		echo '<br />' >> "$BLOG_DIR"/page_links.tmp
+		[ "$prev_num" = "1" ] &&
+			echo '<a href="'$BLOG_URL/$ARCHIVES/$page_outfile'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+		[ "$prev_num" -gt "1" ] &&
+			echo '<a href="'$BLOG_URL/$ARCHIVES/$prev_page'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+		for ((i=1; i <= $total_pages; i++)); do
+			[ "$i" = "1" ] && page="$page_outfile" ||
+				page=`chg_suffix "$arch_name-page$i".no`
+			if [ "$i" = "$page_num" ]; then
+				echo '['$i']' >> "$BLOG_DIR"/page_links.tmp
+			else
+				echo '<a href="'$BLOG_URL/$ARCHIVES/$page'">['$i']</a>' >> "$BLOG_DIR"/page_links.tmp
+			fi
+		done
+		! [ "$next_num" -gt "$total_pages" ] &&
+			echo '<a href="'$BLOG_URL/$ARCHIVES/$next_page'">[next]</a>' >> "$BLOG_DIR"/page_links.tmp
+		NB_PageLinks=`cat "$BLOG_DIR"/page_links.tmp`
+		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
+		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
+		"$BLOG_DIR/$ARCHIVES/$arch_page"
+		NB_PageLinks=
+	done
+	rm -f "$BLOG_DIR"/page_links.tmp
+else
+	make_archive all "$db_catquery" "$ENTRY_TEMPLATE" "$page_outfile"
+	make_page "$BLOG_DIR/$PARTS_DIR/$page_outfile" "$NB_TEMPLATE_DIR/$page_template" \
+	"$BLOG_DIR/$ARCHIVES/$page_outfile"
+fi
+}
+
 # build category archives
 build_catarchives(){
 db_categories="$CAT_LIST"
 if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
-			cat_archindex=`chg_suffix "$cat_arch"`
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
-			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archindex"
-			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archindex" "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
-			"$BLOG_DIR/$ARCHIVES/$cat_archindex"
+			cat_archindex=`chg_suffix "$cat_arch"`
+			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$cat_archindex"
 		fi
 	done
 fi
