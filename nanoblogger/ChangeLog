@@ -1,3 +1,9 @@
+2004-04-29  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, nb, plugins/autoformat/01_escape_chars.off:
+	- Added filter to escape special characters, such as ampersand and quotes.
+	- Removed experimental autoformat plugin that escaped characters.
+
 2004-04-28  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, plugins/autoformat/auto_break.sh:
