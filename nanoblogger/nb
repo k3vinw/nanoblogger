@@ -435,9 +435,7 @@ fi
 # create monthly archives, update any modified parts, and build a master archive index
 build_archives(){
 if [ "$blog_update" = "all" ]; then
-	for run_parts in make_monthlylink build_monthlyarchive; do
-		cycle_months_for $run_parts
-	done
+	cycle_months_for build_monthlyarchive
 else
 	# rebuild current month archive
 	month=`date "+%Y-%m"`
@@ -485,7 +483,6 @@ else
 	done
 fi
 echo "$NB_Month_Links" > "$BLOG_DIR"/"$PARTS_DIR"/month_links.htm
-rm -f "$BLOG_DIR"/month_links.tmp
 build_catarchives
 }
 
@@ -493,6 +490,7 @@ build_catarchives
 build_blog(){
 blog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$blog_update" ] && blog_update="current"
+# query database and check for categories
 db_catquery=`cat_id`; check_catid
 if [ "$blog_update" = "all" ]; then
 	# clear parts directory for clean build of archive links
@@ -502,14 +500,15 @@ if [ "$blog_update" = "all" ]; then
 	# clear permalinks if they exist
 	rm -fr "$BLOG_DIR"/"$PERMALINKS"/*
 fi
-# create main links
+# create main set of links
 make_placeholder "$MAINLINKS_TEMPLATE" main_links.tmp main_links.htm; NB_Main_Links="$PLACEHOLDER"
 rm -f "$BLOG_DIR"/main_links.tmp; PLACEHOLDER=
+[ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
+rm -f "$BLOG_DIR"/month_links.tmp; PLACEHOLDER=
 # build the archives
 load_plugins plugins
 nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
-[ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
 if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
 	mkdir -p "$BLOG_DIR/$PERMALINKS"
 	make_archive "$blog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp

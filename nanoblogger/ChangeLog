@@ -1,5 +1,10 @@
 2004-04-21  n1xt3r  <n1xt3r@scorcher>
 
+	* nb (build_blog): Permalinks now get updated according to blog_update.
+
+	* nb, ChangeLog (build_blog):
+	Fixed logic in the order of code and process.
+
 	* nb, plugins/rss.sh, ChangeLog (build_blog):
 	Permalinks get built and updated correctly.
 
