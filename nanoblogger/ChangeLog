@@ -1,5 +1,8 @@
 2004-04-23  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, nb (delete_blog):
+	Checks relation to category before writing to it.
+
 	* ChangeLog, nb:
 	- (nb_main): Fixed category so it really gets set to Untitled now.
 	- (edit_blog): Checks for empty DB_RESULTS before writing to category database.
