@@ -28,7 +28,8 @@ build_atomfeed(){
 		#NB_AtomEntryModDate=`find "$BLOG_DIR/$ARCHIVES/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		NB_AtomEntryModDate="$NB_AtomEntryDate"
 		NB_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
-		NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
+		#NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
+		NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p'`
 		make_placeholder "$template" atom_entries.tmp "$output_file"
 	done
 	touch "$BLOG_DIR"/atom_entries.tmp
