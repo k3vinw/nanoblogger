@@ -3,8 +3,8 @@
 # centralize modification variables
 MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 
-# check for blog modifications
-if [ ! -z "$MOD_VAR" ] || [ "$blog_update" = "all" ]; then
+# check for weblog modifications
+if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	nb_msg "generating master archive index ..."
 	# make NB_Entry_Links placeholder
 	> "$BLOG_DIR"/entry_links.tmp
