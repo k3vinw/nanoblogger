@@ -1,3 +1,10 @@
+2004-06-15  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/templates/entry.htm, nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh:
+	- (read_entry): Removed NB_EntryDay.
+	- (read_entry): Prepended letter to NB_EntryID to follow w3c recommendations.
+	- Replaced NB_EntryDay with NB_EntryID in calendar.
+
 2004-06-14  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/list_entries.sh, docs/nanoblogger.html, nb, ChangeLog:
