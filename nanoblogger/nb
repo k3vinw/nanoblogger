@@ -72,6 +72,8 @@ tmp_files="$NB_EditFile"
 
 # loads user's blog.conf or fall back on defaults
 load_config(){
+# initially set author to USER
+[ -z "$USER" ] || NB_EntryAuthor="$USER"
 # always load global configs
 . "$BASE_DIR"/nb.conf
 # check for user's .nb.conf in their home directory.
@@ -82,7 +84,7 @@ load_config(){
 BLOG_CONF="$BLOG_DIR/blog.conf"
 # USR_BLOGCONF overrides BLOG_CONF
 [ -z "$USR_BLOGCONF" ] || BLOG_CONF="$USR_BLOGCONF"
-# load blog configs
+# load blog config file
 [ ! -f "$BLOG_CONF" ] || . "$BLOG_CONF"
 # fallback on vi as the default editor
 [ ! -z "$EDITOR" ] || EDITOR="vi"

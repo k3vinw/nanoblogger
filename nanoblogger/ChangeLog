@@ -1,29 +1,31 @@
-2004-03-11  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-11  n1xt3r  <n1xt3r@scorcher>
 
-	* ChangeLog, nb:
+	* ChangeLog: cvs funk
+
+	* nb (query_db): fixed a bad sed address.
+
+	* ChangeLog:
 	fixed sed command in query_db() to conform better to POSIX.
 
-2004-03-09  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-09  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, docs/nanoblogger.html:
 	Removed need to change BASE_DIR, added references to DATE_LOCALE and NB_EntryDescription.
 
-2004-03-08  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-08  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog: 1st Update to ChangeLog a.ka. added a ChangeLog.
 
 	* ChangeLog: added a ChangeLog.
 
-	* nb: made further simplifications to make_archive().
+	* nb (make_archive): Further simplifications made.
 
-	* nb:
-	Fixed bug in filter_dateformat() that would cause the date command to be called twice.
+	* nb (filter_dateformat): Fixed bug calling date command twice.
 
 	* plugins/blog_status.sh:
 	Changed to say 'Total entries: ' to avoid '1 entries' situation.
 
-	* nb:
-	Now checks for user's .nb.conf in their home directory like many other good unix programs do.
+	* nb: Check for user's .nb.conf from /home/kevin directory.
 
 	* default/blog.conf:
 	added configuration variable TIDY_ARGS to control tidy commands in tidy plugin.
@@ -34,20 +36,22 @@
 	* plugins/archive/monthly/monthly-cal.sh:
 	DATE_LOCALE now takes effect on calendar output.
 
-	* nb:
-	simplified if statement and discovered that move_num wasn't being shifted anymore, so move_num is now shifted again.
+	* nb: Simplified if statement and shifted move_num.
 
-2004-03-07  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-07  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/calendar.sh: changed to use DATE_LOCALE
 
-	* nb, plugins/postformat/tidy.sh:
+	* nb:
+	Replaced more references of /dev/null and used Pavel's suggestions to the tidy commands and arguments.
+
+	* plugins/postformat/tidy.sh:
 	Replaced more references of /dev/null with  and applied Pavel's suggestions to the tidy commands and arguments.  Fixed previously broken make_archive().  filter_dateformat() now checks for DATE_LOCALE before setting LANG to it.
 
-	* nb:
-	Applied Pavel's patch. The patch improves upon make_page() and removes a few uses of cat in commands which already used sed.
+	* nb (make_pag):
+	Improved the usage of cat and sed (From Pavel Janik <Pavel@Janik.cz>).
 
-2004-03-06  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-06  n1xt3r  <n1xt3r@scorcher>
 
 	* default/blog.conf:
 	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
@@ -58,7 +62,7 @@
 	* plugins/autoformat/01_escape_chars.off, plugins/autoformat/01_escape_chars.sh:
 	Replaced 01_escape_chars.sh with 01_escape_chars.off, to disable it becuase of too many problems.
 
-2004-03-05  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-05  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/autoformat/01_escape_chars.sh:
 	Added new autoformat plugin, escape_chars that escapes characters: & and " to their respective HTML entities.
@@ -72,7 +76,7 @@
 	* nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
 	Replaced references of /dev/null with $PLUGIN_OUTFILE
 
-2004-03-04  n1xt3r  <n1xt3r@sourceforge.net>
+2004-03-04  n1xt3r  <n1xt3r@scorcher>
 
 	* plugins/calendar.sh:
 	Updated calendar plugin to utilitize the NB_EntryID variable.
