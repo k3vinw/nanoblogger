@@ -68,7 +68,7 @@ build_atomfeed(){
 			Atom_EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
 		#Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
-		Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p'`
+		Atom_EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<entry>
 				<title mode="escaped">$Atom_EntryTitle</title>
@@ -90,7 +90,7 @@ build_atomfeed(){
 			</entry>
 		EOF
 	done
-	NB_AtomEntries="$(< $SCRATCH_FILE)"
+	NB_AtomEntries=$(< "$SCRATCH_FILE")
 	}
 
 

@@ -22,6 +22,9 @@ CURR_PATH="$PWD"
 # directory to store archives of weblog
 ARCHIVES_DIR=archives
 
+# directory to store cached data of weblog
+CACHE_DIR=cache
+
 # directory to store data of weblog
 DATA_DIR=data
 
@@ -97,6 +100,8 @@ load_config(){
 : ${EDITOR:=vi}
 # default to txt for datatype suffix
 : ${NB_DATATYPE:=txt}
+# default to db for database suffix
+: ${NB_DBTYPE:=db}
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
 # default to xml for feed suffix
@@ -119,7 +124,7 @@ fi
 }
 
 # deconfigure, clear some auto-default variables
-deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; }
+deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; }
 
 # filter custom date format for a new entry
 filter_dateformat(){
@@ -170,11 +175,11 @@ cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 	db_catquery=
-	db_categories=`for cat_db in cat_*.db; do echo "$cat_db"; done`
+	db_categories=`for cat_db in cat_*.$NB_DBTYPE; do echo "$cat_db"; done`
 else
 	db_categories="$db_catquery"
 fi
-if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
+if [ "$db_categories" = "cat_*.$NB_DBTYPE" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
 		[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
@@ -214,7 +219,7 @@ cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'
 query_db
 if [ ! -z "$cat_query" ]; then
 	for cat_id in $cat_query; do
-		cat_valid=`echo "$db_categories" |grep cat_"$cat_id".db`
+		cat_valid=`echo "$db_categories" |grep cat_$cat_id.$NB_DBTYPE`
 		echo "$cat_valid"
 		[ -z "$cat_valid" ] &&
 			echo "bad id(s)!"
@@ -236,7 +241,7 @@ done
 load_template(){
 BLOG_FILE="$1"
 # prefix text/html with an X in front of each line
-BLOG_TEMPLATE=`sed -e '/^/ s//X/' <"$BLOG_FILE"`
+BLOG_TEMPLATE=`sed -e '/^/ s//X/' < "$BLOG_FILE"`
 # remove X's and source variables into a temp file
 cat > "$SCRATCH_FILE" <<-EOF
 	sed -e '/^X/ s///' <<TMPL
@@ -276,12 +281,18 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
-	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 	if [ "$ENTRY_ARCHIVES" = 1 ]; then
 		permalink_entry=`chg_suffix $entry`
 		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
 	else
 		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
+	fi
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
+		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
+		load_plugins entry/body
+		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
+	else
+		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
 	fi
 	load_plugins entry
 fi
@@ -320,7 +331,7 @@ fi
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 # preserve content of the source, but let plugins modify it
-: ${MKPAGE_CONTENT:="$(< $MKPAGE_SRCFILE)"}
+: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 # escape content of $NB_Entries so no execution takes place
 NB_Entries="\$MKPAGE_CONTENT"
 load_template "$MKPAGE_TMPLFILE"
@@ -338,9 +349,8 @@ MKPAGE_CONTENT=; NB_EntryTitle=
 # create individual page for an entry
 build_permalink(){
 permalink_entry=`chg_suffix $entry`
-if [ "$archive_template" = "$PERMALINKENTRY_TEMPLATE" ]; then
-	if [ -f "$NB_DATA_DIR/$entry" ] && [ "$NB_DATA_DIR/$entry" -nt \
-		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry" ]; then
+if [ "$ENTRY_ARCHIVES" = 1 ]; then
+	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry" ]; then
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
 		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry"
@@ -366,8 +376,6 @@ for entry in $ARCHIVE_LIST; do
 		echo "$BLOG_HTML" >> "$PARTS_FILE"
 		build_permalink
 		BLOG_HTML=
-		NB_EntryCategories=; NB_EntryCategoryTitle=
-		NB_EntryTitle=
 	fi
 done
 }
@@ -454,7 +462,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
 		[ "$page_num" -gt 1 ] &&
 			arch_page=`chg_suffix "$arch_name-page$page_num".no`
-		>"$SCRATCH_FILE"
+		> "$SCRATCH_FILE"
 		echo '<br />' >> "$SCRATCH_FILE"
 		[ "$prev_num" = 1 ] &&
 			echo '<a href="'$page_outfile'">'$NB_PrevPage'</a>' >> "$SCRATCH_FILE"
@@ -471,7 +479,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
 			echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
-		NB_PageLinks="$(< $SCRATCH_FILE)"
+		NB_PageLinks=$(< "$SCRATCH_FILE")
 		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
 		"$page_outdir/$arch_page"
@@ -506,6 +514,15 @@ build_catarchives
 if [ "$weblog_update" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
+	# update cache
+	query_db all
+	> "$SCRATCH_FILE".cache_list
+	for entry in $DB_RESULTS; do
+		[ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ] &&
+			echo "$entry" >> "$SCRATCH_FILE".cache_list
+	done
+	[ ! -z "$UPDATE_LIST" ] && echo "$UPDATE_LIST" >> "$SCRATCH_FILE".cache_list
+	UPDATE_LIST=$(< "$SCRATCH_FILE.cache_list")
 	# rebuild current month archive
 	month=`date "+%Y-%m"`; this_month="$month"
 	query_db "$month"; build_monthlyarchive
@@ -525,12 +542,10 @@ else
 			read_entry "$NB_DATA_DIR/$entry"
 			load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
 			if [ ! -z "$BLOG_HTML" ]; then
-				echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$mod_entry"
+				echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
 				BLOG_HTML=
 			fi
-			permalink_file=`chg_suffix "$mod_entry"`
-			make_page "$BLOG_DIR/$PARTS_DIR/$mod_entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-			"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+			build_permalink
 		fi
 	done
 fi
@@ -614,7 +629,7 @@ for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id(s): $edit_num"
 done
->"$SCRATCH_FILE"
+> "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	$EDITOR "$NB_DATA_DIR/$Edit_EntryFile"
@@ -622,7 +637,7 @@ for entry_id in $NUMVAR; do
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 	fi
 done
-UPDATE_LIST="$(< $SCRATCH_FILE)"
+UPDATE_LIST=$(< "$SCRATCH_FILE")
 if [ ! -z "$UPDATE_LIST" ]; then
 	nb_msg "processing modified weblog entries ..."
 	find_categories "$UPDATE_LIST"; build_weblog
@@ -701,11 +716,11 @@ if [ "$db_query" = cat ]; then
 	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
 	nb_msg "ID, Title"
 	id=0
-	cat_total=`echo "$db_categories" |grep -c "[\.]db"`
+	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	while [ "$id" != "$cat_total" ]; do
 		id=`expr 1 + $id`
-		if [ -f "$NB_DATA_DIR/cat_$id.db" ]; then
-			echo " $id, `sed 1q "$NB_DATA_DIR"/cat_"$id".db`"
+		if [ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
+			echo " $id, `sed 1q "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`"
 		else
 			cat_total=`expr 1 + $cat_total`
 		fi
@@ -826,10 +841,10 @@ check_config
 if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
 		query_db; id=0
-		cat_total=`echo "$db_categories" |grep -c "[\.]db"`
+		cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
 			id=`expr 1 + $id`
-			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
+			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
 				nb_msg "creating new category id: $id, for '$BLOG_TITLE' ..."
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
@@ -838,7 +853,7 @@ if [ ! -z "$cat_num" ]; then
 					read -p "$NB_PROMPT" cat_title
 					[ -z "$cat_title" ] && cat_title=Untitled
 				fi
-				echo "$cat_title" > "$NB_DATA_DIR"/cat_"$id".db
+				echo "$cat_title" > "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE
 				cat_num="$id"; db_catquery=`cat_id`; check_catid; cat_total="$id"
 			else
 				cat_total=`expr 1 + $cat_total`
@@ -880,7 +895,7 @@ if [ -z "$usr_body" ]; then
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
-		NB_EntryBody="$(< $NB_EditFile)"
+		NB_EntryBody=$(< "$NB_EditFile")
 	fi
 else
 	NB_EntryBody="$usr_body"

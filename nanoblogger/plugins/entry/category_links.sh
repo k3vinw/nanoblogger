@@ -17,4 +17,4 @@ for entry_catlinks in $CAT_TLIST; do
 		EOF
 	fi
 done
-NB_EntryCategories="$(< $SCRATCH_FILE.category_links)"
+NB_EntryCategories=$(< "$SCRATCH_FILE.category_links")

@@ -20,7 +20,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 		EOF
 	done; month=)
 
-	cat_total=`echo "$db_categories" |grep -c "[\.]db"`
+	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	#echo "cat_total: $cat_total"
 	if [ "$cat_total" -gt 0 ]; then
 		# make NB_Category_Links placeholder
