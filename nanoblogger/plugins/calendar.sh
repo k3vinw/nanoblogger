@@ -9,9 +9,10 @@
 
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 
-[ -z "$CAL_CMD" ] && CAL_CMD="cal"
+: ${CAL_CMD:=cal}
 
 if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
+	nb_msg "generating calendar ..."
 	[ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS`
 	[ ! -z "$CALENDAR" ] || CALENDAR=`$CAL_CMD $CAL_ARGS`
 	CAL_HEAD=`echo "$CALENDAR" |sed -n 1p |sed -e '/^[ ]*/ s///g'`
@@ -35,7 +36,7 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 		echo '<tr>' >> "$PLUGIN_OUTFILE"
 		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td align="center"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 		for dn in $DN_LINES ; do
-			set_link="0"
+			set_link=0
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
 			for entry in $MONTH_LINE ; do
 				entry_year=`echo $entry |cut -c1-4`
@@ -45,12 +46,12 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 				curr_month=`date +%m`
 				curr_year=`date +%Y`
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
-				set_link="1"
+				set_link=1
 				dn='<a href="'\${ARCHIVES_PATH}$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
 				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done
-			if [ "$set_link" != "1" ] ; then
+			if [ "$set_link" != 1 ] ; then
 				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 		done

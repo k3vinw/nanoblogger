@@ -9,7 +9,7 @@ OLD_MAIN_LINK="$MAIN_LINK"
 MAIN_LINK="../$MAIN_LINK"
 
 # check for weblog modifications
-if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
+if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = all ]; then
 	nb_msg "generating archive index page ..."
 	# make NB_Entry_Links placeholder
 	query_db all
@@ -18,7 +18,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	for entry in $ENTRY_LIST; do
 		month=`echo "$entry" |cut -c1-7`
 		read_entry "$NB_DATA_DIR/$entry"
-		[ -z "$NB_EntryTitle" ] && NB_EntryTitle="Untitled"
+		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
 		cat <<-EOF
 			<a href="\${ARCHIVES_PATH}$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
@@ -60,7 +60,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/index.$NB_FILETYPE"
 	# set title for makepage template
-	NB_EntryTitle="Archives"
+	NB_EntryTitle=Archives
 	NB_Entries="$NB_Archive_Links"
 	load_template "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"

@@ -2,12 +2,11 @@
 ############################################################
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# TODO: fix (load_config) unconditional loading of default weblog's blog.conf
 # NOTES: because entries get placed in variables, it's possible to produce
 # non-fatal errors when the entry contains incomplete command subsitutions.
 # e.g. ` and $(
 # nanoblogger's version.
-VERSION="CVS-3.0"
+VERSION=CVS-3.0
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -23,35 +22,35 @@ NB_PROMPT=": "
 CURR_PATH="$PWD"
 
 # directory to store archives of weblog
-ARCHIVES_DIR="archives"
+ARCHIVES_DIR=archives
 
 # directory to store data of weblog
-DATA_DIR="data"
+DATA_DIR=data
 
 # directory to store parts of weblog
-PARTS_DIR="parts"
+PARTS_DIR=parts
 
 # the plugins directory name
-PLUGINS_DIR="plugins"
+PLUGINS_DIR=plugins
 
 # the templates directory name
-TEMPLATE_DIR="templates"
+TEMPLATE_DIR=templates
 
 # the temp directory
-TEMP_DIR="/tmp"
+TEMP_DIR=/tmp
 
 # default verbosity, 0 = silent
-VERBOSE="1"
+VERBOSE=1
 
 # automatically set time zone using 'date +%z'
 tzd_mm=`date +%z |cut -c4-5`
 AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 
 # letter to prepend to entry's html id tag
-x_id="e"
+x_id=e
 
 nb_msg(){
-[ "$VERBOSE" = "0" ] ||
+[ "$VERBOSE" = 0 ] ||
 	cat <<-EOF
 		$@
 	EOF
@@ -75,12 +74,13 @@ tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 [ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # loads global and user configurations
+# TODO: fix unconditional loading of default weblog's blog.conf
 load_config(){
 # always load global configs
 . "$BASE_DIR"/nb.conf
-# check for user's .nb.conf in their home directory.
+# check for user's .nb.conf in their home directory
 [ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
-# auto-detect blog.conf from our cwd.
+# auto-detect blog.conf from our cwd
 [ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
 # USR_BLOGDIR overrides BLOG_DIR
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
@@ -100,30 +100,30 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ ! -z "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
 # USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
-# fallback to $USER
-[ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
-# fallback to vi
-[ -z "$EDITOR" ] && EDITOR="vi"
-# fallback to htm
-[ -z "$NB_DATATYPE" ] && NB_DATATYPE="txt" 
-# fallback to html
-[ -z "$NB_FILETYPE" ] && NB_FILETYPE="html"
-# fallback to xml
-[ -z "$NB_SYND_FILETYPE" ] && NB_SYND_FILETYPE="xml"
-# fallback to AUTO_TZD
-[ -z "$BLOG_TZD" ] && BLOG_TZD="$AUTO_TZD"
-# fallback to MAX_ENTRIES
-[ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
+# default to $USER for author
+: ${BLOG_AUTHOR:=$USER}
+# default to vi for editor
+: ${EDITOR:=vi}
+# default to txt for datatype suffix
+: ${NB_DATATYPE:=txt}
+# default to html for page suffix
+: ${NB_FILETYPE:=html}
+# default to xml for feed suffix
+: ${NB_SYND_FILETYPE:=xml}
+# default to AUTO_TZD for iso dates
+: ${BLOG_TZD:=$AUTO_TZD}
 # check if we want absolute links
-[ "$ABSOLUTE_LINKS" = "1" ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
-# default entry display, fallbacks to max filter
-[ -z "$QUERY_MODE" ] && QUERY_MODE="max"
+[ "$ABSOLUTE_LINKS" = 1 ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
+# default to max filter for query mode
+: ${QUERY_MODE:=max}
+# defaults for maximum entries to display on each page
+: ${MAX_ENTRIES:=10}; : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
 }
 
 # filter custom date format for a new entry
 filter_dateformat(){
 FILTER_VAR="$1"
-[ -z "$FILTER_VAR" ] && FILTER_VAR="%B %d, %Y %l:%M %p"
+: ${FILTER_VAR:="%B %d, %Y %l:%M %p"}
 # it might be cool to use the gnu date's description feature here
 [ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
 [ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
@@ -152,10 +152,15 @@ db_query="$1"
 db_catquery="$2"
 db_limit="$3"
 db_offset="$4"
+# sanitize db_limit and db_offset
+db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
+db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
+: ${db_limit:=$MAX_ENTRIES}
+: ${db_limit:=0}; : ${db_offset:=1}
 current_month=`date "+%Y-%m"`
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
-if [ -z "$db_catquery" ] || [ "$db_catquery" = "nocat" ]; then
+if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 	db_catquery=
 	db_categories=`for cat_db in cat_*.db; do echo "$cat_db"; done`
 else
@@ -164,11 +169,9 @@ fi
 if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 	# list amount of entries based on db_limit
 	filter_limit(){
-		db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
-		db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
-		[ -z "$db_limit" ] && db_limit="$MAX_ENTRIES"
-		: ${db_offset:=1}
-		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p; db_limit=; db_offset=
+		[ "$db_limit" = 0 ] && grep -v ''
+		[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
+		db_limit=; db_offset=
 		}
         filter_query(){ grep "$db_query" |sort -ru; }
 	# list all entries
@@ -181,11 +184,11 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 				grep "[\.]$NB_DATATYPE" "$cat_db"
 		done
 		}
-if [ "$db_query" = "all" ]; then
+if [ "$db_query" = all ] || [ -z "$db_limit" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
-elif [ "$db_query" = "current" ]; then
+elif [ "$db_query" = current ]; then
 	db_query="$current_month"; DB_RESULTS=`cat_db |filter_query`
-elif [ "$db_query" = "max" ]; then
+elif [ "$db_query" = max ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
 else
 	DB_RESULTS=`cat_db |filter_query`
@@ -238,7 +241,7 @@ BLOG_HTML=$(. "$SCRATCH_FILE")
 # load plugins from BASE_DIR/plugins and BLOG_DIR/plugins
 load_plugins(){
 PLUGINS_DIR="$1"
-if [ "$ENABLE_PLUGINS" = "1" ]; then
+if [ "$ENABLE_PLUGINS" = 1 ]; then
 	[ ! -d "$BASE_DIR/$PLUGINS_DIR" ] &&
 		die "load_plugins: directory '$BASE_DIR/$PLUGINS_DIR' doesn't exist! goodbye."
 	# loads plugins in alpha-numeric order (0-9, a-z)
@@ -257,7 +260,7 @@ read_metadata(){
 MTAG="$1"
 META_FILE="$2"
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:][ ]/ s///'`
-[ "$MTAG" = "BODY" ] &&
+[ "$MTAG" = BODY ] &&
 NB_Metadata=`sed -n '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/p' "$META_FILE" |sed -e '/^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d'`
 }
 
@@ -272,7 +275,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
 	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-	if [ "$ENTRY_ARCHIVES" = "1" ]; then
+	if [ "$ENTRY_ARCHIVES" = 1 ]; then
 		permalink_entry=`chg_suffix $entry`
 		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
 	else
@@ -418,11 +421,12 @@ for relative_entry in $UPDATE_CATLIST; do
 	done
 done
 [ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
-if [ "$weblog_update" = "all" ]; then query_db; CAT_LIST="$db_categories"; fi
+if [ "$weblog_update" = all ]; then query_db; CAT_LIST="$db_categories"; fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
 # divide larger archives into multiple pages
+# TODO: create and use template for nav links
 paginate(){
 page_query="$1"
 page_catquery="$2"
@@ -432,7 +436,7 @@ page_outdir="$5"
 page_outfile="$6"
 query_db "$page_query" "$page_catquery"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
-if [ "$total_items" -gt "$page_items" ]; then
+if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 	nb_msg "paginating $page_outfile ..."
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr "$page_items" + "$y"`; echo "$y"; done |grep -c ""; }
@@ -447,16 +451,16 @@ if [ "$total_items" -gt "$page_items" ]; then
 		arch_name=`echo "$page_outfile" |cut -d"." -f 1`
 		prev_page=`chg_suffix "$arch_name-page$prev_num".no`
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
-		[ "$page_num" -gt "1" ] &&
+		[ "$page_num" -gt 1 ] &&
 			arch_page=`chg_suffix "$arch_name-page$page_num".no`
 		>"$SCRATCH_FILE"
 		echo '<br />' >> "$SCRATCH_FILE"
-		[ "$prev_num" = "1" ] &&
+		[ "$prev_num" = 1 ] &&
 			echo '<a href="'$page_outfile'">&lt;&lt;</a>' >> "$SCRATCH_FILE"
-		[ "$prev_num" -gt "1" ] &&
+		[ "$prev_num" -gt 1 ] &&
 			echo '<a href="'$prev_page'">&lt;&lt;</a>' >> "$SCRATCH_FILE"
 		for ((i=1; i <= $total_pages; i++)); do
-			[ "$i" = "1" ] && page="$page_outfile" ||
+			[ "$i" = 1 ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
 				echo '['$i']' >> "$SCRATCH_FILE"
@@ -487,7 +491,7 @@ if [ ! -z "$db_categories" ]; then
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
 			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
-			paginate all "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
+			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
 	done
 fi
@@ -498,7 +502,7 @@ build_archives(){
 load_plugins plugins/archive
 nb_msg "generating archives ..."
 build_catarchives
-if [ "$weblog_update" = "all" ]; then
+if [ "$weblog_update" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
 	# rebuild current month archive
@@ -515,7 +519,7 @@ else
 	done
 	# update relative entry archives
 	for mod_entry in $UPDATE_LIST; do
-		if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$NB_DATA_DIR/$mod_entry" ]; then
+		if [ "$ENTRY_ARCHIVES" = 1 ] && [ -f "$NB_DATA_DIR/$mod_entry" ]; then
 			entry="$mod_entry"
 			read_entry "$NB_DATA_DIR/$entry"
 			load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
@@ -539,7 +543,7 @@ weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
-if [ "$weblog_update" = "all" ]; then
+if [ "$weblog_update" = all ]; then
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
@@ -547,8 +551,8 @@ fi
 load_plugins plugins
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
-[ "$weblog_update" != "main" ] && build_archives
-if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
+[ "$weblog_update" != main ] && build_archives
+if [ "$weblog_update" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
 	make_archive "$weblog_update" nocat "$PERMALINKENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
@@ -570,7 +574,7 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-[ "$build_newblog" = "1" ] && weblog_update="all"
+[ "$build_newblog" = 1 ] && weblog_update=all
 build_weblog "$weblog_update"
 nb_msg "new weblog entry added to '$BLOG_TITLE'."
 }
@@ -589,7 +593,7 @@ fi
 
 # edit entry or category by id number
 edit_weblog(){
-if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
+if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	cat_var=`echo "$cat_num" |sed -e '/,/d'`
 	[ -z "$cat_var" ] && die "must specify one category at a time when editing a title!"
 	db_catquery=`cat_id`; check_catid
@@ -636,7 +640,7 @@ if [ ! -z "$cat_num" ]; then
 	cat_list="$db_catquery"
 	cat_msg=", from category id('s): $cat_num"
 fi
-if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
+if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	nb_msg "deleting category id('s): $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
@@ -695,7 +699,7 @@ build_weblog
 list_weblog(){
 query_db; db_query="$1"
 db_catquery=`cat_id`; check_catid
-if [ "$db_query" = "cat" ]; then
+if [ "$db_query" = cat ]; then
 	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
 	nb_msg "ID, Title"
 	id=0
@@ -709,7 +713,7 @@ if [ "$db_query" = "cat" ]; then
 		fi
 	done; exit 0
 fi
-# fallback to entries listed by limit
+# default to entries listed by limit
 [ -z "$db_query" ] && db_query="$QUERY_MODE"
 list_query="$db_query"
 query_db "$db_query" "$db_catquery"
@@ -727,7 +731,7 @@ for entry in $DB_RESULTS; do
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
 	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$NB_Metadata" |cut -c1-32` ..."
 	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$NB_Metadata"
 	id=`expr 1 + $id`
 	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
@@ -803,7 +807,7 @@ create_weblog(){
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
-	build_newblog="1"
+	build_newblog=1
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
 	nb_msg "copying default weblog files ..."
@@ -822,7 +826,7 @@ fi
 check_blogdir; load_config
 # create a new category 
 if [ ! -z "$cat_num" ]; then
-	if [ "$cat_num" = "new" ]; then
+	if [ "$cat_num" = new ]; then
 		query_db; id=0
 		cat_total=`echo "$db_categories" |grep "[\.]db" -c`
 		while [ "$id" != "$cat_total" ]; do
@@ -834,7 +838,7 @@ if [ ! -z "$cat_num" ]; then
 				else
 					echo "please enter the new category's title [Untitled]"
 					read -p "$NB_PROMPT" cat_title
-					[ -z "$cat_title" ] && cat_title="Untitled"
+					[ -z "$cat_title" ] && cat_title=Untitled
 				fi
 				echo "$cat_title" > "$NB_DATA_DIR"/cat_"$id".db
 				cat_num="$id"; db_catquery=`cat_id`; check_catid; cat_total="$id"
@@ -885,7 +889,7 @@ else
 fi
 [ ! -z "$usr_description" ] && NB_EntryDescription="$usr_description"
 # prompt for descritption
-if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != "1" ]; then
+if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != 1 ]; then
 	echo "enter a short descriptive comment"
 	read -p "$NB_PROMPT" NB_EntryDescription
 fi
@@ -988,7 +992,7 @@ while [ $# -gt 0 ]; do
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_blogdir; delete_weblog;;
-		-D|--desc)		desc_var="1"; usr_description="$2"; shift;;
+		-D|--desc)		desc_var=1; usr_description="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_blogdir; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;

@@ -1,3 +1,16 @@
+2004-09-28 03:17  n1xt3r
+
+	* nb, default/blog.conf: - Configuration variable, QUERY_ENTRIES
+	  renamed to more generalized QUERY_MODE.  (show_help): Replaced
+	  reference to QUERY_ENTRIES with "main index view".
+
+2004-09-28 01:09  n1xt3r
+
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh: (list_weblog): -
+	  Enhanced error messages to be more informative.  (build_weblog):
+	  - Main index pagination is governed by $MAX_ENTRIES and
+	  $QUERY_ENTRIES.
+
 2004-09-27 01:06  n1xt3r
 
 	* nb, default/blog.conf, default/templates/main_index.htm,

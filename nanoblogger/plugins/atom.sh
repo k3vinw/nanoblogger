@@ -1,7 +1,7 @@
 # NanoBlogger Atom Feed Plugin
 
 # Limit number of items to include in feed
-[ -z "$LIMIT_ITEMS" ] && LIMIT_ITEMS="10"
+: ${LIMIT_ITEMS:=10}
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
