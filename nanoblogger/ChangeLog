@@ -1,3 +1,8 @@
+2004-07-12  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, nb (show_help):
+	Added missing parameters for options requiring them.
+
 2004-07-11  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, docs/nanoblogger.html:

@@ -806,6 +806,7 @@ if [ -z "$usr_message" ]; then
 else
 	NB_EntryBody="$usr_message"
 fi
+[ ! -z "$usr_description" ] && NB_EntryDescription="$usr_description"
 # prompt for descritption
 if [ -z "$NB_EntryDescription" ]; then
 	echo "enter a short descriptive comment"
@@ -830,13 +831,13 @@ cat <<-EOF
 	 -a, --add				create new entry, category, or weblog
 	 					(directory).
 	 -b, --blogdir <directory>		specify weblog directory.
-	 -c, --category	<new,ID>		specify category (for '--add', '--delete',
+	 -c, --category	<ID,cat>		specify category (for '--add', '--delete',
 	 					'--edit', '--list' and '--update').
 	 --configure				configure weblog.
 	 --datadir <directory>			specify weblog's data directory.
-	 -d, --delete <cat,ID>			delete an entry or category.
+	 -d, --delete <ID,cat>			delete an entry or category.
 	 -D, --desc <text>			set description of entry (for '--add').
-	 -e, --edit <cat,ID>			edit an entry or category.
+	 -e, --edit <ID,cat>			edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
 	 -l, --list <all,cat,current>		list entries or categories
@@ -897,7 +898,8 @@ if [ -z "$argument" ]; then
 fi
 }
 sanity_check(){
-invalid_opt=`echo "$argument" |grep '^[--]$*'`; [ ! -z "$invalid_opt" ] && argument=
+invalid_opt=`echo "$argument" |grep '^[--]$*'`
+[ ! -z "$invalid_opt" ] && argument=
 }
 while [ $# -gt 0 ]; do
 	if [ $# -gt 1 ]; then
@@ -915,7 +917,7 @@ while [ $# -gt 0 ]; do
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_blogdir; delete_weblog;;
-		-D|--desc)		check_arg; usr_desc="$2"; shift;;
+		-D|--desc)		check_arg; usr_description="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_blogdir; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
