@@ -300,10 +300,8 @@ fi
 NB_Entries=`cat "$SOURCE_FILE"`
 [ ! -z "$OUTPUT_FILE" ] || die "output file not specified."
 [ -f "$TEMPLATE_FILE" ] || die "template file '$TEMPLATE_FILE' doesn't exist! bye."
-#if [ ! -z "$usr_srcfile" ] && [ "$AUTO_FORMAT" = "1" ]; then
-#	NB_EntryBody="$NB_Entries"; load_plugins plugins/autoformat
-#	NB_Entries="$NB_EntryBody"
-#fi
+# Make sure the output directory is present before writing to it.
+mkdir -p `dirname "$OUTPUT_FILE"`
 cat "$TEMPLATE_FILE" > "$OUTPUT_FILE".tmp
 load_template "$OUTPUT_FILE".tmp
 echo "$BLOG_HTML" > "$OUTPUT_FILE"
@@ -359,12 +357,8 @@ for entry in $ARCHIVE_LIST; do
 		NB_EntryCategoryTitle=
 	fi
 done
-if [ -f "$BLOG_DIR"/archives.tmp ]; then
-	cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
-else
-	> "$BLOG_DIR"/archives.tmp
-	cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
-fi
+> "$BLOG_DIR"/archives.tmp
+[ -f "$BLOG_DIR"/archives.tmp ] && cp "$BLOG_DIR"/archives.tmp "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 rm -f "$BLOG_DIR"/archives.tmp
 }
 
@@ -417,7 +411,7 @@ if [ ! -z "$db_categories" ]; then
 			category_index=`chg_suffix "$category"`
 			category_part=`chg_suffix "$category" htm`
 			#category_feed=`chg_suffix "$category" rdf`
-			NB_ArchiveTitle=`cat "$BLOG_DIR"/"$ARCHIVES"/"$category" |sed -n 1p`
+			NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$category"`
 			make_archive all "$category" "$ENTRY_TEMPLATE" "$category_part"
 			make_page "$BLOG_DIR"/"$PARTS_DIR"/"$category_part" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 			"$BLOG_DIR"/"$ARCHIVES"/"$category_index"
@@ -664,11 +658,11 @@ for entry_id in $NUMVAR; do
 	done
 	if [ ! -z "$cat_list" ]; then
 		for cat_db in $cat_list; do
-			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 	else
 		for cat_db in $db_categories; do
-			cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Delete_EntryFile'/d' > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+			sed -e '/'$Delete_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 		done
 		rm -f "$BLOG_DIR"/"$ARCHIVES"/"$Delete_EntryFile"
 		Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
@@ -741,8 +735,7 @@ for entry_id in $UPDATE_LIST; do
 		if [ ! -z "$db_catquery" ]; then
 			query_db "$db_query" "$db_catquery"
 			for cat_db in $db_categories; do
-				cat "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" |sed -e '/'$Move_EntryFile'/d' \
-				> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
+				sed -e '/'$Move_EntryFile'/d' "$BLOG_DIR"/"$ARCHIVES"/"$cat_db" > "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 				echo "$Move_EntryFile" >> "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"
 			done
 		fi
