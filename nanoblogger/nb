@@ -1,13 +1,10 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.1 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# NOTES: because entries get placed in variables, it's possible to produce
-# non-fatal errors when the entry contains incomplete command subsitutions.
-# e.g. ` and $(
 
 # nanoblogger's version.
-VERSION="3.0"
+VERSION="CVS-3.1"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
