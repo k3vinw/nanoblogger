@@ -124,10 +124,14 @@ deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_FILETYPE=; NB_SYND_FILE
 # filter custom date format for a new entry
 filter_dateformat(){
 FILTER_VAR="$1"
-: ${FILTER_VAR:="%m.%d.%Y %H:%M"}
-# it might be cool to use the gnu date's description feature here
-[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
-[ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
+# use date's defaults, when no date format is specified
+if [ ! -z "$FILTER_VAR" ]; then
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
+	[ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
+else
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date
+	[ -z "$DATE_LOCALE" ] && date
+fi
 }
 
 # change suffix of file
@@ -328,7 +332,7 @@ nb_msg "$MKPAGE_OUTFILE"
 for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
 	[ -f "$mkp_plugin" ] && . "$mkp_plugin"
 done
-MKPAGE_CONTENT=
+MKPAGE_CONTENT=; NB_EntryTitle=
 }
 
 # create individual page for an entry
@@ -362,9 +366,8 @@ for entry in $ARCHIVE_LIST; do
 		echo "$BLOG_HTML" >> "$PARTS_FILE"
 		build_permalink
 		BLOG_HTML=
-		PLACEHOLDER=
-		NB_EntryCategories=
-		NB_EntryCategoryTitle=
+		NB_EntryCategories=; NB_EntryCategoryTitle=
+		NB_EntryTitle=
 	fi
 done
 }
@@ -859,7 +862,7 @@ fi
 nb_msg "creating new entry for '$BLOG_TITLE'$cat_msg ..."
 # read user specified attributes for entry
 [ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
-[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
+[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title; usr_title=
 [ ! -z "$db_catquery" ] && cat_msg=" in category id(s): $cat_num"
 if [ -z "$NB_EntryAuthor" ]; then
 	echo "enter author's name [$BLOG_AUTHOR]"
