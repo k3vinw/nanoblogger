@@ -117,7 +117,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # check if we want absolute links
 [ "$ABSOLUTE_LINKS" = "1" ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
 # default entry display, fallbacks to max filter
-[ -z "$QUERY_ENTRIES" ] && QUERY_ENTRIES="max"
+[ -z "$QUERY_MODE" ] && QUERY_MODE="max"
 }
 
 # filter custom date format for a new entry
@@ -555,7 +555,7 @@ fi
 # build main index
 nb_msg "generating main index page('s) ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
-paginate "$QUERY_ENTRIES" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
+paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
 }
 
 # add a new entry
@@ -710,7 +710,7 @@ if [ "$db_query" = "cat" ]; then
 	done; exit 0
 fi
 # fallback to entries listed by limit
-[ -z "$db_query" ] && db_query="$QUERY_ENTRIES"
+[ -z "$db_query" ] && db_query="$QUERY_MODE"
 list_query="$db_query"
 query_db "$db_query" "$db_catquery"
 [ -z "$DB_RESULTS" ] && die "nothing matched your query: '$list_query'! goodbye."
@@ -919,7 +919,7 @@ cat <<-EOF
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
 	 -l, --list <all,cat,current,max>	list entries or categories
-	 					(defaults to \$QUERY_ENTRIES).
+	 					(defaults to main index view).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.
 	 -m, --move <ID>			move an entry to a specified category (for
@@ -934,7 +934,7 @@ cat <<-EOF
 	 					(for '--add', '--category', and
 	 					'--makepage').
 	 -u, --update <all,current,main,max>	force update of weblog (defaults to
-	 					\$QUERY_ENTRIES).
+	 					to main index view).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
 
