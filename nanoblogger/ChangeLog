@@ -1,3 +1,14 @@
+2004-06-25  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, default/archives/monthly/2004-01.html, default/atom.xml, default/blog.conf, default/index.html, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/fortune.htm, default/styles/nb_rusted.css, default/templates/main_index.htm, default/templates/month_archive.htm, nb, plugins/archive/master_index.sh, plugins/archive/monthly/monthly-cal.sh, plugins/blog_links.sh, plugins/calendar.sh, plugins/rss.sh:
+	- (find_categories): Replaced cat_num with routines for CAT_LIST.
+	- Vastly improved updating of categories through better utilization of CAT_LIST.
+
+	Martin Slavík <msl@actinet.cz>
+	- Added CAL_ARGS for blog.conf in calendar plugins to set arguments for cal.
+	- Removed empty <span> tags in calendar plugins.
+	- Improved CSS classes for calendar display.
+
 2004-06-24  n1xt3r  <n1xt3r@bluefalcon>
 
 	* ChangeLog, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/atom.xml, default/index.html, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, plugins/archive/master_index.sh:
