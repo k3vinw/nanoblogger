@@ -1,5 +1,8 @@
 2004-05-06  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, nb (nb_main):
+	Fixed "bye" typo in blog directory creation prompt.
+
 	* ChangeLog, nb (build_archives):
 	Replaced generation of "cat_n.db.htm" with "cat_n.htm" in $PARTS_DIR.
 

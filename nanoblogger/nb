@@ -796,29 +796,22 @@ esac
 # create a new entry or sets up a new blog directory.
 nb_main(){
 [ -z "$BLOG_DIR" ] && die "no blog directory specified! bye."
-# ask to create a new blog directory
+# automatically create new blog directory.
 if [ ! -d "$BLOG_DIR" ]; then
 	blog_update="all"
-	echo "blog directory '$BLOG_DIR' doesn't exist!"
-	echo "would you like to create it now? [Y/n]"
+	mkdir -p "$BLOG_DIR"
+	echo "creating blog directory '$BLOG_DIR' ..."
+	echo "copying default blog files ..."
+	cp -R "$BASE_DIR"/default/* "$BLOG_DIR"
+	# but prompt for configuration.
+	echo "would you like to configure the new blog now? [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
-	[Yy]|"") 
-		mkdir -p "$BLOG_DIR"
-		echo "created blog directory '$BLOG_DIR'"
-		echo "copying default blog files ..."
-		cp -R "$BASE_DIR"/default/* "$BLOG_DIR"
-		echo "would you like to configure the new blog now? [Y/n]"
-		read -p "$NB_PROMPT" choice
-		case $choice in
-		[Yy]|"")
-			echo "configuring new blog ..."
-			"$EDITOR" "$BLOG_DIR"/blog.conf;;
-		[Nn])
-			echo "blog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
-		esac;;
-	[Nn])	 
-		die "ok, bye!"
+	[Yy]|"")
+		echo "configuring new blog ..."
+		"$EDITOR" "$BLOG_DIR"/blog.conf;;
+	[Nn])
+		echo "blog not configured! use 'nb -b $BLOG_DIR --configure' to configure later."
 	esac
 fi
 check_blogdir; load_config
