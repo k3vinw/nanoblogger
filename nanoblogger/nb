@@ -4,10 +4,9 @@
 ############################################################
 
 # NanoBlogger's version.
-VERSION="2.8a1"
+VERSION="2.8a2"
 
 # NanoBlogger's installation directory.
-#BASE_DIR="$HOME/nanoblogger-$VERSION"
 BASE_DIR=`dirname $0`
 
 # create a semi ISO 8601 formatted timestamp for archives
@@ -1013,7 +1012,7 @@ while [ $# -gt 0 ]; do
 		-u|--update)		blog_update="$2"; shift
 					check_blogdir; build_blog "$blog_update";; 
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
-		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
+		-V|--version)		echo "NanoBlogger-CVS $VERSION"; exit 0;;
 		--)			shift; break;;
 		*)
 					sanity_check
