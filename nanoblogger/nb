@@ -510,13 +510,13 @@ load_plugins plugins
 nb_msg "generating index pages ..."
 [ "$blog_update" != "main" ] && build_archives
 [ "$blog_update" != "all" ] && cycle_months_for make_monthlylink
-[ "$FULL_PERMALINKS" = "1" ] && mkdir -p "$BLOG_DIR/$PERMALINKS"
-# build main index
-make_archive current nocat "$ENTRY_TEMPLATE" news.htm
 if [ "$blog_update" != "main" ] && [ "$FULL_PERMALINKS" = "1" ]; then
+	mkdir -p "$BLOG_DIR/$PERMALINKS"
 	make_archive all nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR"/"$PARTS_DIR"/permalinks.tmp
 fi
+# build main index
+make_archive current nocat "$ENTRY_TEMPLATE" news.htm
 make_page "$BLOG_DIR"/"$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
 

@@ -1,3 +1,8 @@
+2004-04-21  n1xt3r  <n1xt3r@scorcher>
+
+	* nb, plugins/rss.sh, ChangeLog (build_blog):
+	Permalinks get built and updated correctly.
+
 2004-04-20  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, default/templates/rdf.xml:
