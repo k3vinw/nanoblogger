@@ -1,3 +1,8 @@
+2004-06-01  n1xt3r  <n1xt3r@bluefalcon>
+
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Settings and Configurations" and "Plugins" sections of manual.
+
 2004-05-31  n1xt3r  <n1xt3r@bluefalcon>
 
 	* plugins/list_entries.sh, ChangeLog:
