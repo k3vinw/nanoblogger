@@ -68,12 +68,14 @@ NB_EditFile="/tmp/nb_entry$$.htm"
 
 # cleanup for special temp files
 tmp_files="$NB_EditFile"
-[ -z "$tmp_files" ] || trap "rm -f $tmp_files; exit" 0 1 2 3 15
+[ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # loads user's blog.conf or fall back on defaults
 load_config(){
 # always load global configs
 . "$BASE_DIR"/nb.conf
+# check for user's .nb.conf in their home directory.
+[ ! -f "$HOME/.nb.conf" ] || . "$HOME/.nb.conf"
 # USR_BLOGDIR ovverides BLOG_DIR
 [ ! -z "$BLOG_DIR" ] || [ -z "$USR_BLOGDIR" ] || BLOG_DIR="$USR_BLOGDIR"
 # default BLOG_CONF, can pickup USR_BLOGDIR
