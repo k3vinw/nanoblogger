@@ -77,7 +77,7 @@ load_config(){
 # check for user's .nb.conf in their home directory.
 [ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
 # USR_BLOGDIR overrides BLOG_DIR
-[ -z "$BLOG_DIR" ] && [ -z "$USR_BLOGDIR" ] || BLOG_DIR="$USR_BLOGDIR"
+[ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # default BLOG_CONF, can pickup USR_BLOGDIR
 BLOG_CONF="$BLOG_DIR/blog.conf"
 # USR_BLOGCONF overrides BLOG_CONF
