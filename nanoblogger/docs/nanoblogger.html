@@ -335,7 +335,7 @@ nb --blogdir [myblog_dir] --configure -u all
  <p><b>Plugin Configuration</b></p>
 
  <p>
-   <em>PLUGIN_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>.
+   <em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>.
 
  <p><b>Global Configuration</b></p>
 
@@ -809,21 +809,32 @@ nb [-b blog_dir] -c 1 -d cat
 
  <p><b>Publishing Remotely</b></p>
  <p>
-	Assuming your service provider supports it, you can use FTP to upload the weblog.  Be sure to use recursive mode when
-	uploading your weblog directory:<br />
+  FTP, SSH (scp, sftp, etc.), rsync or WebDAV, are all methods that can be used to upload the weblog.
  </p>
 
+ <p><b>example</b>: automating publishing with ftp and .netrc.</p>
+
+ blog.conf:
  <pre>
-ftp myblog.com, put -r [blog_dir]
+BLOG_PUBLISH_CMD="ftp example.weblog.com"
  </pre>
- <p>
-	If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), rsync or WebDAV.
- </p>
+ .netrc:
+ <pre>
+machine example.weblog.com login foo password
+RIGHT!
+macdef init
+passive on
+prompt off
+lcd ~/public_html/blog
+mput *.*
+cd archives
+lcd archives
+mput *
+ </pre>
 
  <p><b>Publishing Locally</b></p>
  <p>
-	You can run a private web server or Change the weblog's address to a more direct "file:///" address, so you can view it
-	locally using almost any web browser. If you choose to publish locally, you'll probably want to disable the publish command.
+	If you choose to publish locally, you'll probably want to disable the publish command.
 	To do this you can set <em>BLOG_PUBLISH_CMD</em> to null. e.g. BLOG_PUBLISH_CMD=""
  </p>
 

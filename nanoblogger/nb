@@ -237,7 +237,7 @@ EOF
 BLOG_HTML=$(. "$SCRATCH_FILE")
 }
 
-# load plugins from $PLUGIN_DIR
+# load plugins from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
