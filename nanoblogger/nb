@@ -77,7 +77,7 @@ load_config(){
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # auto-detect blog.conf from our CWD
 [ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
-BLOG_CONF="$BLOG_DIR/blog.conf"
+: ${BLOG_CONF:="$BLOG_DIR/blog.conf"}
 # USR_BLOGCONF overrides BLOG_CONF
 [ -f "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load weblog config file
@@ -87,7 +87,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
 [ -d "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
-[ -d "$BLOG_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
+[ -d "$BLOG_DIR/$TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
 # BLOG_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
 [ -d "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
 # USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
@@ -120,6 +120,9 @@ fi
 : ${NB_NextPage:=[&#62;&#62;]}
 : ${NB_PrevPage:=[&#60;&#60;]}
 }
+
+# deconfigure, clear some auto-default variables
+deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; }
 
 # filter custom date format for a new entry
 filter_dateformat(){
@@ -317,15 +320,12 @@ fi
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 # preserve content of the source, but let plugins modify it
 : ${MKPAGE_CONTENT:="$(<$MKPAGE_SRCFILE)"}
-load_template "$MKPAGE_SRCFILE"
-cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
-# disable loading of $NB_Entries, let other placeholders be loaded
-NB_Entries="\$NB_Entries"
-for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
-	[ "$mkpage_template" = "$MKPAGE_OUTFILE" ] && NB_Entries="$MKPAGE_CONTENT"
-	load_template "$mkpage_template"
-	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-done
+# escape content of $NB_Entries so no execution takes place
+NB_Entries="\$MKPAGE_CONTENT"
+load_template "$MKPAGE_TMPLFILE"
+echo "$BLOG_HTML" > "$SCRATCH_FILE"
+load_template "$SCRATCH_FILE"
+echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 # load postformat plugins, but with reusable functionality
 for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
@@ -583,14 +583,10 @@ nb_msg "new weblog entry added to '$BLOG_TITLE'."
 
 # edit $BLOG_CONF
 config_weblog(){
-if [ -f "$BLOG_CONF" ]; then
-	$EDITOR "$BLOG_CONF"
-	# check if file's been modified since opened
-	[ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
-	load_config
-else
-	die "config file, '$BLOG_CONF' doesn't exist! goodbye."
-fi
+$EDITOR "$BLOG_CONF"
+# check if file's been modified since opened
+[ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
+deconfig; load_config
 }
 
 # edit entry or category by id number

@@ -9,7 +9,7 @@ for entry_catlinks in $CAT_TLIST; do
 	if [ ! -z "$cat_var" ]; then
 		cat_title=`sed 1q "$NB_DATA_DIR"/"$entry_catlinks"`
 		cat_index=`chg_suffix "$entry_catlinks"`; cat_feed=`chg_suffix "$entry_catlinks" "$NB_SYND_FILETYPE"`
-		cat >> "$SCRATCH_FILE".category_links <<-EOF
+		sort >> "$SCRATCH_FILE".category_links <<-EOF
 			<a href="${ARCHIVES_PATH}$cat_index">$cat_title</a>,
 		EOF
 	fi
