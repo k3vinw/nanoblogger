@@ -38,6 +38,7 @@ if cal > /dev/null 2>&1 ; then
 			set_link="0"
 			MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
 			for entry in $MONTH_LINE ; do
+				NB_EntryID=`echo "$entry" |sed -e 's/\_/\:/g; s/[\.]htm//g'`"$BLOG_TZD"
 				entry_year=`echo $entry |cut -c1-4`
 				entry_month=`echo $entry |cut -c6-7`
 				entry_day=`echo $entry |cut -c9-10 |sed -e 's/^0//g'`
@@ -49,7 +50,7 @@ if cal > /dev/null 2>&1 ; then
 					permalink_entry=`chg_suffix $entry`
 					dn='<a href="'$BLOG_URL'/'$PERMALINKS'/'$permalink_entry'">'$dn'</a>'
 				else
-					dn='<a href="'$BLOG_URL'/'$ARCHIVES'/'$FILE_BY_DIR'/'$entry_year-$entry_month'.html#'$entry'">'$dn'</a>'
+					dn='<a href="'$BLOG_URL'/'$ARCHIVES'/'$FILE_BY_DIR'/'$entry_year-$entry_month'.html#'$NB_EntryID'">'$dn'</a>'
 				fi
 				echo '<td align="center"><span>'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
