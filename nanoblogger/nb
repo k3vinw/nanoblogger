@@ -79,7 +79,6 @@ load_config(){
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # default BLOG_CONF
 BLOG_CONF="$BLOG_DIR/blog.conf"
-echo $BLOG_CONF
 # USR_BLOGCONF overrides BLOG_CONF
 [ ! -z "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load weblog config file
@@ -533,7 +532,7 @@ db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
 if [ "$weblog_update" = "all" ]; then
 	# remove all generated files for a clean build
-	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/*.$NB_FILETYPE"
+	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
 fi
 load_plugins plugins

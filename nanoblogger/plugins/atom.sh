@@ -69,8 +69,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="$BLOG_URL$NB_EntryPermalink"/>
-				<id>$BLOG_URL$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="$BLOG_URL/$ARCHIVES_DIR/$NB_EntryPermalink"/>
+				<id>$BLOG_URL/$ARCHIVES_DIR/$NB_EntryPermalink</id>
 				<issued>$NB_AtomEntryDate</issued>
 				<modified>$NB_AtomEntryModDate</modified>
 				<created>$NB_AtomEntryDate</created>
