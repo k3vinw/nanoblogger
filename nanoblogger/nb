@@ -3,6 +3,7 @@
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
 #TODO: fix (load_config) unconditional loading of default weblog's blog.conf
+#TODO: fix inconsistenceis in relative links for different node levels
 # nanoblogger's version.
 VERSION="CVS-3.0"
 
@@ -34,6 +35,9 @@ PLUGINS_DIR="plugins"
 # the templates directory name
 TEMPLATE_DIR="templates"
 
+# the temp directory
+TEMP_DIR="/tmp"
+
 # default verbosity, 0 = silent
 VERBOSE="1"
 
@@ -63,8 +67,9 @@ exit 1
 	die "`basename $0`: $BASE_DIR doesn't exist! goodbye."
 
 # cleanup for special temp files
-NB_EditFile="/tmp/nb_entry$$.*"
-tmp_files="$NB_EditFile"
+NB_EditFile="$TEMP_DIR/nb_entry$$.*"
+SCRATCH_FILE="$TEMP_DIR/nb_scratch$$"
+tmp_files="$NB_EditFile $SCRATCH_FILE"
 [ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # loads global and user configurations
@@ -215,13 +220,12 @@ BLOG_FILE="$1"
 # prefix text/html with an X in front of each line
 BLOG_TEMPLATE=`sed -e '/^/ s//X/' <"$BLOG_FILE"`
 # remove X's and source variables into a temp file
-cat > "$BLOG_DIR"/nb_template.tmp <<EOF
-	sed -e '/^X/ s///' <<-TMPL
-	$BLOG_TEMPLATE
+cat > "$SCRATCH_FILE" <<-EOF
+	sed -e '/^X/ s///' <<TMPL
+		$BLOG_TEMPLATE
 	TMPL
 EOF
-BLOG_HTML=`. "$BLOG_DIR"/nb_template.tmp`
-rm -f "$BLOG_DIR"/nb_template.tmp
+BLOG_HTML=`. "$SCRATCH_FILE"`
 }
 
 # load plugins from BASE_DIR/plugins and BLOG_DIR/plugins
@@ -306,11 +310,10 @@ NB_Entries=`cat "$MKPAGE_SRCFILE"`
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-cat "$MKPAGE_TMPLFILE" > "$MKPAGE_OUTFILE".tmp
-load_template "$MKPAGE_OUTFILE".tmp
+cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
+load_template "$SCRATCH_FILE"
 echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
-rm -f "$MKPAGE_OUTFILE".tmp
 load_plugins plugins/postformat
 }
 
@@ -332,16 +335,17 @@ make_archive(){
 query_type="$1"
 db_catquery="$2"
 template="$3"
-output_file="$4"
+PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$4"
 db_limit="$5"
 db_offset="$6"
 query_db "$query_type" "$db_catquery" "$db_limit" "$db_offset"
 ARCHIVE_LIST="$DB_RESULTS"
+> "$PARTS_FILE"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
 	load_template "$NB_TEMPLATE_DIR/$template"
 	if [ ! -z "$BLOG_HTML" ]; then
-		echo "$BLOG_HTML" >> "$BLOG_DIR"/archives.tmp
+		echo "$BLOG_HTML" >> "$PARTS_FILE"
 		build_permalink
 		BLOG_HTML=
 		PLACEHOLDER=
@@ -349,9 +353,6 @@ for entry in $ARCHIVE_LIST; do
 		NB_EntryCategoryTitle=
 	fi
 done
-touch "$BLOG_DIR"/archives.tmp
-cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR/$PARTS_DIR/$output_file"
-rm -f "$BLOG_DIR"/archives.tmp
 }
 
 # create archive of current month
@@ -438,30 +439,29 @@ if [ "$total_items" -gt "$page_items" ]; then
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
 		[ "$page_num" -gt "1" ] &&
 			arch_page=`chg_suffix "$arch_name-page$page_num".no`
-		> "$BLOG_DIR"/page_links.tmp
-		echo '<br />' >> "$BLOG_DIR"/page_links.tmp
+		> "$SCRATCH_FILE"
+		echo '<br />' >> "$SCRATCH_FILE"
 		[ "$prev_num" = "1" ] &&
-			echo '<a href="'$REL_URL$page_outfile'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+			echo '<a href="'$REL_URL$page_outfile'">[prev]</a>' >> "$SCRATCH_FILE"
 		[ "$prev_num" -gt "1" ] &&
-			echo '<a href="'$REL_URL$prev_page'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+			echo '<a href="'$REL_URL$prev_page'">[prev]</a>' >> "$SCRATCH_FILE"
 		for ((i=1; i <= $total_pages; i++)); do
 			[ "$i" = "1" ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
-				echo '['$i']' >> "$BLOG_DIR"/page_links.tmp
+				echo '['$i']' >> "$SCRATCH_FILE"
 			else
-				echo '<a href="'$REL_URL$page'">['$i']</a>' >> "$BLOG_DIR"/page_links.tmp
+				echo '<a href="'$REL_URL$page'">['$i']</a>' >> "$SCRATCH_FILE"
 			fi
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-			echo '<a href="'$REL_URL$next_page'">[next]</a>' >> "$BLOG_DIR"/page_links.tmp
-		NB_PageLinks=`cat "$BLOG_DIR"/page_links.tmp`
+			echo '<a href="'$REL_URL$next_page'">[next]</a>' >> "$SCRATCH_FILE"
+		NB_PageLinks=`cat "$SCRATCH_FILE"`
 		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$arch_page"
 		NB_PageLinks=
 	done
-	rm -f "$BLOG_DIR"/page_links.tmp
 else
 	make_archive all "$db_catquery" "$ENTRY_TEMPLATE" "$page_outfile"
 	make_page "$BLOG_DIR/$PARTS_DIR/$page_outfile" "$NB_TEMPLATE_DIR/$page_template" \
@@ -476,8 +476,8 @@ if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
-			cat_archindex=`chg_suffix "$cat_arch"`
-			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$cat_archindex"
+			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
+			paginate "$cat_arch" "$PAGE_MAX_ENTRIES" "$CATEGORY_TEMPLATE" "$NB_ArchivePrefix.$NB_FILETYPE"
 		fi
 	done
 fi
@@ -855,7 +855,7 @@ fi
 if [ -z "$usr_body" ]; then
 	echo "editing body ..."
 	# entry's new file for editing
-	NB_EditFile="/tmp/nb_entry$$.$NB_DATATYPE"
+	NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then

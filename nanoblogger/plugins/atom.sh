@@ -63,7 +63,8 @@ build_atomfeed(){
 		fi
 		#NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
 		NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p'`
-		cat >> "$BLOG_DIR"/atom_entries.tmp <<-EOF
+		NB_Entries=$(
+		cat <<-EOF
 			<entry>
 				<title mode="escaped">$NB_EntryTitle</title>
 				<author>
@@ -82,11 +83,8 @@ build_atomfeed(){
 				</content>
 
 			</entry>
-		EOF
+		EOF)
 	done
-	touch "$BLOG_DIR"/atom_entries.tmp
-	NB_Entries=`cat "$BLOG_DIR"/atom_entries.tmp`
-	rm -f "$BLOG_DIR"/atom_entries.tmp
 	}
 
 
