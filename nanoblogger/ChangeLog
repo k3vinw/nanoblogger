@@ -1,5 +1,8 @@
 2004-05-26  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, docs/nanoblogger.html:
+	Updated "Templates and Placeholders" and "Plugins" sections of the manual.
+
 	* ChangeLog, nb, plugins/blog_links.sh, plugins/category_links.sh:
 	- Replaced category_links plugin with more general, blog_links plugin.
 	- (build_blog): Moved code to generate links into new blog_links plugin.
