@@ -687,7 +687,7 @@ build_weblog
 }
 
 preview_weblog(){
-[ -z "$BLOG_PREVIEW_CMD" ] && die "BLOG_PREVIEW_CMD not set for this weblog! goodbye."
+[ -z "$BLOG_PREVIEW_CMD" ] && die "BLOG_PREVIEW_CMD is not set! goodbye."
 nb_msg "running '$BLOG_PREVIEW_CMD' ..."
 $BLOG_PREVIEW_CMD
 }
@@ -704,7 +704,7 @@ esac
 }
 
 publish_weblog(){
-[ -z "$BLOG_PUBLISH_CMD" ] && die "BLOG_PUBLISH_CMD not set for this weblog! goodbye."
+[ -z "$BLOG_PUBLISH_CMD" ] && die "BLOG_PUBLISH_CMD is not set! goodbye."
 nb_msg "running '$BLOG_PUBLISH_CMD' ..."
 $BLOG_PUBLISH_CMD
 }
@@ -867,7 +867,7 @@ cat <<-EOF
 	 specify the weblog directory to create or add new entry
 	 	nb -b ~/public_html/weblog -a
 
-	 create new category and titles it "News"
+	 create new category and title it "News"
 	 	nb -b ~/public_html/weblog -t "News" -c new -a
 
 	 add new entry to category 1
@@ -876,7 +876,7 @@ cat <<-EOF
 	 remove entry 2 from category 1
 	 	nb -b ~/public_html/weblog -c 1 -d 2
 
-	 sets author, title, and body for new entry
+	 set author, title, and body for new entry
 	 	nb -b ~/public_html/weblog -n myname -t 'My Title' -B 'My message!' -a
 
 	More info:
