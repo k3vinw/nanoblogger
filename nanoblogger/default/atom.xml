@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed version="0.3" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" lang="en">
+  <title mode="escaped">My Blog's Title</title>
+  <link rel="alternate" type="text/html" href="" />
+  <modified>2004-05-01T18:33:32-04:00</modified>
+  <author>
+    <name>n1xt3r</name>
+    <url></url>
+  </author>
+  <entry>
+    <title mode="escaped">Welcome to NanoBlogger!</title>
+    <author>
+      <name>n1xt3r</name>
+    </author>
+    <link rel="alternate" type="text/html" href="/archives/monthly/2004-01.html#2004-01-18T17:12:12" />
+    <id>/archives/monthly/2004-01.html#2004-01-18T17:12:12</id>
+    <issued>2004-01-18T17:12:12-04:00</issued>
+    <modified>2004-01-18T17:12:12-04:00</modified>
+    <created>2004-01-18T17:12:12-04:00</created>
+  </entry>
+</feed>

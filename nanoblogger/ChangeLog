@@ -1,3 +1,23 @@
+2004-05-01  n1xt3r  <n1xt3r@scorcher>
+
+	* default/blog.conf, nb:
+	- (nb_main): Removed prompt for editor to simplify blog creation.
+	- Updated EDITOR comment in blog.conf
+
+	* default/blog.conf, nb: - (nb_main): Rephrased editor question.
+	- Rephrased EDITOR comment.
+
+	* docs/nanoblogger.html:
+	- Replaced "Usage" section with new "Getting Started" section.
+	- Renamed "Building the Blog" section to "Templates and Placeholders".
+	- Updated templates and plugin information.
+	- Cleaned up organization and removed unnecessary material in manual.
+
+2004-04-30  n1xt3r  <n1xt3r@scorcher>
+
+	* ChangeLog, default/templates/rdf.xml, default/templates/rdf_catfeed.xml:
+	Improved XML parsing of RSS templates by removing charset declarations.
+
 2004-04-29  n1xt3r  <n1xt3r@scorcher>
 
 	* ChangeLog, nb, plugins/autoformat/01_escape_chars.off:
