@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="CVS-2.9"
+VERSION="2.9"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -798,7 +798,7 @@ if [ -z "$NB_EntryTitle" ]; then
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 if [ -z "$usr_body" ]; then
-	echo "editing in '$EDITOR' ..."
+	echo "editing body ..."
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
