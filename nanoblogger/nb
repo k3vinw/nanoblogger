@@ -316,16 +316,16 @@ fi
 [ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! goodbye."
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
-# make sure the output directory is present before writing to it.
+# make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
-# preserve content of entries' text
-PAGE_CONTENT="$(<$MKPAGE_SRCFILE)"
+# preserve content of the source, but let plugins modify it
+: ${MKPAGE_CONTENT:="$(<$MKPAGE_SRCFILE)"}
 load_template "$MKPAGE_SRCFILE"
-echo "$BLOG_HTML" > "$MKPAGE_SRCFILE"
 cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
+# disable loading of $NB_Entries, let other placeholders be loaded
 NB_Entries="\$NB_Entries"
 for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
-	[ "$mkpage_template" = "$MKPAGE_OUTFILE" ] && NB_Entries="$PAGE_CONTENT"
+	[ "$mkpage_template" = "$MKPAGE_OUTFILE" ] && NB_Entries="$MKPAGE_CONTENT"
 	load_template "$mkpage_template"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 done
@@ -334,6 +334,7 @@ nb_msg "$MKPAGE_OUTFILE"
 for mkp_plugin in "$BLOG_DIR/$PLUGINS_DIR"/postformat/*.sh "$BASE_DIR/$PLUGINS_DIR"/postformat/*.sh; do
 	[ -f "$mkp_plugin" ] && . "$mkp_plugin"
 done
+MKPAGE_CONTENT=
 }
 
 # create individual page for an entry
@@ -580,7 +581,7 @@ if [ ! -z "$cat_num" ]; then
 fi
 [ "$build_newblog" = 1 ] && weblog_update=all
 build_weblog "$weblog_update"
-nb_msg "new weblog entry added to '$BLOG_TITLE'"
+nb_msg "new weblog entry added to '$BLOG_TITLE'."
 }
 
 # edit $BLOG_CONF

@@ -11,23 +11,23 @@
  xmlns:content="http://purl.org/rss/1.0/modules/content/"
  xmlns:admin="http://webns.net/mvcb/"
 >
-<channel rdf:about="index.xml">
+<channel rdf:about="/index.xml">
 <title>My Weblog</title>
 <link></link>
 <description>news, diary, journal, whatever</description>
 <dc:language>en-us</dc:language>
 <dc:creator>n1xt3r</dc:creator>
-<admin:generatorAgent rdf:resource="http://home.columbus.rr.com/n1xt3r/nanoblogger/" />
+<admin:generatorAgent rdf:resource="http://nanoblogger.sourceforge.net" />
 <items>
 <rdf:Seq>
-<rdf:li rdf:resource="2004-01.html#e2004-01-18T17_12_12.htm" />
+<rdf:li rdf:resource="/archives/2004-01.html#e2004-01-18T17_12_12.txt" />
 </rdf:Seq>
 </items>
 </channel>
-<item rdf:about="2004-01.html#e2004-01-18T17_12_12.htm">
-<link>2004-01.html#e2004-01-18T17_12_12.htm</link>
+<item rdf:about="/archives/2004-01.html#e2004-01-18T17_12_12.txt">
+<link>/archives/2004-01.html#e2004-01-18T17_12_12.txt</link>
 <title>Welcome to NanoBlogger!</title>
-<dc:date>2004-01-18T17:12:12-04:00</dc:date>
+<dc:date>2004-01-18T17:12:12.txt-04:00</dc:date>
 <dc:creator>n1xt3r</dc:creator>
 <dc:subject>NanoBlogger Help</dc:subject>
 <description><![CDATA[<p>The basic syntax is: <code>nb [-b blog_dir] [options]</code></p>

@@ -1,3 +1,29 @@
+2004-09-30 23:38  n1xt3r
+
+	* nb, default/data/cat_1.db, plugins/01_mymood.off,
+	  plugins/articles.off, plugins/archive/master_index.sh,
+	  plugins/entry/moods.sh: - (load_plugins): Increased robustness,
+	  can load plugins inside plugins.  - (make_page): Improved
+	  reusablity of code, can be called from plugins.  - Articles and
+	  the archive index, can now be validated.
+
+2004-09-29 18:23  n1xt3r
+
+	* default/blog.conf: Removed unecessary use of quotes where
+	  applicable.
+
+2004-09-29 18:17  n1xt3r
+
+	* ChangeLog, nb, plugins/01_mymood.off, plugins/articles.off,
+	  plugins/atom.sh, plugins/blog_links.sh, plugins/blog_status.sh,
+	  plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh,
+	  plugins/recent_entries.sh, plugins/rss.sh,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/monthly/monthly-cal.sh,
+	  plugins/entry/auto_break.sh, plugins/entry/moods.sh,
+	  plugins/postformat/tidy.sh: - Defaults are set through use of
+	  parameter expansion.	- Added verbosity to loading plugins.
+
 2004-09-28 03:17  n1xt3r
 
 	* nb, default/blog.conf: - Configuration variable, QUERY_ENTRIES
