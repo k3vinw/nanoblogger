@@ -20,11 +20,12 @@
 <li><a href="#cr3">Installation</a>
 <li><a href="#cr4">Requirements</a>
 <li><a href="#cr5">Getting Started</a>
-<li><a href="#cr6">Templates and Placeholders</a>
-<li><a href="#cr7">Plugins</a>
-<li><a href="#cr8">Publishing Your Blog to a Remote Site</a>
-<li><a href="#cr9">Tips and Tricks</a>
-<li><a href="#cr10">Credits</a>
+<li><a href="#cr6">Settings and Configuration</a>
+<li><a href="#cr7">Templates and Placeholders</a>
+<li><a href="#cr8">Plugins</a>
+<li><a href="#cr9">Publishing Your Blog to a Remote Site</a>
+<li><a href="#cr10">Tips and Tricks</a>
+<li><a href="#cr11">Credits</a>
 </ul>
 <p />
 
@@ -95,14 +96,31 @@ For online publishing you'll need some kind of shell or FTP access to your web s
 	where "myblog_dir" is a non-existant directory. This is will create a new directory, copy the default files over, and then let you edit the blog's configuration.  Run the same command again to add a new entry.
 </blockquote>
 
-<b>Configuring the New Blog</b>
-<blockquote>
-	To open the blog's configuration invoke:
+<h2><a name="cr6">Settings and Configuration</a></h2>
+	To edit the blog's configuration invoke:
 	<pre>nb --blogdir myblog_dir --configure</pre>
-	<b>DATE_FORMAT</b> can be customized to change the look of a new entry's date.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Read the man pages of the date command to see more on how to customize the format of a date.
+<b>Setting the Editor</b>
+<blockquote>
+	The editor defaults to the EDITOR variable in your shell's environment, but falls back on vi when no EDITOR is set.  You can specify a different editor to use by overriding EDITOR in blog.conf or setting the EDITOR variable in your shell's environment.
+</blockquote>
+<b>Setting the Date Format for New Entries</b>
+<blockquote>
+	DATE_FORMAT controls the look of a new entry's date.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Please note that this setting has no effect on previous entries.  Read the man pages of the date command to see more on how to customize the format of the date command's output.
+</blockquote>
+<b>Setting the Address</b>
+<blockquote>
+	BLOG_URL is used as the address for the blog.  Typically, you would set this to a remote address such as: "http://myblogurl.com".  If you wish to browse your blog locally you can set this to an address like this: "file:///home/bloguser/blogdir".  Replacing "myblogurl", "bloguser", and "myblogdir" with the actual location of your blog.
+</blockquote>
+<b>Enabling Full Permalinks</b>
+<blockquote>
+	FULL_PERMALINKS determines whether permalinks are linked back to the monthly archives or linked to an entry's individual archive.  The default is to leave FULL_PERMALINKS off and link back to the monthly archives.  Enabling FULL_PERMALINKS will increase the time needed to generate your blog.
+</blockquote>
+<b>Global Configuration</b>
+<blockquote>
+	NanoBlogger has it's own configuration file, nb.conf that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may ovveride settings in nb.conf.  Typically one would set BLOG_DIR here as a default blog directory to use.  NanoBlogger also looks for this file under, $HOME/.nb.conf.
 </blockquote>
 
-<h2><a name="cr6">Templates and Placeholders</a></h2>
+<h2><a name="cr7">Templates and Placeholders</a></h2>
 
 <blockquote>
 	<table border="1" cellspacing="4" cellpadding="2">
@@ -293,7 +311,7 @@ This is my new entry ...<br />
 Entries are kept inside the blog's "archives" directory as time-stamped filenames.  NanoBlogger uses the filename to determine how to sort the entries into the archives.<br />
 <p />
 
-<h2><a name="cr7">Plugins</a></h2>
+<h2><a name="cr8">Plugins</a></h2>
 <p />
 
 Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders.  Placeholders allow for a great deal of control in how the plugins output is placed in the template.  The variable, ENABLE_PLUGINS, in blog.conf toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
@@ -397,7 +415,7 @@ To use a some of the new plugins, you may need to identify it's unique placehold
 To disable a plugin, rename the plugin's extension from ".sh" to ".off".  This will move the plugin off of the radar, the next time NanoBlogger is run.<br />
 <br />
 
-<h2><a name="cr8">Publishing Your Blog to a Remote Site</a></h2>
+<h2><a name="cr9">Publishing Your Blog to a Remote Site</a></h2>
 <p />
 
 <b>FTP:</b><br />
@@ -407,7 +425,7 @@ Any FTP client should do, but I'd recommend ncftp.  Be sure to use recursive mod
 <b>Other methods:</b><br />
 If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), rsync or WebDAV.
 
-<h2><a name="cr9">Tips and Tricks</a></h2>
+<h2><a name="cr10">Tips and Tricks</a></h2>
 <p />
 
 <ul>
@@ -485,7 +503,7 @@ Here are the steps to enable comments:
 </ul>
 <p />
 
-<h2><a name="cr10">Credits</a></h2>
+<h2><a name="cr11">Credits</a></h2>
 <p />
 Thanks to Adrien "ze" Urban for many code enhancements and suggestions.<br />
 <p />
