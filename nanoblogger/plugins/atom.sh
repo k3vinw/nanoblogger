@@ -4,8 +4,11 @@
 : ${LIMIT_ITEMS:=10}
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
+# Make links temporarily absolute
 ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
 [ "$ABSOLUTE_LINKS" = "1" ] && ARCHIVES_URL=""
+OLD_BASE_URL="$BASE_URL"
+BASE_URL="$BLOG_URL/"
 
 # escape special characters to help create valid xml feeds
 esc_chars(){
@@ -94,3 +97,4 @@ build_atomfeed(){
 nb_msg "generating atom feed ..."
 build_atomfeed nocat
 make_atomfeed
+BASE_URL="$OLD_BASE_URL"

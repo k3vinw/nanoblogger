@@ -1,3 +1,9 @@
+2004-11-11 15:44  n1xt3r
+
+	* ChangeLog, nb, default/blog.conf, docs/nanoblogger.html,
+	  plugins/entry/base_url.sh: Added new plugin that allows for
+	  easier link creation when editing an entry.
+
 2004-11-09 03:10  n1xt3r
 
 	* default/blog.conf, default/templates/permalink_entry.htm,
