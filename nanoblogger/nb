@@ -469,11 +469,12 @@ else
 			if [ "$last_dbcat" != "$db_categories" ] && [ -z "$cat_num" ]; then
 				for cat_db in $db_categories; do
 					cat_archindex=`chg_suffix "$cat_db"`
+					cat_archpart=`chg_suffix "$cat_db" htm`
 					cat_entryvar=`grep "$Mod_Entry" "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
 					if [ ! -z "$cat_entryvar" ]; then
-						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_db".htm
+						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_archpart"
 						NB_ArchiveTitle=`sed -n 1p "$BLOG_DIR"/"$ARCHIVES"/"$cat_db"`
-						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_db".htm \
+						make_page "$BLOG_DIR"/"$PARTS_DIR"/"$cat_archpart" \
 						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 						"$BLOG_DIR"/"$ARCHIVES"/"$cat_archindex"
 					fi
