@@ -31,10 +31,10 @@ MONTHLY_DIR="$ARCHIVES/monthly"
 # the permalinks directory (automatically created)
 PERMALINKS_DIR="$ARCHIVES/permalinks"
 
-# the plugins dir
+# the plugins directory name
 PLUGINS_DIR="plugins"
 
-# the templates dir
+# the templates directory name
 TEMPLATE_DIR="templates"
 
 # default verbosity setting
@@ -84,9 +84,17 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 # load blog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory to user's blog archives
-NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
-# USR_DATADIR overrides NB_DATA_DIR
+[ ! -z "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
+# BLOG_DATA_DIR overrides NB_DATA_DIR
+[ ! -z "$BLOG_DATA_DIR" ] && NB_DATA_DIR="$BLOG_DATA_DIR"
+# USR_DATADIR overrides NB_DATA_DIR, BLOG_DATA_DIR
 [ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
+# set template directory to user's blog templates
+[ ! -z "$BLOG_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
+# BLOG_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
+[ ! -z "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
+# USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
+[ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # if BLOG_AUTHOR is not specified, use $USER (even when empty)
 [ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
 # fallback on vi as the default editor
@@ -124,7 +132,7 @@ check_blogdir(){
 [ -z "$BLOG_DIR" ] && die "no blog directory specified! bye."
 [ ! -d "$BLOG_DIR" ] && die "blog directory '$BLOG_DIR' doesn't exist! bye."
 [ ! -d "$NB_DATA_DIR" ] && die "blog's data directory '$NB_DATA_DIR' doesn't exist! bye."
-[ ! -d "$BLOG_DIR/$TEMPLATE_DIR" ] && die "blog's templates directory '$BLOG_DIR/$TEMPLATE_DIR' doesn't exist!. bye."
+[ ! -d "$NB_TEMPLATE_DIR" ] && die "blog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. bye."
 }
 
 # create list of entries based on a month or interval
@@ -293,7 +301,7 @@ MKPAGE_OUTFILE="$3"
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
 if [ ! -z "$usr_srcfile" ]; then
 	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
-	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$BLOG_DIR/$TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
+	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
 [ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! bye."
 NB_Entries=`cat "$MKPAGE_SRCFILE"`
@@ -314,7 +322,7 @@ make_placeholder(){
 TEMPLATE_FILE="$1"
 TEMP_FILE="$2"
 OUTPUT_FILE="$3"
-load_template "$BLOG_DIR/$TEMPLATE_DIR/$TEMPLATE_FILE"
+load_template "$NB_TEMPLATE_DIR/$TEMPLATE_FILE"
 if [ ! -z "$BLOG_HTML" ]; then
 	echo "$BLOG_HTML" >> "$BLOG_DIR/$TEMP_FILE"
 	BLOG_HTML=
@@ -331,7 +339,7 @@ if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 	if [ -f "$NB_DATA_DIR/$entry" ] && [ "$NB_DATA_DIR/$entry" -nt \
 		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry" ]; then
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
-		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry"
 	fi
 fi
@@ -347,7 +355,7 @@ query_db "$query_type" "$db_catquery" "$db_limit"
 ARCHIVE_LIST="$DB_RESULTS"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
-	load_template "$BLOG_DIR/$TEMPLATE_DIR/$template"
+	load_template "$NB_TEMPLATE_DIR/$template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$BLOG_DIR"/archives.tmp
 		build_permalink
@@ -368,7 +376,7 @@ build_monthlyarchive(){
 		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$month".htm
 		NB_ArchiveTitle="$month"
 		load_plugins plugins/archive/monthly
-		make_page "$BLOG_DIR/$PARTS_DIR/$month".htm "$BLOG_DIR/$TEMPLATE_DIR/$MONTH_TEMPLATE" \
+		make_page "$BLOG_DIR/$PARTS_DIR/$month".htm "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
 		"$BLOG_DIR/$MONTHLY_DIR/$month.$NB_FILETYPE"
 	fi
 }
@@ -405,7 +413,7 @@ if [ ! -z "$db_categories" ]; then
 			cat_archpart=`chg_suffix "$cat_arch" htm`
 			NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_arch"`
 			make_archive all "$cat_arch" "$ENTRY_TEMPLATE" "$cat_archpart"
-			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" "$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
+			make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 			"$BLOG_DIR/$ARCHIVES/$cat_archindex"
 		fi
 	done
@@ -429,13 +437,13 @@ else
 			if [ "$ENTRY_ARCHIVES" = "1" ] && [ -f "$NB_DATA_DIR/$Mod_Entry" ]; then
 				entry="$Mod_Entry"
 				read_entry "$NB_DATA_DIR/$entry"
-				load_template "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
+				load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
 				if [ ! -z "$BLOG_HTML" ]; then
 					echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$Mod_Entry"
 					BLOG_HTML=
 				fi
 				permalink_file=`chg_suffix "$Mod_Entry"`
-				make_page "$BLOG_DIR/$PARTS_DIR/$Mod_Entry" "$BLOG_DIR/$TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+				make_page "$BLOG_DIR/$PARTS_DIR/$Mod_Entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 				"$BLOG_DIR/$PERMALINKS_DIR/$permalink_file"
 			fi
 			# update relative monthly archives
@@ -455,7 +463,7 @@ else
 						make_archive "$db_query" "$cat_db" "$ENTRY_TEMPLATE" "$cat_archpart"
 						NB_ArchiveTitle=`sed -n 1p "$NB_DATA_DIR/$cat_db"`
 						make_page "$BLOG_DIR/$PARTS_DIR/$cat_archpart" \
-						"$BLOG_DIR/$TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
+						"$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" \
 						"$BLOG_DIR/$ARCHIVES/$cat_archindex"
 					fi
 				done
@@ -492,7 +500,7 @@ if [ "$blog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 fi
 # build main index
 make_archive current nocat "$ENTRY_TEMPLATE" news.htm
-make_page "$BLOG_DIR/$PARTS_DIR"/news.htm "$BLOG_DIR/$TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
+make_page "$BLOG_DIR/$PARTS_DIR"/news.htm "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
 
 # function to add a new entry
@@ -880,7 +888,7 @@ cat <<-EOF
 	 					'--delete', '--edit', '--list' and
 	 					'--update').
 	 --configure				configure blog.
-	 --datadir				specify blog's data directory.
+	 --datadir <directory>			specify blog's data directory.
 	 -d, --delete <cat,number>		delete an existing entry or category.
 	 -e, --edit <cat,number>		edit an existing entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration
@@ -899,6 +907,7 @@ cat <<-EOF
 	 -P, --publish				run publish blog command.
 	 --template <file>			specify file to load as template (for
 	 					'--makepage').
+	 --templatedir <directory>		specify blog's template directory.
 	 -t, --title				title attribute of entry/category/page
 	 					(for '--add', '--category',
 	 					'--importfile', and '--makepage').
@@ -978,6 +987,7 @@ while [ $# -gt 0 ]; do
 		-p|--preview)		check_blogdir; preview_blog;;
 		-P|--publish)		check_blogdir; publish_blog;;
 		--template)		check_arg; usr_template="$2"; shift;;
+		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; usr_title="$2"; shift;;
 		-u|--update)		blog_update="$2"; shift
 					check_blogdir; build_blog "$blog_update";; 

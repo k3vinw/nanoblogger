@@ -1,6 +1,6 @@
 # NanoBlogger Plugin that creates a master archive index
 
-ARCHIVE_TEMPLATE="$BLOG_DIR/$TEMPLATE_DIR/archive.htm"
+ARCHIVE_TEMPLATE="$NB_TEMPLATE_DIR/archive.htm"
 ARCHIVELINKS_TEMPLATE="archive_links.htm"
 
 # centralize modification variables
