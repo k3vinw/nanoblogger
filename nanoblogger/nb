@@ -96,11 +96,11 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 
 # filters custom date format for a new entry
 filter_dateformat(){
-[ -z "$DATE_LOCALE" ] || LANG="$DATE_LOCALE"
 FILTER_VAR="$1"
 [ ! -z "$FILTER_VAR" ] || FILTER_VAR="%B %d, %Y %l:%M %p"
 # it would've been nice to use the date command's description feature here
-LANG="$DATE_LOCALE" date +"$FILTER_VAR"
+[ -z "$DATE_LOCALE" ] || LANG="$DATE_LOCALE" date +"$FILTER_VAR"
+date +"$FILTER_VAR"
 }
 
 # changes suffix of file
@@ -357,8 +357,12 @@ for entry in $ARCHIVE_LIST; do
 		NB_EntryCategoryTitle=
 	fi
 done
-> "$BLOG_DIR"/archives.tmp
-[ -f "$BLOG_DIR"/archives.tmp ] && cp "$BLOG_DIR"/archives.tmp "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
+if [ -f "$BLOG_DIR"/archives.tmp ]; then
+       cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
+else
+       > "$BLOG_DIR"/archives.tmp
+       cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
+fi
 rm -f "$BLOG_DIR"/archives.tmp
 }
 
