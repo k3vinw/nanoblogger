@@ -76,7 +76,7 @@ load_config(){
 . "$BASE_DIR"/nb.conf
 # check for user's .nb.conf in their home directory.
 [ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
-# autodetect blog.conf from our cwd.
+# auto-detect blog.conf from our cwd.
 [ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
 # USR_BLOGDIR overrides BLOG_DIR
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
@@ -102,7 +102,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
 # fallback to vi
 [ -z "$EDITOR" ] && EDITOR="vi"
-# fallback to $BLOG_URL
+# fallback to $BLOG_URL/
 [ -z "$BLOG_URL_ACTION" ] && BLOG_URL_ACTION="$BLOG_URL/"
 # fallback to htm
 [ -z "$NB_DATATYPE" ] && NB_DATATYPE="htm" 
