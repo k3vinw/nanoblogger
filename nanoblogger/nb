@@ -1,8 +1,8 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 2.9 Copyright 2004 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
-
+#TODO: fix (load_config) unconditional loading of default weblog's blog.conf
 # nanoblogger's version.
 VERSION="CVS-3.0"
 
@@ -19,17 +19,14 @@ NB_PROMPT=": "
 # set current path
 CURR_PATH="$PWD"
 
-# directory name to store archives
-ARCHIVES="archives"
+# directory to store archives of weblog
+ARCHIVES_DIR="archives"
 
-# directory name to store parts of weblog
+# directory to store data of weblog
+DATA_DIR="data"
+
+# directory to store parts of weblog
 PARTS_DIR="parts"
-
-# directory name to store monthly archives
-MONTHLY_DIR="$ARCHIVES/monthly"
-
-# individual entry archives directory (automatically created)
-PERMALINKS_DIR="$ARCHIVES/permalinks"
 
 # the plugins directory name
 PLUGINS_DIR="plugins"
@@ -82,15 +79,14 @@ load_config(){
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # default BLOG_CONF
 BLOG_CONF="$BLOG_DIR/blog.conf"
+echo $BLOG_CONF
 # USR_BLOGCONF overrides BLOG_CONF
 [ ! -z "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
-[ ! -z "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$ARCHIVES"
-# BLOG_DATA_DIR overrides NB_DATA_DIR
-[ ! -z "$BLOG_DATA_DIR" ] && NB_DATA_DIR="$BLOG_DATA_DIR"
-# USR_DATADIR overrides NB_DATA_DIR, BLOG_DATA_DIR
+[ ! -z "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/$DATA_DIR"
+# USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
 [ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
 [ ! -z "$BLOG_DIR" ] && NB_TEMPLATE_DIR="$BLOG_DIR/$TEMPLATE_DIR"
@@ -102,8 +98,6 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$BLOG_AUTHOR" ] && BLOG_AUTHOR="$USER"
 # fallback to vi
 [ -z "$EDITOR" ] && EDITOR="vi"
-# fallback to $BLOG_URL/
-[ -z "$BLOG_URL_ACTION" ] && BLOG_URL_ACTION="$BLOG_URL/"
 # fallback to htm
 [ -z "$NB_DATATYPE" ] && NB_DATATYPE="htm" 
 # fallback to html
@@ -270,9 +264,11 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 	if [ "$ENTRY_ARCHIVES" = "1" ]; then
 		permalink_entry=`chg_suffix $entry`
-		NB_EntryPermalink="$BLOG_URL/$PERMALINKS_DIR/$permalink_entry"
+		#NB_EntryPermalink="$ARCHIVES_DIR/$permalink_entry"
+		NB_EntryPermalink="$REL_URL$permalink_entry"
 	else
-		NB_EntryPermalink="$BLOG_URL/$MONTHLY_DIR/$month.$NB_FILETYPE#$NB_EntryID"
+		#NB_EntryPermalink="$ARCHIVES_DIR/$month.$NB_FILETYPE#$NB_EntryID"
+		NB_EntryPermalink="$REL_URL$month.$NB_FILETYPE#$NB_EntryID"
 	fi
 	load_plugins plugins/entry
 fi
@@ -324,10 +320,10 @@ build_permalink(){
 permalink_entry=`chg_suffix $entry`
 if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 	if [ -f "$NB_DATA_DIR/$entry" ] && [ "$NB_DATA_DIR/$entry" -nt \
-		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry" ]; then
+		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry" ]; then
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
 		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-		"$BLOG_DIR/$PERMALINKS_DIR/$permalink_entry"
+		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry"
 	fi
 fi
 }
@@ -366,7 +362,7 @@ build_monthlyarchive(){
 		NB_ArchiveTitle="$month"
 		load_plugins plugins/archive/monthly
 		make_page "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
-		"$BLOG_DIR/$MONTHLY_DIR/$month.$NB_FILETYPE"
+		"$BLOG_DIR/$ARCHIVES_DIR/$month.$NB_FILETYPE"
 	fi
 }
 
@@ -416,7 +412,6 @@ CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
 # divide larger archives into multiple pages
-#TODO: test in other UNIX/Bash environments
 paginate(){
 page_category="$1"
 page_items="$2"
@@ -447,31 +442,31 @@ if [ "$total_items" -gt "$page_items" ]; then
 		> "$BLOG_DIR"/page_links.tmp
 		echo '<br />' >> "$BLOG_DIR"/page_links.tmp
 		[ "$prev_num" = "1" ] &&
-			echo '<a href="'$BLOG_URL/$ARCHIVES/$page_outfile'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+			echo '<a href="'$REL_URL$page_outfile'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
 		[ "$prev_num" -gt "1" ] &&
-			echo '<a href="'$BLOG_URL/$ARCHIVES/$prev_page'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
+			echo '<a href="'$REL_URL$prev_page'">[prev]</a>' >> "$BLOG_DIR"/page_links.tmp
 		for ((i=1; i <= $total_pages; i++)); do
 			[ "$i" = "1" ] && page="$page_outfile" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
 				echo '['$i']' >> "$BLOG_DIR"/page_links.tmp
 			else
-				echo '<a href="'$BLOG_URL/$ARCHIVES/$page'">['$i']</a>' >> "$BLOG_DIR"/page_links.tmp
+				echo '<a href="'$REL_URL$page'">['$i']</a>' >> "$BLOG_DIR"/page_links.tmp
 			fi
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-			echo '<a href="'$BLOG_URL/$ARCHIVES/$next_page'">[next]</a>' >> "$BLOG_DIR"/page_links.tmp
+			echo '<a href="'$REL_URL$next_page'">[next]</a>' >> "$BLOG_DIR"/page_links.tmp
 		NB_PageLinks=`cat "$BLOG_DIR"/page_links.tmp`
 		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
-		"$BLOG_DIR/$ARCHIVES/$arch_page"
+		"$BLOG_DIR/$ARCHIVES_DIR/$arch_page"
 		NB_PageLinks=
 	done
 	rm -f "$BLOG_DIR"/page_links.tmp
 else
 	make_archive all "$db_catquery" "$ENTRY_TEMPLATE" "$page_outfile"
 	make_page "$BLOG_DIR/$PARTS_DIR/$page_outfile" "$NB_TEMPLATE_DIR/$page_template" \
-	"$BLOG_DIR/$ARCHIVES/$page_outfile"
+	"$BLOG_DIR/$ARCHIVES_DIR/$page_outfile"
 fi
 }
 
@@ -521,7 +516,7 @@ else
 			fi
 			permalink_file=`chg_suffix "$mod_entry"`
 			make_page "$BLOG_DIR/$PARTS_DIR/$mod_entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-			"$BLOG_DIR/$PERMALINKS_DIR/$permalink_file"
+			"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 		fi
 	done
 fi
@@ -529,6 +524,8 @@ fi
 
 # generate the weblog files
 build_weblog(){
+# set base for relative links
+REL_URL=
 weblog_update=`echo "$1" |sed -e '/\,/d; /[\)\.\-]/d'`
 [ -z "$weblog_update" ] && weblog_update="current"
 # query database and check for categories
@@ -536,21 +533,20 @@ db_catquery=`cat_id`; check_catid
 find_categories "$UPDATE_LIST"
 if [ "$weblog_update" = "all" ]; then
 	# remove all generated files for a clean build
+	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/*.$NB_FILETYPE"
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
-	rm -fr "$BLOG_DIR/$MONTHLY_DIR"/*
-	rm -fr "$BLOG_DIR/$PERMALINKS_DIR"/*
 fi
 load_plugins plugins
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$weblog_update" != "main" ] && build_archives
 if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
-	mkdir -p "$BLOG_DIR/$PERMALINKS_DIR"
 	make_archive "$weblog_update" nocat "$PERMALINKENTRY_TEMPLATE" permalinks.tmp
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
 nb_msg "generating main index page ..."
+REL_URL="$ARCHIVES_DIR/"
 make_archive current nocat "$ENTRY_TEMPLATE" news.$NB_FILETYPE
 make_page "$BLOG_DIR/$PARTS_DIR"/news.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAIN_TEMPLATE" "$BLOG_DIR"/index.$NB_FILETYPE
 }
@@ -629,7 +625,7 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = "cat" ]; then
 	nb_msg "deleting category id('s): $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
-		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES"/`chg_suffix "$cat_db"`
+		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
 	done
 	cat_num=; build_weblog; exit 0
 fi
@@ -671,8 +667,8 @@ for entry_id in $NUMVAR; do
 			done
 			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
 			Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
-			if [ -f "$BLOG_DIR/$PERMALINKS_DIR/$Delete_PermalinkFile" ]; then
-				rm -f "$BLOG_DIR/$PERMALINKS_DIR/$Delete_PermalinkFile"
+			if [ -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile" ]; then
+				rm -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
 			fi
 		fi
 	fi

@@ -2,6 +2,8 @@
 
 # centralize modification variables
 MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
+OLD_REL_URL="$REL_URL"
+REL_URL="$ARCHIVES_DIR/"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
@@ -15,7 +17,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 		read_entry "$NB_DATA_DIR/$entry"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle="Untitled"
 		cat >> "$BLOG_DIR"/entry_links.tmp <<-EOF
-			<a href="$BLOG_URL/$MONTHLY_DIR/$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="$REL_URL$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			`[ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }'`<br />
 		EOF
 	done; month=
@@ -65,3 +67,6 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
         load_plugins plugins/postformat
 fi
+
+REL_URL="$OLD_REL_URL"
+

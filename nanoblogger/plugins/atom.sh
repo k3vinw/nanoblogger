@@ -21,11 +21,11 @@ cat > "$MKPAGE_OUTFILE" <<-EOF
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
 	>
 	<title mode="escaped">$BLOG_TITLE</title>
-	<link rel="alternate" type="text/html" href="$BLOG_URL_MAIN"/>
+	<link rel="alternate" type="text/html" href="$BLOG_URL"/>
 	<modified>$NB_AtomModDate</modified>
 	<author>
 		<name>$NB_EntryAuthor</name>
-		<url>$BLOG_URL_MAIN</url>
+		<url>$BLOG_URL</url>
 	</author>
 
 	$NB_Entries
@@ -69,8 +69,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="$NB_EntryPermalink"/>
-				<id>$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="$BLOG_URL$NB_EntryPermalink"/>
+				<id>$BLOG_URL$NB_EntryPermalink</id>
 				<issued>$NB_AtomEntryDate</issued>
 				<modified>$NB_AtomEntryModDate</modified>
 				<created>$NB_AtomEntryDate</created>

@@ -3,7 +3,6 @@
 <!ENTITY % HTMLlat1 PUBLIC
  "-//W3C//ENTITIES Latin 1 for XHTML//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent">
- %HTMLlat1;
 ]>
 <rdf:RDF
  xmlns="http://purl.org/rss/1.0/"
@@ -12,21 +11,21 @@
  xmlns:content="http://purl.org/rss/1.0/modules/content/"
  xmlns:admin="http://webns.net/mvcb/"
 >
-<channel rdf:about="/index.xml">
-<title>My Weblog's Title</title>
-<link>/index.html</link>
-<description>My Weblog's Description</description>
+<channel rdf:about="index.xml">
+<title>My Weblog</title>
+<link></link>
+<description>news, diary, journal, whatever</description>
 <dc:language>en-us</dc:language>
 <dc:creator>n1xt3r</dc:creator>
 <admin:generatorAgent rdf:resource="http://home.columbus.rr.com/n1xt3r/nanoblogger/" />
 <items>
 <rdf:Seq>
-<rdf:li rdf:resource="/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm" />
+<rdf:li rdf:resource="2004-01.html#e2004-01-18T17_12_12.htm" />
 </rdf:Seq>
 </items>
 </channel>
-<item rdf:about="/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm">
-<link>/archives/monthly/2004-01.html#e2004-01-18T17_12_12.htm</link>
+<item rdf:about="2004-01.html#e2004-01-18T17_12_12.htm">
+<link>2004-01.html#e2004-01-18T17_12_12.htm</link>
 <title>Welcome to NanoBlogger!</title>
 <dc:date>2004-01-18T17:12:12-04:00</dc:date>
 <dc:creator>n1xt3r</dc:creator>

@@ -46,7 +46,7 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 				curr_year=`date +%Y`
 			if [ "$curr_year-$curr_month-$dn" = "$entry_year-$entry_month-$entry_day" ] ; then
 				set_link="1"
-				dn='<a href="'$BLOG_URL'/'$MONTHLY_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
+				dn='<a href="'$ARCHIVES_DIR'/'$entry_year-$entry_month'.'$NB_FILETYPE'#'$NB_EntryID'">'$dn'</a>'
 				echo '<td align="center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done
