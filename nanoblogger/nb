@@ -294,26 +294,26 @@ EOF
 
 # process a plain text-file through a template to an output file
 make_page(){
-SOURCE_FILE="$1"
-TEMPLATE_FILE="$2"
-OUTPUT_FILE="$3"
+MKPAGE_SRCFILE="$1"
+MKPAGE_TMPLFILE="$2"
+MKPAGE_OUTFILE="$3"
 [ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
 if [ ! -z "$usr_srcfile" ]; then
-	SOURCE_FILE="$usr_srcfile"; OUTPUT_FILE="$usr_outputfile"; TEMPLATE_FILE="$usr_template"
-	[ -z "$usr_template" ] && TEMPLATE_FILE="$BLOG_DIR/$TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
+	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
+	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$BLOG_DIR/$TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
-[ ! -f "$SOURCE_FILE" ] && die "source file '$SOURCE_FILE' doesn't exist! bye."
-NB_Entries=`cat "$SOURCE_FILE"`
-[ -z "$OUTPUT_FILE" ] && die "output file not specified."
-[ ! -f "$TEMPLATE_FILE" ] && die "template file '$TEMPLATE_FILE' doesn't exist! bye."
+[ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! bye."
+NB_Entries=`cat "$MKPAGE_SRCFILE"`
+[ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
+[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! bye."
 # Make sure the output directory is present before writing to it.
-mkdir -p `dirname "$OUTPUT_FILE"`
-cat "$TEMPLATE_FILE" > "$OUTPUT_FILE".tmp
-load_template "$OUTPUT_FILE".tmp
-echo "$BLOG_HTML" > "$OUTPUT_FILE"
-nb_msg "$OUTPUT_FILE"
+mkdir -p `dirname "$MKPAGE_OUTFILE"`
+cat "$MKPAGE_TMPLFILE" > "$MKPAGE_OUTFILE".tmp
+load_template "$MKPAGE_OUTFILE".tmp
+echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+nb_msg "$MKPAGE_OUTFILE"
 load_plugins plugins/postformat
-rm -f "$OUTPUT_FILE".tmp
+rm -f "$MKPAGE_OUTFILE".tmp
 }
 
 # create a temporary place-holder from a template
