@@ -2,8 +2,8 @@
 ############################################################
 #  NanoBlogger 3.0 Copyright 2004 n1xt3r (Kevin R. Wood)   #
 ############################################################
-#TODO: fix (load_config) unconditional loading of default weblog's blog.conf
-#NOTES: because entries get placed in variables, it's possible to produce
+# TODO: fix (load_config) unconditional loading of default weblog's blog.conf
+# NOTES: because entries get placed in variables, it's possible to produce
 # non-fatal errors when the entry contains incomplete command subsitutions.
 # e.g. ` and $(
 # nanoblogger's version.
@@ -116,7 +116,7 @@ BLOG_CONF="$BLOG_DIR/blog.conf"
 [ -z "$PAGE_MAX_ENTRIES" ] && PAGE_MAX_ENTRIES="$MAX_ENTRIES"
 # check if we want absolute links
 [ "$ABSOLUTE_LINKS" = "1" ] && { BASE_URL="$BLOG_URL/"; ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"; }
-# default entry display, fallbacks to limit
+# default entry display, fallbacks to max filter
 [ -z "$QUERY_ENTRIES" ] && QUERY_ENTRIES="max"
 }
 
@@ -184,7 +184,7 @@ if [ "$db_categories" = "cat_*.db" ]; then db_categories=; fi
 if [ "$db_query" = "all" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = "current" ]; then
-	db_query="$current_month"; DB_RESULTS=`cat_db |filter_query |filter_limit`
+	db_query="$current_month"; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = "max" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
 else
@@ -553,9 +553,9 @@ if [ "$weblog_update" != "main" ] && [ "$ENTRY_ARCHIVES" = "1" ]; then
 	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
 fi
 # build main index
-nb_msg "generating main index page ..."
+nb_msg "generating main index page('s) ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
-paginate "$QUERY_ENTRIES" nocat "$PAGE_MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
+paginate "$QUERY_ENTRIES" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
 }
 
 # add a new entry
@@ -696,7 +696,7 @@ list_weblog(){
 query_db; db_query="$1"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = "cat" ]; then
-	[ -z "$db_categories" ] && die "no categories to list for '$BLOG_TITLE'! goodbye."
+	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
 	nb_msg "ID, Title"
 	id=0
 	cat_total=`echo "$db_categories" |grep "[\.]db" -c`
@@ -711,8 +711,9 @@ if [ "$db_query" = "cat" ]; then
 fi
 # fallback to entries listed by limit
 [ -z "$db_query" ] && db_query="$QUERY_ENTRIES"
+list_query="$db_query"
 query_db "$db_query" "$db_catquery"
-[ -z "$DB_RESULTS" ] && die "no entries to list for '$BLOG_TITLE'! goodbye."
+[ -z "$DB_RESULTS" ] && die "nothing matched your query: '$list_query'! goodbye."
 nb_msg "ID, Title - [Category] - Date"
 id=0
 for entry in $DB_RESULTS; do

@@ -4,6 +4,8 @@
 [ -z "$LIMIT_ITEMS" ] && LIMIT_ITEMS="10"
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
+ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
+[ "$ABSOLUTE_LINKS" = "1" ] && ARCHIVES_URL=""
 
 # escape special characters to help create valid xml feeds
 esc_chars(){
@@ -70,8 +72,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="$BLOG_URL/$ARCHIVES_DIR/$NB_EntryPermalink"/>
-				<id>$BLOG_URL/$ARCHIVES_DIR/$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="${ARCHIVES_URL}$NB_EntryPermalink"/>
+				<id>${ARCHIVES_URL}$NB_EntryPermalink</id>
 				<issued>$Atom_EntryDate</issued>
 				<modified>$Atom_EntryModDate</modified>
 				<created>$Atom_EntryDate</created>
