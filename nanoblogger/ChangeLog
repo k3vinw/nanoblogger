@@ -1,5 +1,8 @@
 2004-03-22  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/master_index.sh:
+	Checks for modifications before building index.
+
 	* nb (build_blog):
 	archives are no longer built when blog_update is set to main.
 

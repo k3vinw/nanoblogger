@@ -296,6 +296,7 @@ make_page(){
 SOURCE_FILE="$1"
 TEMPLATE_FILE="$2"
 OUTPUT_FILE="$3"
+[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
 if [ ! -z "$usr_srcfile" ]; then
 	SOURCE_FILE="$usr_srcfile"; OUTPUT_FILE="$usr_outputfile"; TEMPLATE_FILE="$usr_template"
 	[ -z "$usr_template" ] && TEMPLATE_FILE="$BLOG_DIR/$TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
