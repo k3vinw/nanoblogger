@@ -1,0 +1,98 @@
+2004-03-08  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+
+	* nb: made further simplifications to make_archive().
+
+	* nb:
+	Fixed bug in filter_dateformat() that would cause the date command to be called twice.
+
+	* plugins/blog_status.sh:
+	Changed to say 'Total entries: ' to avoid '1 entries' situation.
+
+	* nb:
+	Now checks for user's .nb.conf in their home directory like many other good unix programs do.
+
+	* default/blog.conf:
+	added configuration variable TIDY_ARGS to control tidy commands in tidy plugin.
+
+	* default/blog.conf, plugins/fortune.sh:
+	added configuration variable FORTUNE_FILE to define fortune files in the fortune plugin.
+
+	* plugins/archive/monthly/monthly-cal.sh:
+	DATE_LOCALE now takes effect on calendar output.
+
+	* nb:
+	simplified if statement and discovered that move_num wasn't being shifted anymore, so move_num is now shifted again.
+
+2004-03-07  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+
+	* plugins/calendar.sh: changed to use DATE_LOCALE
+
+	* nb, plugins/postformat/tidy.sh:
+	Replaced more references of /dev/null with  and applied Pavel's suggestions to the tidy commands and arguments.  Fixed previously broken make_archive().  filter_dateformat() now checks for DATE_LOCALE before setting LANG to it.
+
+	* nb:
+	Applied Pavel's patch. The patch improves upon make_page() and removes a few uses of cat in commands which already used sed.
+
+2004-03-06  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+
+	* default/blog.conf:
+	changed BLOG_CONTACT example so it uses single quotes, allowing for proper inclusion of double quotes inside.
+
+	* plugins/autoformat/moods.sh:
+	Improved regex, added a blank space to beggining of the match.
+
+	* plugins/autoformat/01_escape_chars.off, plugins/autoformat/01_escape_chars.sh:
+	Replaced 01_escape_chars.sh with 01_escape_chars.off, to disable it becuase of too many problems.
+
+2004-03-05  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+
+	* plugins/autoformat/01_escape_chars.sh:
+	Added new autoformat plugin, escape_chars that escapes characters: & and " to their respective HTML entities.
+
+	* nb, plugins/01_mymood.off, plugins/autoformat/auto_break.sh, plugins/mymood.off:
+	Renamed plugins/mymood.off to plugins/01_mymood.off, so it loads 1st!
+
+	* nb:
+	Replaced 'echo "" > $file' with '> $file'.  Changed check_blogdir() so that it only ckecks $BLOG_DIR, archives, and templates.
+
+	* nb, plugins/archive/monthly/monthly-cal.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	Replaced references of /dev/null with $PLUGIN_OUTFILE
+
+2004-03-04  n1xt3r  <n1xt3r@cvs.sourceforge.net>
+
+	* plugins/calendar.sh:
+	Updated calendar plugin to utilitize the NB_EntryID variable.
+
+	* plugins/archive/monthly/monthly-cal.sh:
+	Permanently committed missing file: monthly-cal.sh to repository.
+
+	* plugins/master_index.sh:
+	Permanently comitted missing files: master_index.sh and monthly-cal.sh to the repository.
+
+	* plugins/archive/monthly-cal.sh:
+	It helps to use the CVS remove command.
+
+	* plugins/list_entries.sh:
+	Updated list_entries.sh and monthly-cal.sh plugins so that they utilitize the new NB_EntryID variable.
+
+	* default/archives.html, default/archives/cat_1.html, default/archives/monthly/2004-01.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/blog_status.htm, default/parts/cat_1.htm, default/parts/fortune.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/recent_entries.htm, default/styles/nb_rusted.css, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/main_index.htm, default/templates/month_archive.htm, default/templates/permalink.htm, default/templates/rdf_entry.xml, docs/nanoblogger.html, nb, nb.conf, plugins/list_entries.sh, plugins/postformat/tidy.sh:
+	Moved code to generate a master archive index out into a plugin.  Replaced TXT_EDITOR with EDITOR, changed BASE_DIR to use the dirname command, added new BLOG_TZD to define a time zone, and added a new --verbose option.  Also improved regular expressions found in sed commands, stopped autoformat plugins from loading in make_page function, and probably more changes that slipped my mind.
+
+	* default/archives/monthly/2004-01.html, default/styles/mt_clean.css, default/styles/nb_rusted.css:
+	Initial import
+
+	* default/archives/monthly/2004-01.html, default/styles/mt_clean.css, default/styles/nb_rusted.css:
+	New file.
+
+	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/autoformat/auto_break.sh, plugins/autoformat/moods.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	Initial import
+
+	* default/archives.html, default/archives/2004-01-18T17_12_12.htm, default/archives/cat_1.db, default/archives/cat_1.html, default/blog.conf, default/index.html, default/index.rdf, default/parts/2004-01.htm, default/parts/archive_links.htm, default/parts/blog_status.htm, default/parts/cal-2004-01.htm, default/parts/cal.htm, default/parts/cat_1.db.htm, default/parts/cat_1.htm, default/parts/category_links.htm, default/parts/entry_links.htm, default/parts/fortune.htm, default/parts/main_links.htm, default/parts/month_links.htm, default/parts/news.htm, default/parts/news.rdf, default/parts/older_entries.htm, default/parts/recent_entries.htm, default/parts/tidy.html, default/templates/archive.htm, default/templates/archive_links.htm, default/templates/category_archive.htm, default/templates/category_links.htm, default/templates/entry.htm, default/templates/entry_links.htm, default/templates/entrycat_links.htm, default/templates/main_index.htm, default/templates/main_links.htm, default/templates/makepage.htm, default/templates/month_archive.htm, default/templates/month_links.htm, default/templates/permalink.htm, default/templates/permalink_entry.htm, default/templates/rdf.xml, default/templates/rdf_entry.xml, moods/smilies/shocked.gif, moods/smilies/smiley.gif, moods/smilies/tongue.gif, moods/smilies/wink.gif, plugins/archive/monthly-cal.sh, plugins/autoformat/auto_break.sh, plugins/autoformat/moods.sh, plugins/blog_status.sh, plugins/calendar.sh, plugins/fortune.sh, plugins/list_entries.sh, plugins/mymood.off, plugins/postformat/tidy.sh:
+	New file.
+
+	* COPYING, docs/nanoblogger.html, moods/moods.conf, moods/mymood.txt, moods/smilies/angry.gif, moods/smilies/cheesy.gif, moods/smilies/cool.gif, moods/smilies/cry.gif, moods/smilies/embarassed.gif, moods/smilies/grin.gif, moods/smilies/huh.gif, moods/smilies/kiss.gif, moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif, moods/smilies/rolleyes.gif, moods/smilies/sad.gif, nb, nb.conf:
+	Initial import
+
+	* COPYING, docs/nanoblogger.html, moods/moods.conf, moods/mymood.txt, moods/smilies/angry.gif, moods/smilies/cheesy.gif, moods/smilies/cool.gif, moods/smilies/cry.gif, moods/smilies/embarassed.gif, moods/smilies/grin.gif, moods/smilies/huh.gif, moods/smilies/kiss.gif, moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif, moods/smilies/rolleyes.gif, moods/smilies/sad.gif, nb, nb.conf:
+	New file.
+
