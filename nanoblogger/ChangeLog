@@ -1,3 +1,8 @@
+2004-04-22  n1xt3r  <n1xt3r@scorcher>
+
+	* plugins/master_index.sh, nb, ChangeLog:
+	NB_Month_Links gets generated correctly.
+
 2004-04-21  n1xt3r  <n1xt3r@scorcher>
 
 	* nb (build_blog): Permalinks now get updated according to blog_update.

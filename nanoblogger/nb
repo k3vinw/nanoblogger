@@ -438,7 +438,7 @@ if [ "$blog_update" = "all" ]; then
 	cycle_months_for build_monthlyarchive
 else
 	# rebuild current month archive
-	month=`date "+%Y-%m"`
+	month=`date "+%Y-%m"`; this_month="$month"
 	query_db "$month"; build_monthlyarchive
 	# update modified parts of blog (deleted, edited, or moved)
 	nb_msg "checking for related parts ..."
@@ -458,9 +458,9 @@ else
 				"$BLOG_DIR"/"$PERMALINKS"/"$permalink_file"
 			fi
 			# update relative monthly archives
-			edit_month=`echo "$Mod_Entry" |cut -c1-7`
-			if [ "$edit_month" != "$month" ]; then
-				month="$edit_month"
+			mod_month=`echo "$Mod_Entry" |cut -c1-7`
+			if [ "$mod_month" != "$this_month" ]; then
+				month="$mod_month"
 				query_db "$month"; build_monthlyarchive
 			fi
 			query_db
@@ -557,6 +557,9 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 	db_catquery=`cat_id`; check_catid
 	query_db "$db_query" "$db_catquery"
 	if [ ! -z "$usr_title" ]; then
+		nb_msg "changing title to '$usr_title' for category id: $cat_num ..."
+		echo "$usr_title" > "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
+		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
 		find_catlinks(){
 			ENTRY_LIST=`sed 1d "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"`
 			query_db "$db_query"
@@ -566,9 +569,6 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = "cat" ]; then
 				done
 			done |grep " " |cut -d" " -f 1 |sort -u |sed -e 's/cat_//; s/[.]db//'
 		}
-		nb_msg "changing title to '$usr_title' for category id: $cat_num ..."
-		echo "$usr_title" > "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
-		echo "$DB_RESULTS" >> "$BLOG_DIR"/"$ARCHIVES"/"$db_catquery"
 		cat_num=`find_catlinks`
 		UPDATE_LIST="$DB_RESULTS"
 		build_blog; exit 0
@@ -833,9 +833,9 @@ if [ ! -z "$cat_num" ]; then
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
 				else
-					cat_title="Untitled"
-					echo "please enter the new category's title [$cat_title]"
+					echo "please enter the new category's title [Untitled]"
 					read -p "$NB_PROMPT" cat_title
+					[ -z "$cat_title" ] && cat_title="Untitled"
 				fi
 				echo "$cat_title" > "$BLOG_DIR"/"$ARCHIVES"/cat_"$id".db
 				cat_num="$id"; db_catquery=`cat_id`; check_catid; cat_total="$id"
