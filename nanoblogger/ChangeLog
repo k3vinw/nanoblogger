@@ -1,5 +1,10 @@
 2004-04-18  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
+	- NB_AtomEntryModDate was temporarily changed to NB_AtomEntryDate.
+	- Switched to make_placeholder to generate NB_Entries.
+	- Deleted files left in PARTS_DIR directory.
+
 	* ChangeLog, plugins/rss.sh:
 	- Switched to make_placeholder to generate NB_Entries.
 	- Deleted files left in PARTS_DIR directory.
