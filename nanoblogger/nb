@@ -305,7 +305,7 @@ make_page(){
 MKPAGE_SRCFILE="$1"
 MKPAGE_TMPLFILE="$2"
 MKPAGE_OUTFILE="$3"
-[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title
+[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title; usr_title=
 if [ ! -z "$usr_srcfile" ]; then
 	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
 	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
@@ -824,14 +824,14 @@ if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
 		query_db; id=0
 		cat_total=`echo "$db_categories" |grep -c "[\.]db"`
-		while [ "$id" != "$cat_total" ]; do
+		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.db" ]; then
 				nb_msg "creating new category id: $id, for '$BLOG_TITLE' ..."
 				if [ ! -z "$usr_title" ]; then
 					cat_title=$usr_title; usr_title=
 				else
-					echo "please enter the new category's title [Untitled]"
+					echo "enter the new category's title [Untitled]"
 					read -p "$NB_PROMPT" cat_title
 					[ -z "$cat_title" ] && cat_title=Untitled
 				fi
