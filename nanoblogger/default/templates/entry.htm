@@ -1,15 +1,17 @@
-<h2 class="date">
-$NB_EntryDate
-</h2>
+<div class="item">
+<h2 class="date">$NB_EntryDate</h2>
 <div class="blogbody">
 <a name="$NB_EntryID"></a>
 <h3 class="title">$NB_EntryTitle</h3>
+<span class="item-description">
 $NB_EntryBody
+</span>
 </div>
 
 <div class="posted">
-<br />Posted by $NB_EntryAuthor
-| <a href="$NB_EntryPermalink">Permalink</a>
+<br />Posted by <span class="item-creator">$NB_EntryAuthor</span>
+| <a class="link" href="$NB_EntryPermalink">Permalink</a>
 `if [ ! -z "$NB_EntryCategories" ]; then echo "| Categories: $NB_EntryCategories" |sed -e '{$ s/\,$//; }'; fi`
 <!-- <br /><a href="$BLOG_URL_ACTION$PERMALINKS/$permalink_entry#comments">Comments</a> -->
+</div>
 </div>
