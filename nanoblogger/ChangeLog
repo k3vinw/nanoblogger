@@ -1,5 +1,13 @@
 2004-04-09  n1xt3r  <n1xt3r@scorcher>
 
+	* default/templates/atom.xml, default/templates/atom_entry.xml, plugins/atom.sh:
+	- Added BLOG_TZD in atom feed plugin.
+	- NB_AtomEntryModDate uses the find command.
+	- More changes and some fixes were made to the atom feed templates.
+
+	* ChangeLog, default/templates/atom.xml, default/templates/atom_entry.xml, plugins/atom.sh:
+	Added new plugin and templates for atom feed.
+
 	* ChangeLog, plugins/articles.off:
 	- Changed article format to metadata tags: TITLE, DESC, and BODY.
 

@@ -36,4 +36,11 @@ build_atomfeed(){
 
 nb_msg "generating atom feed ..."
 build_atomfeed current nocat "$ATOMENTRY_TEMPLATE" atom.xml
-make_page "$BLOG_DIR/$PARTS_DIR/atom.xml" "$ATOMFEED_TEMPLATE" "$BLOG_DIR/atom.xml"
+
+# make atom feed (alternate to calling make_page)
+MKPAGE_OUTFILE="$BLOG_DIR/atom.xml"
+NB_Entries=`cat "$BLOG_DIR"/"$PARTS_DIR"/atom.xml`
+load_template "$ATOMFEED_TEMPLATE"
+echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
+nb_msg "$MKPAGE_OUTFILE"
+load_plugins plugins/postformat
