@@ -358,9 +358,7 @@ for entry in $ARCHIVE_LIST; do
 		NB_EntryCategoryTitle=
 	fi
 done
-if [ ! -f "$BLOG_DIR"/archives.tmp ]; then
-       > "$BLOG_DIR"/archives.tmp
-fi
+touch "$BLOG_DIR"/archives.tmp
 cat "$BLOG_DIR"/archives.tmp > "$BLOG_DIR"/"$PARTS_DIR"/"$output_file"
 rm -f "$BLOG_DIR"/archives.tmp
 }
