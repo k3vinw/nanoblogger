@@ -1,5 +1,8 @@
 2004-05-16  n1xt3r  <n1xt3r@scorcher>
 
+	* ChangeLog, plugins/atom.sh, plugins/rss.sh:
+	Loads autoformat plugins from inside.
+
 	* ChangeLog, nb:
 	(make_archive),(build_archives),(edit_blog): Autoformat plugins no longer
 	overwrite (possibly destroy) the entry's metadata.
