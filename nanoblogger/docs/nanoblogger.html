@@ -438,7 +438,7 @@ If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), 
 	<li>
 		<p>
 		To add an introduction, create a text file in your blog called, "intro.txt".  Edit the text file to say what you want, then add the following to the main template: 
-			<p>‘cat "$BLOG_DIR"/intro.txt‘</p> Note the use of left single quotes, they're important.  Also, note that no processing is being done this way, you have to add your own HTML.
+			<p><pre>cat "$BLOG_DIR"/intro.txt</pre></p> Note the use of left single quotes, they're important.  Also, note that no processing is being done this way, you have to add your own HTML.
 		</p>
 	</li>
 	
@@ -450,7 +450,13 @@ If you're not limited to FTP, you might want to consider SSH (scp, sftp, etc.), 
 
 	<li>
 		<p>
-		If the WEB_BROWSER you set is being overridden and this is undesirable, check for the environment variable, BROWSER.  This is standard on Debian systems and takes precedence over your WEB_BROWSER setting.  As a workaround, make sure that BROWSER is set to the web browser you want to use or replace WEB_BROWSER with BROWSER in the blog's config file, "blog.conf".  The same could apply for the TXT_EDITOR variable as well.
+		BLOG_PREVIEW_CMD can be used to set a command to run when you want to preview your blog.
+		</p>
+	</li>
+
+	<li>
+		<p>
+		BLOG_PUBLISH_CMD can be used to set a command to run when you want to publish your blog.
 		</p>
 	</li>
 
