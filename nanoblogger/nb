@@ -304,19 +304,22 @@ if [ ! -z "$usr_srcfile" ]; then
 	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
 [ ! -f "$MKPAGE_SRCFILE" ] && die "source file '$MKPAGE_SRCFILE' doesn't exist! goodbye."
-NB_Entries=`cat "$MKPAGE_SRCFILE"`
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it.
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 nb_msg "$MKPAGE_OUTFILE"
+# preserve content of body
+PLACEHOLDER=$(<"$MKPAGE_SRCFILE")
+load_template "$MKPAGE_SRCFILE"
+echo "$BLOG_HTML" > "$MKPAGE_SRCFILE"
 cat "$MKPAGE_TMPLFILE" > "$SCRATCH_FILE"
-Preserved_Entries="$NB_Entries"
 NB_Entries="\$NB_Entries"
-pass=0; for template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
+pass=0
+for mkpage_template in "$SCRATCH_FILE" "$MKPAGE_OUTFILE"; do
 	pass=`expr 1 + $pass`
-	[ "$pass" = "2" ] && NB_Entries="$Preserved_Entries"
-	load_template "$template"
+	[ "$pass" = "2" ] && NB_Entries="$PLACEHOLDER"
+	load_template "$mkpage_template"
 	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 done
 load_plugins plugins/postformat
@@ -325,7 +328,7 @@ load_plugins plugins/postformat
 # create individual page for an entry
 build_permalink(){
 permalink_entry=`chg_suffix $entry`
-if [ "$template" = "$PERMALINKENTRY_TEMPLATE" ]; then
+if [ "$archive_template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 	if [ -f "$NB_DATA_DIR/$entry" ] && [ "$NB_DATA_DIR/$entry" -nt \
 		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry" ]; then
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
@@ -339,7 +342,7 @@ fi
 make_archive(){
 query_type="$1"
 db_catquery="$2"
-template="$3"
+archive_template="$3"
 PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$4"
 db_limit="$5"
 db_offset="$6"
@@ -348,7 +351,7 @@ ARCHIVE_LIST="$DB_RESULTS"
 > "$PARTS_FILE"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
-	load_template "$NB_TEMPLATE_DIR/$template"
+	load_template "$NB_TEMPLATE_DIR/$archive_template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$PARTS_FILE"
 		build_permalink
@@ -460,7 +463,7 @@ if [ "$total_items" -gt "$page_items" ]; then
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
 			echo '<a href="'$next_page'">[next]</a>' >> "$SCRATCH_FILE"
-		NB_PageLinks=`cat "$SCRATCH_FILE"`
+		NB_PageLinks=$(<"$SCRATCH_FILE")
 		make_archive limit "$page_category" "$ENTRY_TEMPLATE" "$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$arch_page"
@@ -862,7 +865,7 @@ if [ -z "$usr_body" ]; then
 	$EDITOR "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
-		NB_EntryBody=`cat "$NB_EditFile"`
+		NB_EntryBody=$(<"$NB_EditFile")
 	fi
 else
 	NB_EntryBody="$usr_body"
@@ -942,7 +945,7 @@ cat <<-EOF
 	 	nb -b ~/public_html/weblog -n myname -t 'My Title' -B 'My message!' -a
 
 	More info:
-	 URL: http://home.columbus.rr.com/n1xt3r/nanoblogger/
+	 URL: http://nanoblogger.sourceforge.net
 EOF
 }
 

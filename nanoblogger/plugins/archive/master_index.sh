@@ -10,7 +10,7 @@ BLOG_URL_MAIN="../$BLOG_URL_MAIN"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
-	nb_msg "generating master archive index ..."
+	nb_msg "generating archive index page ..."
 	# make NB_Entry_Links placeholder
 	query_db all
 	ENTRY_LIST="$DB_RESULTS"
@@ -54,19 +54,17 @@ if [ ! -z "$MOD_VAR" ] || [ "$weblog_update" = "all" ]; then
 		$NB_Entry_Links
 		</div>
 	EOF
-	NB_Archive_Links=`cat "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE`
-
+	load_template "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE
+	echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR"/archive_links."$NB_FILETYPE"
+	NB_Archive_Links="$BLOG_HTML"
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/index.$NB_FILETYPE"
 	# set title for makepage template
 	NB_EntryTitle="Archives"
 	NB_Entries="$NB_Archive_Links"
 	nb_msg "$MKPAGE_OUTFILE"
-	for template in "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"; do
-		load_template "$template"
-		echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-	done
-	load_plugins plugins/postformat
+	load_template "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
+	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
 fi
 
 BLOG_CSS="$OLD_BLOG_CSS"

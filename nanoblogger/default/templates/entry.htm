@@ -10,8 +10,8 @@ $NB_EntryBody
 
 <div class="posted">
 <br />Posted by <span class="item-creator">$NB_EntryAuthor</span>
-`[ "$PERMALINKS" = "1" ] && echo '| <a class="link" href="'$NB_EntryPermalink'">Permalink</a>'`
-`[ ! -z "$NB_EntryCategories" ] && echo "| Categories: $NB_EntryCategories" |sed -e '{$ s/\,$//; }'`
-<!-- <br /><a href="$BLOG_URL_ACTION$PERMALINKS_DIR/$permalink_entry#comments">Comments</a> -->
+$([ "$PERMALINKS" = "1" ] && echo '| <a class="link" href="'$NB_EntryPermalink'">Permalink</a>')
+$([ ! -z "$NB_EntryCategories" ] && echo "| Categories: $NB_EntryCategories" |sed -e '{$ s/\,$//; }')
+<!-- <br /><a href="${BLOG_URL_ACTION}$permalink_entry#comments">Comments</a> -->
 </div>
 </div>
