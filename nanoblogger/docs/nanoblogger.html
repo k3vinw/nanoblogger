@@ -519,7 +519,7 @@ There's many ways you could accomplish this, but I chose to go with a perl based
 Here are the steps to enable comments:
 	<ul>
 		<li>
-			Enable full permalinks in blog.conf. Set FULL_PERMALINKS to "1".
+			Enable individual entry archiving in blog.conf. Set ENTRY_ARCHIVES to "1".
 		</li>
 		<li>
 			Set BLOG_URL_ACTION in blog.conf to "http://myblog.com/cgi-bin/cgicomment.pl?article=".
@@ -531,7 +531,7 @@ Here are the steps to enable comments:
 			Rebuild your blog to reflect the changes. e.g. "nb -b [your_blog_dir] -u all"
 		</li>
 		<li>
-			Unpack CGIComment (e.g. tar xzf CGIComment-1.0.tar.gz) one directory above that of your blog.
+			Decompress CGIComment (e.g. tar xzf CGIComment-1.0.tar.gz) one directory above that of your blog.
 		</li>
 		<li>
 			Edit cgi-bin/cgicomment.conf and set BASE_DIR to "../cgicomment" and ARTICLEDIR to "../[your_blog_dir]".
