@@ -80,13 +80,24 @@ When upgrading nanoblogger, there's three basic things that need to be considere
 
 <h2><a name="cr4">Requirements</a></h2>
 <p />
-programs required other than bash:
+Programs:
 <blockquote>
-	cat, cp, cut, dirname, date, expr, grep, mkdir, read, rm, sed, sort, touch, trap
+	bash,
+	cat,
+	cp,
+	cut,
+	dirname,
+	date,
+	expr,
+	grep,
+	mkdir,
+	read,
+	rm,
+	sed,
+	sort,
+	touch,
+	trap
 </blockquote>
-<p>
-For online publishing you'll need some kind of shell or FTP access to your web server.
-</p>
 
 <h2><a name="cr5">Getting Started</a></h2>
 <b>Creating a New Blog</b>
@@ -99,37 +110,38 @@ For online publishing you'll need some kind of shell or FTP access to your web s
 <h2><a name="cr6">Settings and Configuration</a></h2>
 	To edit the blog's configuration invoke:
 	<pre>nb --blogdir myblog_dir --configure</pre>
+	This opens <em>blog.conf</em> from the blog directory for editing.<p />
 <b>Setting the Editor</b>
 <blockquote>
-	The editor defaults to the EDITOR variable in your shell's environment, but falls back on vi when no EDITOR is set.  You can specify a different editor to use by overriding EDITOR in blog.conf or setting the EDITOR variable in your shell's environment.
+	The editor defaults to the <em>EDITOR</em> variable in your shell's environment, but falls back on vi when no <em>EDITOR</em> is set.  You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your shell's environment.
 </blockquote>
 <b>Setting the Date Format for New Entries</b>
 <blockquote>
-	DATE_FORMAT controls the look of a new entry's date.  The default DATE_FORMAT uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable DATE_LOCALE).  Please note that this setting has no effect on previous entries.  Read the man pages of the date command to see more on how to customize the format of the date command's output.
+	<em>DATE_FORMAT</em> controls the look of a new entry's date.  The default <em>DATE_FORMAT</em> uses "%B %d, %Y %l:%M %p" and  produces something like this: "August 05, 2003 12:53 AM".  You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>).  Please note that this setting has no effect on previous entries.  Read the man pages of the date command to see more on how to customize the format of the date command's output.
 </blockquote>
 <b>Setting the Web Address</b>
 <blockquote>
-	BLOG_URL is used as the address for the blog.  Typically, you would set this to a remote address such as: "http://myblogurl.com".  Replacing <em>myblogurl.com</em> with the actual address to your blog.
+	<em>BLOG_URL</em> is used as the address for the blog.  Typically, you would set this to a remote address such as: "http://myblogurl.com".  Replacing <em>myblogurl.com</em> with the actual address to your blog.
 </blockquote>
 <b>Setting the Style Sheet</b>
 <blockquote>
-	BLOG_CSS is used as the link to the style sheet in the default set of templates.  It provides an easy way to edit or switch the style sheet's location without having to edit each template.  It should be set in a similar fashion to BLOG_URL.
+	<em>BLOG_CSS</em> is used as the link to the style sheet in the default set of templates.  It provides an easy way to edit or switch the style sheet's location without having to edit each template.  It should be set in a similar fashion to <em>BLOG_URL</em>.
 </blockquote>
 <b>Setting the Author's Name</b>
 <blockquote>
-	BLOG_AUTHOR can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting BLOG_AUTHOR will override this behaviour.
+	<em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to get the author's name from the USER variable.  Setting <em>BLOG_AUTHOR</em> will override this behaviour.
 </blockquote>
 <b>Enabling Full Permalinks</b>
 <blockquote>
-	FULL_PERMALINKS determines whether permalinks are linked back to the monthly archives or linked to an entry's individual archive.  The default is to leave FULL_PERMALINKS off and link back to the monthly archives.  Enabling FULL_PERMALINKS will increase the time needed to generate your blog.
+	<em>FULL_PERMALINKS</em> determines whether permalinks are linked back to the monthly archives or linked to an entry's individual archive.  The default is to leave <em>FULL_PERMALINKS</em> off and link back to the monthly archives.  Enabling <em>FULL_PERMALINKS</em> will increase the time needed to generate your blog.
 </blockquote>
 <b>Setting Actions for Previewing and Publishing</b>
 <blockquote>
-	BLOG_PREVIEW_CMD and BLOG_PUBLISH_CMD may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.
+	<em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.
 </blockquote>
 <b>Global Configuration</b>
 <blockquote>
-	NanoBlogger has it's own configuration file, nb.conf that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may ovveride settings in nb.conf.  Typically one would set BLOG_DIR here as a default blog directory to use.  NanoBlogger also looks for this file under, $HOME/.nb.conf.
+	NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all blogs.  The global configuration file is read first meaning that settings in the blog's configuration may ovveride settings in <em>nb.conf</em>.  Typically one would set <em>BLOG_DIR</em> here as a default blog directory to use.  NanoBlogger also looks for this file under, <em>$HOME/.nb.conf</em>.
 </blockquote>
 
 <h2><a name="cr7">Templates and Placeholders</a></h2>
@@ -324,10 +336,10 @@ Entries are kept inside the blog's "archives" directory as time-stamped filename
 <h2><a name="cr8">Plugins</a></h2>
 <p />
 
-Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders.  Placeholders allow for a great deal of control in how the plugins output is placed in the template.  The variable, ENABLE_PLUGINS, in blog.conf toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
+Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders.  Placeholders allow for a great deal of control in how the plugins output is placed in the template.  The variable, <em>ENABLE_PLUGINS</em>, in <em>blog.conf</em> toggles the use of plugins on/off.  Create plugins that run specifically for your blog by creating a "plugins" directory under a blog's own directory and copying or creating a plugin with the ".sh" extension.
 <p />
 
-Additionally there are some plugins specific to the formatting of entries, and are referred to as auto-format plugins, which allows for automatic placement of HTML elements, such as placing paragraph breaks inside blank lines.  The variable, AUTO_FORMAT, in blog.conf toggles this feature on/off, but requires ENABLE_PLUGINS to be toggled on.<br />
+Additionally there are some plugins specific to the formatting of entries, and are referred to as auto-format plugins, which allows for automatic placement of HTML elements, such as placing paragraph breaks inside blank lines.  The variable, <em>AUTO_FORMAT</em>, in <em>blog.conf</em> toggles this feature on/off, but requires <em>ENABLE_PLUGINS</em> to be toggled on.<br />
 <p />
 
 To use a some of the new plugins, you may need to identify it's unique placeholder/destination and add it to your template accordingly.<br />

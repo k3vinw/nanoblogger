@@ -1,5 +1,10 @@
 2004-05-21  n1xt3r  <n1xt3r@bluefalcon>
 
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh:
+	- (read_metadata): Removed text filtering.
+	- Removed load_filters().
+	- Added text filtering to the atom and rss plugins.
+
 	* ChangeLog, nb (read_entry): Enabled filtering mode, escape_chars.
 
 2004-05-19  n1xt3r  <n1xt3r@bluefalcon>
