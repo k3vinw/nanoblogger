@@ -11,7 +11,7 @@ BASE_DIR=`dirname $0`
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
-NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
+NB_TimeStamp(){ date "+%Y/%m/%d/T%H_%M_%S"; }
 
 # prompt to use when asking something.
 NB_PROMPT=": "
@@ -41,16 +41,12 @@ PARTS_DIR="parts"
 # letter to prepend to entry's html id tag
 x_id=e
 
-nb_edit(){
-# TODO: test with external editor (outside of script's process)
-EDIT_FILE="$1"
-$EDITOR "$EDIT_FILE"
-#if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
-if [ ! -f "$EDIT_FILE" ]; then
-	echo "press [enter] to continue."
-	read -p "$NB_PROMPT" enter_key
-fi
-[ ! -f "$EDIT_FILE" ] && die "failed to write '$EDIT_FILE'! goodbye."
+# function to die with a message
+die(){
+cat <<-EOF
+	$@
+EOF
+exit 1
 }
 
 nb_msg(){
@@ -59,14 +55,6 @@ if [ "$VERBOSE" != 0 ]; then
 		$@
 	EOF
 fi
-}
-
-# function to die with a message
-die(){
-cat <<-EOF
-	$@
-EOF
-exit 1
 }
 
 # die without the base directory
@@ -130,11 +118,13 @@ fi
 # default for previous and next page symbols, using html entities
 : ${NB_NextPage:=[&#62;&#62;]}
 : ${NB_PrevPage:=[&#60;&#60;]}
+# default sort arguments (-unique is required)
+: ${SORT_ARGS:=-ru}
 }
 
 # deconfigure, clear some auto-default variables
 deconfig(){ PLUGINS_DIR=; BLOG_AUTHOR=; NB_DATATYPE=; NB_DBTYPE=; \
-	NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; }
+	NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; SORT_ARGS=; }
 
 # filter custom date format for a new entry
 filter_dateformat(){
@@ -156,6 +146,23 @@ suffix="$2"
 old_suffix=`echo $filename |cut -d"." -f2`
 [ ! -z "$suffix" ] && NB_FILETYPE="$suffix"
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
+}
+
+# generate entry's HTML anchor/id
+set_entryid(){ entry_var="$1"
+echo "$x_id$entry_var" |sed -e '/\// s//-/g'
+}
+
+nb_edit(){
+# TODO: test with external editor (outside of script's process)
+EDIT_FILE="$1"
+$EDITOR "$EDIT_FILE"
+#if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
+if [ ! -f "$EDIT_FILE" ]; then
+	echo "press [enter] to continue."
+	read -p "$NB_PROMPT" enter_key
+fi
+[ ! -f "$EDIT_FILE" ] && die "failed to write '$EDIT_FILE'! goodbye."
 }
 
 # insure a sane configuration or die
@@ -181,7 +188,7 @@ db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
-current_month=`date "+%Y-%m"`
+current_date=`date "+%Y/%m"`
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
@@ -197,9 +204,22 @@ filter_limit(){
 	[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
 	db_limit=; db_offset=
 	}
-filter_query(){ grep "$db_query." |sort -ru; } # allow for empty $db_query
+filter_query(){ grep "$db_query." |sort $SORT_ARGS; } # allow for empty $db_query
 # list all entries
-list_db(){ for files in *.$NB_DATATYPE; do echo "$files"; done; }
+list_db(){
+if [ -d "$NB_DATA_DIR/$db_query" ]; then
+	DB_YYYY=`echo "$db_query" |cut -c1-4`
+	DB_MM=`echo "$db_query" |cut -c6-7`
+	DB_DD=`echo "$db_query" |cut -c9-10`
+fi
+: ${DB_YYYY:=[0-9][0-9][0-9][0-9]}
+: ${DB_MM:=[0-9][0-9]}
+: ${DB_DD:=[0-9][0-9]}
+DB_DATE="$DB_YYYY/$DB_MM"
+for entry in $DB_DATE/$DB_DD*.$NB_DATATYPE; do
+	[ -f "$entry" ] && echo "$entry"
+done
+}
 # include categorized entries
 cat_db(){
 	[ -z "$db_catquery" ] && list_db
@@ -211,14 +231,14 @@ cat_db(){
 if [ "$db_query" = all ] || [ -z "$db_limit" ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = current ]; then
-	db_query="$current_month"; DB_RESULTS=`cat_db |filter_query`
+	db_query="$current_date"; DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = max ]; then
 	db_query=; DB_RESULTS=`cat_db |filter_query |filter_limit`
 else
 	DB_RESULTS=`cat_db |filter_query`
 fi
 # make sure results actually match something
-DB_RESULTS=`echo "$DB_RESULTS" |grep "..[\.]$NB_DATATYPE"`
+DB_RESULTS=`echo "$DB_RESULTS"`
 db_query=; cd "$CURR_PATH"
 }
 
@@ -288,22 +308,24 @@ NB_Metadata=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; /^'$MTAG'[\:]/d; 
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
+	ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 	month=`echo "$entry" |cut -c1-7`
-	NB_EntryID="$x_id$entry"
+	NB_EntryID=`set_entryid $entry`
+	if [ "$ENTRY_ARCHIVES" = 1 ]; then
+		permalink_file=`chg_suffix $entry`
+		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_file"
+	else
+		NB_EntryPermalink="${ARCHIVES_PATH}$month/$NB_INDEX#$NB_EntryID"
+	fi
 	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
-	if [ "$ENTRY_ARCHIVES" = 1 ]; then
-		permalink_entry=`chg_suffix $entry`
-		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
-	else
-		NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
-	fi
 	load_plugins entry
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
+		mkdir -p `dirname "$BLOG_DIR/$CACHE_DIR/$entry.body"`
 		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
 		echo "$entry" >> "$SCRATCH_FILE.cache_list"
 	else
@@ -315,6 +337,7 @@ fi
 # write entry to file
 write_entry(){
 ENTRY_FILE="$1"
+mkdir -p `dirname "$ENTRY_FILE"`
 cat > "$ENTRY_FILE" <<-EOF
 	TITLE: $NB_EntryTitle
 	AUTHOR: $NB_EntryAuthor
@@ -343,6 +366,16 @@ fi
 [ ! -f "$MKPAGE_TMPLFILE" ] && die "template file, '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
+# auto-detect node levels for BASE_URL based on relativity to BLOG_DIR
+if [ ! -z "$usr_srcfile" ]; then # only do this when --makepage is specified
+	BLOG_BASEDIR=`echo "$BLOG_DIR" |sed -e 's/\//\\\\\//g'`
+	BASE_URL=`echo "$MKPAGE_OUTDIR" |sed -e 's/'$BLOG_BASEDIR'//g; s/\/[^\/]*/..\//g'`
+	NODES=`echo "$BASE_URL" |sed -e 's/\.\.\//node /g'`
+	NODE_CNT=`for node in $NODES; do echo "$node"; done |grep -c ""`
+	if [ "$NODE_CNT" = 0 ]; then
+		BASE_URL="./"
+	fi
+fi
 if [ "$USR_QUERY" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
 	# preserve content of the source, but let plugins modify it
 	: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
@@ -363,12 +396,13 @@ MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
 
 # create individual page for an entry
 build_permalink(){
-permalink_entry=`chg_suffix $entry`
 if [ "$ENTRY_ARCHIVES" = 1 ]; then
-	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry" ]; then
+	BASE_URL="../../../"
+	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file" ]; then
+		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$entry"`
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
 		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
-		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_entry"
+		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	fi
 fi
 }
@@ -383,6 +417,7 @@ db_limit="$5"
 db_offset="$6"
 query_db "$query_type" "$db_catquery" "$db_limit" "$db_offset"
 ARCHIVE_LIST="$DB_RESULTS"
+mkdir -p `dirname "$PARTS_FILE"`
 > "$PARTS_FILE"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
@@ -394,61 +429,6 @@ for entry in $ARCHIVE_LIST; do
 		BLOG_HTML=
 	fi
 done
-}
-
-# create archive of current month
-build_monthlyarchive(){
-	if [ ! -z "$DB_RESULTS" ]; then
-		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE
-		NB_ArchiveTitle="$month"
-		load_plugins archive/monthly
-		make_page "$BLOG_DIR/$PARTS_DIR/$month".$NB_FILETYPE "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
-		"$BLOG_DIR/$ARCHIVES_DIR/$month.$NB_FILETYPE"
-	fi
-}
-
-# create all the monthly archives
-cycle_months_for(){
-	which_part="$1"
-	query_db all
-	MASTER_LIST="$DB_RESULTS"
-	curr_year=`date +%Y`
-	curr_month=`date +%m`
-	# build archives seperated monthly and yearly
-	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort -ru`
-	for yearn in $ENTRY_YEARS; do
-		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
-			for entry_month in $ENTRY_LIST; do
-				month="$yearn-$monthn"
-				query_db "$month"
-				[ ! -z "$DB_RESULTS" ] && $which_part
-			done
-		done
-	done
-}
-
-# helps update relative categories
-find_categories(){
-UPDATE_CATLIST="$1"
-	build_catlist(){
-	if [ ! -z "$cat_var" ]; then
-		CAT_LIST="$cat_db"
-		[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
-		OLD_CATLIST="$CAT_LIST"
-	fi
-	}
-# find related categories for a given set of entries
-for relative_entry in $UPDATE_CATLIST; do
-	query_db "$db_query"
-	for cat_db in $db_categories; do
-		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
-		build_catlist
-	done
-done
-[ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
-if [ "$USR_QUERY" = all ]; then query_db; CAT_LIST="$db_categories"; fi
-CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
 # divide larger archives into multiple pages
@@ -517,7 +497,7 @@ if [ "$total_items" -gt "$page_items" -a "$page_items" != 0 ]; then
 		! [ "$next_num" -gt "$total_pages" ] &&
 				echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
 		NB_PageLinks=$(< "$SCRATCH_FILE")
-		if [ ! -z "$UPDATE_LIST" -a ! -z "$edit_num" ]; then
+		if [ ! -z "$UPDATE_LIST" ] && [ ! -z "$USR_QUERY" ]; then
 			update_pages
 			for page_mod in $PAGE_LIST; do
 				[ "page$page_num" = "$page_mod" ] && page_bynumber
@@ -534,15 +514,75 @@ else
 fi
 }
 
+# create archive of current month
+build_monthlyarchive(){
+	if [ ! -z "$DB_RESULTS" ]; then
+		BASE_URL="../../../"
+		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month/index.$NB_FILETYPE"
+		NB_ArchiveTitle="$month"
+		load_plugins archive/monthly
+		make_page "$BLOG_DIR/$PARTS_DIR/$month/index.$NB_FILETYPE" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
+		"$BLOG_DIR/$ARCHIVES_DIR/$month/index.$NB_FILETYPE"
+	fi
+}
+
+# create all the monthly archives
+cycle_months_for(){
+	which_part="$1"
+	query_db all
+	MASTER_LIST="$DB_RESULTS"
+	# build archives seperated monthly and yearly
+	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort $SORT_ARGS`
+	for yearn in $ENTRY_YEARS; do
+		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
+			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[\/]'$monthn'[\/]' |sed 1q`
+			for entry_month in $ENTRY_LIST; do
+				month="$yearn/$monthn"
+				query_db "$month"
+				[ ! -z "$DB_RESULTS" ] && $which_part
+			done
+		done
+	done
+}
+
+# helps update relative categories
+find_categories(){
+UPDATE_CATLIST="$1"
+	build_catlist(){
+	if [ ! -z "$cat_var" ]; then
+		[ -z "$CAT_LIST" ] && CAT_LIST="$cat_db"
+		[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
+		OLD_CATLIST="$CAT_LIST"
+	fi
+	}
+# find related categories for a given set of entries
+if [ "$USR_QUERY" != all ]; then
+	for relative_entry in $UPDATE_CATLIST; do
+		query_db "$USR_QUERY"
+		for cat_db in $db_categories; do
+			cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
+			build_catlist
+		done
+	done
+else
+	query_db; CAT_LIST="$db_categories"
+fi
+[ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
+CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
+}
+
 # build category archives
 build_catarchives(){
 db_categories="$CAT_LIST"
 if [ ! -z "$db_categories" ]; then
+	BASE_URL="../"
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
-			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
-			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
+			#NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
+			#paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
+			NB_CatArchive=`chg_suffix "$cat_arch"`
+			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_CatArchive"
 		fi
 	done
 fi
@@ -550,38 +590,40 @@ fi
 
 # create/update archives
 build_archives(){
+if [ "$USR_QUERY" = all ]; then
+	# remove all generated files for a clean build
+	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*.{"$NB_DATATYPE","$NB_FILETYPE"}
+	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*/*.{"$NB_DATATYPE","$NB_FILETYPE"}
+	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*/*/*.{"$NB_DATATYPE","$NB_FILETYPE"}
+fi
 load_plugins archive
 nb_msg "generating archives ..."
+# build the category archives
 build_catarchives
+# build the monthly archives
 if [ "$USR_QUERY" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
 	# build current month archive
-	month=`date "+%Y-%m"`
 	if [ -z "$USR_QUERY" ]; then
+		month=`date "+%Y/%m"`
 		query_db "$month"; build_monthlyarchive
-	# or update archives based on a query match
-	else
-		db_query="$USR_QUERY"; query_db "$db_query"
-		UPDATE_LIST="$DB_RESULTS"
 	fi
-
 	# update relative monthly archives
-	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort -ru`
+	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort $SORT_ARGS`
 	for mod_month in $MOD_MONTHS; do
 		month="$mod_month"
 		query_db "$month"; build_monthlyarchive
 	done
 	# update relative entry archives
 	for mod_entry in $UPDATE_LIST; do
-		if [ "$ENTRY_ARCHIVES" = 1 ] && [ -f "$NB_DATA_DIR/$mod_entry" ]; then
-			entry="$mod_entry"
-			read_entry "$NB_DATA_DIR/$entry"
-			load_template "$NB_TEMPLATE_DIR/$PERMALINKENTRY_TEMPLATE"
-			build_permalink
-		fi
+		[ "$ENTRY_ARCHIVES" = 1 ] && [ -f "$NB_DATA_DIR/$mod_entry" ] &&
+			touch "$NB_DATA_DIR/$mod_entry"
 	done
 fi
+# build the entry archives
+[ "$ENTRY_ARCHIVES" = 1 ] &&
+	make_archive "$USR_QUERY" nocat "$PERMALINKENTRY_TEMPLATE" "$SCRATCH_FILE".permalinks.tmp
 }
 
 # update the cache
@@ -606,15 +648,17 @@ fi
 
 # build the weblog
 build_weblog(){
-[ -z "$USR_QUERY" ] && USR_QUERY="current"
+# update archives based on a query match
+if [ -z "$USR_QUERY" ]; then
+	USR_QUERY="current"
+else
+	db_query="$USR_QUERY"; query_db "$db_query"
+	UPDATE_LIST="$DB_RESULTS"
+fi
 # query database and check for categories
 db_catquery=`cat_id`; check_catid
-find_categories "$UPDATE_LIST"
-if [ "$USR_QUERY" = all ]; then
-	# remove all generated files for a clean build
-	rm -fr "$BLOG_DIR/$ARCHIVES_DIR/"*."$NB_FILETYPE"
-	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
-fi
+[ -z "$CAT_LIST" ] &&
+	find_categories "$UPDATE_LIST"
 update_cache all
 load_plugins
 # update previously cached entries
@@ -623,16 +667,12 @@ update_cache list "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$USR_QUERY" != main ] && build_archives
-if [ "$USR_QUERY" != main ] && [ "$ENTRY_ARCHIVES" = 1 ]; then
-	make_archive "$USR_QUERY" nocat "$PERMALINKENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
-	rm -f "$BLOG_DIR/$PARTS_DIR"/permalinks.tmp
-fi
 # build main index
 update_cache "$QUERY_MODE"
 [ "$ABSOLUTE_LINKS" != 1 ] && BASE_URL="./"
 nb_msg "generating main index page(s) ..."
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
-paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" index."$NB_FILETYPE"
+paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR" "index.$NB_FILETYPE"
 }
 
 # add a new entry
@@ -694,7 +734,7 @@ done
 UPDATE_LIST=$(< "$SCRATCH_FILE")
 if [ ! -z "$UPDATE_LIST" ]; then
 	nb_msg "processing modified weblog entries ..."
-	find_categories "$UPDATE_LIST"; build_weblog
+	build_weblog
 else
 	die "no changes were made! goodbye."
 fi
@@ -729,15 +769,15 @@ for entry_id in $NUMVAR; do
 done
 nb_msg "deleting weblog entry id(s): $delete_num$cat_msg ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
-find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
 		if [ ! -z "$cat_list" ]; then
 			for cat_db in $cat_list; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				if [ ! -z "$cat_mod" ]; then
-					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
+				sedified_entry=`echo "$Delete_EntryFile" |sed -e 's|\/|\\\/|g'`
+				if [ ! -z "$cat_mod" ] && [ ! -z "$sedified_entry" ]; then
+					sed -e '/'$sedified_entry'/d' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi
@@ -745,8 +785,9 @@ for entry_id in $NUMVAR; do
 		else
 			for cat_db in $db_categories; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				if [ ! -z "$cat_mod" ]; then
-					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
+				sedified_entry=`echo "$Delete_EntryFile" |sed -e 's|\/|\\\/|g'`
+				if [ ! -z "$cat_mod" ] && [ ! -z "$sedified_entry" ]; then
+					sed -e '/'$sedified_entry'/d' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi
@@ -997,8 +1038,7 @@ cat <<-EOF
 	 -t, --title <text>			set title of entry/category/page
 	 					(for '--add', '--category', and
 	 					'--makepage').
-	 -u, --update <all,current,date,main,max>
-	 					force update of weblog (defaults to
+	 -u, --update <all,current,date,main> 	force update of weblog (defaults to
 	 					current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
 	 -V, --version				display version information.
@@ -1078,7 +1118,7 @@ while [ $# -gt 0 ]; do
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; usr_title="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
-					check_config; build_weblog "$USR_QUERY";; 
+					check_config; build_weblog "$USR_QUERY";;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;

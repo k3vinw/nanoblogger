@@ -5,9 +5,7 @@
 : ${CATLINKS_FILTER_CMD:="sort"}
 query_db
 >"$SCRATCH_FILE".category_links
-get_cat_titles(){ for cat_db in $db_categories; do echo "`sed 1q $NB_DATA_DIR/$cat_db` | $cat_db"; done; }
-CAT_TLIST=`get_cat_titles |sort -u |cut -d"|" -f 2`
-for entry_catlinks in $CAT_TLIST; do
+for entry_catlinks in $db_categories; do
 	cat_var=`grep "$entry" "$NB_DATA_DIR"/"$entry_catlinks"`
 	if [ ! -z "$cat_var" ]; then
 		cat_title=`sed 1q "$NB_DATA_DIR"/"$entry_catlinks"`

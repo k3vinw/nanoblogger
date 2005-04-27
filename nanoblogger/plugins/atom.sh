@@ -11,8 +11,6 @@ NB_AtomAltLink='<link rel="alternate" type="application/atom+xml" title="Atom $N
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 # make links temporarily absolute
-ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
-[ "$ABSOLUTE_LINKS" = "1" ] && ARCHIVES_URL=""
 OLD_BASE_URL="$BASE_URL"
 BASE_URL="$BLOG_URL/"
 
@@ -54,7 +52,7 @@ build_atomfeed(){
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
-		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
+		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/\//-/g; s/[\.]'$NB_DATATYPE'//g'`
 		Atom_EntryDate=`echo "$Atom_EntryTime$BLOG_TZD"`
 		# non-portable find command!
 		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
@@ -81,8 +79,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="${ARCHIVES_URL}$NB_EntryPermalink"/>
-				<id>${ARCHIVES_URL}$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="$NB_EntryPermalink"/>
+				<id>$NB_EntryPermalink</id>
 				<issued>$Atom_EntryDate</issued>
 				<modified>$Atom_EntryModDate</modified>
 				<created>$Atom_EntryDate</created>

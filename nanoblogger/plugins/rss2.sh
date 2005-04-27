@@ -13,8 +13,6 @@ NB_RSS2CatAltLink='<link rel="alternate" type="application/rss+xml" title="RSS $
 
 NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 # Make links temporarily absolute
-ARCHIVES_URL="$BLOG_URL/$ARCHIVES_DIR/"
-[ "$ABSOLUTE_LINKS" = "1" ] && ARCHIVES_URL=""
 OLD_BASE_URL="$BASE_URL"
 BASE_URL="$BLOG_URL/"
 
@@ -59,7 +57,7 @@ build_rssfeed(){
 	ARCHIVE_LIST="$DB_RESULTS"
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
-		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
+		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/\//-/g; s/[\.]'$NB_DATATYPE'//g'`
 	        read_entry "$NB_DATA_DIR/$entry"
 		# non-portable find command!
 		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
@@ -82,7 +80,7 @@ build_rssfeed(){
 		NB_RSS2EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<item>
-				<link>${ARCHIVES_URL}$NB_EntryPermalink</link>
+				<link>$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
 				<dc:creator>$NB_EntryAuthor</dc:creator>
@@ -119,3 +117,4 @@ build_rssfeed nocat
 make_rssfeed "$BLOG_DIR/$NB_RSS2File"
 build_rss_catfeeds
 BASE_URL="$OLD_BASE_URL"
+

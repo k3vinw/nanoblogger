@@ -29,17 +29,17 @@ if [ "$LIST_MODE" = "old" ]; then
 fi
 for entry in $DB_RESULTS ; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
-	NB_EntryID="$x_id$entry"
+	NB_EntryID=`set_entryid $entry`
 	title_link="$NB_EntryTitle"
 	[ -z "$title_link" ] && title_link="Untitled"
 	if [ "$ENTRY_ARCHIVES" = "1" ] ; then
-		permalink_entry=`chg_suffix $entry`
-		permalink="\${ARCHIVES_PATH}$permalink_entry"
+		permalink_file=`chg_suffix $entry`
+		recent_permalink="\${ARCHIVES_PATH}$permalink_file"
 	else
 		month_link=`echo "$entry" |cut -c1-7`
-		permalink="\${ARCHIVES_PATH}$month_link.$NB_FILETYPE#$NB_EntryID"
+		recent_permalink="\${ARCHIVES_PATH}$month_link/$NB_INDEX#$NB_EntryID"
 	fi
-	echo '<a href="'$permalink'">'$title_link'</a><br />'
+	echo '<a href="'$recent_permalink'">'$title_link'</a><br />'
 done
 }
 

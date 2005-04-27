@@ -14,17 +14,19 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		month=`echo "$entry" |cut -c1-7`
 		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
+		NB_EntryID=`set_entryid $entry`
 		if [ "$ENTRY_ARCHIVES" = 1 ]; then
-			permalink_entry=`chg_suffix $entry`
-			NB_EntryPermalink="${ARCHIVES_PATH}$permalink_entry"
+			permalink_file=`chg_suffix $entry`
+			NB_EntryPermalink="${ARCHIVES_PATH}$permalink_file"
 		else
-			NB_EntryPermalink="${ARCHIVES_PATH}$month.$NB_FILETYPE#$NB_EntryID"
+			NB_EntryID=`set_entryid $entry`
+			NB_EntryPermalink="${ARCHIVES_PATH}$month/$NB_INDEX#$NB_EntryID"
 		fi
 		# load category links plugin
 		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
 			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
-			<a href="\${ARCHIVES_PATH}$month.$NB_FILETYPE">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="\${ARCHIVES_PATH}$month/$NB_INDEX">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)

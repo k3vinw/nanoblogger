@@ -20,7 +20,7 @@ $([ ! -z "$NB_AtomAltLink" ] && echo "$NB_AtomAltLink")
 <body>
 
 <div id="banner">
-<h1><a href="${BASE_URL}$MAIN_LINK" accesskey="1">$BLOG_TITLE</a></h1>
+<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
 <span class="description">$BLOG_DESCRIPTION</span>
 </div>
 
@@ -75,7 +75,7 @@ Archives
 </div>
 
 <div class="side">
-<a href="${BASE_URL}$ARCHIVES_DIR/index.$NB_FILETYPE">Archive Index</a><br />
+<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archive Index</a><br />
 $NB_Month_Links
 </div>
 
