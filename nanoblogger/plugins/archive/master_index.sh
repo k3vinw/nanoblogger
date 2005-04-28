@@ -11,28 +11,20 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	ENTRY_LIST="$DB_RESULTS"
 	NB_Entry_Links=$(
 	for entry in $ENTRY_LIST; do
-		month=`echo "$entry" |cut -c1-7`
 		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
 		NB_EntryID=`set_entryid $entry`
-		if [ "$ENTRY_ARCHIVES" = 1 ]; then
-			permalink_file=`chg_suffix $entry`
-			NB_EntryPermalink="${ARCHIVES_PATH}$permalink_file"
-		else
-			NB_EntryID=`set_entryid $entry`
-			NB_EntryPermalink="${ARCHIVES_PATH}$month/$NB_INDEX#$NB_EntryID"
-		fi
+		set_entrylink "$entry"
 		# load category links plugin
 		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
 			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
-			<a href="\${ARCHIVES_PATH}$month/$NB_INDEX">$month</a> - <a href="$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="\${ARCHIVES_PATH}$month_file">$month</a> - <a href="\${ARCHIVES_PATH}$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)
 
 	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
-	#echo "cat_total: $cat_total"
 	if [ "$cat_total" -gt 0 ]; then
 		# make NB_Category_Links placeholder
 		NB_Browse_CatLinks=$(

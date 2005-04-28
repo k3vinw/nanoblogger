@@ -22,7 +22,7 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 
 	curr_month=`date +%m`
 	query_db all
-	MONTH_LIST=`echo "$DB_RESULTS" |sort $SORT_ARGS |grep '[\/]'$curr_month'[\/]'`
+	MONTH_LIST=`echo "$DB_RESULTS" |sort $SORT_ARGS |grep '[-]'$curr_month'[-]'`
 
 	echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with links to days with entries">' > "$PLUGIN_OUTFILE"
 	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
@@ -45,9 +45,10 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 				entry_day=`echo $entry |cut -c9-10 |sed -e '/^0/ s///g'`
 				curr_month=`date +%m`
 				curr_year=`date +%Y`
-			if [ "$curr_year/$curr_month/$dn" = "$entry_year/$entry_month/$entry_day" ] ; then
+			if [ "$curr_year$curr_month$dn" = "$entry_year$entry_month$entry_day" ] ; then
 				set_link=1
-				dn='<a href="'\${ARCHIVES_PATH}$entry_year/$entry_month/$NB_INDEX'#'$NB_EntryID'">'$dn'</a>'
+				set_entrylink "$entry" altlink
+				dn='<a href="'\${ARCHIVES_PATH}$NB_EntryPermalink'">'$dn'</a>'
 				echo '<td style="text-align: center;"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done

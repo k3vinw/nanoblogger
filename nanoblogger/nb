@@ -11,7 +11,7 @@ BASE_DIR=`dirname $0`
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
-NB_TimeStamp(){ date "+%Y/%m/%d/T%H_%M_%S"; }
+NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
 
 # prompt to use when asking something.
 NB_PROMPT=": "
@@ -148,9 +148,28 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
+# set link for given month
+set_monthlink(){ month_var="$1"
+month_dir=`echo $month_var |sed -e '/-/ s//\//g'`
+month_file="$month_dir/index.$NB_FILETYPE"
+NB_ArchiveMonthLink="$month_dir/$NB_INDEX"; }
+
 # generate entry's HTML anchor/id
 set_entryid(){ entry_var="$1"
-echo "$x_id$entry_var" |sed -e '/\// s//-/g'
+echo "$x_id$entry_var" |sed -e '/\// s//-/g'; }
+
+# set link for given entry
+set_entrylink(){ entry_var="$1"; link_type="$2"
+entry_link=`echo $entry_var |sed -e '/-/ s//\//g'`
+month=`echo "$entry_link" |cut -c1-7`
+month_file="$month/index.$NB_FILETYPE"
+if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
+	permalink_file=`chg_suffix $entry_link`
+	NB_EntryPermalink="$permalink_file"
+else
+	entry_id=`set_entryid $entry_var`
+	NB_EntryPermalink="$month/$NB_INDEX#$entry_id"
+fi
 }
 
 nb_edit(){
@@ -188,7 +207,7 @@ db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
-current_date=`date "+%Y/%m"`
+current_date=`date "+%Y-%m"`
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
@@ -215,8 +234,8 @@ fi
 : ${DB_YYYY:=[0-9][0-9][0-9][0-9]}
 : ${DB_MM:=[0-9][0-9]}
 : ${DB_DD:=[0-9][0-9]}
-DB_DATE="$DB_YYYY/$DB_MM"
-for entry in $DB_DATE/$DB_DD*.$NB_DATATYPE; do
+DB_DATE="$DB_YYYY-$DB_MM"
+for entry in $DB_DATE-$DB_DD*.$NB_DATATYPE; do
 	[ -f "$entry" ] && echo "$entry"
 done
 }
@@ -309,14 +328,7 @@ read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
 	ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
-	month=`echo "$entry" |cut -c1-7`
 	NB_EntryID=`set_entryid $entry`
-	if [ "$ENTRY_ARCHIVES" = 1 ]; then
-		permalink_file=`chg_suffix $entry`
-		NB_EntryPermalink="${ARCHIVES_PATH}$permalink_file"
-	else
-		NB_EntryPermalink="${ARCHIVES_PATH}$month/$NB_INDEX#$NB_EntryID"
-	fi
 	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
 	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
@@ -325,7 +337,6 @@ if [ -f "$ENTRY_FILE" ]; then
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
-		mkdir -p `dirname "$BLOG_DIR/$CACHE_DIR/$entry.body"`
 		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
 		echo "$entry" >> "$SCRATCH_FILE.cache_list"
 	else
@@ -337,7 +348,6 @@ fi
 # write entry to file
 write_entry(){
 ENTRY_FILE="$1"
-mkdir -p `dirname "$ENTRY_FILE"`
 cat > "$ENTRY_FILE" <<-EOF
 	TITLE: $NB_EntryTitle
 	AUTHOR: $NB_EntryAuthor
@@ -399,7 +409,7 @@ build_permalink(){
 if [ "$ENTRY_ARCHIVES" = 1 ]; then
 	BASE_URL="../../../"
 	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file" ]; then
-		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$entry"`
+		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$permalink_file"`
 		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
 		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
@@ -421,6 +431,7 @@ mkdir -p `dirname "$PARTS_FILE"`
 > "$PARTS_FILE"
 for entry in $ARCHIVE_LIST; do
 	read_entry "$NB_DATA_DIR/$entry"
+	set_entrylink "$entry"
 	load_template "$NB_TEMPLATE_DIR/$archive_template"
 	if [ ! -z "$BLOG_HTML" ]; then
 		echo "$BLOG_HTML" >> "$PARTS_FILE"
@@ -518,11 +529,13 @@ fi
 build_monthlyarchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
 		BASE_URL="../../../"
-		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month/index.$NB_FILETYPE"
+		set_monthlink "$month"
+		mkdir -p `dirname "$BLOG_DIR/$ARCHIVES_DIR/$month_file"`
+		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
 		NB_ArchiveTitle="$month"
 		load_plugins archive/monthly
-		make_page "$BLOG_DIR/$PARTS_DIR/$month/index.$NB_FILETYPE" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
-		"$BLOG_DIR/$ARCHIVES_DIR/$month/index.$NB_FILETYPE"
+		make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
+		"$BLOG_DIR/$ARCHIVES_DIR/$month_file"
 	fi
 }
 
@@ -535,9 +548,9 @@ cycle_months_for(){
 	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort $SORT_ARGS`
 	for yearn in $ENTRY_YEARS; do
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[\/]'$monthn'[\/]' |sed 1q`
+			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
 			for entry_month in $ENTRY_LIST; do
-				month="$yearn/$monthn"
+				month="$yearn-$monthn"
 				query_db "$month"
 				[ ! -z "$DB_RESULTS" ] && $which_part
 			done
@@ -579,8 +592,6 @@ if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
-			#NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
-			#paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_ArchivePrefix.$NB_FILETYPE"
 			NB_CatArchive=`chg_suffix "$cat_arch"`
 			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR" "$NB_CatArchive"
 		fi
@@ -606,7 +617,7 @@ if [ "$USR_QUERY" = all ]; then
 else
 	# build current month archive
 	if [ -z "$USR_QUERY" ]; then
-		month=`date "+%Y/%m"`
+		month=`date "+%Y-%m"`
 		query_db "$month"; build_monthlyarchive
 	fi
 	# update relative monthly archives
@@ -775,9 +786,8 @@ for entry_id in $NUMVAR; do
 		if [ ! -z "$cat_list" ]; then
 			for cat_db in $cat_list; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				sedified_entry=`echo "$Delete_EntryFile" |sed -e 's|\/|\\\/|g'`
-				if [ ! -z "$cat_mod" ] && [ ! -z "$sedified_entry" ]; then
-					sed -e '/'$sedified_entry'/d' "$NB_DATA_DIR/$cat_db" \
+				if [ ! -z "$cat_mod" ] && [ ! -z "$Delete_EntryFile" ]; then
+					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi
@@ -785,9 +795,8 @@ for entry_id in $NUMVAR; do
 		else
 			for cat_db in $db_categories; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				sedified_entry=`echo "$Delete_EntryFile" |sed -e 's|\/|\\\/|g'`
-				if [ ! -z "$cat_mod" ] && [ ! -z "$sedified_entry" ]; then
-					sed -e '/'$sedified_entry'/d' "$NB_DATA_DIR/$cat_db" \
+				if [ ! -z "$cat_mod" ] && [ ! -z "$Delete_EntryFile" ]; then
+					sed -e '/'$Delete_EntryFile'/d' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi

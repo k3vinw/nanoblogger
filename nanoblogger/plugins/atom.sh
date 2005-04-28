@@ -52,7 +52,8 @@ build_atomfeed(){
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
-		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/\//-/g; s/[\.]'$NB_DATATYPE'//g'`
+		set_entrylink "$entry"
+		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 		Atom_EntryDate=`echo "$Atom_EntryTime$BLOG_TZD"`
 		# non-portable find command!
 		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
@@ -79,8 +80,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="$NB_EntryPermalink"/>
-				<id>$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="${ARCHIVES_PATH}$NB_EntryPermalink"/>
+				<id>${ARCHIVES_PATH}$NB_EntryPermalink</id>
 				<issued>$Atom_EntryDate</issued>
 				<modified>$Atom_EntryModDate</modified>
 				<created>$Atom_EntryDate</created>

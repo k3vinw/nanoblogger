@@ -32,14 +32,8 @@ for entry in $DB_RESULTS ; do
 	NB_EntryID=`set_entryid $entry`
 	title_link="$NB_EntryTitle"
 	[ -z "$title_link" ] && title_link="Untitled"
-	if [ "$ENTRY_ARCHIVES" = "1" ] ; then
-		permalink_file=`chg_suffix $entry`
-		recent_permalink="\${ARCHIVES_PATH}$permalink_file"
-	else
-		month_link=`echo "$entry" |cut -c1-7`
-		recent_permalink="\${ARCHIVES_PATH}$month_link/$NB_INDEX#$NB_EntryID"
-	fi
-	echo '<a href="'$recent_permalink'">'$title_link'</a><br />'
+	set_entrylink "$entry"
+	echo '<a href="'\${ARCHIVES_PATH}$NB_EntryPermalink'">'$title_link'</a><br />'
 done
 }
 

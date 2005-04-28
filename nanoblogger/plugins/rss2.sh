@@ -57,8 +57,9 @@ build_rssfeed(){
 	ARCHIVE_LIST="$DB_RESULTS"
 	> "$SCRATCH_FILE"
 	for entry in $ARCHIVE_LIST; do
-		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/\//-/g; s/[\.]'$NB_DATATYPE'//g'`
+		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 	        read_entry "$NB_DATA_DIR/$entry"
+		set_entrylink "$entry"
 		# non-portable find command!
 		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
@@ -80,7 +81,7 @@ build_rssfeed(){
 		NB_RSS2EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<item>
-				<link>$NB_EntryPermalink</link>
+				<link>${ARCHIVES_PATH}$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
 				<dc:creator>$NB_EntryAuthor</dc:creator>
