@@ -27,6 +27,7 @@ if [ "$LIST_MODE" = "old" ]; then
 	LIST_N=`expr $LIST_N + $LIST_N`
 	query_db max nocat "$LIST_N" "$LIST_OFFSET"
 fi
+set_baseurl "./"
 for entry in $DB_RESULTS ; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 	NB_EntryID=`set_entryid $entry`
@@ -38,12 +39,10 @@ done
 }
 
 get_entries new > "$PLUGIN_OUTFILE1"
-NB_Recent_Entries=$(< "$PLUGIN_OUTFILE1")
 load_template "$PLUGIN_OUTFILE1"
-echo "$BLOG_HTML" > "$PLUGIN_OUTFILE1"
+NB_Recent_Entries="$BLOG_HTML"
 
 get_entries old > "$PLUGIN_OUTFILE2"
-NB_Older_Entries=$(< "$PLUGIN_OUTFILE2")
 load_template "$PLUGIN_OUTFILE2"
-echo "$BLOG_HTML" > "$PLUGIN_OUTFILE2"
+NB_Older_Entries="$BLOG_HTML"
 

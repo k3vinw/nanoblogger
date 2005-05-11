@@ -48,7 +48,8 @@ if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
 			if [ "$curr_year$curr_month$dn" = "$entry_year$entry_month$entry_day" ] ; then
 				set_link=1
 				set_entrylink "$entry" altlink
-				dn='<a href="'\${ARCHIVES_PATH}$NB_EntryPermalink'">'$dn'</a>'
+				set_baseurl "./"
+				dn='<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$dn'</a>'
 				echo '<td style="text-align: center;"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 			done

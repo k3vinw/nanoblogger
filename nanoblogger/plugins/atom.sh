@@ -7,12 +7,12 @@ NB_AtomFile="atom.$NB_SYND_FILETYPE"
 # atom feed version
 NB_AtomVer="0.3"
 # atom feed's alternate link
-NB_AtomAltLink='<link rel="alternate" type="application/atom+xml" title="Atom $NB_AtomVer" href="${BASE_URL}$NB_AtomFile" />'
+NB_AtomAltLink='<link rel="alternate" type="application/atom+xml" title="Atom $NB_AtomVer" href="$BLOG_URL/$NB_AtomFile" />'
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
-# make links temporarily absolute
-OLD_BASE_URL="$BASE_URL"
-BASE_URL="$BLOG_URL/"
+
+# set link to the archives
+NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR"
 
 # escape special characters to help create valid xml feeds
 esc_chars(){
@@ -80,8 +80,8 @@ build_atomfeed(){
 				<author>
 					<name>$NB_EntryAuthor</name>
 				</author>
-				<link rel="alternate" type="text/html" href="${ARCHIVES_PATH}$NB_EntryPermalink"/>
-				<id>${ARCHIVES_PATH}$NB_EntryPermalink</id>
+				<link rel="alternate" type="text/html" href="${NB_AtomArchivesPath}$NB_EntryPermalink"/>
+				<id>${NB_AtomArchivesPath}$NB_EntryPermalink</id>
 				<issued>$Atom_EntryDate</issued>
 				<modified>$Atom_EntryModDate</modified>
 				<created>$Atom_EntryDate</created>
@@ -102,4 +102,4 @@ build_atomfeed(){
 nb_msg "generating atom $NB_AtomVer feed ..."
 build_atomfeed nocat
 make_atomfeed
-BASE_URL="$OLD_BASE_URL"
+

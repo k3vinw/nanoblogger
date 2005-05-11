@@ -8,13 +8,13 @@ NB_RSS2File="rss.$NB_SYND_FILETYPE"
 # rss version
 NB_RSS2Ver="2.0"
 # rss feed's alternate link
-NB_RSS2AltLink='<link rel="alternate" type="application/rss+xml" title="RSS $NB_RSS2Ver" href="${BASE_URL}$NB_RSS2File" />'
+NB_RSS2AltLink='<link rel="alternate" type="application/rss+xml" title="RSS $NB_RSS2Ver" href="$BLOG_URL/$NB_RSS2File" />'
 NB_RSS2CatAltLink='<link rel="alternate" type="application/rss+xml" title="RSS $NB_RSS2Ver: $NB_ArchiveTitle" href="$NB_ArchivePrefix-$NB_RSS2File" />'
 
 NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
-# Make links temporarily absolute
-OLD_BASE_URL="$BASE_URL"
-BASE_URL="$BLOG_URL/"
+
+# set link to archives
+NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR"
 
 # escape special characters to help create valid xml feeds
 esc_chars(){
@@ -81,7 +81,7 @@ build_rssfeed(){
 		NB_RSS2EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE" <<-EOF
 			<item>
-				<link>${ARCHIVES_PATH}$NB_EntryPermalink</link>
+				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
 				<dc:creator>$NB_EntryAuthor</dc:creator>
@@ -117,5 +117,4 @@ nb_msg "generating rss $NB_RSS2Ver feed ..."
 build_rssfeed nocat
 make_rssfeed "$BLOG_DIR/$NB_RSS2File"
 build_rss_catfeeds
-BASE_URL="$OLD_BASE_URL"
 
