@@ -8,8 +8,8 @@
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}images/favicon.ico" />
-$([ ! -z "$NB_RSS2CatAltLink" ] && echo "$NB_RSS2CatAltLink")
-$([ ! -z "$NB_RSSCatAltLink" ] && echo "$NB_RSSCatAltLink")
+$([ ! -z "$NB_RSS2Ver" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSS2Ver': '$NB_ArchiveTitle'" href="'${ARCHIVES_PATH}$NB_ArchivePrefix-rss.$NB_SYND_FILETYPE'" />')
+$([ ! -z "$NB_RSSVer" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSSVer': '$NB_ArchiveTitle'" href="'${ARCHIVES_PATH}$NB_ArchivePrefix.$NB_SYND_FILETYPE'" />')
 
 </head>
 

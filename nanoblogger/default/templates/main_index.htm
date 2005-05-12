@@ -11,9 +11,9 @@
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}images/favicon.ico" />
-$([ ! -z "$NB_RSS2AltLink" ] && echo "$NB_RSS2AltLink")
-$([ ! -z "$NB_RSSAltLink" ] && echo "$NB_RSSAltLink")
-$([ ! -z "$NB_AtomAltLink" ] && echo "$NB_AtomAltLink")
+$([ ! -z "$NB_RSS2File" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSS2Ver'" href="'${BASE_URL}$NB_RSS2File'" />')
+$([ ! -z "$NB_RSSFile" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSSVer'" href="'${BASE_URL}$NB_RSSFile'" />')
+$([ ! -z "$NB_AtomFile" ] && echo '<link rel="alternate" type="application/atom+xml" title="Atom '$NB_AtomVer'" href="'${BASE_URL}$NB_AtomFile'" />)
 
 </head>
 

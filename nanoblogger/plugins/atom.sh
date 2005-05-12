@@ -6,13 +6,11 @@
 NB_AtomFile="atom.$NB_SYND_FILETYPE"
 # atom feed version
 NB_AtomVer="0.3"
-# atom feed's alternate link
-NB_AtomAltLink='<link rel="alternate" type="application/atom+xml" title="Atom $NB_AtomVer" href="$BLOG_URL/$NB_AtomFile" />'
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 
 # set link to the archives
-NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR"
+NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 
 # escape special characters to help create valid xml feeds
 esc_chars(){

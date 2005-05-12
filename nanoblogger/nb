@@ -469,7 +469,7 @@ page_file=`basename "$page_outfile"`
 	PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
 	}
 	page_bynumber(){
-		set_baseurl "" "$page_dir/$archpage"
+		set_baseurl "" "$page_dir/$arch_page"
 		make_archive max "$page_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$arch_page" "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/$arch_page" "$NB_TEMPLATE_DIR/$page_template" "$page_dir/$arch_page"
 	}
@@ -597,6 +597,7 @@ if [ ! -z "$db_categories" ]; then
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
 			NB_CatArchive=`chg_suffix "$cat_arch"`
+			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
 			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/$NB_CatArchive"
 		fi
 	done

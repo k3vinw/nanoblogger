@@ -7,14 +7,12 @@
 NB_RSS2File="rss.$NB_SYND_FILETYPE"
 # rss version
 NB_RSS2Ver="2.0"
-# rss feed's alternate link
-NB_RSS2AltLink='<link rel="alternate" type="application/rss+xml" title="RSS $NB_RSS2Ver" href="$BLOG_URL/$NB_RSS2File" />'
-NB_RSS2CatAltLink='<link rel="alternate" type="application/rss+xml" title="RSS $NB_RSS2Ver: $NB_ArchiveTitle" href="$NB_ArchivePrefix-$NB_RSS2File" />'
+
 
 NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 
 # set link to archives
-NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR"
+NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 
 # escape special characters to help create valid xml feeds
 esc_chars(){
