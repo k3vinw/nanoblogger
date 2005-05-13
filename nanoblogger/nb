@@ -621,7 +621,7 @@ if [ "$USR_QUERY" = all ]; then
 	cycle_months_for build_monthlyarchive
 else
 	# build current month archive
-	if [ -z "$USR_QUERY" ]; then
+	if [ -z "$USR_QUERY" ] || [ "$USR_QUERY" = current ]; then
 		month=`date "+%Y-%m"`
 		query_db "$month"; build_monthlyarchive
 	fi
@@ -702,7 +702,7 @@ if [ ! -z "$cat_num" ]; then
 	done
 fi
 [ "$build_newblog" = 1 ] && USR_QUERY=all
-build_weblog "$USR_QUERY"
+build_weblog
 }
 
 # edit $BLOG_CONF
@@ -784,6 +784,7 @@ for entry_id in $NUMVAR; do
 done
 nb_msg "deleting weblog entry id(s): $delete_num$cat_msg ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
+find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
@@ -1118,7 +1119,7 @@ while [ $# -gt 0 ]; do
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-l|--list)		USR_QUERY="$2"; shift
-					check_config; list_weblog "$db_query";;
+					check_config; list_weblog;;
 		-n|--author)		check_arg; usr_author="$2"; shift;;
 		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
 					check_config; make_page;;
@@ -1131,7 +1132,7 @@ while [ $# -gt 0 ]; do
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; usr_title="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
-					check_config; build_weblog "$USR_QUERY";;
+					check_config; build_weblog;;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
