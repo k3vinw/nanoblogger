@@ -2,11 +2,11 @@
 		margin:0px 0px 20px 0px;
 		background:#FFF;
 		}
-	A 		{ color: #003366; text-decoration: underline; }
-	A:link		{ color: #003366; text-decoration: underline; }
-	A:visited	{ color: #003366; text-decoration: underline; }
-	A:active	{ color: #999999;  }
-	A:hover		{ color: #999999;  }
+	a 		{ color: #003366; text-decoration: underline; }
+	a:link		{ color: #003366; text-decoration: underline; }
+	a:visited	{ color: #003366; text-decoration: underline; }
+	a:active	{ color: #999999;  }
+	a:hover		{ color: #999999;  }
 
 	h1, h2, h3 {
 		margin: 0px;

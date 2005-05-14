@@ -2,11 +2,11 @@
 		margin:0px 0px 0px 0px;
 		background:#FFF;
 		}
-	A 		{ color: #57933a; text-decoration: none; }
-	A:link		{ color: #57933a; text-decoration: none; }
-	A:visited	{ color: #57933a; text-decoration: none; }
-	A:active	{ color: #7fd754; text-decoration: underline; }
-	A:hover		{ color: #ee9d00; text-decoration: underline; }
+	a 		{ color: #57933a; text-decoration: none; }
+	a:link		{ color: #57933a; text-decoration: none; }
+	a:visited	{ color: #57933a; text-decoration: none; }
+	a:active	{ color: #7fd754; text-decoration: underline; }
+	a:hover		{ color: #ee9d00; text-decoration: underline; }
 
 	h1, h2, h3 {
 		margin: 0px;

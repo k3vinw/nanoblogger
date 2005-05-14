@@ -411,11 +411,32 @@ if [ "$ENTRY_ARCHIVES" = 1 ]; then
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file" ]; then
 		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$permalink_file"`
-		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$entry"
-		make_page "$BLOG_DIR/$PARTS_DIR/$entry" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
+		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
+		make_page "$BLOG_DIR/$PARTS_DIR/$permalink_file" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	fi
 fi
+}
+
+# build entry archives
+build_entryarchives(){
+ENTRY_ARCHIVES_LIST="$1"
+entry_template="$2"
+for entry in $ENTRY_ARCHIVES_LIST; do
+	if [ -f "$NB_DATA_DIR/$entry" ]; then
+		touch "$NB_DATA_DIR/$entry"
+		read_entry "$NB_DATA_DIR/$entry"
+		set_entrylink "$entry"
+		set_baseurl "$BASE_URL"
+		load_template "$NB_TEMPLATE_DIR/$entry_template"
+		if [ ! -z "$BLOG_HTML" ]; then
+			[ -f "$PARTS_FILE" ] &&
+				echo "$BLOG_HTML" >> "$PARTS_FILE"
+			[ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ] &&
+				build_permalink
+		fi
+	fi
+done
 }
 
 # generate archive content
@@ -430,18 +451,7 @@ query_db "$query_type" "$db_catquery" "$db_limit" "$db_offset"
 ARCHIVE_LIST="$DB_RESULTS"
 mkdir -p `dirname "$PARTS_FILE"`
 > "$PARTS_FILE"
-for entry in $ARCHIVE_LIST; do
-	read_entry "$NB_DATA_DIR/$entry"
-	set_entrylink "$entry"
-	set_baseurl "$BASE_URL"
-	load_template "$NB_TEMPLATE_DIR/$archive_template"
-	if [ ! -z "$BLOG_HTML" ]; then
-		echo "$BLOG_HTML" >> "$PARTS_FILE"
-		[ "$archive_template" = "$PERMALINKENTRY_TEMPLATE" ] &&
-			build_permalink
-		BLOG_HTML=
-	fi
-done
+build_entryarchives "$ARCHIVE_LIST" "$archive_template"
 }
 
 # divide larger archives into multiple pages
@@ -616,9 +626,12 @@ load_plugins archive
 nb_msg "generating archives ..."
 # build the category archives
 build_catarchives
-# build the monthly archives
 if [ "$USR_QUERY" = all ]; then
+	# build the monthly archives
 	cycle_months_for build_monthlyarchive
+	# build the entry archives
+	[ "$ENTRY_ARCHIVES" = 1 ] &&
+		build_entryarchives "$DB_RESULTS" "$PERMALINKENTRY_TEMPLATE"
 else
 	# build current month archive
 	if [ -z "$USR_QUERY" ] || [ "$USR_QUERY" = current ]; then
@@ -632,14 +645,9 @@ else
 		query_db "$month"; build_monthlyarchive
 	done
 	# update relative entry archives
-	for mod_entry in $UPDATE_LIST; do
-		[ "$ENTRY_ARCHIVES" = 1 ] && [ -f "$NB_DATA_DIR/$mod_entry" ] &&
-			touch "$NB_DATA_DIR/$mod_entry"
-	done
+	[ "$ENTRY_ARCHIVES" = 1 ] &&
+		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE"
 fi
-# build the entry archives
-[ "$ENTRY_ARCHIVES" = 1 ] &&
-	make_archive "$USR_QUERY" nocat "$PERMALINKENTRY_TEMPLATE" "$SCRATCH_FILE".permalinks.tmp
 }
 
 # update the cache
@@ -676,7 +684,6 @@ db_catquery=`cat_id`; check_catid
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
 update_cache all
-#set_baseurl "../"
 load_plugins
 # update previously cached entries
 CACHE_LIST=`sort -u "$SCRATCH_FILE.cache_list"`

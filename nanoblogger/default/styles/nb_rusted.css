@@ -2,11 +2,11 @@
 		margin:0px 0px 0px 0px;
 		background:#FFF;
 		}
-	A 		{ color: #921d00; text-decoration: none; }
-	A:link		{ color: #921d00; text-decoration: none; }
-	A:visited	{ color: #921d00; text-decoration: none; }
-	A:active	{ color: #dd8f07; text-decoration: underline; }
-	A:hover		{ color: #dd8f07; text-decoration: underline; }
+	a 		{ color: #921d00; text-decoration: none; }
+	a:link		{ color: #921d00; text-decoration: none; }
+	a:visited	{ color: #921d00; text-decoration: none; }
+	a:active	{ color: #dd8f07; text-decoration: underline; }
+	a:hover		{ color: #dd8f07; text-decoration: underline; }
 
 	h1, h2, h3 {
 		margin: 0px;
