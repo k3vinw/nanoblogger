@@ -46,6 +46,9 @@ make_rssfeed(){
 		</rss>
 	EOF
 	nb_msg "$MKPAGE_OUTFILE"
+	# load postformat tidy plugin
+	[ -f "$PLUGINS_DIR"/postformat/tidy.sh ] &&
+		. "$PLUGINS_DIR"/postformat/tidy.sh
 	}
 
 # generate feed entries
