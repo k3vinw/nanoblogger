@@ -12,6 +12,8 @@ NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
 # set link to the archives
 NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 
+set_baseurl "$BLOG_URL/"
+
 # escape special characters to help create valid xml feeds
 esc_chars(){
 	sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'

@@ -614,6 +614,26 @@ if [ ! -z "$db_categories" ]; then
 fi
 }
 
+# update the cache
+update_cache(){
+cache_update="$1"
+CACHE_LIST="$2"
+nb_msg "updating cache ..."
+> "$SCRATCH_FILE".cache_list
+if [ "$cache_update" = list ]; then
+	for cache_entry in $CACHE_LIST; do
+		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+	done
+	CACHE_LIST=$(< "$SCRATCH_FILE.cache_list")
+else
+	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
+	for cache_entry in $DB_RESULTS; do	
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+	done
+fi
+}
+
 # create/update archives
 build_archives(){
 if [ "$USR_QUERY" = all ]; then
@@ -642,7 +662,10 @@ else
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort $SORT_ARGS`
 	for mod_month in $MOD_MONTHS; do
 		month="$mod_month"
-		query_db "$month"; build_monthlyarchive
+		# don't update the current month twice!
+		if [ "$month" != `date "+%Y-%m"` ]; then
+			query_db "$month"; build_monthlyarchive
+		fi
 	done
 	# update relative entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
@@ -650,29 +673,10 @@ else
 fi
 }
 
-# update the cache
-update_cache(){
-cache_update="$1"
-CACHE_LIST="$2"
-nb_msg "updating cache ..."
-> "$SCRATCH_FILE".cache_list
-if [ "$cache_update" = list ]; then
-	for cache_entry in $CACHE_LIST; do
-		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
-	done
-	CACHE_LIST=$(< "$SCRATCH_FILE.cache_list")
-else
-	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
-	for cache_entry in $DB_RESULTS; do	
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
-	done
-fi
-}
-
 # build the weblog
 build_weblog(){
 # update archives based on a query match
+[ "$new_weblog" = 1 ] && USR_QUERY=all
 if [ -z "$USR_QUERY" ]; then
 	USR_QUERY="current"
 else
@@ -708,7 +712,7 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-[ "$build_newblog" = 1 ] && USR_QUERY=all
+UPDATE_LIST="$New_EntryFile"
 build_weblog
 }
 
@@ -937,7 +941,7 @@ add_weblog(){
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
-	build_newblog=1
+	new_weblog=1
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
 	nb_msg "copying default weblog files ..."
