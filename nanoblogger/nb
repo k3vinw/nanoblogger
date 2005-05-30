@@ -80,13 +80,11 @@ load_config(){
 # set data directory
 [ -d "$BLOG_DIR/data" ] && NB_DATA_DIR="$BLOG_DIR/data"
 # USR_DATADIR overrides NB_DATA_DIR, DATA_DIR
-[ -d "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
+[ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
-[ -d "$BLOG_DIR/templates" ] && NB_TEMPLATE_DIR="$BLOG_DIR/templates"
-# BLOG_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
-[ -d "$BLOG_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$BLOG_TEMPLATE_DIR"
-# USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR, BLOG_TEMPLATE_DIR
-[ -d "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
+: ${NB_TEMPLATE_DIR:=$BLOG_DIR/templates}
+# USR_TEMPLATE_DIR overrides NB_TEMPLATE_DIR
+[ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # where plugins are located and run by default
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
@@ -109,10 +107,12 @@ load_config(){
 : ${QUERY_MODE:=max}
 # defaults for maximum entries to display on each page
 : ${MAX_ENTRIES:=10}; : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
+# defaults for index file name
+: ${NB_INDEXFILE:=index.$NB_FILETYPE}
 # default for previous and next page symbols, using html entities
 : ${NB_NextPage:=[&#62;&#62;]}
 : ${NB_PrevPage:=[&#60;&#60;]}
-# default sort arguments (-unique is required)
+# default sort arguments (-u|nique is required)
 : ${SORT_ARGS:=-ru}
 }
 
@@ -163,7 +163,7 @@ load_config
 [ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
 [ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
 [ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "weblog's cache directory '$CACHE_DIR' doesn't exist! goodbye."
-[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist!. goodbye."
+[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist! goodbye."
 }
 
 # create list of entries based on a month or interval
@@ -226,8 +226,6 @@ elif [ "$db_query" = max ]; then
 else
 	DB_RESULTS=`cat_db |filter_query`
 fi
-# make sure results actually match something
-DB_RESULTS=`echo "$DB_RESULTS"`
 db_query=; cd "$CURR_PATH"
 }
 
@@ -255,6 +253,11 @@ done
 [ ! -z "$cat_num" ] && [ -z "$cat_list" ] && die "must specify a valid category id!"
 }
 
+# special conversion for titles to link form
+set_title2link(){ title2link_var="$1"
+echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]//g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"
+}
+
 # set base url based on parameters
 set_baseurl(){
 node_var="$1"
@@ -274,46 +277,86 @@ fi
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 }
 
-# set link for given month
+# set link/file for given category
+set_catlink(){
+catlink_var="$1"
+#category_dir=`echo $catlink_var |cut -d"." -f 1`
+category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
+category_dir=`set_title2link "$category_title"`
+category_file="$category_dir/$NB_INDEXFILE"
+category_link="$category_dir/$NB_INDEX"
+}
+
+# set link/file for given month
 set_monthlink(){
-month_var="$1"
-month_dir=`echo $month_var |sed -e '/-/ s//\//g'`
-month_file="$month_dir/index.$NB_FILETYPE"
-NB_ArchiveMonthLink="$month_dir/$NB_INDEX"; }
+monthlink_var="$1"
+month_dir=`echo $monthlink_var |sed -e '/-/ s//\//g'`
+month_file="$month_dir/$NB_INDEXFILE"
+NB_ArchiveMonthLink="$month_dir/$NB_INDEX"
+}
 
 # generate entry's anchor/id
-set_entryid(){ entry_var="$1"
-echo "$x_id$entry_var" |sed -e '/\// s//-/g'; }
+set_entryid(){ entryid_var="$1"
+echo "$x_id$entryid_var" |sed -e '/\// s//-/g'; }
 
-# set link for given entry
-set_entrylink(){ entry_var="$1"; link_type="$2"
-entry_link=`echo $entry_var |sed -e '/-/ s//\//g'`
+# set link/file for given entry
+set_entrylink(){
+entrylink_var="$1"
+link_type="$2"
+entry_link=`echo $entrylink_var |sed -e '/-/ s//\//g'`
 month=`echo "$entry_link" |cut -c1-7`
-month_file="$month/index.$NB_FILETYPE"
+set_monthlink "$month"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
-	permalink_file=`chg_suffix $entry_link`
-	NB_EntryPermalink="$permalink_file"
+	# old way
+	#permalink_file=`chg_suffix $entry_link`
+	#NB_EntryPermalink="$permalink_file"
+
+	# new way
+	#entry_dir=`echo "$entry_link" |cut -d"." -f 1`
+	#permalink_file="$entry_dir/$NB_INDEXFILE"
+	#NB_EntryPermalink="$entry_dir/$NB_INDEX"
+
+	# experimental title-based links
+	entry_dir=`echo "$entry_link" |cut -d"." -f 1 |cut -c1-10`
+	entry_linkname=`set_title2link "$NB_EntryTitle"`
+	permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
+	NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
 else
-	entry_id=`set_entryid $entry_var`
-	NB_EntryPermalink="$month/$NB_INDEX#$entry_id"
+	entry_id=`set_entryid $entrylink_var`
+	NB_EntryPermalink="$NB_ArchiveMonthLink#$entry_id"
 fi
+}
+
+read_cache(){
+cache_def="$1"
+CACHE_FILE="$BLOG_DIR/$CACHE_DIR/$2.$cache_def"
+[ -f "$CACHE_FILE" ] &&
+	CACHE_DATA=$(< "$CACHE_FILE")
+}
+
+write_cache(){
+cache_def="$1"
+CACHE_INPUT="$2"
+CACHE_FILE="$BLOG_DIR/$CACHE_DIR/$3.$cache_def"
+[ ! -z "$CACHE_INPUT" ] &&
+	echo "$CACHE_INPUT" > "$CACHE_FILE"
 }
 
 # filter content through a template
 load_template(){
-BLOG_FILE="$1"
-if [ -f "$BLOG_FILE" ]; then
-	# prefix text/html with an X in front of each line
-	BLOG_TEMPLATE=`sed -e '/^/ s//X: /' < "$BLOG_FILE"`
+TEMPLATE_FILE="$1"
+if [ -f "$TEMPLATE_FILE" ]; then
+	# prefix lines with an X
+	TEMPLATE=`sed -e '/^/ s//X: /' < "$TEMPLATE_FILE"`
 	# remove X's and source variables into a temp file
 	cat > "$SCRATCH_FILE" <<-EOF
 		sed -e '/^X:[ ]/ s///' <<TMPL
-			$BLOG_TEMPLATE
+			$TEMPLATE
 		TMPL
 	EOF
-	BLOG_HTML=`. "$SCRATCH_FILE"`
+	TEMPLATE_DATA=`. "$SCRATCH_FILE"`
 else
-	die "template file, '$BLOG_FILE' doesn't exist! goodbye."
+	die "template file, '$TEMPLATE_FILE' doesn't exist! goodbye."
 fi
 }
 
@@ -350,10 +393,10 @@ if [ -f "$ENTRY_FILE" ]; then
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
 		load_plugins entry/body
-		echo "$NB_EntryBody" > "$BLOG_DIR/$CACHE_DIR/$entry.body"
-		echo "$entry" >> "$SCRATCH_FILE.cache_list"
+		write_cache body "$NB_EntryBody" "$entry"
+		update_cache build body "$entry"
 	else
-		NB_EntryBody=$(< "$BLOG_DIR/$CACHE_DIR/$entry.body")
+		read_cache body "$entry"; NB_EntryBody="$CACHE_DATA"
 	fi
 fi
 }
@@ -390,18 +433,17 @@ fi
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
-if [ "$USR_QUERY" = all ] || [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
-	# preserve content of the source, but let plugins modify it
-	: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
-	NB_Entries="$MKPAGE_CONTENT"
-	load_template "$MKPAGE_TMPLFILE"
-	echo "$BLOG_HTML" > "$MKPAGE_OUTFILE"
-	nb_msg "$MKPAGE_OUTFILE"
-	# load postformat plugins, but with reusable functionality
-	for mkp_plugin in "$PLUGINS_DIR"/postformat/*.sh; do
-		[ -f "$mkp_plugin" ] && . "$mkp_plugin"
-	done
-fi
+# preserve content of the source, but let plugins modify it
+: ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
+NB_Entries="$MKPAGE_CONTENT"
+load_plugins page
+load_template "$MKPAGE_TMPLFILE"
+echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
+nb_msg "$MKPAGE_OUTFILE"
+# load postformat plugins, but with reusable functionality
+for mkp_postplugin in "$PLUGINS_DIR"/postformat/*.sh; do
+	[ -f "$mkp_postplugin" ] && . "$mkp_postplugin"
+done
 MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
 }
 
@@ -411,7 +453,7 @@ if [ "$ENTRY_ARCHIVES" = 1 ]; then
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file" ]; then
 		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$permalink_file"`
-		echo "$BLOG_HTML" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
+		echo "$TEMPLATE_DATA" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
 		make_page "$BLOG_DIR/$PARTS_DIR/$permalink_file" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	fi
@@ -429,9 +471,9 @@ for entry in $ENTRY_ARCHIVES_LIST; do
 		set_entrylink "$entry"
 		set_baseurl "$BASE_URL"
 		load_template "$NB_TEMPLATE_DIR/$entry_template"
-		if [ ! -z "$BLOG_HTML" ]; then
+		if [ ! -z "$TEMPLATE_DATA" ]; then
 			[ -f "$PARTS_FILE" ] &&
-				echo "$BLOG_HTML" >> "$PARTS_FILE"
+				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
 			[ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ] &&
 				build_permalink
 		fi
@@ -606,8 +648,8 @@ if [ ! -z "$db_categories" ]; then
 	for cat_arch in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
-			NB_CatArchive=`chg_suffix "$cat_arch"`
-			NB_ArchivePrefix=`echo "$cat_arch" |cut -d"." -f 1`
+			set_catlink "$cat_arch"
+			NB_CatArchive="$category_file"
 			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/$NB_CatArchive"
 		fi
 	done
@@ -617,31 +659,31 @@ fi
 # update the cache
 update_cache(){
 cache_update="$1"
-CACHE_LIST="$2"
-nb_msg "updating cache ..."
-> "$SCRATCH_FILE".cache_list
-if [ "$cache_update" = list ]; then
-	for cache_entry in $CACHE_LIST; do
-		echo "$cache_entry" >> "$SCRATCH_FILE".cache_list
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+cache_def="$2"
+CACHEUPDATE_LIST="$3"
+> "$SCRATCH_FILE-$cache_def".cache_list
+if [ "$cache_update" = build ]; then
+	for cache_item in $CACHEUPDATE_LIST; do
+		echo "$cache_item" >> "$SCRATCH_FILE-$cache_def".cache_list
 	done
-	CACHE_LIST=$(< "$SCRATCH_FILE.cache_list")
+	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE-$cache_def.cache_list")
+elif [ "$cache_update" = rebuild ]; then
+	for cache_item in $CACHEUPDATE_LIST; do
+		echo "$cache_item" >> "$SCRATCH_FILE-$cache_def".cache_list
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item.$cache_def"
+	done
+	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE-$cache_def.cache_list")
 else
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
-	for cache_entry in $DB_RESULTS; do	
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_entry".body
+	for cache_item in $DB_RESULTS; do	
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item.$cache_def"
 	done
 fi
+CACHE_LIST=`echo "$CACHEUPDATE_LIST" |sort -u`
 }
 
 # create/update archives
 build_archives(){
-if [ "$USR_QUERY" = all ]; then
-	# remove all generated files for a clean build
-	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*.{"$NB_DATATYPE","$NB_FILETYPE"}
-	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*/*.{"$NB_DATATYPE","$NB_FILETYPE"}
-	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*/*/*.{"$NB_DATATYPE","$NB_FILETYPE"}
-fi
 load_plugins archive
 nb_msg "generating archives ..."
 # build the category archives
@@ -677,6 +719,12 @@ fi
 build_weblog(){
 # update archives based on a query match
 [ "$new_weblog" = 1 ] && USR_QUERY=all
+if [ "$USR_QUERY" = all ]; then
+	nb_msg "removing all generated files for a clean build ..."
+	# remove all generated files for a clean build
+	#rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*.{"$NB_DATATYPE","$NB_FILETYPE"}
+	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*
+fi
 if [ -z "$USR_QUERY" ]; then
 	USR_QUERY="current"
 else
@@ -687,18 +735,18 @@ fi
 db_catquery=`cat_id`; check_catid
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
-update_cache all
+update_cache all body
 load_plugins
 # update previously cached entries
-CACHE_LIST=`sort -u "$SCRATCH_FILE.cache_list"`
-update_cache list "$CACHE_LIST"
+#CACHE_LIST=`sort -u "$SCRATCH_FILE-body.cache_list"`
+update_cache rebuild body "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
-update_cache "$QUERY_MODE"
+update_cache "$QUERY_MODE" body
 nb_msg "generating main index page(s) ..."
-paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/index.$NB_FILETYPE"
+paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/$NB_INDEXFILE"
 }
 
 # add a new entry
@@ -1162,3 +1210,4 @@ exit 0
 #
 # End of script
 #
+

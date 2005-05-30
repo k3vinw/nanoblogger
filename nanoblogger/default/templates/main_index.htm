@@ -11,10 +11,9 @@
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}images/favicon.ico" />
-$([ ! -z "$NB_RSS2File" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSS2Ver'" href="'${BASE_URL}$NB_RSS2File'" />')
-$([ ! -z "$NB_RSSFile" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSSVer'" href="'${BASE_URL}$NB_RSSFile'" />')
-$([ ! -z "$NB_AtomFile" ] && echo '<link rel="alternate" type="application/atom+xml" title="Atom '$NB_AtomVer'" href="'${BASE_URL}$NB_AtomFile'" />')
-
+$NB_AtomAltLink
+$NB_RSS2AltLink
+$NB_RSSAltLink
 </head>
 
 <body>
@@ -51,7 +50,7 @@ Links
 </div>
 
 <div class="side">
-$NB_Main_Links
+$NB_MainLinks
 </div>
 
 <div class="sidetitle">
@@ -59,7 +58,7 @@ Recent Entries
 </div>
 
 <div class="side">
-$NB_Recent_Entries
+$NB_RecentEntries
 </div>
 
 <div class="sidetitle">
@@ -67,7 +66,7 @@ Categories
 </div>
 
 <div class="side">
-$NB_Category_Links
+$NB_CategoryLinks
 </div>
 
 <div class="sidetitle">
@@ -76,7 +75,7 @@ Archives
 
 <div class="side">
 <a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archive Index</a><br />
-$NB_Month_Links
+$NB_MonthLinks
 </div>
 
 <div class="syndicate">
@@ -96,7 +95,7 @@ Weblog Status
 </div>
 
 <div class="side">
-$NB_Blog_Status
+$NB_BlogStatus
 </div>
 
 <div class="powered">

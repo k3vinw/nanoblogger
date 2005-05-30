@@ -8,9 +8,8 @@
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}images/favicon.ico" />
-$([ ! -z "$NB_RSS2Ver" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSS2Ver': '$NB_ArchiveTitle'" href="'${ARCHIVES_PATH}$NB_ArchivePrefix-rss.$NB_SYND_FILETYPE'" />')
-$([ ! -z "$NB_RSSVer" ] && echo '<link rel="alternate" type="application/rss+xml" title="RSS '$NB_RSSVer': '$NB_ArchiveTitle'" href="'${ARCHIVES_PATH}$NB_ArchivePrefix.$NB_SYND_FILETYPE'" />')
-
+$NB_RSS2AltLink
+$NB_RSSAltLink
 </head>
 
 <body>
@@ -25,17 +24,14 @@ $([ ! -z "$NB_RSSVer" ] && echo '<link rel="alternate" type="application/rss+xml
 <div class="blog">
 
 <div id="menu">
-	<a href="${BASE_URL}$NB_INDEX">Main</a>
+	<a href="${BASE_URL}$NB_INDEX">Main</a><br />
+	$NB_PageLinks
 </div>
 
 </div>
 
 <div class="blog">
 $NB_Entries
-</div>
-
-<div id="menu">
-	$NB_PageLinks
 </div>
 
 </div>

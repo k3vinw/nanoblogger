@@ -10,7 +10,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	query_db all
 	set_baseurl "../"
 	ENTRY_LIST="$DB_RESULTS"
-	NB_ArchiveEntry_Links=$(
+	NB_ArchiveEntryLinks=$(
 	for entry in $ENTRY_LIST; do
 		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
@@ -30,7 +30,10 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	build_catlinks(){
 	for cat_link in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_link" ]; then
-			cat_index=`chg_suffix "$cat_link"`; cat_feed=`chg_suffix "$cat_link" "$NB_SYND_FILETYPE"`
+			#cat_index=`chg_suffix "$cat_link"`
+			#cat_feed=`chg_suffix "$cat_link" "$NB_SYND_FILETYPE"`
+			set_catlink "$cat_link"
+			cat_index="$category_link"
 			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 			NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
 			cat <<-EOF
@@ -42,7 +45,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 
 	build_catlinks |$CATLINKS_FILTER_CMD |sed -e 's/<!-- .* -->//' > "$SCRATCH_FILE.category_links.$NB_FILETYPE"
 	load_template "$SCRATCH_FILE.category_links.$NB_FILETYPE"
-	NB_ArchiveCategory_Links="$BLOG_HTML"
+	NB_ArchiveCategoryLinks="$TEMPLATE_DATA"
 
 	# create links for monthly archives
 	[ -z "$CAL_CMD" ] && CAL_CMD="cal"
@@ -65,46 +68,46 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 
 	cycle_months_for make_monthlylink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
 	load_template "$SCRATCH_FILE.month_links.$NB_FILETYPE"
-	NB_ArchiveMonth_Links="$BLOG_HTML"
+	NB_ArchiveMonthLinks="$TEMPLATE_DATA"
 
 	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	if [ "$cat_total" -gt 0 ]; then
-		# make NB_Category_Links placeholder
-		NB_Browse_CatLinks=$(
+		# make NB_CategoryLinks placeholder
+		NB_BrowseCatLinks=$(
 		cat <<-EOF
 			<a id="category"></a>
 			<b>Browse by category</b>
 			<div>
-			$NB_ArchiveCategory_Links
+			$NB_ArchiveCategoryLinks
 			</div>
 			<br />
 		EOF)
 	fi
 
-	# make NB_Archive_Links placeholder
+	# make NB_ArchiveLinks placeholder
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.$NB_FILETYPE <<-EOF
-		$NB_Browse_CatLinks
+		$NB_BrowseCatLinks
 		<a id="date"></a>
 		<b>Browse by date</b>
 		<div>
-		$NB_ArchiveMonth_Links
+		$NB_ArchiveMonthLinks
 		</div>
 		<br />
 		<a id="entry"></a>
 		<b>Browse by entry</b>
 		<div>
-		$NB_ArchiveEntry_Links
+		$NB_ArchiveEntryLinks
 		</div>
 	EOF
 
 	load_template "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE"
-	NB_Archive_Links="$BLOG_HTML"
-	echo "$NB_Archive_Links" > "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE"
+	NB_ArchiveLinks="$TEMPLATE_DATA"
+	echo "$NB_ArchiveLinks" > "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE"
 	# build master archive index
-	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/index.$NB_FILETYPE"
+	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$NB_INDEXFILE"
 	# set title for makepage template
 	NB_EntryTitle=Archives
-	MKPAGE_CONTENT="$NB_Archive_Links"
+	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
 
