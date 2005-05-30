@@ -255,7 +255,7 @@ done
 
 # special conversion for titles to link form
 set_title2link(){ title2link_var="$1"
-echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]//g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"
+echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]//g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"
 }
 
 # set base url based on parameters
@@ -267,7 +267,7 @@ if [ "$ABSOLUTE_LINKS" = 1 ]; then
 	BASE_URL="$BLOG_URL/"
 else
 	BASE_URL="$node_var"
-	if [ "$base_dir" != . ] && [ -d "$base_dir" ]; then
+	if [ "$base_dir" != . ]; then
 		blogdir_sedvar=`echo "$BLOG_DIR" |sed -e 's/\//\\\\\//g'`
 		BASE_URL=`echo "$base_dir" |sed -e 's/'$blogdir_sedvar'//g; s/[^ \/]*./..\//g; s/^[\.][\.]\///g'`
 	fi

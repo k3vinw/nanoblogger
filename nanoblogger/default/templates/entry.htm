@@ -12,6 +12,6 @@ $NB_EntryBody
 <br />Posted by <span class="item-creator">$NB_EntryAuthor</span>
 $([ "$PERMALINKS" = "1" ] && echo '| <a class="link" href="'${ARCHIVES_PATH}$NB_EntryPermalink'">Permalink</a>')
 $([ ! -z "$NB_EntryCategories" ] && echo "| Categories: $NB_EntryCategories" |sed -e '{$ s/\,$//; }')
-<!-- <br /><a href="$BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_entry#comments">Comments</a> -->
+<!-- <br /><a href="$BLOG_URL_ACTION$ARCHIVES_DIR/$NB_EntryPermalink#comments">Comments</a> -->
 </div>
 </div>

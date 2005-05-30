@@ -30,8 +30,6 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	build_catlinks(){
 	for cat_link in $db_categories; do
 		if [ -f "$NB_DATA_DIR/$cat_link" ]; then
-			#cat_index=`chg_suffix "$cat_link"`
-			#cat_feed=`chg_suffix "$cat_link" "$NB_SYND_FILETYPE"`
 			set_catlink "$cat_link"
 			cat_index="$category_link"
 			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
