@@ -280,9 +280,9 @@ ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 # set link/file for given category
 set_catlink(){
 catlink_var="$1"
-#category_dir=`echo $catlink_var |cut -d"." -f 1`
-category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
-category_dir=`set_title2link "$category_title"`
+category_dir=`echo $catlink_var |cut -d"." -f 1`
+#category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
+#category_dir=`set_title2link "$category_title"`
 category_file="$category_dir/$NB_INDEXFILE"
 category_link="$category_dir/$NB_INDEX"
 }
@@ -313,14 +313,15 @@ if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 
 	# new way
 	#entry_dir=`echo "$entry_link" |cut -d"." -f 1`
-	#permalink_file="$entry_dir/$NB_INDEXFILE"
-	#NB_EntryPermalink="$entry_dir/$NB_INDEX"
+	entry_dir=`echo "$entry_link" |cut -d "." -f 1 |sed -e '/\T/ s//\/T/g'`
+	permalink_file="$entry_dir/$NB_INDEXFILE"
+	NB_EntryPermalink="$entry_dir/$NB_INDEX"
 
 	# experimental title-based links
-	entry_dir=`echo "$entry_link" |cut -d"." -f 1 |cut -c1-10`
-	entry_linkname=`set_title2link "$NB_EntryTitle"`
-	permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
-	NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
+	#entry_dir=`echo "$entry_link" |cut -d"." -f 1 |cut -c1-10`
+	#entry_linkname=`set_title2link "$NB_EntryTitle"`
+	#permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
+	#NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
 else
 	entry_id=`set_entryid $entrylink_var`
 	NB_EntryPermalink="$NB_ArchiveMonthLink#$entry_id"
@@ -469,13 +470,17 @@ for entry in $ENTRY_ARCHIVES_LIST; do
 		touch "$NB_DATA_DIR/$entry"
 		read_entry "$NB_DATA_DIR/$entry"
 		set_entrylink "$entry"
-		set_baseurl "$BASE_URL"
-		load_template "$NB_TEMPLATE_DIR/$entry_template"
-		if [ ! -z "$TEMPLATE_DATA" ]; then
-			[ -f "$PARTS_FILE" ] &&
+		if [ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ]; then
+			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+			load_template "$NB_TEMPLATE_DIR/$entry_template"
+			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
-			[ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ] &&
-				build_permalink
+			build_permalink
+		else
+			set_baseurl "$BASE_URL"
+			load_template "$NB_TEMPLATE_DIR/$entry_template"
+			[ ! -z "$TEMPLATE_DATA" ] &&
+				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
 		fi
 	fi
 done
