@@ -19,7 +19,7 @@ WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
 DAYS=`echo "$CALENDAR" |sed 1,2d`
 NUM_DAY_LINES=`echo "$DAYS" |grep -n "." |cut -c1`
 
-curr_month=`date +%Y-%m`
+curr_month=`date +%Y.%m`
 query_db all
 set_baseurl "./"
 MONTH_LIST=`echo "$DB_RESULTS" |sort $SORT_ARGS |grep ''$curr_month''`

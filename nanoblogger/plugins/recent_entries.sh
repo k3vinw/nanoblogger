@@ -22,11 +22,11 @@ set_baseurl "./"
 
 get_entries(){
 LIST_MODE="$1"
-[ "$LIST_MODE" = "new" ] && query_db max nocat "$LIST_N"
+[ "$LIST_MODE" = "new" ] && query_db max nocat limit "$LIST_N"
 if [ "$LIST_MODE" = "old" ]; then
 	XLIST_OFFSET="$LIST_N"
 	XLIST_N=`expr $LIST_N + $LIST_N`
-	query_db max nocat "$XLIST_N" "$XLIST_OFFSET"
+	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET"
 fi
 for entry in $DB_RESULTS ; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"

@@ -1,37 +1,33 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE rdf:RDF [
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rdf:RDF
+[
 <!ENTITY % HTMLlat1 PUBLIC
  "-//W3C//ENTITIES Latin 1 for XHTML//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent">
 ]>
-<rdf:RDF
- xmlns="http://purl.org/rss/1.0/"
- xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
- xmlns:dc="http://purl.org/dc/elements/1.1/"
- xmlns:content="http://purl.org/rss/1.0/modules/content/"
- xmlns:admin="http://webns.net/mvcb/"
->
-<channel rdf:about="/index.xml">
+<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:admin="http://webns.net/mvcb/">
+<channel rdf:about="">
 <title>My Weblog</title>
 <link></link>
 <description>news, diary, journal, whatever</description>
 <dc:language>en-us</dc:language>
 <dc:creator>n1xt3r</dc:creator>
-<dc:date>2004-12-23T11:02:27-05:00</dc:date>
+<dc:date>2005-06-02T20:48:40-04:00</dc:date>
 <admin:generatorAgent rdf:resource="http://nanoblogger.sourceforge.net" />
 <items>
 <rdf:Seq>
-<rdf:li rdf:resource="/archives/2004-11.html#e2004-11-07T18_52_16.txt" />
+<rdf:li rdf:resource="/archives/2005/06/#e2005-06-02T20_48_35.txt" />
 </rdf:Seq>
 </items>
 </channel>
-<item rdf:about="/archives/2004-11.html#e2004-11-07T18_52_16.txt">
-<link>/archives/2004-11.html#e2004-11-07T18_52_16.txt</link>
+<item rdf:about="/archives/2005/06/#e2005-06-02T20_48_35.txt">
+<link>/archives/2005/06/#e2005-06-02T20_48_35.txt</link>
 <title>Welcome to NanoBlogger!</title>
-<dc:date>2004-11-07T18:52:16-05:00</dc:date>
+<dc:date>2005-06-02T20:48:35-04:00</dc:date>
 <dc:creator>n1xt3r</dc:creator>
 <dc:subject>NanoBlogger Help</dc:subject>
-<description><![CDATA[<p>The basic syntax is: <code>nb [-b blog_dir] [options]</code></p>
+<description>
+<![CDATA[<p>The basic syntax is: <code>nb [-b blog_dir] [options]</code></p>
 <b>How to ...</b>
 <ul>
 <li>create a new weblog (directory) = <code>nb -b [blog_dir] -a</code></li>
@@ -50,6 +46,7 @@
 </ul>
 <p>
 Thank you for trying NanoBlogger.  Please direct comments and suggestions to the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or submit a bug report to the <a href="http://sourceforge.net/tracker/?atid=635240&amp;group_id=103576&amp;func=browse">project page</a> on sourceforge.net.
-</p>]]></description>
+</p>]]>
+</description>
 </item>
 </rdf:RDF>

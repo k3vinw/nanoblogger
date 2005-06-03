@@ -1,26 +1,22 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<feed version="0.3"
-xmlns="http://purl.org/atom/ns#"
-xmlns:dc="http://purl.org/dc/elements/1.1/"
->
+<?xml version="1.0" encoding="utf-8"?>
+<feed version="0.3" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <title mode="escaped">My Weblog</title>
-<link rel="alternate" type="text/html" href=""/>
-<modified>2004-12-23T11:02:25-05:00</modified>
+<link rel="alternate" type="text/html" href="" />
+<modified>2005-06-02T20:48:36-04:00</modified>
 <author>
 <name>n1xt3r</name>
 <url></url>
 </author>
-
 <entry>
 <title mode="escaped">Welcome to NanoBlogger!</title>
 <author>
 <name>n1xt3r</name>
 </author>
-<link rel="alternate" type="text/html" href="/archives/2004-11.html#e2004-11-07T18_52_16.txt"/>
-<id>/archives/2004-11.html#e2004-11-07T18_52_16.txt</id>
-<issued>2004-11-07T18:52:16-05:00</issued>
-<modified>2004-11-07T18:52:16-05:00</modified>
-<created>2004-11-07T18:52:16-05:00</created>
+<link rel="alternate" type="text/html" href="/archives/2005/06/#e2005-06-02T20_48_35.txt" />
+<id>/archives/2005/06/#e2005-06-02T20_48_35.txt</id>
+<issued>2005-06-02T20:48:35-04:00</issued>
+<modified>2005-06-02T20:48:35-04:00</modified>
+<created>2005-06-02T20:48:35-04:00</created>
 <dc:subject>NanoBlogger Help</dc:subject>
 <content type="application/xhtml+xml" xml:lang="en" xml:space="preserve" mode="escaped">
 <![CDATA[
@@ -46,7 +42,5 @@ Thank you for trying NanoBlogger.  Please direct comments and suggestions to the
 </p>
 ]]>
 </content>
-
 </entry>
-
 </feed>
