@@ -146,7 +146,7 @@ nb_edit(){
 # TODO: test with external editor (outside of script's process)
 EDIT_FILE="$1"
 $EDITOR "$EDIT_FILE"
-#if [ ! -f "$EDIT_FILE" -o -N "$EDIT_FILE" ]; then
+#if [ ! -f "$EDIT_FILE" ] || [ -N "$EDIT_FILE" ]; then
 if [ ! -f "$EDIT_FILE" ]; then
 	echo "press [enter] to continue."
 	read -p "$NB_PROMPT" enter_key
@@ -288,21 +288,32 @@ set_catlink(){
 catlink_var="$1"
 # default
 category_dir=`echo $catlink_var |cut -d"." -f 1`
+category_file="$category_dir/$NB_INDEXFILE"
+category_link="$category_dir/$NB_INDEX"
 
 # experimental title-based links
 #category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
 #category_dir=`set_title2link "$category_title"`
+#category_file="$category_dir/$NB_INDEXFILE"
+#category_link="$category_dir/$NB_INDEX"
 
-category_file="$category_dir/$NB_INDEXFILE"
-category_link="$category_dir/$NB_INDEX"
+# old way
+#category_file=`chg_suffix "$catlink_var"`
+#category_link="$category_file"
 }
 
 # set link/file for given month
 set_monthlink(){
 monthlink_var="$1"
+# default
 month_dir=`echo $monthlink_var |sed -e '/[-]/ s//\//g'`
 month_file="$month_dir/$NB_INDEXFILE"
 NB_ArchiveMonthLink="$month_dir/$NB_INDEX"
+
+# old way
+#month_file="$monthlink_var.$NB_FILETYPE"
+#month_link="$month_file"
+#NB_ArchiveMonthLink="$month_file"
 }
 
 # generate entry's anchor/id
@@ -313,25 +324,29 @@ echo "$x_id$entryid_var" |sed -e '/[\/]/ s//-/g'; }
 set_entrylink(){
 entrylink_var="$1"
 link_type="$2"
-entry_link=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
-month=`echo "$entry_link" |cut -c1-7`
-set_monthlink "$month"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
-	# old way
-	#permalink_file=`chg_suffix $entry_link`
-	#NB_EntryPermalink="$permalink_file"
-
 	# default
-	entry_dir=`echo "$entry_link" |cut -d "." -f 1 |sed -e '/\T/ s//\/T/g'`
+	entrylink_var=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
+	entry_dir=`echo "$entrylink_var" |cut -d "." -f 1 |sed -e '/\T/ s//\/T/g'`
 	permalink_file="$entry_dir/$NB_INDEXFILE"
 	NB_EntryPermalink="$entry_dir/$NB_INDEX"
 
 	# experimental title-based links
-	#entry_dir=`echo "$entry_link" |cut -d"." -f 1 |cut -c1-10`
+	#entrylink_var=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
+	#entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
 	#entry_linkname=`set_title2link "$NB_EntryTitle"`
 	#permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
 	#NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
+
+	# old way
+	#permalink_file=`chg_suffix $entrylink_var`
+	#NB_EntryPermalink="$permalink_file"
+
+	month=`echo "$entrylink_var" |cut -c1-7`
+	set_monthlink "$month"
 else
+	month=`echo "$entrylink_var" |cut -c1-7`
+	set_monthlink "$month"
 	entry_id=`set_entryid $entrylink_var`
 	NB_EntryPermalink="$NB_ArchiveMonthLink#$entry_id"
 fi
@@ -400,13 +415,13 @@ if [ -f "$ENTRY_FILE" ]; then
 	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
 	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
 	load_plugins entry
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.body" ]; then
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-		load_plugins entry/body
-		write_cache body "$NB_EntryBody" "$entry"
-		update_cache build body "$entry"
+		load_plugins entry/mod
+		write_cache entry "$NB_EntryBody" "$entry"
+		update_cache build entry "$entry"
 	else
-		read_cache body "$entry"; NB_EntryBody="$CACHE_DATA"
+		read_cache entry "$entry"; NB_EntryBody="$CACHE_DATA"
 	fi
 fi
 }
@@ -450,9 +465,9 @@ load_plugins page
 load_template "$MKPAGE_TMPLFILE"
 echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
-# load postformat plugins, but with reusable functionality
-for mkp_postplugin in "$PLUGINS_DIR"/postformat/*.sh; do
-	[ -f "$mkp_postplugin" ] && . "$mkp_postplugin"
+# load makepage plugins, but with reusable functionality
+for mkpage_plugin in "$PLUGINS_DIR"/makepage/*.sh; do
+	[ -f "$mkpage_plugin" ] && . "$mkpage_plugin"
 done
 MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
 }
@@ -608,13 +623,13 @@ page_filedir=
 }
 
 # create archive of current month
-build_monthlyarchive(){
+build_montharchive(){
 	if [ ! -z "$DB_RESULTS" ]; then
 		set_monthlink "$month"
 		set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
 		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
 		NB_ArchiveTitle="$month"
-		load_plugins archive/monthly
+		load_plugins archive/month
 		make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
 		"$BLOG_DIR/$ARCHIVES_DIR/$month_file"
 	fi
@@ -714,7 +729,7 @@ nb_msg "generating archives ..."
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
 	# build the monthly archives
-	cycle_months_for build_monthlyarchive
+	cycle_months_for build_montharchive
 	# build the entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
 		build_entryarchives "$DB_RESULTS" "$PERMALINKENTRY_TEMPLATE"
@@ -722,7 +737,7 @@ else
 	# build current month archive
 	if [ -z "$USR_QUERY" ] || [ "$USR_QUERY" = current ]; then
 		month=`date "+%Y-%m"`
-		build_monthlyarchive
+		build_montharchive
 	fi
 	# update relative monthly archives
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort $SORT_ARGS`
@@ -730,7 +745,7 @@ else
 		month="$mod_month"
 		# don't update the current month twice!
 		if [ "$month" != `date "+%Y-%m"` ]; then
-			build_monthlyarchive
+			build_montharchive
 		fi
 	done
 	# update relative entry archives
@@ -759,16 +774,16 @@ fi
 db_catquery=`cat_id`; check_catid
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
-update_cache all body
+update_cache all entry
 load_plugins
 # update previously cached entries
-#CACHE_LIST=`sort -u "$SCRATCH_FILE-body.cache_list"`
-update_cache rebuild body "$CACHE_LIST"
+#CACHE_LIST=`sort -u "$SCRATCH_FILE-entry.cache_list"`
+update_cache rebuild entry "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
-update_cache "$QUERY_MODE" body
+update_cache "$QUERY_MODE" entry
 nb_msg "generating main index page(s) ..."
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 }
@@ -1073,7 +1088,7 @@ if [ -z "$NB_EntryTitle" ]; then
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 if [ -z "$usr_body" ]; then
-	echo "editing body ..."
+	echo "editing body of entry ..."
 	# entry's new file for editing
 	NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
 	nb_edit "$NB_EditFile"
@@ -1119,7 +1134,7 @@ cat <<-EOF
 	 -e, --edit <ID,cat>			edit an entry or category.
 	 -f, --blogconf <file>			specify an alternate configuration file.
 	 -h, --help				show this help message.
-	 -l, --list <all,cat,current,date,max>	list entries or categories
+	 -l, --list <all,cat,current,DATE,max>	list entries or categories
 	 					(defaults to max).
 	 --makepage <source> <output>		specify source and output file to create
 	 					web page.

@@ -42,9 +42,9 @@ cat > "$MKPAGE_OUTFILE" <<-EOF
 	</feed>
 EOF
 nb_msg "$MKPAGE_OUTFILE"
-# load postformat tidy plugin
-[ -f "$PLUGINS_DIR"/postformat/tidy.sh ] &&
-	. "$PLUGINS_DIR"/postformat/tidy.sh
+# load makepage tidy plugin
+[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
+	. "$PLUGINS_DIR"/makepage/tidy.sh
 }
 
 # generate feed entries
