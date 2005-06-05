@@ -20,6 +20,9 @@ esc_chars(){
 	sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 	}
 
+NB_RSS2Title=`echo "$BLOG_TITLE" |esc_chars`
+NB_RSS2Author=`echo "$BLOG_AUTHOR" |esc_chars`
+
 # make rss feed
 make_rssfeed(){
 	feed_outfile="$1"
@@ -36,11 +39,11 @@ make_rssfeed(){
 		 xmlns:admin="http://webns.net/mvcb/"
 		>
 		<channel>
-			<title>$BLOG_TITLE</title>
+			<title>$NB_RSS2Title</title>
 			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
 			<dc:language>$BLOG_LANG</dc:language>
-			<dc:creator>$NB_EntryAuthor</dc:creator>
+			<dc:creator>$NB_RSS2Author</dc:creator>
 			<dc:date>$NB_RSS2ModDate</dc:date>
 			<admin:generatorAgent rdf:resource="http://nanoblogger.sourceforge.net" />
 			$NB_RSS2Entries
@@ -66,6 +69,7 @@ build_rssfeed(){
 		# non-portable find command!
 		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
+		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
 		for cat_db in $db_categories; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
@@ -87,7 +91,7 @@ build_rssfeed(){
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
 				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
-				<dc:creator>$NB_EntryAuthor</dc:creator>
+				<dc:creator>$NB_RSS2EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
 				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
 			</item>

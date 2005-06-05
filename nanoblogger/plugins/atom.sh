@@ -19,6 +19,9 @@ esc_chars(){
 	sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 	}
 
+NB_AtomTitle=`echo "$BLOG_TITLE" |esc_chars`
+NB_AtomAuthor=`echo "$BLOG_AUTHOR" |esc_chars`
+
 # make atom feed
 make_atomfeed(){
 MKPAGE_OUTFILE="$BLOG_DIR/$NB_AtomFile"
@@ -29,11 +32,11 @@ cat > "$MKPAGE_OUTFILE" <<-EOF
 		xmlns="http://purl.org/atom/ns#"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
 	>
-	<title mode="escaped">$BLOG_TITLE</title>
+	<title mode="escaped">$NB_AtomTitle</title>
 	<link rel="alternate" type="text/html" href="$BLOG_URL"/>
 	<modified>$NB_AtomModDate</modified>
 	<author>
-		<name>$NB_EntryAuthor</name>
+		<name>$NB_AtomAuthor</name>
 		<url>$BLOG_URL</url>
 	</author>
 
@@ -62,6 +65,7 @@ build_atomfeed(){
 		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
 		Atom_EntryModDate="$Atom_EntryDate"
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
+		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		Atom_EntrySubject=; cat_title=; oldcat_title=
 		for cat_db in $db_categories; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
@@ -81,7 +85,7 @@ build_atomfeed(){
 			<entry>
 				<title mode="escaped">$Atom_EntryTitle</title>
 				<author>
-					<name>$NB_EntryAuthor</name>
+					<name>$Atom_EntryAuthor</name>
 				</author>
 				<link rel="alternate" type="text/html" href="${NB_AtomArchivesPath}$NB_EntryPermalink"/>
 				<id>${NB_AtomArchivesPath}$NB_EntryPermalink</id>
