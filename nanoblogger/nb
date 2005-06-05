@@ -4,7 +4,7 @@
 ############################################################
 
 # nanoblogger's version.
-VERSION="CVS-3.2"
+VERSION="Pre-3.2"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -352,21 +352,6 @@ else
 fi
 }
 
-read_cache(){
-cache_def="$1"
-CACHE_FILE="$BLOG_DIR/$CACHE_DIR/$2.$cache_def"
-[ -f "$CACHE_FILE" ] &&
-	CACHE_DATA=$(< "$CACHE_FILE")
-}
-
-write_cache(){
-cache_def="$1"
-CACHE_INPUT="$2"
-CACHE_FILE="$BLOG_DIR/$CACHE_DIR/$3.$cache_def"
-[ ! -z "$CACHE_INPUT" ] &&
-	echo "$CACHE_INPUT" > "$CACHE_FILE"
-}
-
 # filter content through a template
 load_template(){
 TEMPLATE_FILE="$1"
@@ -385,6 +370,44 @@ else
 fi
 }
 
+# read file's metadata
+read_metadata(){
+MTAG="$1"
+META_FILE="$2"
+META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:][ ]/ s///' "$META_FILE"`
+[ "$MTAG" = BODY ] &&
+META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d' "$META_FILE"`
+}
+
+
+# write metadata to file
+write_metadata(){
+MTAG="$1"
+META_DATA="$2"
+META_FILE="$3"
+if [ "$MTAG" = BODY ]; then
+	if [ ! -z "$META_DATA" ]; then
+		if [ -f "$META_FILE" ]; then
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d' "$META_FILE"`
+			echo "$META_OTHER" > "$META_FILE"
+		fi
+		cat >> "$META_FILE" <<-EOF
+			$MTAG:
+			$META_DATA
+			-----
+		EOF
+	fi
+else
+	if [ ! -z "$MTAG" ] && [ ! -z "$META_DATA" ]; then
+		if [ -f "$META_FILE" ]; then
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
+			echo "$META_OTHER" > "$META_FILE"
+		fi
+		echo "$MTAG: $META_DATA" >> "$META_FILE"
+	fi
+fi
+}
+
 # load plugins from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
@@ -394,36 +417,6 @@ PLUGIN_DIR="$1"
 	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
 		[ -f "$nb_plugin" ] && . "$nb_plugin"
 	done
-}
-
-# read file's metadata
-read_metadata(){
-MTAG="$1"
-META_FILE="$2"
-NB_Metadata=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:][ ]/ s///' "$META_FILE"`
-[ "$MTAG" = BODY ] &&
-NB_Metadata=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; /^'$MTAG'[\:]/d; /^[\-][\-][\-][\-][\-]/d' "$META_FILE"`
-}
-
-# read an entry
-read_entry(){
-ENTRY_FILE="$1"
-if [ -f "$ENTRY_FILE" ]; then
-	NB_EntryID=`set_entryid $entry`
-	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$NB_Metadata"
-	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$NB_Metadata"
-	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$NB_Metadata"
-	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$NB_Metadata"
-	load_plugins entry
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry" ]; then
-		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$NB_Metadata"
-		load_plugins entry/mod
-		write_cache entry "$NB_EntryBody" "$entry"
-		update_cache build entry "$entry"
-	else
-		read_cache entry "$entry"; NB_EntryBody="$CACHE_DATA"
-	fi
-fi
 }
 
 # write entry to file
@@ -439,6 +432,27 @@ cat > "$ENTRY_FILE" <<-EOF
 	$NB_EntryBody
 	-----
 EOF
+}
+
+# read an entry
+read_entry(){
+ENTRY_FILE="$1"
+if [ -f "$ENTRY_FILE" ]; then
+	NB_EntryID=`set_entryid $entry`
+	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$META_DATA"
+	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$META_DATA"
+	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$META_DATA"
+	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$META_DATA"
+	load_plugins entry
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry" ]; then
+		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$META_DATA"
+		load_plugins entry/mod
+		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry"
+		update_cache build entry "$entry"
+	else
+		read_metadata BODY "$BLOG_DIR/$CACHE_DIR/$entry.entry"; NB_EntryBody="$META_DATA"
+	fi
+fi
 }
 
 # create page from source and template files
@@ -475,7 +489,6 @@ MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
 # create individual page for an entry
 build_permalink(){
 if [ "$ENTRY_ARCHIVES" = 1 ]; then
-	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 	if [ "$NB_DATA_DIR/$entry" -nt "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file" ]; then
 		mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$permalink_file"`
 		echo "$TEMPLATE_DATA" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
@@ -492,18 +505,20 @@ entry_template="$2"
 for entry in $ENTRY_ARCHIVES_LIST; do
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
 		touch "$NB_DATA_DIR/$entry"
-		read_entry "$NB_DATA_DIR/$entry"
-		set_entrylink "$entry"
 		[ -z "$PARTS_FILE" ] &&
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
 		if [ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ]; then
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+			read_entry "$NB_DATA_DIR/$entry"
+			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$entry_template"
 			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
 			build_permalink
 		else
 			set_baseurl "$BASE_URL"
+			read_entry "$NB_DATA_DIR/$entry"
+			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$entry_template"
 			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
@@ -761,8 +776,7 @@ build_weblog(){
 if [ "$USR_QUERY" = all ]; then
 	nb_msg "removing all generated files for a clean build ..."
 	# remove all generated files for a clean build
-	#rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*.{"$NB_DATATYPE","$NB_FILETYPE"}
-	rm -fr "$BLOG_DIR"/{"$PARTS_DIR","$ARCHIVES_DIR"}/*
+	rm -fr "$BLOG_DIR"/{"$ARCHIVES_DIR","$CACHE_DIR","$PARTS_DIR"}/*
 fi
 if [ -z "$USR_QUERY" ]; then
 	USR_QUERY="current"
@@ -777,7 +791,6 @@ db_catquery=`cat_id`; check_catid
 update_cache all entry
 load_plugins
 # update previously cached entries
-#CACHE_LIST=`sort -u "$SCRATCH_FILE-entry.cache_list"`
 update_cache rebuild entry "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
@@ -952,8 +965,8 @@ for entry in $DB_RESULTS; do
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
 	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$NB_Metadata" |cut -c1-32`..."
-	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$NB_Metadata"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$META_DATA" |cut -c1-32`..."
+	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$META_DATA"
 	id=`expr 1 + $id`
 	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
 	oldcat_title=; cat_title=; NB_Category=

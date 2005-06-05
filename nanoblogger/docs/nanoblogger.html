@@ -1059,20 +1059,6 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
      </tr>
      <tr>
-       <td align="left">read_cache</td>
-       <td align="left">retrieves cached data</td>
-       <td align="left">cache_def=$1, CACHE_FILE=$BLOG_DIR/$CACHE_DIR/$2.$cache_def</td>
-       <td align="left">$CACHE_DATA</td>
-       <td align="left">see function read_entry for a good example</td>
-     </tr>
-     <tr>
-       <td align="left">write_cache</td>
-       <td align="left">writes data to cache</td>
-       <td align="left">cache_def=$1, CACHE_INPUT=$2, CACHE_FILE=$BLOG_DIR/$CACHE_DIR/$3.$cache_def</td>
-       <td align="left">see $CACHE_FILE</td>
-       <td align="left">see function read_entry for a good example</td>
-     </tr>
-     <tr>
        <td align="left">update_cache</td>
        <td align="left">compiles list or removes cache entries</td>
        <td align="left">cache_update=$1, cache_def=$2, CACHEUPDATE_LIST=$3</td>
@@ -1084,28 +1070,35 @@ nb [-b blog_dir] -c 1 -d cat
        <td align="left">loads template from file</td>
        <td align="left">TEMPLATE_FILE=$1</td>
        <td align="left">$TEMPLATE_DATA</td>
-       <td align="left">see plugin, recent_entries.sh for good example</td>
+       <td align="left">see plugin recent_entries.sh for a good example</td>
+     </tr>
+     <tr>
+       <td align="left">write_metadata</td>
+       <td align="left">writes metadata to file</td>
+       <td align="left">MTAG=$1, META_DATA=$2, META_FILE=$3</td>
+       <td align="left">$META_FILE</td>
+       <td align="left">example: "write_metadata UPDATED "`date`" $metafile"</td>
      </tr>
      <tr>
        <td align="left">read_metadata</td>
-       <td align="left">extracts metadata from entry</td>
+       <td align="left">extracts metadata from (entry) file</td>
        <td align="left">MTAG=$1, META_FILE=$2</td>
-       <td align="left">$NB_Metadata</td>
-       <td align="left">faster than read_entry, see plugin recent_entries for good example</td>
+       <td align="left">$META_DATA</td>
+       <td align="left">faster than read_entry, see plugin recent_entries for a good example</td>
      </tr>
      <tr>
        <td align="left">read_entry</td>
        <td align="left">converts entry data for use in templates</td>
        <td align="left">ENTRY_FILE=$1</td>
        <td align="left">$NB_EntryTitle, ..., $NB_EntryBody</td>
-       <td align="left">use read_metadata instead</td>
+       <td align="left">see plugin atom.sh for a good example</td>
      </tr>
      <tr>
        <td align="left">make_page</td>
        <td align="left">generates page from source file and template</td>
        <td align="left">MKPAGE_SRCFILE=$1, MKPAGE_TMPLFILE=$2, MKPAGE_OUTFILE=$3</td>
        <td align="left">$MKPAGE_CONTENT, $NB_Entries</td>
-       <td align="left">see plugin articles.sh for good example</td>
+       <td align="left">see plugin articles.sh for a good example</td>
      </tr>
    </table>
  </div>

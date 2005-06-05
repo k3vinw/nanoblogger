@@ -12,7 +12,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	ENTRY_LIST="$DB_RESULTS"
 	NB_ArchiveEntryLinks=$(
 	for entry in $ENTRY_LIST; do
-		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$NB_Metadata"
+		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$META_DATA"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
