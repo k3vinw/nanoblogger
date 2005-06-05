@@ -374,9 +374,9 @@ fi
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:][ ]/ s///' "$META_FILE"`
+META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:]/ s///' "$META_FILE"`
 [ "$MTAG" = BODY ] &&
-META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d' "$META_FILE"`
+META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 }
 
 
@@ -388,7 +388,7 @@ META_FILE="$3"
 if [ "$MTAG" = BODY ]; then
 	if [ ! -z "$META_DATA" ]; then
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 			echo "$META_OTHER" > "$META_FILE"
 		fi
 		cat >> "$META_FILE" <<-EOF
