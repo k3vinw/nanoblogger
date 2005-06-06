@@ -89,6 +89,7 @@ load_config(){
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
+# USR_BLOGAUTHOR overrides BLOG_AUTHOR
 [ ! -z "$USR_BLOGAUTHOR" ] && BLOG_AUTHOR="$USR_BLOGAUTHOR"
 # default to lynx for browser
 : ${BROWSER:=lynx}
@@ -640,15 +641,16 @@ page_filedir=
 
 # create archive of current month
 build_montharchive(){
-	if [ ! -z "$DB_RESULTS" ]; then
-		set_monthlink "$month"
-		set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
-		make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
-		NB_ArchiveTitle="$month"
-		load_plugins archive/month
-		make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
-		"$BLOG_DIR/$ARCHIVES_DIR/$month_file"
-	fi
+[ -z "$DB_RESULTS" ] && query_db "$month"
+if [ ! -z "$DB_RESULTS" ]; then
+	set_monthlink "$month"
+	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
+	make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
+	NB_ArchiveTitle="$month"
+	load_plugins archive/month
+	make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
+	"$BLOG_DIR/$ARCHIVES_DIR/$month_file"
+fi
 }
 
 # create all the monthly archives

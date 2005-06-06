@@ -79,9 +79,13 @@ li {
         line-height:14px;
         }
 
-.ul {
+.underline {
         text-decoration: underline;
         }
+
+.warning {
+	text-decoration: underline overline;
+	}
         
 .copyright {
         border-top: 1px solid #999;
@@ -208,7 +212,7 @@ li {
     <p><b>Synopsis</b></p>
     <pre>
  
-nb [<span class="ul">-b blog_dir</span>] [<span class="ul">options</span>]
+nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>]
         
 </pre>
 
@@ -271,8 +275,10 @@ nb [<span class="ul">-b blog_dir</span>] [<span class="ul">options</span>]
         tar xzf nanoblogger-XX.tar.gz
         
 </pre>
+    <p><b>Upgrading</b></p><p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any differences between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
 
-    <p><b>Upgrading</b></p>Three basic steps to upgrading. Any customizations made will have to be copied over manually, such as modified templates.
+    <p>Three basic steps to upgrading:</p>
+
     <pre>
 1. create a new weblog directory using nanoblogger (skip the configuration):
         nb [-b blog_dir] -a
@@ -281,7 +287,7 @@ nb [<span class="ul">-b blog_dir</span>] [<span class="ul">options</span>]
         cp -r [old_blog_dir]/data [newblog_dir]
 
 3. edit the new blog.conf to your likings and rebuild the weblog:
-        nb [-b blog_dir] -u all
+        nb [-b blog_dir] --configure -u all
         
 </pre>
 
