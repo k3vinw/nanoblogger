@@ -1294,8 +1294,20 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">$META_DATA</td>
 
-          <td align="left">faster than read_entry, see plugin recent_entries for a good example</td>
+          <td align="left">faster than read_entry, see plugin recent_entries.sh for a good example</td>
         </tr>
+
+	<tr>
+	  <td align="left">loop_archive</td>
+
+	  <td align="left">loops through archives and executes intructions by years or months</td>
+
+	  <td align="left">looparch_query=$1, looparch_type=$2, looparch_exec=$3</td>
+
+	  <td align="left">determined by $looparch_exec</td>
+
+	  <td align="left">example: "loop_archive current months make_monthlink"</td>
+	</tr>
 
         <tr>
           <td align="left">read_entry</td>

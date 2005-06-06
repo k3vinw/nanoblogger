@@ -641,7 +641,7 @@ page_filedir=
 
 # create archive of current month
 build_montharchive(){
-[ -z "$DB_RESULTS" ] && query_db "$month"
+query_db "$month"
 if [ ! -z "$DB_RESULTS" ]; then
 	set_monthlink "$month"
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
@@ -653,23 +653,35 @@ if [ ! -z "$DB_RESULTS" ]; then
 fi
 }
 
-# create all the monthly archives
-cycle_months_for(){
-	which_part="$1"
-	query_db all
-	MASTER_LIST="$DB_RESULTS"
-	# build archives seperated monthly and yearly
-	ENTRY_YEARS=`echo "$MASTER_LIST" |cut -c1-4 |sort $SORT_ARGS`
-	for yearn in $ENTRY_YEARS; do
-		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ENTRY_LIST=`echo "$MASTER_LIST" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
-			for entry_month in $ENTRY_LIST; do
-				month="$yearn-$monthn"
-				query_db "$month"
-				[ ! -z "$DB_RESULTS" ] && $which_part
-			done
+# loops through archives, and executes instructions by years or months
+loop_archive(){
+looparch_query="$1"
+looparch_type="$2"
+looparch_exec="$3"
+# set instructions to execute based on $looparch_type
+if [ "$looparch_type" = years ]; then
+	looparchexec_years="$looparch_exec"
+elif [ "$looparch_type" = months ]; then
+	looparchexec_months="$looparch_exec"
+fi
+query_db "$looparch_query"
+ARCHIVE_MASTER="$DB_RESULTS"
+ARCHIVE_YEARS=`echo "$ARCHIVE_MASTER" |cut -c1-4 |sort $SORT_ARGS`
+for yearn in $ARCHIVE_YEARS; do
+	# execute instructions for each year
+	[ ! -z "$DB_RESULTS" ] && [ ! -z "$looparchexec_years" ] &&
+		$looparchexec_years
+	for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
+		ARCHIVE_MONTHS=`echo "$ARCHIVE_MASTER" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
+		for entry_month in $ARCHIVE_MONTHS; do
+			month="$yearn-$monthn"
+			query_db "$month"
+			# execute instructions for each month
+			[ ! -z "$DB_RESULTS" ] && [ ! -z "$looparchexec_months" ] &&
+				$looparchexec_months
 		done
 	done
+done
 }
 
 # helps update relative categories
@@ -747,7 +759,7 @@ nb_msg "generating archives ..."
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
 	# build the monthly archives
-	cycle_months_for build_montharchive
+	loop_archive all months build_montharchive
 	# build the entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
 		build_entryarchives "$DB_RESULTS" "$PERMALINKENTRY_TEMPLATE"

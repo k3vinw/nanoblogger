@@ -6,7 +6,7 @@ MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	nb_msg "generating archive index page ..."
-	# make NB_Entry_Links placeholder
+	# make NB_ArchiveEntryLinks placeholder
 	query_db all
 	set_baseurl "../"
 	ENTRY_LIST="$DB_RESULTS"
@@ -49,7 +49,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	[ -z "$CAL_CMD" ] && CAL_CMD="cal"
 	$CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
 		
-	make_monthlylink(){
+	make_monthlink(){
 	if [ "$CAL_VAR" = "1" ]; then
 		[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
 		[ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS $monthn $yearn`
@@ -64,7 +64,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	EOF
 	}
 
-	cycle_months_for make_monthlylink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
+	loop_archive all months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
 	load_template "$SCRATCH_FILE.month_links.$NB_FILETYPE"
 	NB_ArchiveMonthLinks="$TEMPLATE_DATA"
 

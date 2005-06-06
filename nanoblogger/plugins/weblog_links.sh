@@ -60,7 +60,7 @@ NB_CategoryLinks="$TEMPLATE_DATA"
 [ -z "$CAL_CMD" ] && CAL_CMD="cal"
 $CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
 	
-make_monthlylink(){
+make_monthlink(){
 if [ "$CAL_VAR" = "1" ]; then
 	[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
 	[ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS $monthn $yearn`
@@ -75,7 +75,7 @@ cat <<-EOF
 EOF
 }
 
-cycle_months_for make_monthlylink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
+loop_archive current months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 load_template "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 NB_MonthLinks="$TEMPLATE_DATA"
 
