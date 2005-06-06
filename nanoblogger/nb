@@ -89,6 +89,7 @@ load_config(){
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
+[ ! -z "$USR_BLOGAUTHOR" ] && BLOG_AUTHOR="$USR_BLOGAUTHOR"
 # default to lynx for browser
 : ${BROWSER:=lynx}
 # default to vi for editor
@@ -460,11 +461,11 @@ make_page(){
 MKPAGE_SRCFILE="$1"
 MKPAGE_TMPLFILE="$2"
 MKPAGE_OUTFILE="$3"
-[ ! -z "$usr_title" ] && MKPAGE_TITLE="$usr_title"
+[ ! -z "$USR_TITLE" ] && MKPAGE_TITLE="$USR_TITLE"
 [ ! -z "$MKPAGE_TITLE" ] && NB_EntryTitle="$MKPAGE_TITLE"
-if [ ! -z "$usr_srcfile" ]; then
-	MKPAGE_SRCFILE="$usr_srcfile"; MKPAGE_OUTFILE="$usr_outputfile"; MKPAGE_TMPLFILE="$usr_template"
-	[ -z "$usr_template" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
+if [ ! -z "$USR_SRCFILE" ]; then
+	MKPAGE_SRCFILE="$USR_SRCFILE"; MKPAGE_OUTFILE="$USR_FILE"; MKPAGE_TMPLFILE="$USR_TEMPLATE"
+	[ -z "$USR_TEMPLATE" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 fi
 [ ! -f "$MKPAGE_SRCFILE" ] && die "source file, '$MKPAGE_SRCFILE' doesn't exist! goodbye."
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
@@ -831,9 +832,9 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	[ -z "$cat_var" ] && die "must specify one category at a time when editing a title!"
 	db_catquery=`cat_id`; check_catid
 	query_db "$db_query" "$db_catquery"
-	if [ ! -z "$usr_title" ]; then
-		nb_msg "changing title to '$usr_title' for category id: $cat_num ..."
-		echo "$usr_title" > "$NB_DATA_DIR/$db_catquery"
+	if [ ! -z "$USR_TITLE" ]; then
+		nb_msg "changing title to '$USR_TITLE' for category id: $cat_num ..."
+		echo "$USR_TITLE" > "$NB_DATA_DIR/$db_catquery"
 		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$NB_DATA_DIR/$db_catquery"
 		UPDATE_LIST="$DB_RESULTS"
 		build_weblog; exit 0
@@ -1068,8 +1069,8 @@ if [ ! -z "$cat_num" ]; then
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
 				nb_msg "creating new category id: $id ..."
-				if [ ! -z "$usr_title" ]; then
-					cat_title=$usr_title; usr_title=
+				if [ ! -z "$USR_TITLE" ]; then
+					cat_title=$USR_TITLE; USR_TITLE=
 				else
 					echo "enter the new category's title [Untitled]"
 					read -p "$NB_PROMPT" cat_title
@@ -1089,18 +1090,17 @@ fi
 [ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
 nb_msg "creating new entry in '$BLOG_DIR'$cat_msg ..."
 # read user specified attributes for entry
-[ ! -z "$usr_author" ] && NB_EntryAuthor=$usr_author
-[ ! -z "$usr_title" ] && NB_EntryTitle=$usr_title; usr_title=
+[ ! -z "$USR_TITLE" ] && NB_EntryTitle=$USR_TITLE; USR_TITLE=
+[ ! -z "$USR_BLOGAUTHOR" ] && NB_EntryAuthor="$USR_BLOGAUTHOR"
 if [ -z "$NB_EntryAuthor" ]; then
 	echo "enter author's name [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
-	[ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
 fi
 if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-if [ -z "$usr_body" ]; then
+if [ -z "$USR_TEST" ]; then
 	echo "editing body of entry ..."
 	# entry's new file for editing
 	NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
@@ -1110,9 +1110,9 @@ if [ -z "$usr_body" ]; then
 		NB_EntryBody=$(< "$NB_EditFile")
 	fi
 else
-	NB_EntryBody="$usr_body"
+	NB_EntryBody="$USR_TEXT"
 fi
-[ ! -z "$usr_description" ] && NB_EntryDescription="$usr_description"
+[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 # prompt for descritption
 if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != 1 ]; then
 	echo "enter a short descriptive comment"
@@ -1218,30 +1218,30 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-a|--add)		load_config; add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
-		-B|--body)		check_arg; usr_body="$2"; shift;;
+		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		check_config; config_weblog;;
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_config; delete_weblog;;
-		-D|--desc)		desc_var=1; usr_description="$2"; shift;;
+		-D|--desc)		desc_var=1; USR_DESC="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_config; edit_weblog;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
-		-n|--author)		check_arg; usr_author="$2"; shift;;
-		--makepage)		check_arg; usr_srcfile="$2"; usr_outputfile="$3"; shift 2
+		-n|--author)		check_arg; USR_BLOGAUTHOR="$2"; shift;;
+		--makepage)		check_arg; USR_SRCFILE="$2"; USR_FILE="$3"; shift 2
 					check_config; make_page;;
 		--manual)		load_config; $BROWSER "$BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_config; move_entry;;
 		-p|--preview)		check_config; preview_weblog;;
 		-P|--publish)		check_config; publish_weblog;;
-		--template)		check_arg; usr_template="$2"; shift;;
+		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
-		-t|--title)		check_arg; usr_title="$2"; shift;;
+		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;

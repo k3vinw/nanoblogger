@@ -1,1130 +1,1340 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
- <style type="text/css">
- <!--
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-	body {
-		font-family:verdana, arial, sans-serif;
-		font-size:11px;
-		line-height:14px;
-		margin:20px 20px 20px 20px;
-		background:#FFFFFF;
-		}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta name="generator" content="HTML Tidy for MkLinux (vers 12 April 2005), see www.w3.org" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <title>NanoBlogger User Manual</title>
+<style type="text/css">
+/*<![CDATA[*/
+        <!--
+body {
+        font-family:verdana, arial, sans-serif;
+        font-size:11px;
+        line-height:14px;
+        margin:20px 20px 20px 20px;
+        background:#FFFFFF;
+        }
 
 table {
-	color:#333; 
-	font-size:10px;
-	border:1px solid #999;
-	}
+        color:#333; 
+        font-size:10px;
+        border:1px solid #999;
+        }
 th {
-	background:#CCC;
-	}
+        background:#CCC;
+        }
 td {
-	background:#EEE;
-	}
+        background:#EEE;
+        }
 
 div.tables { margin:10px; padding:4px; }
 
 h1, h2, h3 {
-	font-family:verdana, arial, sans-serif;
-	font-color:#333;
-	}
+        font-family:verdana, arial, sans-serif;
+        font-color:#333;
+        }
 
 p {
-	color:#333;
-	line-height:15px;
-	}
+        color:#333;
+        line-height:15px;
+        }
 
 pre {
-	font-family:geneva, verdana, arial, sans-serif;
-	font-size:11px;
-	color:#333;
-	line-height:15px;
-	background-color: #EEE;
-	border: 1px solid #333;
-	padding: 2px;
-	margin-left: 30px;
-	margin-right: 75px;
-	}
-	
+        font-family:geneva, verdana, arial, sans-serif;
+        font-size:11px;
+        color:#333;
+        line-height:15px;
+        background-color: #EEE;
+        border: 1px solid #333;
+        padding: 2px;
+        margin-left: 30px;
+        margin-right: 75px;
+        }
+        
 ol { 
-	color:#333; 
-	font-family: verdana, helvetica, sans-serif; 
-	font-size: 11px; 
-	line-height:14px;  }
-	
+        color:#333; 
+        font-family: verdana, helvetica, sans-serif; 
+        font-size: 11px; 
+        line-height:14px;  }
+        
 ul { 
-	color:#333; 
-	font-family: verdana, helvetica, sans-serif; 
-	font-size: 11px; 
-	list-style: square; 
-	line-height:14px;  }
+        color:#333; 
+        font-family: verdana, helvetica, sans-serif; 
+        font-size: 11px; 
+        list-style: square; 
+        line-height:14px;  }
 
 li { 
-	font-family: verdana, helvetica, sans-serif;
-	color:#333; 
-	font-size: 11px; 
-	margin-left: 0px; 
-	margin-right: 0px; 
-	margin-top: 6px; 
-	margin-bottom: 0px;
-	line-height:14px;
-	}
-	
-span.copyright {
-	font-family:verdana, arial, sans-serif;
-	font-size:10px;
-	color:#999;
-	line-height:15px;
-	}	
- -->
- </style>
- <title>NanoBlogger User Manual</title>
+        font-family: verdana, helvetica, sans-serif;
+        color:#333; 
+        font-size: 11px; 
+        margin-left: 0px; 
+        margin-right: 0px; 
+        margin-top: 6px; 
+        margin-bottom: 0px;
+        line-height:14px;
+        }
+
+.ul {
+        text-decoration: underline;
+        }
+        
+.copyright {
+        border-top: 1px solid #999;
+        font-family:verdana, arial, sans-serif;
+        font-size:10px;
+        color:#999;
+        line-height:15px;
+        }       
+        -->
+/*]]>*/
+</style>
 </head>
 
-<body bgcolor="white">
+<body>
+  <div id="summary" style="border-top: 1px solid #999; border-bottom: 1px solid #999;">
+    <h1>NanoBlogger User Manual</h1>
 
- <hr size="1" color="#CCCCCC" />
+    <h2>by <a href="mailto:un1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood)</h2>
 
- <h1>NanoBlogger User Manual</h1>
+    <p><em>This document explains how to install and use NanoBlogger.</em></p>
+  </div>
 
- <h2>by <a href="mailto:un1xt3r_at_fastmail_dot_fm">n1xt3r</a> (Kevin Wood)</h2>
-  
- <hr size="1" color="#CCCCCC" />
+  <div id="toc">
+    <p><b>Table of Contents</b></p>
 
- <em>This document explains how to install and use NanoBlogger.</em><br />
- <br />
+    <table summary="toc" style="border:0px;">
+      <tr>
+        <td>1.</td>
 
- <hr size="1" color="#CCCCCC" />
+        <td><a href="#s.1">Introduction</a></td>
+      </tr>
 
- <p><b>Table of Contents</b></p>
+      <tr>
+        <td>2.</td>
 
- <table summary="toc" style="border:0px;">
-   <tr><td>1.</td><td><a href="#1">Introduction</a></td></tr>
+        <td><a href="#s.2">Features</a></td>
+      </tr>
 
-   <tr><td>2.</td><td><a href="#2">Features</a></td></tr>
+      <tr>
+        <td>3.</td>
 
-   <tr><td>3.</td><td><a href="#3">Installation</a></td></tr>
+        <td><a href="#s.3">Installation</a></td>
+      </tr>
 
-   <tr><td>4.</td><td><a href="#4">Requirements</a></td></tr>
+      <tr>
+        <td>4.</td>
 
-   <tr><td>5.</td><td><a href="#5">Getting Started</a></td></tr>
+        <td><a href="#s.4">Requirements</a></td>
+      </tr>
 
-   <tr><td>6.</td><td><a href="#6">Settings and Configuration</a></td></tr>
+      <tr>
+        <td>5.</td>
 
-   <tr><td>7.</td><td><a href="#7">Managing Entries and Categories</a></td></tr>
+        <td><a href="#s.5">Getting Started</a></td>
+      </tr>
 
-   <tr><td>8.</td><td><a href="#8">Templates and Placeholders</a></td></tr>
+      <tr>
+        <td>6.</td>
 
-   <tr><td>9.</td><td><a href="#9">About Plugins</a></td></tr>
+        <td><a href="#s.6">Settings and Configuration</a></td>
+      </tr>
 
-   <tr><td>10.</td><td><a href="#10">Writing Plugins</a></td></tr>
+      <tr>
+        <td>7.</td>
 
-   <tr><td>11.</td><td><a href="#11">Publishing</a></td></tr>
+        <td><a href="#s.7">Managing Entries and Categories</a></td>
+      </tr>
 
-   <tr><td>12.</td><td><a href="#12">Adding Support for Comments</a></td></tr>
+      <tr>
+        <td>8.</td>
 
-   <tr><td>13.</td><td><a href="#13">Importing Entries</a></td></tr>
+        <td><a href="#s.8">Templates and Placeholders</a></td>
+      </tr>
 
-   <tr><td>14.</td><td><a href="#14">Tips and Tricks</a></td></tr>
+      <tr>
+        <td>9.</td>
 
-   <tr><td>15.</td><td><a href="#15">Credits</a></td></tr>
- </table>
+        <td><a href="#s.9">About Plugins</a></td>
+      </tr>
 
- <h2><a name="1" id="1">1. Introduction</a></h2>
- NanoBlogger is a small weblog engine written in Bash for the command line. It
- uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+      <tr>
+        <td>10.</td>
 
- <p><b>Synopsis</b></p>
+        <td><a href="#s.10">Writing Plugins</a></td>
+      </tr>
 
-	<pre> 
-nb [<u>-b blog_dir</u>] [<u>options</u>]
-	</pre>
+      <tr>
+        <td>11.</td>
 
- <h2><a name="2" id="2">2. Features</a></h2>
+        <td><a href="#s.11">Publishing</a></td>
+      </tr>
 
- <ul>
-   <li>intuitive command line interface</li>
+      <tr>
+        <td>12.</td>
 
-   <li>support for multiple weblogs</li>
+        <td><a href="#s.12">Adding Support for Comments</a></td>
+      </tr>
 
-   <li>support for multiple categories</li>
+      <tr>
+        <td>13.</td>
 
-   <li>easy editing and management of entries</li>
+        <td><a href="#s.13">Importing Entries</a></td>
+      </tr>
 
-   <li>archiving by category, entry, and month</li>
+      <tr>
+        <td>14.</td>
 
-   <li>pagination</li>
+        <td><a href="#s.14">Tips and Tricks</a></td>
+      </tr>
 
-   <li>permanent links</li>
+      <tr>
+        <td>15.</td>
 
-   <li>RSS syndication (comes with RSS 2.0 and 1.0 formats)</li>
+        <td><a href="#s.15">Credits</a></td>
+      </tr>
+    </table>
+  </div>
 
-   <li>Atom syndication (comes with 0.3 format)</li>
+  <div id="intro">
+    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+  </div>
 
-   <li>templates and CSS style sheets for full control of appearance</li>
+  <div id="synopsis">
+    <p><b>Synopsis</b></p>
+    <pre>
+ 
+nb [<span class="ul">-b blog_dir</span>] [<span class="ul">options</span>]
+        
+</pre>
 
-   <li>placeholders for easy template manipulation</li>
+    <h2><a id="s.2" name="s.2">2. Features</a></h2>
 
-   <li>plugins for calendar, recent entries, weblog status, fortunes, etc.</li>
+    <ul>
+      <li>intuitive command line interface</li>
 
-   <li>auto-formatting, e.g. line breaks translate to HTML</li>
+      <li>support for multiple weblogs</li>
 
-   <li>support for relative and absolute links</li>
+      <li>support for multiple categories</li>
 
-   <li>extensibility through reusability</li>
+      <li>easy editing and management of entries</li>
 
-   <li>global configuration to set defaults (nb.conf)</li>
+      <li>archiving by category, entry, and month</li>
 
-   <li>per-weblog configuration to override global defaults (blog.conf)</li>
+      <li>pagination</li>
 
-   <li>intelligent build system, only rebuilds relative parts for a modified entry</li>
+      <li>permanent links</li>
 
-   <li>simple cache system, for faster content generation</li>
+      <li>RSS syndication (comes with RSS 2.0 and 1.0 formats)</li>
 
-   <li>auto-detection of weblog from current directory</li>
+      <li>Atom syndication (comes with 0.3 format)</li>
 
-   <li>no dependency on any java-script, server-side scripting, or server-side includes</li>
+      <li>templates and CSS style sheets for full control of appearance</li>
 
-   <li>no dependency on any special database (uses flat-file)</li>
+      <li>placeholders for easy template manipulation</li>
 
-   <li>multi-platform portability (at least where there's bash and the required commands)</li>
- </ul>
+      <li>plugins for calendar, recent entries, weblog status, fortunes, etc.</li>
 
- <h2><a name="3" id="3">3. Installation</a></h2>To install nanoblogger: 
+      <li>auto-formatting, e.g. line breaks translate to HTML</li>
 
-	<pre>
+      <li>support for relative and absolute links</li>
+
+      <li>extensibility through reusability</li>
+
+      <li>global configuration to set defaults (nb.conf)</li>
+
+      <li>per-weblog configuration to override global defaults (blog.conf)</li>
+
+      <li>intelligent build system, only rebuilds relative parts for a modified entry</li>
+
+      <li>simple cache system, for faster content generation</li>
+
+      <li>auto-detection of weblog from current directory</li>
+
+      <li>no dependency on any java-script, server-side scripting, or server-side includes</li>
+
+      <li>no dependency on any special database (uses flat-file)</li>
+
+      <li>multi-platform portability (at least where there's bash and the required commands)</li>
+    </ul>
+  </div>
+
+  <div id="install">
+    <h2><a id="s.3" name="s.3">3. Installation</a></h2>To install nanoblogger:
+    <pre>
 1. download the gzipped tar archive from the web site[1]
 2. decompress the gzipped tar archive (where "XX" equals the version number):
-	tar xzf nanoblogger-XX.tar.gz
-	</pre>
+        tar xzf nanoblogger-XX.tar.gz
+        
+</pre>
 
- <p><b>Upgrading</b></p>
-  Three basic steps to upgrading.  Any customizations made will
-  have to be copied over manually, such as modified templates.
-
-	<pre>
+    <p><b>Upgrading</b></p>Three basic steps to upgrading. Any customizations made will have to be copied over manually, such as modified templates.
+    <pre>
 1. create a new weblog directory using nanoblogger (skip the configuration):
-	nb [-b blog_dir] -a
+        nb [-b blog_dir] -a
 
 2. copy the old data directory over to the new weblog directory:
-	cp -r [old_blog_dir]/data [newblog_dir]
+        cp -r [old_blog_dir]/data [newblog_dir]
 
 3. edit the new blog.conf to your likings and rebuild the weblog:
-	nb [-b blog_dir] -u all
-	</pre>
+        nb [-b blog_dir] -u all
+        
+</pre>
 
- <h2><a name="4" id="4">4. Requirements</a></h2>Programs:
+    <h2><a id="s.4" name="s.4">4. Requirements</a></h2>Programs:
 
- <p>
-   bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap
- </p>
+    <p>bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
 
- <p>* = GNU version recommended, but not required</p>
+    <p>* = GNU version recommended, but not required</p>
 
- <h2><a name="5" id="5">5. Getting Started</a></h2>
- <p><b>Creating a New Weblog</b></p>
+    <h2><a id="s.5" name="s.5">5. Getting Started</a></h2>
 
- <p>
-   To create a new weblog:
- </p>
+    <p><b>Creating a New Weblog</b></p>
 
-	<pre>
+    <p>To create a new weblog:</p>
+    <pre>
 cd [nb_dir]
 ./nb --blogdir [myblog_dir] --add
-	</pre>
+        
+</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same
+command again on an existing weblog directory will add a new entry.
 
-where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will
-create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created
-this way.  Running the same command again on an existing weblog directory will add a new entry.
-
- <p>For easier invocation, add nb to your $PATH in Bash:</p>
-
- 	<pre>
+    <p>For easier invocation, add nb to your $PATH in Bash:</p>
+    <pre>
 export PATH="$PATH:[nanoblogger_dir]"
-	</pre>
+        
+</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to.
 
-where <em>nb_dir</em> is the path that NanoBlogger was installed to.
-
- <p>To set a default weblog directory:</p>
-
-	<pre>
+    <p>To set a default weblog directory:</p>
+    <pre>
 1. edit either nb.conf or $HOME/.nb.conf.
 2. set BLOG_DIR to your weblog directory:
-	BLOG_DIR="$HOME/public_html/[myblog_dir]"
-	</pre>
+        BLOG_DIR="$HOME/public_html/[myblog_dir]"
+        
+</pre>
+  </div>
 
- <h2><a name="6" id="6">6. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
-	<pre>
+  <div id="config">
+    <h2><a id="s.6" name="s.6">6. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
+    <pre>
 nb --blogdir [myblog_dir] --configure -u all
-	</pre>
- This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
+        
+</pre>This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
- <p><b>Setting the Browser</b></p>
+    <p><b>Setting the Browser</b></p>
 
- <p>
-   The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em>
-   is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em>
-   variable in your bash environment. In Mac OS X, you would set this to "open".
+    <p>The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your bash
+    environment. In Mac OS X, you would set this to "open".</p>
 
- <p><b>Setting the Editor</b></p>
+    <p><b>Setting the Editor</b></p>
 
- <p>
-   The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em>
-   is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the
-   <em>EDITOR</em> variable in your bash environment.
- </p>
+    <p>The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your bash
+    environment.</p>
 
- <p><b>Setting the Date Format for New Entries</b></p>
+    <p><b>Setting the Date Format for New Entries</b></p>
 
- <p>
-   <em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command.
-   You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). Please note that this setting
-   has no effect on previous entries. Read the man pages of the date command to see more on how to customize the format of the date
-   command's output.
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). Please note that this setting has no effect on previous
+    entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.</p>
+
+    <p>Example:</p>
+    <pre>
 DATE_FORMAT="%m.%d.%Y %H:%M"
 DATE_LOCALE="$LANG"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Timezone for Syndication Feeds</b></p>
+    <p><b>Setting the Timezone for Syndication Feeds</b></p>
 
- <p>
-   <em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a
-   non-standard extension of the date command.  You'll have to set this manually, if the date command on your system doesn't support it or see
-   if your system administrator will install GNU date for you.
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a non-standard extension of the date command. You'll have to set this manually, if the date command on your system doesn't support it or see if your
+    system administrator will install GNU date for you.</p>
+
+    <p>Example:</p>
+    <pre>
 BLOG_TZD="-0:500"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Language</b></p>
+    <p><b>Setting the Language</b></p>
 
- <p>
-   <em>BLOG_CHARSET</em> sets the character encoding to be used for your weblog.
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>BLOG_CHARSET</em> sets the character encoding to be used for your weblog.</p>
+
+    <p>Example:</p>
+    <pre>
 BLOG_CHARSET="iso-8859-1"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Mime Type</b></p>
+    <p><b>Setting the Mime Type</b></p>
 
- <p>
-   <em>BLOG_MIMETYPE</em> sets the mime type to be used for your weblog.
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>BLOG_MIMETYPE</em> sets the mime type to be used for your weblog.</p>
+
+    <p>Example:</p>
+    <pre>
 BLOG_MIMETYPE="text/html"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Web Address</b></p>
+    <p><b>Setting the Web Address</b></p>
 
- <p>
-   <em>BLOG_URL</em> should be set as the full URL to your weblog, excluding the index file and any
-   preceding "/".
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>BLOG_URL</em> should be set as the full URL to your weblog, excluding the index file and any preceding "/".</p>
+
+    <p>Example:</p>
+    <pre>
 BLOG_URL="http://my-site.com/weblog"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Style Sheet</b></p>
+    <p><b>Setting the Style Sheet</b></p>
 
- <p>
-   <em>BLOG_CSS</em> sets the style sheet to be used by your weblog. Style sheets are located in the
-   <em>styles</em> directory.
- </p>
- <p>
-   Example:
-   <pre>
+    <p><em>BLOG_CSS</em> sets the style sheet to be used by your weblog. Style sheets are located in the <em>styles</em> directory.</p>
+
+    <p>Example:</p>
+    <pre>
 BLOG_CSS="styles/nb_rusted.css"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Enabling Generation of Absolute Links</b></p>
+    <p><b>Enabling Generation of Absolute Links</b></p>
 
- <p>
-   <em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to "0", disabled.
- </p>
+    <p><em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to "0", disabled.</p>
 
- <p><b>Setting the Link to a Directory's Index</b></p>
+    <p><b>Setting the Link to a Directory's Index</b></p>
 
- <p>
-   <em>NB_INDEX</em> determines how a directory's index is accessed. The default is to leave this as blank.
- </p>
-   Example:
-   <pre>
+    <p><em>NB_INDEX</em> determines how a directory's index is accessed. The default is to leave this as blank.</p>Example:
+    <pre>
 NB_INDEX="index.html"
-   </pre>
- </p>
+   
+</pre>
 
- <p><b>Setting the Author's Name</b></p>
+    <p><b>Setting the Author's Name</b></p>
 
- <p>
-   <em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER
-   variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.
- </p>
+    <p><em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.</p>
 
- <p><b>Setting the Maximum Number of Entries to Display on the Main Page</b></p>
+    <p><b>Setting the Maximum Number of Entries to Display on the Main Page</b></p>
 
- <p>
-   <em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page. Defaults to "10".
- </p>
+    <p><em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page. Defaults to "10".</p>
 
- <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
- 
- <p>
-   <em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".
- </p>
+    <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
 
- <p><b>Toggling the Display of Permanent Links</b></p>
+    <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".</p>
 
- <p>
-   <em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.
- </p>
+    <p><b>Toggling the Display of Permanent Links</b></p>
 
- <p><b>Building Individual Archives for Each Entry</b></p>
+    <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
 
- <p>
-   Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables individual archiving of each entry and reconfigures the links of the
-   entries to point to their individual archives. Note that this will increase the rebuild time since more pages will have to be
-   generated.
- </p>
+    <p><b>Building Individual Archives for Each Entry</b></p>
 
- <p><b>Setting Actions for Previewing and Publishing</b></p>
+    <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables individual archiving of each entry and reconfigures the links of the entries to point to their individual archives. Note that this will increase the rebuild time since more pages will have to be generated.</p>
 
- <p>
-   <em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their
-   respective options, <em>--preview</em> and <em>--publish</em>.
- </p>
+    <p><b>Setting Actions for Previewing and Publishing</b></p>
 
- <p><b>Changing the File Type</b></p>
+    <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.</p>
 
- <p>
-   <em>NB_FILETYPE</em>, specifies the file type or rather the suffix for the generated files.
-   The default, of course, is set to <em>html</em>.
- </p>
+    <p><b>Changing the File Type</b></p>
 
- <p><b>Changing the Default Query Mode</b></p>
+    <p><em>NB_FILETYPE</em>, specifies the file type or rather the suffix for the generated files. The default, of course, is set to <em>html</em>.</p>
 
- <p>
-   <em>QUERY_MODE</em>, specifies the default query mode for listing entries and displaying them on the main page. Defaults
-   to "$MAX_ENTRIES".
- </p>
+    <p><b>Changing the Default Query Mode</b></p>
 
- <p><b>Plugin Configuration</b></p>
+    <p><em>QUERY_MODE</em>, specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
 
- <p>
-   <em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>.
-   When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by
-   copying the plugins directory and sub-directories to the desired location.
- </p>
+    <p><b>Plugin Configuration</b></p>
 
- <p><b>Global Configuration</b></p>
+    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories
+    to the desired location.</p>
 
- <p>
-   NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all weblogs. The global
-   configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>nb.conf</em>.
-   This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.
- </p>
+    <p><b>Global Configuration</b></p>
 
- <h2><a name="7" id="7">7. Managing Entries and Categories</a></h2>
+    <p>NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>nb.conf</em>. This configuration is also looked for under
+    the file, <em>$HOME/.nb.conf</em>.</p>
+  </div>
 
- Commands to manage entries and categories.
+  <div id="mgmt">
+    <h2><a id="s.7" name="s.7">7. Managing Entries and Categories</a></h2>Commands to manage entries and categories.
 
- <p><h3>Managing Entries</h3></p>
+    <h3>Managing Entries</h3>
 
- <p><b>Entry ID's</b></p>
+    <p><b>Entry ID's</b></p>
 
- <p>
-	The latest entry added, will always have an ID of "1", entry's added before that will have ID's of higher values.  An entry will have a different ID for each category it belongs in.  When modifying entries from a category, ID's for both category and entry must be specified.
- </p>
+    <p>The latest entry added, will always have an ID of "1", entry's added before that will have ID's of higher values. An entry will have a different ID for each category it belongs in. When modifying entries from a category, ID's for both category and entry must be specified.</p>
 
- <p><b>Creating Entries</b></p>
+    <p><b>Creating Entries</b></p>
 
- <p>
-	Adding a new entry:
- </p>
-
-	<pre>
+    <p>Adding a new entry:</p>
+    <pre>
 nb [-b blog_dir] -a
-	</pre>
-
-	Adding a new entry to a category:
-	<pre>
+        
+</pre>Adding a new entry to a category:
+    <pre>
 nb [-b blog_dir] -c 1 -a
-	</pre>
-
-	Setting title and author for new entry:
-	<pre>
+        
+</pre>Setting title and author for new entry:
+    <pre>
 nb [-b blog_dir] -t "New Entry" -n [entry_author] -a
-	</pre>
-
-	Setting title, author, and body for new entry:
-	<pre>
+        
+</pre>Setting title, author, and body for new entry:
+    <pre>
 nb [-b blog_dir] -t "New Entry" -n [entry_author] -M "This is my message." -a
-	</pre>
+        
+</pre>
 
- <p><b>Listing Entries</b></p>
+    <p><b>Listing Entries</b></p>
 
- <p>Listing current entries:</p>
-
-	<pre>
+    <p>Listing current entries:</p>
+    <pre>
 nb [-b blog_dir] -l
-	</pre>
-
-	Listing all entries:
-	<pre>
+        
+</pre>Listing all entries:
+    <pre>
 nb [-b blog_dir] -l all
-	</pre>
-
-	Listing entries for a category:
-	<pre>
+        
+</pre>Listing entries for a category:
+    <pre>
 nb [-b blog_dir] -c 1 -l
-	</pre>
- </p>
+        
+</pre>
 
- <p><b>Editing Entries</b></p>
+    <p><b>Editing Entries</b></p>
 
- <p>Editing the last entry created:</p>
-
-	<pre>
+    <p>Editing the last entry created:</p>
+    <pre>
 nb [-b blog_dir] -e 1
-	</pre>
-	
-	Editing an entry from a category:
-	<pre>
+        
+</pre>Editing an entry from a category:
+    <pre>
 nb [-b blog_dir] -c 1 -e 1
-	</pre>
-	Editing multiple entries:
-	<pre>
+        
+</pre>Editing multiple entries:
+    <pre>
 nb [-b blog_dir] -e 1,2,3
-	</pre>
+        
+</pre>
 
- <p><b>Moving Entries</b></p>
+    <p><b>Moving Entries</b></p>
 
- <p>Moving an entry to a category:</p>
-
-	<pre>
+    <p>Moving an entry to a category:</p>
+    <pre>
 nb [-b blog_dir] -c 1 -m 1
-	</pre>
-
-	Moving an entry to multiple categories:
-	<pre>
+        
+</pre>Moving an entry to multiple categories:
+    <pre>
 nb [-b blog_dir] -c 1,2,3 -m 1
-	</pre>
-
-	Moving multiple entries to a category:
-	<pre>
+        
+</pre>Moving multiple entries to a category:
+    <pre>
 nb [-b blog_dir] -c 1 -m 1,2,3
-	</pre>
+        
+</pre>
 
- <p><b>Deleting Entries</b></p>
+    <p><b>Deleting Entries</b></p>
 
- <p>Permanently deleting an entry:</p>
-
-	<pre>
+    <p>Permanently deleting an entry:</p>
+    <pre>
 nb [-b blog_dir] -d 1
-	</pre>
-
-	Permanently deleting multiple entries:
-	<pre>
+        
+</pre>Permanently deleting multiple entries:
+    <pre>
 nb [-b blog_dir] -d 1,2,3
-	</pre>
-
-	Deleting an entry from a category:
-	<pre>
+        
+</pre>Deleting an entry from a category:
+    <pre>
 nb [-b blog_dir] -c 1 -d 1
-	</pre>
+        
+</pre>
 
- <h3>Managing Categories</h3>
+    <h3>Managing Categories</h3>
 
- <p><b>Category ID's</b></p>
+    <p><b>Category ID's</b></p>
 
- <p>
-  	Category ID's count up from "1".  A category's ID remains constant until that category is deleted.  Deleting a category will free up that category's ID for use by a new category upon creation.
- </p>
+    <p>Category ID's count up from "1". A category's ID remains constant until that category is deleted. Deleting a category will free up that category's ID for use by a new category upon creation.</p>
 
- <p><b>Category Commands</b></p>
+    <p><b>Category Commands</b></p>
 
- <p>Creating a new category:</p>
-
-	<pre>
+    <p>Creating a new category:</p>
+    <pre>
 nb [-b blog_dir] -c new -a
-	</pre>
-
-	Setting the title for a new category:
-	<pre>
+        
+</pre>Setting the title for a new category:
+    <pre>
 nb [-b blog_dir] -t "New Category" -c new -a
-	</pre>
-
-	Listing available categories:
-	<pre>
+        
+</pre>Listing available categories:
+    <pre>
 nb [-b blog_dir] -l cat
-	</pre>
-
-  	Editing a category's title:
-	<pre>
+        
+</pre>Editing a category's title:
+    <pre>
 nb [-b blog_dir] -c 1 -t "News" -e cat
-	</pre>
-
-	Deleting a category:
-	<pre>
+        
+</pre>Deleting a category:
+    <pre>
 nb [-b blog_dir] -c 1 -d cat
-	</pre>
+        
+</pre>
+  </div>
 
- <h2><a name="8" id="8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
+  <div id="templates">
+    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
 
- <div class="tables">
-   <table border="0" cellspacing="4" cellpadding="2" summary="templates">
-     <caption>
-       The weblog's appearance is controlled by the following templates:
-     </caption>
-     <tr>
-       <th align="left">templates</th>
-       <th align="left">description</th>
-     </tr>
-     <tr>
-       <td align="left">category_archive.htm</td>
-       <td align="left">controls look of the categories pages</td>
-     </tr>
-     <tr>
-       <td align="left">entry.htm</td>
-       <td align="left">controls look of your weblog entries</td>
-     </tr>
-     <tr>
-       <td align="left">main_index.htm</td>
-       <td align="left">controls look of the weblog's main page</td>
-     </tr>
-     <tr>
-       <td align="left">main_links.htm*</td>
-       <td align="left">contains user defined links</td>
-     </tr>
-     <tr>
-       <td align="left">makepage.htm</td>
-       <td align="left">default template used by makepage option</td>
-     </tr>
-     <tr>
-       <td align="left">month_archive.htm</td>
-       <td align="left">controls look of the monthly archive pages</td>
-     </tr>
-     <tr>
-       <td align="left">permalink.htm</td>
-       <td align="left">controls look of an entry's archive page</td>
-     </tr>
-     <tr>
-       <td align="left">permalink_entry.htm</td>
-       <td align="left">controls look of an entry within it's archive page</td>
-     </tr>
-   </table>
-   * = used by plugin
- </div>
+    <div class="tables">
+      <table border="0" cellspacing="4" cellpadding="2" summary="templates">
+        <caption>
+          The weblog's appearance is controlled by the following templates:
+        </caption>
 
- <div class="tables">
-   <table border="0" cellspacing="4" cellpadding="2" summary="entry placeholders">
-     <caption>
-       The entry template includes the following placeholders:
-     </caption>
-     <tr>
-       <th align="left">placeholders</th>
-       <th align="left">description</th>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryAuthor</td>
-        <td align="left">author of entry</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryCategories*</td>
-        <td align="left">entry's category links</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryBody</td>
-        <td>entry's content</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryDate</td>
-        <td align="left">entry's posted time</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryDescription</td>
-        <td align="left">entry's description</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryID</td>
-        <td align="left">entry's id</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryPermalink</td>
-        <td align="left">entry's permanent link</td>
-     </tr>
-     <tr>
-        <td align="left">$NB_EntryTitle</td>
-        <td align="left">entry's title</td>
-     </tr>
-  </table>
-  * = generated by plugin
- </div>
+        <tr>
+          <th align="left">templates</th>
 
- <div class="tables">
-   <table border="0" cellspacing="4" cellpadding="2" summary="main placeholders">
-      <caption>
-         The main template includes the following placeholders:
-      </caption>
-      <tr>
-         <th align="left">placeholders</th>
-         <th align="left">description</th>
-      </tr>
-      <tr>
-         <td align="left">${BASE_URL}</td>
-	 <td align="left">relative or absolute link to the weblog's base URL</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_MIMETYPE</td>
-	 <td align="left">weblog's mime type</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_CHARSET</td>
-         <td align="left">weblog's character set</td>
-      </tr>
-      <tr>
-         <td align="left">$NB_INDEX</td>
-         <td align="left">weblog's link to directory's index</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_CONTACT</td>
-         <td align="left">weblog's contact info</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_DESCRIPTION</td>
-         <td align="left">weblog's description</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_TITLE</td>
-         <td align="left">weblog's title</td>
-      </tr>
-      <tr>
-         <td align="left">$BLOG_URL</td>
-         <td align="left">weblog's URL</td>
-      </tr>
-      <tr>
-  	 <td align="left">$NB_ArticleLinks</td>
-	 <td align="left">links to articles</td>
-      </tr>
-      <tr>
-         <td align="left">$NB_MonthLinks*</td>
-         <td align="left">links to the monthly archives</td>
-      </tr>
-      <tr>
-         <td align="left">$NB_CategoryLinks*</td>
-         <td align="left">links to categories</td>
-      </tr>
-      <tr>
-         <td align="left">$NB_MainLinks*</td>
-         <td align="left">user defined links</td>
-      </tr>
-      <tr>
-         <td align="left">$NB_Entries</td>
-         <td align="left">all the current entries</td>
-      </tr>
-   </table>
-   * = generated by plugin
- </div>
+          <th align="left">description</th>
+        </tr>
 
- <h2><a name="9" id="9">9. About Plugins</a></h2>
+        <tr>
+          <td align="left">category_archive.htm</td>
 
- <p><h3>Directory of Plugins</h3></p>
+          <td align="left">controls look of the categories pages</td>
+        </tr>
 
- <p>
-   <p><b>Regular Plugins: plugins</b></p>
+        <tr>
+          <td align="left">entry.htm</td>
 
-   <p>
-     These plugins are initialized first.
-   </p>
+          <td align="left">controls look of your weblog entries</td>
+        </tr>
 
-   <p><b>Archive Plugins: plugins/archive</b></p>
+        <tr>
+          <td align="left">main_index.htm</td>
 
-   <p>
-     These plugins are initialized when the archives are built.
-   </p>
+          <td align="left">controls look of the weblog's main page</td>
+        </tr>
 
-   <p><b>Monthly Plugins: plugins/archive/month</b></p>
+        <tr>
+          <td align="left">main_links.htm*</td>
 
-   <p>
-     These plugins are initialized for each month. Formally known as monthly plugins.
-   </p>
+          <td align="left">contains user defined links</td>
+        </tr>
 
-   <p><b>Entry Plugins: plugins/entry</b></p>
+        <tr>
+          <td align="left">makepage.htm</td>
 
-   <p>
-     These plugins are initialized for each entry.
-   </p>
+          <td align="left">default template used by makepage option</td>
+        </tr>
 
-   <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
+        <tr>
+          <td align="left">month_archive.htm</td>
 
-   <p>
-     These plugins are initialized for each entry modified, meaning they only get run when an entry's data
-     has been changed. This helps reduce redundancy when generating multiple entries for a page. A good example
-     would be the plugin, moods.sh, which generates graphics for smiley icons. There main use is for altering
-     the data output for an entry.
-     They typically modify the NB_EntryBody, variable. Formally known as entry body plugins.
-   </p>
+          <td align="left">controls look of the monthly archive pages</td>
+        </tr>
 
-   <p><b>Page Plugins: plugins/page</b></p>
+        <tr>
+          <td align="left">permalink.htm</td>
 
-   <p>
-     These plugins are initialized for each page.
-     They were initially developed to implement a cleaner way for setting dynamic metadata in the templates.
-   </p>
+          <td align="left">controls look of an entry's archive page</td>
+        </tr>
 
-   <p><b>Make Page Plugins: plugins/makepage</b></p>
+        <tr>
+          <td align="left">permalink_entry.htm</td>
 
-   <p>
-     These plugins are initialized after each page generated. Formally known as post-format plugins.
-   </p>
- </p>
+          <td align="left">controls look of an entry within it's archive page</td>
+        </tr>
+      </table>* = used by plugin
+    </div>
 
- <div class="tables">
-   <table border="0" cellspacing="4" cellpadding="2" summary="plugins">
-     <caption>
-       Default plugins (most are enabled by default):
-     </caption>
-     <tr>
-       <th align="left">plugins</th>
-       <th align="left">description</th>
-       <th align="left">variables</th>
-       <th align="left">targets</th>
-       <th align="left">notes</th>
-     </tr>
-     <tr>
-       <td align="left">archive/master_index.sh</td>
-       <td align="left">creates a master index page of the archives</td>
-       <td align="left">none</td>
-       <td align="left">$ARCHIVES_DIR/index.html</td>
-       <td align="left">requires makepage.htm template</td>
-     </tr>
-     <tr>
-       <td align="left">archive/month/month_calendar.sh</td>
-       <td align="left">generates a calendar with links for each active day</td>
-       <td align="left">none</td>
-       <td align="left">$NB_MonthlyCalendar</td>
-       <td align="left">requires cal</td>
-     </tr>
-     <tr>
-       <td align="left">articles.sh*</td>
-       <td align="left">generates articles found in the "articles" directory</td>
-       <td align="left">$NB_ArticleLinks</td>
-       <td align="left">$ARTICLE_DIR/article_title.$ARTICLE_SUFFIX</td>
-       <td align="left">requires makepage.htm template, should be last plugin to load</td>
-     </tr>
-     <tr>
-       <td align="left">atom.sh</td>
-       <td align="left">adds an atom feed</td>
-       <td align="left">LIMIT_ITEMS</td>
-       <td align="left">$NB_AtomVer, $NB_AtomFile</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">calendar.sh</td>
-       <td align="left">generates a calendar with links for each active day</td>
-       <td align="left">CAL_CMD, CAL_ARGS</td>
-       <td align="left">$NB_Calendar</td>
-       <td align="left">requires cal</td>
-     </tr>
-     <tr>
-       <td align="left">entry/category_links.sh</td>
-       <td align="left">generates category links</td>
-       <td align="left">none</td>
-       <td align="left">$NB_EntryCategories</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">entry/mod/auto_break.sh</td>
-       <td align="left">converts blank lines to html paragraph breaks</td>
-       <td align="left">AUTO_FORMAT</td>
-       <td align="left">$NB_EntryBody</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">entry/mod/base_url.sh</td>
-       <td align="left">helps set relative links</td>
-       <td align="left">AUTO_FORMAT, %base_url%</td>
-       <td align="left">$NB_EntryBody</td>
-       <td align="left">example: &lt;img src="%base_url%images/pic.png" /&gt;
-     </tr>
-     <tr>
-       <td align="left">entry/mod/moods.sh</td>
-       <td align="left">converts mood variables into smiley icons</td>
-       <td align="left">AUTO_FORMAT, MOODS_URL</td>
-       <td align="left">$NB_EntryBody</td>
-       <td align="left">copy moods directory to weblog's directory</td>
-     </tr>
-     <tr>
-       <td align="left">fortune.sh</td>
-       <td align="left">generates random quotes</td>
-       <td align="left">FORTUNE_FILE</td>
-       <td align="left">$NB_Fortune</td>
-       <td align="left">requires fortune</td>
-     </tr>
-     <tr>
-       <td align="left">makepage/tidy.sh</td>
-       <td align="left">validates HTML/XML code</td>
-       <td align="left">TIDY_HTML_ARGS, TIDY_XML_ARGS</td>
-       <td align="left">$NB_Tidy, $BLOG_DIR/tidy.log</td>
-       <td align="left">requires HTML Tidy, overrides $BLOG_CHARSET</td>
-     </tr>
-     <tr>
-       <td align="left">mymood.sh*</td>
-       <td align="left">adds ability to display your mood</td>
-       <td align="left">MOODS_URL</td>
-       <td align="left">$NB_MyMood</td>
-       <td align="left">copy moods directory to weblog's directory</td>
-     </tr>
-     <tr>
-       <td align="left">page/feed_links.sh</td>
-       <td align="left">generates alt links for feeds</td>
-       <td align="left">none</td>
-       <td align="left">$NB_AtomAltLink, $NB_RSS2AltLink, $NB_RSSAltLink</td>
-       <td align="left">requires one of atom.sh, rss.sh, or rss2.sh plugins</td>
-     </tr>
-     <tr>
-       <td align="left">page/page_links.sh</td>
-       <td align="left">regenerates links for inclusion on other pages</td>
-       <td align="left">none</td>
-       <td align="left">$NB_MainLinks, $NB_RecentEntries, $NB_CategoryLinks, $NB_MonthLinks, etc.</td>
-       <td align="left">requires one of weblog_links.sh or recent_entries.sh plugins</td>
-     </tr>
-     <tr>
-       <td align="left">recent_entries.sh</td>
-       <td align="left">generates links to recent and old entries</td>
-       <td align="left">LIST_N, LIST_OFFSET</td>
-       <td align="left">$NB_RecentEntries, $NB_OlderEntries</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">rss2.sh</td>
-       <td align="left">adds rss 2.0 feeds</td>
-       <td align="left">LIMIT_ITEMS</td>
-       <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">rss.sh</td>
-       <td align="left">adds rss 1.0 feeds</td>
-       <td align="left">LIMIT_ITEMS</td>
-       <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">weblog_links.sh</td>
-       <td align="left">generates some useful links</td>
-       <td align="left">none</td>
-       <td align="left">$NB_MainLinks, $NB_MonthLinks, $NB_CategoryLinks</td>
-       <td align="left">requires main_links.htm template</td>
-     </tr>
-     <tr>
-       <td align="left">weblog_status.sh</td>
-       <td align="left">generates some statistics</td>
-       <td align="left">see notes</td>
-       <td align="left">$NB_BlogStatus</td>
-       <td align="left">requires weblog_status.htm template</td>
-     </tr>
-   </table>
-   <p>* = actual name may vary.</p>
-   <p>
-     To disable an individual plugin, rename the plugin's extension from ".sh" to ".off".
-   </p>
- </div>
+    <div class="tables">
+      <table border="0" cellspacing="4" cellpadding="2" summary="entry placeholders">
+        <caption>
+          The entry template includes the following placeholders:
+        </caption>
 
- <h2><a name="10" id="10">Writing Plugins</a></h2>
+        <tr>
+          <th align="left">placeholders</th>
 
- <p><h3>Functions for Plugins</h3></p>
+          <th align="left">description</th>
+        </tr>
 
- <p>
-   These are a collection of functions that should come in handy when writing a plugin.
- </p>
- 
- <p>
-   plugins typically work by creating placeholders for the templates, but are in no way limited to creating
-   placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template.
-   Some plugins may require you to identify it's unique placeholder/destination and manually add it to your templates.
- </p>
+        <tr>
+          <td align="left">$NB_EntryAuthor</td>
 
- <p>
-   To write a plugin, you should begin by creating a text file with the <em>".sh"</em> suffix. plugins are basically
-   shell scripts that get loaded (sourced in shell terms) depending on where the plugin is located in the plugins
-   directory or one of the plugin sub-directories. It may be a good idea to look at a simple plugin, such as fortune.sh
-   for an idea on how a plugin works. When the new plugin is saved, it needs to have the appropriate read
-   permissions, so it can be loaded by NanoBlogger. Executable permissions are not necessary for plugins.
- </p>
- <p>
-   Below is a list of functions for plugins.
- </p>
+          <td align="left">author of entry</td>
+        </tr>
 
- <div class="tables">
-   <table border="0" cellspacing="4" cellpadding="2" summary="api">
-     <caption>
-       API for writing plugins.
-     </caption>
-     <tr>
-       <th align="left">function</th>
-       <th align="left">description</th>
-       <th align="left">variables</th>
-       <th align="left">targets</th>
-       <th align="left">notes</th>
-     </tr>
-     <tr>
-       <td align="left">die</td>
-       <td align="left">exits with error message</td>
-       <td align="left">$@</td>
-       <td align="left">console</td>
-       <td align="left">returns exit status 1</td>
-     </tr>
-     <tr>
-       <td align="left">nb_msg</td>
-       <td align="left">preferred method of verbosity</td>
-       <td align="left">$@</td>
-       <td align="left">console</td>
-       <td align="left">use instead of echo when appropriate</td>
-     </tr>
-     <tr>
-       <td align="left">chg_suffix</td>
-       <td align="left">changes a file's suffix</td>
-       <td align="left">filename=$1, suffix=$2</td>
-       <td align="left">file</td>
-       <td align="left">can specify $NB_FILETYPE, $NB_SYND_FILETYPE as suffix</td>
-     </tr>
-     <tr>     
-       <td align="left">query_db</td>
-       <td align="left">queries database</td>
-       <td align="left">db_query=$1, db_catquery=$2, db_setlimit=$3 db_limit=$4, db_offset=$5</td>
-       <td align="left">$DB_RESULTS</td>
-       <td align="left">example (retrieves entries 1 through 10): "query_db all nocat limit 10 1"</td>
-     </tr>
-     <tr>
-       <td align="left">set_title2link</td>
-       <td align="left">transforms text for use in links</td>
-       <td align="left">$1</td>
-       <td align="left">console or redirect</td>
-       <td align="left">none</td>
-     </tr>
-     <tr>
-       <td align="left">set_baseurl</td>
-       <td align="left">helps in setting relative links</td>
-       <td align="left">node_var=$1, base_dir=$2</td>
-       <td align="left">$BASE_URL, $ARCHIVES_PATH</td>
-       <td align="left">should only specify one, of node_var or base_dir, at a time</td>
-     </tr>
-     <tr>
-       <td align="left">set_catlink</td>
-       <td align="left">sets link and file for given category</td>
-       <td align="left">$1</td>
-       <td align="left">$category_file, $category_link</td>
-       <td align="left">category should be of the form, cat_N.$NB_DBTYPE</td>
-     </tr>
-     <tr>
-       <td align="left">set_monthlink</td>
-       <td align="left">sets link and file for given month</td>
-       <td align="left">$1</td>
-       <td align="left">$month_file, $month_link</td>
-       <td align="left">month should be of the form YYYY-MM</td>
-     </tr>
-     <tr>
-       <td align="left">set_entryid</td>
-       <td align="left">sets anchor/id for given entry</td>
-       <td align="left">$1</td>
-       <td align="left">console or redirect</td>
-       <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
-     </tr>
-     <tr>
-       <td align="left">set_entrylink</td>
-       <td align="left">sets link and file for given entry</td>
-       <td align="left">$1</td>
-       <td align="left">$entry_dir, $permalink_file, $NB_EntryPermalink</td>
-       <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
-     </tr>
-     <tr>
-       <td align="left">update_cache</td>
-       <td align="left">compiles list or removes cache entries</td>
-       <td align="left">cache_update=$1, cache_def=$2, CACHEUPDATE_LIST=$3</td>
-       <td align="left">$CACHE_LIST</td>
-       <td align="left">commonly used to expire cached data</td>
-     </tr>
-     <tr>
-       <td align="left">load_template</td>
-       <td align="left">loads template from file</td>
-       <td align="left">TEMPLATE_FILE=$1</td>
-       <td align="left">$TEMPLATE_DATA</td>
-       <td align="left">see plugin recent_entries.sh for a good example</td>
-     </tr>
-     <tr>
-       <td align="left">write_metadata</td>
-       <td align="left">writes metadata to file</td>
-       <td align="left">MTAG=$1, META_DATA=$2, META_FILE=$3</td>
-       <td align="left">$META_FILE</td>
-       <td align="left">example: "write_metadata UPDATED "`date`" $metafile"</td>
-     </tr>
-     <tr>
-       <td align="left">read_metadata</td>
-       <td align="left">extracts metadata from (entry) file</td>
-       <td align="left">MTAG=$1, META_FILE=$2</td>
-       <td align="left">$META_DATA</td>
-       <td align="left">faster than read_entry, see plugin recent_entries for a good example</td>
-     </tr>
-     <tr>
-       <td align="left">read_entry</td>
-       <td align="left">converts entry data for use in templates</td>
-       <td align="left">ENTRY_FILE=$1</td>
-       <td align="left">$NB_EntryTitle, ..., $NB_EntryBody</td>
-       <td align="left">see plugin atom.sh for a good example</td>
-     </tr>
-     <tr>
-       <td align="left">make_page</td>
-       <td align="left">generates page from source file and template</td>
-       <td align="left">MKPAGE_SRCFILE=$1, MKPAGE_TMPLFILE=$2, MKPAGE_OUTFILE=$3</td>
-       <td align="left">$MKPAGE_CONTENT, $NB_Entries</td>
-       <td align="left">see plugin articles.sh for a good example</td>
-     </tr>
-   </table>
- </div>
+        <tr>
+          <td align="left">$NB_EntryCategories*</td>
 
- <h2><a name="11" id="11">11. Publishing</a></h2>
+          <td align="left">entry's category links</td>
+        </tr>
 
- <p><b>Setting the Publish Command</b></p>
+        <tr>
+          <td align="left">$NB_EntryBody</td>
 
- <p>
-	The <em>BLOG_PUBLISH_CMD</em> variable allows you to set a command to publish your weblog.  This can be as simple as
-	an FTP command to upload files or a more complex set of tasks via a script.
- </p>
+          <td>entry's content</td>
+        </tr>
 
- <p><b>Publishing Remotely</b></p>
- <p>
-  FTP, SSH (scp, sftp, etc.), rsync or WebDAV, are all methods that can be used to upload the weblog.
- </p>
+        <tr>
+          <td align="left">$NB_EntryDate</td>
 
- <p><b>example</b>: automating publishing with ftp and .netrc.</p>
+          <td align="left">entry's posted time</td>
+        </tr>
 
- blog.conf:
- <pre>
+        <tr>
+          <td align="left">$NB_EntryDescription</td>
+
+          <td align="left">entry's description</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_EntryID</td>
+
+          <td align="left">entry's id</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_EntryPermalink</td>
+
+          <td align="left">entry's permanent link</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_EntryTitle</td>
+
+          <td align="left">entry's title</td>
+        </tr>
+      </table>* = generated by plugin
+    </div>
+
+    <div class="tables">
+      <table border="0" cellspacing="4" cellpadding="2" summary="main placeholders">
+        <caption>
+          The main template includes the following placeholders:
+        </caption>
+
+        <tr>
+          <th align="left">placeholders</th>
+
+          <th align="left">description</th>
+        </tr>
+
+        <tr>
+          <td align="left">${BASE_URL}</td>
+
+          <td align="left">relative or absolute link to the weblog's base URL</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_MIMETYPE</td>
+
+          <td align="left">weblog's mime type</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_CHARSET</td>
+
+          <td align="left">weblog's character set</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_INDEX</td>
+
+          <td align="left">weblog's link to directory's index</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_CONTACT</td>
+
+          <td align="left">weblog's contact info</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_DESCRIPTION</td>
+
+          <td align="left">weblog's description</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_TITLE</td>
+
+          <td align="left">weblog's title</td>
+        </tr>
+
+        <tr>
+          <td align="left">$BLOG_URL</td>
+
+          <td align="left">weblog's URL</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_ArticleLinks</td>
+
+          <td align="left">links to articles</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_MonthLinks*</td>
+
+          <td align="left">links to the monthly archives</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_CategoryLinks*</td>
+
+          <td align="left">links to categories</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_MainLinks*</td>
+
+          <td align="left">user defined links</td>
+        </tr>
+
+        <tr>
+          <td align="left">$NB_Entries</td>
+
+          <td align="left">all the current entries</td>
+        </tr>
+      </table>* = generated by plugin
+    </div>
+  </div>
+
+  <div id="about.plugins">
+    <h2><a id="s.9" name="s.9">9. About Plugins</a></h2>
+
+    <h3>Directory of Plugins</h3>
+
+    <div>
+      <p><b>Regular Plugins: plugins</b></p>
+
+      <p>These plugins are initialized first.</p>
+
+      <p><b>Archive Plugins: plugins/archive</b></p>
+
+      <p>These plugins are initialized when the archives are built.</p>
+
+      <p><b>Monthly Plugins: plugins/archive/month</b></p>
+
+      <p>These plugins are initialized for each month. Formally known as monthly plugins.</p>
+
+      <p><b>Entry Plugins: plugins/entry</b></p>
+
+      <p>These plugins are initialized for each entry.</p>
+
+      <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
+
+      <p>These plugins are initialized for each entry modified, meaning they only get run when an entry's data has been changed. This helps reduce redundancy when generating multiple entries for a page. A good example would be the plugin, moods.sh, which generates graphics for smiley icons. There
+      main use is for altering the data output for an entry. They typically modify the NB_EntryBody, variable. Formally known as entry body plugins.</p>
+
+      <p><b>Page Plugins: plugins/page</b></p>
+
+      <p>These plugins are initialized for each page. They were initially developed to implement a cleaner way for setting dynamic metadata in the templates.</p>
+
+      <p><b>Make Page Plugins: plugins/makepage</b></p>
+
+      <p>These plugins are initialized after each page generated. Formally known as post-format plugins.</p>
+    </div>
+
+    <div class="tables">
+      <table border="0" cellspacing="4" cellpadding="2" summary="plugins">
+        <caption>
+          Default plugins (most are enabled by default):
+        </caption>
+
+        <tr>
+          <th align="left">plugins</th>
+
+          <th align="left">description</th>
+
+          <th align="left">variables</th>
+
+          <th align="left">targets</th>
+
+          <th align="left">notes</th>
+        </tr>
+
+        <tr>
+          <td align="left">archive/master_index.sh</td>
+
+          <td align="left">creates a master index page of the archives</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$ARCHIVES_DIR/index.html</td>
+
+          <td align="left">requires makepage.htm template</td>
+        </tr>
+
+        <tr>
+          <td align="left">archive/month/month_calendar.sh</td>
+
+          <td align="left">generates a calendar with links for each active day</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_MonthlyCalendar</td>
+
+          <td align="left">requires cal</td>
+        </tr>
+
+        <tr>
+          <td align="left">articles.sh*</td>
+
+          <td align="left">generates articles found in the "articles" directory</td>
+
+          <td align="left">$NB_ArticleLinks</td>
+
+          <td align="left">$ARTICLE_DIR/article_title.$ARTICLE_SUFFIX</td>
+
+          <td align="left">requires makepage.htm template, should be last plugin to load</td>
+        </tr>
+
+        <tr>
+          <td align="left">atom.sh</td>
+
+          <td align="left">adds an atom feed</td>
+
+          <td align="left">LIMIT_ITEMS</td>
+
+          <td align="left">$NB_AtomVer, $NB_AtomFile</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">calendar.sh</td>
+
+          <td align="left">generates a calendar with links for each active day</td>
+
+          <td align="left">CAL_CMD, CAL_ARGS</td>
+
+          <td align="left">$NB_Calendar</td>
+
+          <td align="left">requires cal</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry/category_links.sh</td>
+
+          <td align="left">generates category links</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_EntryCategories</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry/mod/auto_break.sh</td>
+
+          <td align="left">converts blank lines to html paragraph breaks</td>
+
+          <td align="left">AUTO_FORMAT</td>
+
+          <td align="left">$NB_EntryBody</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry/mod/base_url.sh</td>
+
+          <td align="left">helps set relative links</td>
+
+          <td align="left">AUTO_FORMAT, %base_url%</td>
+
+          <td align="left">$NB_EntryBody</td>
+
+          <td align="left">example: &lt;img src="%base_url%images/pic.png" /&gt;</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry/mod/moods.sh</td>
+
+          <td align="left">converts mood variables into smiley icons</td>
+
+          <td align="left">AUTO_FORMAT, MOODS_URL</td>
+
+          <td align="left">$NB_EntryBody</td>
+
+          <td align="left">copy moods directory to weblog's directory</td>
+        </tr>
+
+        <tr>
+          <td align="left">fortune.sh</td>
+
+          <td align="left">generates random quotes</td>
+
+          <td align="left">FORTUNE_FILE</td>
+
+          <td align="left">$NB_Fortune</td>
+
+          <td align="left">requires fortune</td>
+        </tr>
+
+        <tr>
+          <td align="left">makepage/tidy.sh</td>
+
+          <td align="left">validates HTML/XML code</td>
+
+          <td align="left">TIDY_HTML_ARGS, TIDY_XML_ARGS</td>
+
+          <td align="left">$NB_Tidy, $BLOG_DIR/tidy.log</td>
+
+          <td align="left">requires HTML Tidy, overrides $BLOG_CHARSET</td>
+        </tr>
+
+        <tr>
+          <td align="left">mymood.sh*</td>
+
+          <td align="left">adds ability to display your mood</td>
+
+          <td align="left">MOODS_URL</td>
+
+          <td align="left">$NB_MyMood</td>
+
+          <td align="left">copy moods directory to weblog's directory</td>
+        </tr>
+
+        <tr>
+          <td align="left">page/feed_links.sh</td>
+
+          <td align="left">generates alt links for feeds</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_AtomAltLink, $NB_RSS2AltLink, $NB_RSSAltLink</td>
+
+          <td align="left">requires one of atom.sh, rss.sh, or rss2.sh plugins</td>
+        </tr>
+
+        <tr>
+          <td align="left">page/page_links.sh</td>
+
+          <td align="left">regenerates links for inclusion on other pages</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_MainLinks, $NB_RecentEntries, $NB_CategoryLinks, $NB_MonthLinks, etc.</td>
+
+          <td align="left">requires one of weblog_links.sh or recent_entries.sh plugins</td>
+        </tr>
+
+        <tr>
+          <td align="left">recent_entries.sh</td>
+
+          <td align="left">generates links to recent and old entries</td>
+
+          <td align="left">LIST_N, LIST_OFFSET</td>
+
+          <td align="left">$NB_RecentEntries, $NB_OlderEntries</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">rss2.sh</td>
+
+          <td align="left">adds rss 2.0 feeds</td>
+
+          <td align="left">LIMIT_ITEMS</td>
+
+          <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">rss.sh</td>
+
+          <td align="left">adds rss 1.0 feeds</td>
+
+          <td align="left">LIMIT_ITEMS</td>
+
+          <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">weblog_links.sh</td>
+
+          <td align="left">generates some useful links</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_MainLinks, $NB_MonthLinks, $NB_CategoryLinks</td>
+
+          <td align="left">requires main_links.htm template</td>
+        </tr>
+
+        <tr>
+          <td align="left">weblog_status.sh</td>
+
+          <td align="left">generates some statistics</td>
+
+          <td align="left">see notes</td>
+
+          <td align="left">$NB_BlogStatus</td>
+
+          <td align="left">requires weblog_status.htm template</td>
+        </tr>
+      </table>
+
+      <div>
+        <p>* = actual name may vary.</p>
+
+        <p>To disable an individual plugin, rename the plugin's extension from ".sh" to ".off".</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="writing.plugins">
+    <h2><a id="s.10" name="s.10">Writing Plugins</a></h2>
+
+    <h3>Functions for Plugins</h3>
+
+    <div>
+      <p>These are a collection of functions that should come in handy when writing a plugin.</p>
+
+      <p>plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. Some plugins may require you to identify it's unique
+      placeholder/destination and manually add it to your templates.</p>
+
+      <p>To write a plugin, you should begin by creating a text file with the <em>".sh"</em> suffix. plugins are basically shell scripts that get loaded (sourced in shell terms) depending on where the plugin is located in the plugins directory or one of the plugin sub-directories. It may be a good
+      idea to look at a simple plugin, such as fortune.sh for an idea on how a plugin works. When the new plugin is saved, it needs to have the appropriate read permissions, so it can be loaded by NanoBlogger. Executable permissions are not necessary for plugins.</p>
+
+      <p>Below is a list of functions for plugins.</p>
+    </div>
+
+    <div class="tables">
+      <table border="0" cellspacing="4" cellpadding="2" summary="api">
+        <caption>
+          API for writing plugins.
+        </caption>
+
+        <tr>
+          <th align="left">function</th>
+
+          <th align="left">description</th>
+
+          <th align="left">variables</th>
+
+          <th align="left">targets</th>
+
+          <th align="left">notes</th>
+        </tr>
+
+        <tr>
+          <td align="left">die</td>
+
+          <td align="left">exits with error message</td>
+
+          <td align="left">$@</td>
+
+          <td align="left">console</td>
+
+          <td align="left">returns exit status 1</td>
+        </tr>
+
+        <tr>
+          <td align="left">nb_msg</td>
+
+          <td align="left">preferred method of verbosity</td>
+
+          <td align="left">$@</td>
+
+          <td align="left">console</td>
+
+          <td align="left">use instead of echo when appropriate</td>
+        </tr>
+
+        <tr>
+          <td align="left">chg_suffix</td>
+
+          <td align="left">changes a file's suffix</td>
+
+          <td align="left">filename=$1, suffix=$2</td>
+
+          <td align="left">file</td>
+
+          <td align="left">can specify $NB_FILETYPE, $NB_SYND_FILETYPE as suffix</td>
+        </tr>
+
+        <tr>
+          <td align="left">query_db</td>
+
+          <td align="left">queries database</td>
+
+          <td align="left">db_query=$1, db_catquery=$2, db_setlimit=$3 db_limit=$4, db_offset=$5</td>
+
+          <td align="left">$DB_RESULTS</td>
+
+          <td align="left">example (retrieves entries 1 through 10): "query_db all nocat limit 10 1"</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_title2link</td>
+
+          <td align="left">transforms text for use in links</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">console or redirect</td>
+
+          <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_baseurl</td>
+
+          <td align="left">helps in setting relative links</td>
+
+          <td align="left">node_var=$1, base_dir=$2</td>
+
+          <td align="left">$BASE_URL, $ARCHIVES_PATH</td>
+
+          <td align="left">should only specify one, of node_var or base_dir, at a time</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_catlink</td>
+
+          <td align="left">sets link and file for given category</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">$category_file, $category_link</td>
+
+          <td align="left">category should be of the form, cat_N.$NB_DBTYPE</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_monthlink</td>
+
+          <td align="left">sets link and file for given month</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">$month_file, $month_link</td>
+
+          <td align="left">month should be of the form YYYY-MM</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_entryid</td>
+
+          <td align="left">sets anchor/id for given entry</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">console or redirect</td>
+
+          <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_entrylink</td>
+
+          <td align="left">sets link and file for given entry</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">$entry_dir, $permalink_file, $NB_EntryPermalink</td>
+
+          <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+        </tr>
+
+        <tr>
+          <td align="left">update_cache</td>
+
+          <td align="left">compiles list or removes cache entries</td>
+
+          <td align="left">cache_update=$1, cache_def=$2, CACHEUPDATE_LIST=$3</td>
+
+          <td align="left">$CACHE_LIST</td>
+
+          <td align="left">commonly used to expire cached data</td>
+        </tr>
+
+        <tr>
+          <td align="left">load_template</td>
+
+          <td align="left">loads template from file</td>
+
+          <td align="left">TEMPLATE_FILE=$1</td>
+
+          <td align="left">$TEMPLATE_DATA</td>
+
+          <td align="left">see plugin recent_entries.sh for a good example</td>
+        </tr>
+
+        <tr>
+          <td align="left">write_metadata</td>
+
+          <td align="left">writes metadata to file</td>
+
+          <td align="left">MTAG=$1, META_DATA=$2, META_FILE=$3</td>
+
+          <td align="left">$META_FILE</td>
+
+          <td align="left">example: "write_metadata UPDATED "`date`" $metafile"</td>
+        </tr>
+
+        <tr>
+          <td align="left">read_metadata</td>
+
+          <td align="left">extracts metadata from (entry) file</td>
+
+          <td align="left">MTAG=$1, META_FILE=$2</td>
+
+          <td align="left">$META_DATA</td>
+
+          <td align="left">faster than read_entry, see plugin recent_entries for a good example</td>
+        </tr>
+
+        <tr>
+          <td align="left">read_entry</td>
+
+          <td align="left">converts entry data for use in templates</td>
+
+          <td align="left">ENTRY_FILE=$1</td>
+
+          <td align="left">$NB_EntryTitle, ..., $NB_EntryBody</td>
+
+          <td align="left">see plugin atom.sh for a good example</td>
+        </tr>
+
+        <tr>
+          <td align="left">make_page</td>
+
+          <td align="left">generates page from source file and template</td>
+
+          <td align="left">MKPAGE_SRCFILE=$1, MKPAGE_TMPLFILE=$2, MKPAGE_OUTFILE=$3</td>
+
+          <td align="left">$MKPAGE_CONTENT, $NB_Entries</td>
+
+          <td align="left">see plugin articles.sh for a good example</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="publish">
+    <h2><a id="s.11" name="s.11">11. Publishing</a></h2>
+
+    <p><b>Setting the Publish Command</b></p>
+
+    <p>The <em>BLOG_PUBLISH_CMD</em> variable allows you to set a command to publish your weblog. This can be as simple as an FTP command to upload files or a more complex set of tasks via a script.</p>
+
+    <p><b>Publishing Remotely</b></p>
+
+    <p>FTP, SSH (scp, sftp, etc.), rsync or WebDAV, are all methods that can be used to upload the weblog.</p>
+
+    <p><b>example</b>: automating publishing with ftp and .netrc.</p>blog.conf:
+    <pre>
 BLOG_PUBLISH_CMD="ftp example.weblog.com"
- </pre>
- .netrc:
- <pre>
+ 
+</pre>.netrc:
+    <pre>
 machine example.weblog.com login foo password
 RIGHT!
 macdef init
@@ -1135,51 +1345,41 @@ mput *.*
 cd archives
 lcd archives
 mput *
- </pre>
+ 
+</pre>
 
- <p><b>Publishing Locally</b></p>
- <p>
-	If you choose to publish locally, you'll probably want to disable the publish command.
-	To do this you can set <em>BLOG_PUBLISH_CMD</em> to null. e.g. BLOG_PUBLISH_CMD=""
- </p>
+    <p><b>Publishing Locally</b></p>
 
- <h2><a name="12" id="12">12. Adding Support for Comments</a></h2>
+    <p>If you choose to publish locally, you'll probably want to disable the publish command. To do this you can set <em>BLOG_PUBLISH_CMD</em> to null. e.g. BLOG_PUBLISH_CMD=""</p>
+  </div>
 
- <p>
-	To add support for comments, you can use a php script called NanoBlogger Comments [2].
-	It's simple, features support for accounts, and is easy to install.
- </p>
+  <div id="comments">
+    <h2><a id="s.12" name="s.12">12. Adding Support for Comments</a></h2>
 
- <p>
- 	Typically, integrating a comment system with your weblog involves editing the appropriate templates. To make things
-	easier you should utilize <em>BLOG_URL_ACTION</em> in your weblog's blog.conf.
- </p>
+    <p>To add support for comments, you can use a php script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
 
- <h2><a name="13" id="13">13. Importing Entries</a></h2>
+    <p>Typically, integrating a comment system with your weblog involves editing the appropriate templates. To make things easier you should utilize <em>BLOG_URL_ACTION</em> in your weblog's blog.conf.</p>
+  </div>
 
- <p>Importing entries from another web-logging system is not entirely impossible.  This section hopefully contains the right
-	information to make it possible.</p>
+  <div id="entries.import">
+    <h2><a id="s.13" name="s.13">13. Importing Entries</a></h2>
 
- <p><b>The Format of an Entry</b></p>
+    <p>Importing entries from another web-logging system is not entirely impossible. This section hopefully contains the right information to make it possible.</p>
 
- <p>An entry file name is of the format:</p>
+    <p><b>The Format of an Entry</b></p>
 
-	<pre>
+    <p>An entry file name is of the format:</p>
+    <pre>
 YYYY-MM-DDTHH_MM_SS.txt
-	</pre>
-
-	So a typical entry's file name would look something like this:
-	<pre>
+        
+</pre>So a typical entry's file name would look something like this:
+    <pre>
 2004-06-25T22_24_37.txt
-	</pre>
+        
+</pre>
 
-	<p>
-	The format of an entry is made up of metadata. Each piece of metadata is of the format KEY:
-	VALUE, then a carriage return that separates one piece from the next. The order of the metadata is not important.
-	</p>
-
-	Example of an entry's format:
-	<pre>
+    <p>The format of an entry is made up of metadata. Each piece of metadata is of the format KEY: VALUE, then a carriage return that separates one piece from the next. The order of the metadata is not important.</p>Example of an entry's format:
+    <pre>
 TITLE: A New Entry
 AUTHOR: foo
 DATE: January 30 2004, 12:00 PM
@@ -1188,89 +1388,81 @@ DESC: keywords or a short, one line summary
 BODY:
 This is my new entry ...
 -----
-	</pre>
+        
+</pre>
 
-  <p><b>Converting Entries</b></p>
-  <p>Before entries can be imported they must be converted to the correct format.</p>
-  <p>Steps to converting entries:</p>
-  
-	<pre>
+    <p><b>Converting Entries</b></p>
+
+    <p>Before entries can be imported they must be converted to the correct format.</p>
+
+    <p>Steps to converting entries:</p>
+    <pre>
 1. Convert each entry so they each contain the following metadata: TITLE, AUTHOR, DATE, DESC, BODY
 2. Rename each entry's file name to it's corresponding date and time.
-	</pre>
- <p>
-	If there's multiple entries it may be a good idea to automate all this with a script.
- </p>
+        
+</pre>
 
- <p><b>Updating the Weblog's Data Directory</b></p>
- <p>
-  	The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
+    <p>If there's multiple entries it may be a good idea to automate all this with a script.</p>
 
-	Update the weblog with the new entries:
- </p>
+    <p><b>Updating the Weblog's Data Directory</b></p>
 
-	<pre>
+    <p>The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
+    Update the weblog with the new entries:</p>
+    <pre>
 nb [-b blog_dir] -u all
-	</pre>
+        
+</pre>
+  </div>
 
- <h2><a name="14" id="14">14. Tips and Tricks</a></h2>
+  <div id="tips">
+    <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
 
-   <p><b>Set a Default Weblog Directory</b></p>
-   <p>
-    	By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to.
-    	Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em> and set <em>BLOG_DIR</em> to your weblog directory.
-   </p>
+    <p><b>Set a Default Weblog Directory</b></p>
 
-   <p><b>Adding Shell Scripting to your Templates</b></p>
-   <p>
-   	It's possible to use command substitution in your templates, using one of the following forms:
-		<pre>
-	$(command)
+    <p>By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to. Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em> and set <em>BLOG_DIR</em> to your weblog directory.</p>
+
+    <p><b>Adding Shell Scripting to your Templates</b></p>
+
+    <p>It's possible to use command substitution in your templates, using one of the following forms:</p>
+    <pre>
+        $(command)
 or
-	`command`
-		</pre>
-	This is mostly useful for small and simple dynamic changes you wish to make to the content generated from the templates.
-   </p>
-   <p><b>Add an Introduction to your Weblog</b></p>
-   <p>
-	Create a text file in your weblog directory called, "intro.txt". Edit the text file to say
-	what you want, then add the following to the main template:<br />
-   </p>
+        `command`
+                
+</pre>This is mostly useful for small and simple dynamic changes you wish to make to the content generated from the templates.
 
-	<pre>
-$(< "$BLOG_DIR/intro.txt")
-	</pre>
-   <p>
-	Note that no processing is being done this way, you have to add your own HTML.
-   </p>
+    <p><b>Add an Introduction to your Weblog</b></p>
 
-   <p><b>Integrating Parts of your Weblog into a Site</b></p>
-   <p>
-     Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own
-     custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries,
-     so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page. So, now
-     you can have a simple weblog-like page, that's updated whenever index.html changes.
-   </p>
-   <p>
-     Other clever uses include combining NanoBlogger's static output with some php or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using php. Set your <em>NB_FILETYPE</em> to php and modify the appropriate templates to include the php code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.
-   </p>
+    <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file to say what you want, then add the following to the main template:<br /></p>
+    <pre>
+$(&lt; "$BLOG_DIR/intro.txt")
+        
+</pre>
 
- <h2><a name="15" id="15">15. Credits</a></h2>
- <p>
-   Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik
-   &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and
-   suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.
- </p>
+    <p>Note that no processing is being done this way, you have to add your own HTML.</p>
 
- <p>
-   <a href="http://nanoblogger.sf.net/downloads/">1. http://nanoblogger.sf.net/downloads/</a><br />
-   <a href="http://www.nhw.pl/blg/articles/nbcom.php">2. http://www.nhw.pl/blg/articles/nbcom.php</a><br />
-   <a href="http://freshmeat.net/projects/microblogger">3. http://freshmeat.net/projects/microblogger</a><br />
- </p>
+    <p><b>Integrating Parts of your Weblog into a Site</b></p>
 
- <hr size="1" color="#CCCCCC" />
+    <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a
+    matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
 
- <span class="copyright">Copyright &copy; 2003-2005 Kevin Wood.  All Rights Reserved.</span>
-  
+    <p>Other clever uses include combining NanoBlogger's static output with some php or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using php. Set your <em>NB_FILETYPE</em> to php and modify the appropriate templates to include the php
+    code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+  </div>
+
+  <div id="credits">
+    <h2><a id="s.15" name="s.15">15. Credits</a></h2>
+
+    <p>Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration
+    of this project.</p>
+
+    <p><a href="http://nanoblogger.sf.net/downloads/">1. http://nanoblogger.sf.net/downloads/</a><br />
+    <a href="http://www.nhw.pl/blg/articles/nbcom.php">2. http://www.nhw.pl/blg/articles/nbcom.php</a><br />
+    <a href="http://freshmeat.net/projects/microblogger">3. http://freshmeat.net/projects/microblogger</a><br /></p>
+
+    <div class="copyright">
+      <span>Copyright © 2003-2005 Kevin Wood. All Rights Reserved.</span>
+    </div>
+  </div>
 </body>
 </html>
