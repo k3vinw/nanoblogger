@@ -1,1 +1,2 @@
-* Replace old archives index plugin with something better
+* Simplify date and entry listings in the master archive index to years
+* Generate archive index for each year with listings for months and entries

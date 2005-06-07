@@ -1,7 +1,7 @@
 # NanoBlogger Plugin that creates a master archive index
 
 # concatenate modification variables
-MOD_VAR="$New_EntryFile$Edit_EntryFile$UPDATE_LIST$DEL_LIST"
+MOD_VAR="$New_EntryFile$Edit_EntryFile$USR_TITLE$DEL_LIST"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
@@ -64,7 +64,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	EOF
 	}
 
-	loop_archive all months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
+	query_db all
+	loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
 	load_template "$SCRATCH_FILE.month_links.$NB_FILETYPE"
 	NB_ArchiveMonthLinks="$TEMPLATE_DATA"
 

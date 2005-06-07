@@ -655,7 +655,7 @@ fi
 
 # loops through archives, and executes instructions by years or months
 loop_archive(){
-looparch_query="$1"
+looparch_list="$1"
 looparch_type="$2"
 looparch_exec="$3"
 # set instructions to execute based on $looparch_type
@@ -664,8 +664,7 @@ if [ "$looparch_type" = years ]; then
 elif [ "$looparch_type" = months ]; then
 	looparchexec_months="$looparch_exec"
 fi
-query_db "$looparch_query"
-ARCHIVE_MASTER="$DB_RESULTS"
+ARCHIVE_MASTER="$looparch_list"
 ARCHIVE_YEARS=`echo "$ARCHIVE_MASTER" |cut -c1-4 |sort $SORT_ARGS`
 for yearn in $ARCHIVE_YEARS; do
 	# execute instructions for each year
@@ -751,33 +750,23 @@ fi
 CACHE_LIST=`echo "$CACHEUPDATE_LIST" |sort -u`
 }
 
-# create/update archives
+# generate the archives
 build_archives(){
 load_plugins archive
 nb_msg "generating archives ..."
-# build the category archives
+# build/update the category archives
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
 	# build the monthly archives
-	loop_archive all months build_montharchive
+	query_db all
+	loop_archive "$DB_RESULTS" months build_montharchive
 	# build the entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
 		build_entryarchives "$DB_RESULTS" "$PERMALINKENTRY_TEMPLATE"
 else
-	# build current month archive
-	if [ -z "$USR_QUERY" ] || [ "$USR_QUERY" = current ]; then
-		month=`date "+%Y-%m"`
-		build_montharchive
-	fi
-	# update relative monthly archives
-	MOD_MONTHS=`echo "$UPDATE_LIST" |sed -e '/^[ ]/ s///g' |cut -c1-7 |sort $SORT_ARGS`
-	for mod_month in $MOD_MONTHS; do
-		month="$mod_month"
-		# don't update the current month twice!
-		if [ "$month" != `date "+%Y-%m"` ]; then
-			build_montharchive
-		fi
-	done
+	# update relateive month archives
+	MOD_MONTHS=`echo "$UPDATE_LIST" |sort $SORT_ARGS`
+	loop_archive "$MOD_MONTHS" months build_montharchive
 	# update relative entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
 		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE"

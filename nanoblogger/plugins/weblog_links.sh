@@ -75,7 +75,8 @@ cat <<-EOF
 EOF
 }
 
-loop_archive current months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
+query_db "$QUERY_MODE"
+loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 load_template "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 NB_MonthLinks="$TEMPLATE_DATA"
 

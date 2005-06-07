@@ -1302,11 +1302,11 @@ nb [-b blog_dir] -c 1 -d cat
 
 	  <td align="left">loops through archives and executes intructions by years or months</td>
 
-	  <td align="left">looparch_query=$1, looparch_type=$2, looparch_exec=$3</td>
+	  <td align="left">looparch_list=$1, looparch_type=$2, looparch_exec=$3</td>
 
 	  <td align="left">determined by $looparch_exec</td>
 
-	  <td align="left">example: "loop_archive current months make_monthlink"</td>
+	  <td align="left">example: "query_db max; loop_archive "$DB_RESULTS" months make_monthlink"</td>
 	</tr>
 
         <tr>
