@@ -1,3 +1,19 @@
+2005-06-07 00:02  n1xt3r
+
+	* default/atom.xml, default/index.html, default/index.xml,
+	  default/articles/example.txt, docs/nanoblogger.html: Version
+	  Changed to 3.2
+
+2005-06-06 23:49  n1xt3r
+
+	* nb: Version Changed to 3.2
+
+2005-06-06 21:47  n1xt3r
+
+	* ChangeLog, TODO, nb, docs/nanoblogger.html,
+	  plugins/weblog_links.sh, plugins/archive/master_index.sh:
+	  Enhanced loop_archive to use data base entry listings as input.
+
 2005-06-06 19:46  n1xt3r
 
 	* nb, docs/nanoblogger.html, plugins/weblog_links.sh,
@@ -299,31 +315,4 @@
 	  to CVS-3.2 - Removed non-portable regex, "\t" (tab) in fortune
 	  plugin.  - Fixed bad reference to "archives", in the upgrade
 	  instructions of the manual.
-
-2004-12-23 13:07  n1xt3r
-
-	* ChangeLog: Added ChangeLog for 3.1
-
-2004-12-23 12:48  n1xt3r
-
-	* nb: Version Changed to 3.1
-
-2004-12-23 12:45  n1xt3r
-
-	* default/atom.xml, default/blog.conf, default/index.html,
-	  default/index.xml, default/archives/2004-11.html,
-	  default/archives/cat_1.html, default/archives/index.html,
-	  default/articles/example.html,
-	  default/cache/2004-11-07T18_52_16.txt.body,
-	  default/parts/2004-11.html, default/parts/blog_status.html,
-	  default/parts/cat_1.html, default/parts/fortune.html,
-	  docs/nanoblogger.html: - Added shell scripting trick to "Tips and
-	  Tricks" section of manual.  - Updated manual.
-
-2004-12-23 10:57  n1xt3r
-
-	* nb, default/blog.conf, plugins/fortune.sh,
-	  plugins/zyx_articles.sh: - BROWSER variable, used as command for
-	  previewing weblog.  - Removed instances of alternative regular
-	  expressions (GNU extension).
 

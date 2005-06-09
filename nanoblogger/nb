@@ -1,10 +1,10 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.2 Copyright 2005 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.2.1 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
 
 # nanoblogger's version.
-VERSION="3.2"
+VERSION="3.2.1"
 
 # nanoblogger's install directory.
 BASE_DIR=`dirname $0`
@@ -89,8 +89,8 @@ load_config(){
 : ${PLUGINS_DIR:=$BASE_DIR/plugins}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
-# USR_BLOGAUTHOR overrides BLOG_AUTHOR
-[ ! -z "$USR_BLOGAUTHOR" ] && BLOG_AUTHOR="$USR_BLOGAUTHOR"
+# USR_AUTHOR overrides BLOG_AUTHOR
+[ ! -z "$USR_AUTHOR" ] && BLOG_AUTHOR="$USR_AUTHOR"
 # default to lynx for browser
 : ${BROWSER:=lynx}
 # default to vi for editor
@@ -1093,17 +1093,18 @@ fi
 [ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
 nb_msg "creating new entry in '$BLOG_DIR'$cat_msg ..."
 # read user specified attributes for entry
-[ ! -z "$USR_TITLE" ] && NB_EntryTitle=$USR_TITLE; USR_TITLE=
-[ ! -z "$USR_BLOGAUTHOR" ] && NB_EntryAuthor="$USR_BLOGAUTHOR"
+[ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
+[ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
 if [ -z "$NB_EntryAuthor" ]; then
 	echo "enter author's name [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
 fi
+[ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
 if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-if [ -z "$USR_TEST" ]; then
+if [ -z "$USR_TEXT" ]; then
 	echo "editing body of entry ..."
 	# entry's new file for editing
 	NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
@@ -1234,7 +1235,7 @@ while [ $# -gt 0 ]; do
 		-h|--help)		show_help; exit 0;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
-		-n|--author)		check_arg; USR_BLOGAUTHOR="$2"; shift;;
+		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
 		--makepage)		check_arg; USR_SRCFILE="$2"; USR_FILE="$3"; shift 2
 					check_config; make_page;;
 		--manual)		load_config; $BROWSER "$BASE_DIR/docs/nanoblogger.html";;
