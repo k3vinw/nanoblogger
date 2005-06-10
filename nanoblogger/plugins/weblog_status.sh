@@ -11,12 +11,14 @@
 # </div>
 
 OUTPUT_FILE="$BLOG_DIR/$PARTS_DIR/weblog_status.$NB_FILETYPE"
-TEMPLATE_FILE="$NB_TEMPLATE_DIR/weblog_status.htm"
+TEMPLATE_FILE="${NB_BASE_DIR}/weblog_status.htm"
+WEBLOG_STATUSTEMPLATE="$NB_TEMPLATE_DIR/weblog_status.htm"
 
 nb_msg "generating weblog status ..."
-if [ ! -f "$TEMPLATE_FILE" ] ; then
-	# TEMPLATE_FILE doesn't exist, get it from default
-	cp "${BASE_DIR}/default/templates/weblog_status.htm" "$TEMPLATE_FILE" || die "$nb_plugin: failed to copy '${BASE_DIR}/default/templates/weblog_status.htm!' repair nanoblogger! goodbye."
+if [ ! -f "$WEBLOG_STATUSTEMPLATE" ] ; then
+	# WEBLOG_STATUSTEMPLATE doesn't exist, get it from default
+	cp "$TEMPLATE_FILE" "$WEBLOG_STATUSTEMPLATE" ||
+		die "$nb_plugin: failed to copy '$TEMPLATE_FILE!' repair nanoblogger! goodbye."
 fi
 
 [ -r "$TEMPLATE_FILE" ] || \
