@@ -17,9 +17,9 @@
 TIDY_CMD="tidy"
 
 # set additional arguments
-: ${TIDY_ARGS:=-asxhtml -n -utf8 --output-xhtml yes}
+: ${TIDY_ARGS:=-asxhtml -n -utf8}
 : ${TIDY_HTML_ARGS:=$TIDY_ARGS}
-: ${TIDY_XML_ARGS:=-xml -n -utf8 -wrap 0 --output-xml yes}
+: ${TIDY_XML_ARGS:=-xml -n -utf8 -wrap 0}
 
 # file to log tidy errors to
 TIDY_LOGFILE="$BLOG_DIR/tidy.log"
@@ -71,8 +71,8 @@ if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
 		tidy_info
 	fi
 	echo '<a href="http://validator.w3.org/check/referer"><img' > "$TIDY_PLUGIN_OUTFILE"
-	echo 'src="http://www.w3.org/Icons/valid-xhtml10"' >> "$TIDY_PLUGIN_OUTFILE"
-	echo 'alt="Valid XHTML 1.0!" /></a>' >> "$TIDY_PLUGIN_OUTFILE"
+	echo 'src="http://www.w3.org/Icons/valid-xhtml11"' >> "$TIDY_PLUGIN_OUTFILE"
+	echo 'alt="Valid XHTML 1.1!" /></a>' >> "$TIDY_PLUGIN_OUTFILE"
 	NB_Tidy=$(< "$TIDY_PLUGIN_OUTFILE")
 fi
 

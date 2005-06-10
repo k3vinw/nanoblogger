@@ -371,8 +371,12 @@ BLOG_TZD="-0:500"
     <p>Example:</p>
     <pre>
 BLOG_CHARSET="iso-8859-1"
-   
+
 </pre>
+
+    <p><span class="warning">WARNING</span>:
+      If you have the tidy plugin enabled, this setting will be overridden by tidy. Please, refer to tidy's documentation for setting the character encoding.
+    </p>
 
     <p><b>Setting the Mime Type</b></p>
 
@@ -450,12 +454,12 @@ NB_INDEX="index.html"
 
     <p><b>Plugin Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories
+    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories
     to the desired location.</p>
 
     <p><b>Global Configuration</b></p>
 
-    <p>NanoBlogger has it's own configuration file, <em>nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>nb.conf</em>. This configuration is also looked for under
+    <p>NanoBlogger has it's own configuration file, <em>$NB_BASE_DIR/nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>$NB_BASE_DIR/nb.conf</em>. This configuration is also looked for under
     the file, <em>$HOME/.nb.conf</em>.</p>
   </div>
 
