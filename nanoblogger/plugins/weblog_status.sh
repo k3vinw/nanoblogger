@@ -11,18 +11,18 @@
 # </div>
 
 OUTPUT_FILE="$BLOG_DIR/$PARTS_DIR/weblog_status.$NB_FILETYPE"
-TEMPLATE_FILE="${NB_BASE_DIR}/weblog_status.htm"
+TEMPLATE_COPY="$NB_BASE_DIR/default/templates/weblog_status.htm"
 WEBLOG_STATUSTEMPLATE="$NB_TEMPLATE_DIR/weblog_status.htm"
 
 nb_msg "generating weblog status ..."
 if [ ! -f "$WEBLOG_STATUSTEMPLATE" ] ; then
 	# WEBLOG_STATUSTEMPLATE doesn't exist, get it from default
-	cp "$TEMPLATE_FILE" "$WEBLOG_STATUSTEMPLATE" ||
-		die "$nb_plugin: failed to copy '$TEMPLATE_FILE!' repair nanoblogger! goodbye."
+	cp "$TEMPLATE_COPY" "$WEBLOG_STATUSTEMPLATE" ||
+		die "$nb_plugin: failed to copy '$TEMPLATE_COPY!' repair nanoblogger! goodbye."
 fi
 
-[ -r "$TEMPLATE_FILE" ] || \
-    die "`basename $0`: $TEMPLATE_FILE doens't exist! goodbye."
+[ -r "$WEBLOG_STATUSTEMPLATE" ] ||
+    die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' doens't exist! goodbye."
 
 query_db all
 TOTAL_CATEGORIES=`echo "$db_categories" |grep -c "."`
@@ -33,7 +33,7 @@ LAST_ENTRY=`echo "$DB_RESULTS" |sed 1q`
 LAST_ENTRY_TIME="$NB_EntryDate"
 LAST_UPDATED=`filter_dateformat "$DATE_FORMAT"`
 
-NB_BlogStatus=$(< "$TEMPLATE_FILE")
+NB_BlogStatus=$(< "$WEBLOG_STATUSTEMPLATE")
 
 cat > "$OUTPUT_FILE" <<-EOF
 	cat <<-TMPL

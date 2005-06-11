@@ -64,6 +64,8 @@ tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 
 # loads global and user configurations
 load_config(){
+# set deprecated BASE_DIR for temporary compatibility
+BASE_DIR="$NB_BASE_DIR"
 # always load global configs
 [ -f "$NB_BASE_DIR/nb.conf" ] && . "$NB_BASE_DIR/nb.conf"
 # check for user's .nb.conf in their home directory
@@ -79,8 +81,6 @@ export BLOG_DIR
 [ -f "$USR_BLOGCONF" ] && BLOG_CONF="$USR_BLOGCONF"
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
-# set deprecated BASE_DIR for temporary compatibility
-BASE_DIR="$NB_BASE_DIR"
 # set data directory
 [ -d "$BLOG_DIR/data" ] && NB_DATA_DIR="$BLOG_DIR/data"
 # allow user specified weblog data directories
@@ -1132,6 +1132,8 @@ if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != 1 ]; then
 fi
 # generate date format for entry's content
 NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
+# reload configuration with new weblog directory
+check_config
 add_entry
 [ ! -z "$BLOG_PREVIEW_CMD" ] && preview_ask
 [ ! -z "$BLOG_PUBLISH_CMD" ] && publish_ask
@@ -1224,7 +1226,8 @@ while [ $# -gt 0 ]; do
 	[ $# -gt 1 ] && argument=$2
 	bad_argument=$1
 	case "$1" in
-		-a|--add)		check_config; add_weblog;;
+		# use load_config to allow for new weblog directory
+		-a|--add)		load_config; add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
