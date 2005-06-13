@@ -46,15 +46,14 @@ for cat_link in $db_categories; do
 		cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 		NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
 		cat <<-EOF
-			<!-- $NB_CategoryTitle --><a href="\${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
+			<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
 		EOF
 	fi
 done
 }
 
 build_catlinks |$CATLINKS_FILTER_CMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
-load_template "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
-NB_CategoryLinks="$TEMPLATE_DATA"
+NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
 # create links for monthly archives
 [ -z "$CAL_CMD" ] && CAL_CMD="cal"
@@ -71,12 +70,11 @@ fi
 month_total=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 set_monthlink "$month"
 cat <<-EOF
-	<a href="\${ARCHIVES_PATH}$NB_ArchiveMonthLink">$Month_Title</a> ($month_total)<br />
+	<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$Month_Title</a> ($month_total)<br />
 EOF
 }
 
 query_db "$QUERY_MODE"
 loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
-load_template "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
-NB_MonthLinks="$TEMPLATE_DATA"
+NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
 

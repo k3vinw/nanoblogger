@@ -1,10 +1,10 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.2.1 Copyright 2005 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.2.2 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
 
 # nanoblogger's version.
-VERSION="3.2.1"
+VERSION="3.2.2"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -1050,6 +1050,7 @@ esac
 
 # create a new entry, category or weblog directory
 add_weblog(){
+load_config
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
@@ -1226,8 +1227,7 @@ while [ $# -gt 0 ]; do
 	[ $# -gt 1 ] && argument=$2
 	bad_argument=$1
 	case "$1" in
-		# use load_config to allow for new weblog directory
-		-a|--add)		load_config; add_weblog;;
+		-a|--add)		add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;

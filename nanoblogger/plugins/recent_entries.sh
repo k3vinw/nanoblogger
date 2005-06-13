@@ -34,15 +34,13 @@ for entry in $DB_RESULTS ; do
 	title_link="$NB_EntryTitle"
 	[ -z "$title_link" ] && title_link="Untitled"
 	set_entrylink "$entry"
-	echo '<a href="'\${ARCHIVES_PATH}$NB_EntryPermalink'">'$title_link'</a><br />'
+	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$title_link'</a><br />'
 done
 }
 
 get_entries new > "$PLUGIN_OUTFILE1"
-load_template "$PLUGIN_OUTFILE1"
-NB_RecentEntries="$TEMPLATE_DATA"
+NB_RecentEntries=$(< "$PLUGIN_OUTFILE1")
 
 get_entries old > "$PLUGIN_OUTFILE2"
-load_template "$PLUGIN_OUTFILE2"
-NB_OlderEntries="$TEMPLATE_DATA"
+NB_OlderEntries=$(< "$PLUGIN_OUTFILE2")
 

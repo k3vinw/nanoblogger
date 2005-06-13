@@ -12,7 +12,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	ENTRY_LIST="$DB_RESULTS"
 	NB_ArchiveEntryLinks=$(
 	for entry in $ENTRY_LIST; do
-		read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$META_DATA"
+		read_metadata TITLE "$NB_DATA_DIR/$entry"
+		NB_EntryTitle="$META_DATA"
 		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
@@ -21,7 +22,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
 			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
-			<a href="\${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a> - <a href="\${ARCHIVES_PATH}$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a> - <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_EntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)
@@ -35,15 +36,14 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 			NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
 			cat <<-EOF
-				<!-- $NB_CategoryTitle --><a href="\${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
+				<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
 			EOF
 		fi
 	done
 	}
 
 	build_catlinks |$CATLINKS_FILTER_CMD |sed -e 's/<!-- .* -->//' > "$SCRATCH_FILE.category_links.$NB_FILETYPE"
-	load_template "$SCRATCH_FILE.category_links.$NB_FILETYPE"
-	NB_ArchiveCategoryLinks="$TEMPLATE_DATA"
+	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.category_links.$NB_FILETYPE")
 
 	# create links for monthly archives
 	[ -z "$CAL_CMD" ] && CAL_CMD="cal"
@@ -60,14 +60,13 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	month_total=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 	set_monthlink "$month"
 	cat <<-EOF
-		<a href="\${ARCHIVES_PATH}$NB_ArchiveMonthLink">$Month_Title</a> ($month_total)<br />
+		<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$Month_Title</a> ($month_total)<br />
 	EOF
 	}
 
 	query_db all
 	loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
-	load_template "$SCRATCH_FILE.month_links.$NB_FILETYPE"
-	NB_ArchiveMonthLinks="$TEMPLATE_DATA"
+	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.month_links.$NB_FILETYPE")
 
 	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	if [ "$cat_total" -gt 0 ]; then
@@ -99,13 +98,11 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		</div>
 	EOF
 
-	load_template "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE"
-	NB_ArchiveLinks="$TEMPLATE_DATA"
-	echo "$NB_ArchiveLinks" > "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE"
+	NB_ArchiveLinks=$(< "$BLOG_DIR/$PARTS_DIR/archive_links.$NB_FILETYPE")
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$NB_INDEXFILE"
 	# set title for makepage template
-	NB_EntryTitle=Archives
+	MKPAGE_TITLE=Archives
 	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
