@@ -205,7 +205,8 @@ li {
   </div>
 
   <div id="intro">
-    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>
+    NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
   </div>
 
   <div id="synopsis">
@@ -268,7 +269,8 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
   </div>
 
   <div id="install">
-    <h2><a id="s.3" name="s.3">3. Installation</a></h2>To install nanoblogger:
+    <h2><a id="s.3" name="s.3">3. Installation</a></h2>
+    To install nanoblogger:
     <pre>
 1. download the gzipped tar archive from the web site[1]
 2. decompress the gzipped tar archive (where "XX" equals the version number):
@@ -291,7 +293,8 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
         
 </pre>
 
-    <h2><a id="s.4" name="s.4">4. Requirements</a></h2>Programs:
+    <h2><a id="s.4" name="s.4">4. Requirements</a></h2>
+    Programs:
 
     <p>bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
 
@@ -325,7 +328,8 @@ export PATH="$PATH:[nanoblogger_dir]"
   </div>
 
   <div id="config">
-    <h2><a id="s.6" name="s.6">6. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
+    <h2><a id="s.6" name="s.6">6. Settings and Configuration</a></h2>
+    To edit the weblog's configuration invoke:
     <pre>
 nb --blogdir [myblog_dir] --configure -u all
         
@@ -464,7 +468,8 @@ NB_INDEX="index.html"
   </div>
 
   <div id="mgmt">
-    <h2><a id="s.7" name="s.7">7. Managing Entries and Categories</a></h2>Commands to manage entries and categories.
+    <h2><a id="s.7" name="s.7">7. Managing Entries and Categories</a></h2>
+    Commands to manage entries and categories.
 
     <h3>Managing Entries</h3>
 
@@ -588,9 +593,54 @@ nb [-b blog_dir] -c 1 -d cat
   </div>
 
   <div id="templates">
-    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
+    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>
+    Templates are located in the weblog's sub-directory, templates.
 
     <div class="tables">
+
+      <p>
+        <b>Special Template Characters</b>
+      </p>
+
+      <table border="0" cellspacing="4" cellpadding="2" summary="templates">
+        <caption>
+          Special characters that have effect in the templates:
+        </caption>
+
+        <tr>
+	  <th align="left">characters</th>
+
+          <th align="left">description</th>
+
+	  <th align="left">notes</th>
+        </tr>
+
+	<tr>
+	  <td align="left">$</td>
+	  <td align="left">dollar sign</td>
+	  <td align="left">prepend backslash to disable, e.g. "\$"</td>
+	</tr>
+
+	<tr>
+	  <td align="left">`</td>
+	  <td align="left">backquote</td>
+	  <td align="left">form of command substitution, prepend backslash to
+	  disable, e.g. "\`"</td>
+	</tr>
+
+	<tr>
+	  <td align="left">$(</td>
+	  <td align="left">dollar sign and left parenthesis</td>
+	  <td align="left">form of command substitution, prepend backslash to disable, e.g. "\$("</td>
+      </table>
+    </div>
+
+    <div class="tables">
+
+      <p>
+        <b>Default Templates</b>
+      </p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
           The weblog's appearance is controlled by the following templates:
@@ -611,7 +661,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">entry.htm</td>
 
-          <td align="left">controls look of your weblog entries</td>
+          <td align="left">controls look of the weblog entries</td>
         </tr>
 
         <tr>
@@ -649,10 +699,21 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">controls look of an entry within it's archive page</td>
         </tr>
-      </table>* = used by plugin
+
+	<tr>
+	  <td align="left">weblog_status.htm</td>
+
+	  <td align="left">controls look of weblog status</td>
+	</tr>
+      </table>
     </div>
 
     <div class="tables">
+
+      <p>
+        <b>Placeholders for Entries</b>
+      </p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="entry placeholders">
         <caption>
           The entry template includes the following placeholders:
@@ -715,6 +776,11 @@ nb [-b blog_dir] -c 1 -d cat
     </div>
 
     <div class="tables">
+
+      <p>
+        <b>Placeholders for Main Index</b>
+      </p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="main placeholders">
         <caption>
           The main template includes the following placeholders:
@@ -844,6 +910,11 @@ nb [-b blog_dir] -c 1 -d cat
     </div>
 
     <div class="tables">
+      
+      <p>
+        <b>Default Plugins</b>
+      </p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="plugins">
         <caption>
           Default plugins (most are enabled by default):
@@ -1116,6 +1187,11 @@ nb [-b blog_dir] -c 1 -d cat
     </div>
 
     <div class="tables">
+
+      <p>
+        <b>Plugin API</b>
+      </p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="api">
         <caption>
           API for writing plugins.
@@ -1455,7 +1531,7 @@ or
 
     <p><b>Add an Introduction to your Weblog</b></p>
 
-    <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file to say what you want, then add the following to the main template:<br /></p>
+    <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file to say what you want, then add the following to the main template:</p>
     <pre>
 $(&lt; "$BLOG_DIR/intro.txt")
         
@@ -1468,8 +1544,20 @@ $(&lt; "$BLOG_DIR/intro.txt")
     <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a
     matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
 
-    <p>Other clever uses include combining NanoBlogger's static output with some php or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using php. Set your <em>NB_FILETYPE</em> to php and modify the appropriate templates to include the php
+    <p>Other clever uses include combining NanoBlogger's static output with some PHP or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP 
     code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+     
+     <p>
+       Example using PHP code in the templates with shell characters disabled (escaped) for correct processing:
+     </p>
+
+     <pre>
+     &lt;?php
+     \$VAR = array ();
+     echo "\\\$VAR=\$VAR";
+     php?&gt;
+     </pre>
+
   </div>
 
   <div id="credits">

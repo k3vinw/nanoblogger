@@ -87,7 +87,7 @@ export BLOG_DIR
 [ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory
 : ${NB_TEMPLATE_DIR:=$BLOG_DIR/templates}
-# allow user specified template direcotries
+# allow user specified template directories
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # where plugins are located and run by default
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
@@ -384,7 +384,7 @@ fi
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:]/ s///' "$META_FILE"`
+META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
 [ "$MTAG" = BODY ] &&
 META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 }

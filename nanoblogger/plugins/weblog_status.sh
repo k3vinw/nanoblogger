@@ -48,3 +48,4 @@ NB_BlogStatus=$(. "$OUTPUT_FILE")
 cat > "$OUTPUT_FILE" <<-EOF
 	$NB_BlogStatus
 EOF
+
