@@ -784,8 +784,12 @@ fi
 # build the weblog
 build_weblog(){
 # update archives based on a query match
+if [ -f "$BLOG_DIR/.nb_new_weblog" ]; then
+	USR_QUERY=all
+	rm -f "$BLOG_DIR/.nb_new_weblog"
+fi
 if [ "$USR_QUERY" = all ]; then
-	nb_msg "removing all generated files for a clean build ..."
+	nb_msg "updating all files! this may take a while ..."
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR"/{"$ARCHIVES_DIR","$CACHE_DIR","$PARTS_DIR"}/*
 fi
@@ -1055,6 +1059,7 @@ load_config
 if [ ! -d "$BLOG_DIR" ]; then
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
+	> "$BLOG_DIR/.nb_new_weblog"
 	nb_msg "copying default weblog files ..."
 	cp -R "$NB_BASE_DIR"/default/* "$BLOG_DIR"
 	# but prompt for configuration.
