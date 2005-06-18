@@ -602,9 +602,12 @@ nb [-b blog_dir] -c 1 -d cat
         <b>Special Template Characters</b>
       </p>
 
+      <p><span class="warning">IMPORTANT</span>:
+      Escaping these characters prevents them from changing.</p>
+
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
-          Special characters that have effect in the templates:
+          Special characters that effect the templates:
         </caption>
 
         <tr>
@@ -618,20 +621,20 @@ nb [-b blog_dir] -c 1 -d cat
 	<tr>
 	  <td align="left">$</td>
 	  <td align="left">dollar sign</td>
-	  <td align="left">prepend backslash to disable, e.g. "\$"</td>
+	  <td align="left">prepend backslash to escape, e.g. "\$"</td>
 	</tr>
 
 	<tr>
 	  <td align="left">`</td>
 	  <td align="left">backquote</td>
 	  <td align="left">form of command substitution, prepend backslash to
-	  disable, e.g. "\`"</td>
+	  escape, e.g. "\`"</td>
 	</tr>
 
 	<tr>
 	  <td align="left">$(</td>
 	  <td align="left">dollar sign and left parenthesis</td>
-	  <td align="left">form of command substitution, prepend backslash to disable, e.g. "\$("</td>
+	  <td align="left">form of command substitution, prepend backslash to escape, e.g. "\$("</td>
       </table>
     </div>
 
@@ -1456,7 +1459,7 @@ mput *
 
     <p>To add support for comments, you can use a php script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
 
-    <p>Typically, integrating a comment system with your weblog involves editing the appropriate templates. To make things easier you should utilize <em>BLOG_URL_ACTION</em> in your weblog's blog.conf.</p>
+    <p>Typically, integrating a comment system with your weblog involves editing the appropriate templates. To make things easier you should utilize <em>BLOG_URL_ACTION</em> in your weblog's blog.conf. Please see examples in blog.conf and templates.</p>
   </div>
 
   <div id="entries.import">
@@ -1527,17 +1530,15 @@ nb [-b blog_dir] -u all
 or
         `command`
                 
-</pre>This is mostly useful for small and simple dynamic changes you wish to make to the content generated from the templates.
+</pre>
 
     <p><b>Add an Introduction to your Weblog</b></p>
 
-    <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file to say what you want, then add the following to the main template:</p>
+    <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file the way you like, then add the following to the main template:</p>
     <pre>
 $(&lt; "$BLOG_DIR/intro.txt")
         
 </pre>
-
-    <p>Note that no processing is being done this way, you have to add your own HTML.</p>
 
     <p><b>Integrating Parts of your Weblog into a Site</b></p>
 
@@ -1546,16 +1547,20 @@ $(&lt; "$BLOG_DIR/intro.txt")
 
     <p>Other clever uses include combining NanoBlogger's static output with some PHP or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP 
     code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+
+    <p><b>Embedding Variables in the Templates</b></p>
+
+    <p>Any characters that are similar to the shell's variable or command substitution characters, will have to be escaped before they will work from the templates.</p>
      
      <p>
-       Example using PHP code in the templates with shell characters disabled (escaped) for correct processing:
+       Example using variables in the PHP code:
      </p>
 
      <pre>
-     &lt;?php
-     \$VAR = array ();
-     echo "\\\$VAR=\$VAR";
-     php?&gt;
+&lt;?php
+\$VAR = array ();
+echo "\\\$VAR=\$VAR";
+php?&gt;
      </pre>
 
   </div>

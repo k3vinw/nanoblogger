@@ -1,15 +1,23 @@
-2005-06-09 22:23  n1xt3r
+2005-06-16 23:25  n1xt3r
 
-	* nb, nb.conf, plugins/weblog_status.sh: Adrian Ho
-	  <blog_AT-symbol_03s.net>: - BLOG_DIR now gets exported for
-	  external use - Improved logic and reduced redundancy in loading
-	  configurations
+	* nb, docs/nanoblogger.html, plugins/weblog_status.sh: Adrian Ho
+	  <blog_AT_03s.net>: removed extra space added to entry titles -
+	  Minor improvements to the layout of the user manual - Added
+	  example of PHP code with escaped variables to the user manual
 
-2005-06-09 07:41  n1xt3r
+2005-06-13 00:13  n1xt3r
 
-	* ChangeLog, nb, plugins/zyx_articles.sh: - Version changed to
-	  3.2.1 - Fixed bug in NB_EntryAuthor not being set - Fixed bug in
-	  USR_TEXT not being checked for properly - Articles plugin updated
-	  to compare source file against new file - Articles plugin updated
-	  to take "articles" as an argument to force updates
+	* nb, default/blog.conf, docs/nanoblogger.html,
+	  plugins/recent_entries.sh, plugins/weblog_links.sh,
+	  plugins/zyx_articles.sh, plugins/archive/master_index.sh,
+	  plugins/page/page_links.off: - Version Changed to 3.2.2 - Fixed
+	  broken weblog creation - Fixed bug that could lead to arbitrary
+	  command execution in various plugins.
+
+2005-06-11 00:56  n1xt3r
+
+	* nb, plugins/weblog_status.sh: - Fixed bug that failed to set
+	  BASE_DIR before loading external configurations.  - Fixed bug
+	  that would cause new weblog directory creation to fail.  - Fixed
+	  bug in the weblog status plugin's that failed to copy a template.
 
