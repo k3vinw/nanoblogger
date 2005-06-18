@@ -784,7 +784,6 @@ fi
 # build the weblog
 build_weblog(){
 # update archives based on a query match
-[ "$new_weblog" = 1 ] && USR_QUERY=all
 if [ "$USR_QUERY" = all ]; then
 	nb_msg "removing all generated files for a clean build ..."
 	# remove all generated files for a clean build
@@ -1054,7 +1053,6 @@ load_config
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
 # automatically create new weblog directory.
 if [ ! -d "$BLOG_DIR" ]; then
-	new_weblog=1
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
 	nb_msg "copying default weblog files ..."
