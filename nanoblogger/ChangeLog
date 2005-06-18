@@ -1,3 +1,21 @@
+2005-06-18 17:49  n1xt3r
+
+	* nb: Improved weblog creation routines.
+
+2005-06-18 17:26  n1xt3r
+
+	* nb: Fixed bug that caused full update to skip on new weblog
+	  directories.
+
+2005-06-18 16:29  n1xt3r
+
+	* nb, plugins/zyx_articles.sh: removed some default directories
+
+2005-06-18 15:36  n1xt3r
+
+	* ChangeLog, docs/nanoblogger.html: Several minor updates to the
+	  user manual.
+
 2005-06-16 23:25  n1xt3r
 
 	* nb, docs/nanoblogger.html, plugins/weblog_status.sh: Adrian Ho
