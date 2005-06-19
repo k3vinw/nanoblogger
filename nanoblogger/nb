@@ -1018,7 +1018,7 @@ for entry_id in $UPDATE_LIST; do
 		fi
 	fi
 done
-UPDATE_LIST="$DB_RESULTS"
+find_categories "$UPDATE_LIST"
 build_weblog
 }
 
