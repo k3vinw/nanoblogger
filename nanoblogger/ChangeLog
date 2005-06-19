@@ -1,3 +1,8 @@
+2005-06-19 18:14  n1xt3r
+
+	* ChangeLog, nb: Fixed update bug that failed to update date
+	  archives when moving entries.
+
 2005-06-18 21:45  n1xt3r
 
 	* ChangeLog, nb: Improved pagination code to handle modifications

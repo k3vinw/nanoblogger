@@ -1064,6 +1064,8 @@ load_config
 if [ ! -d "$BLOG_DIR" ]; then
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
+fi
+if [ -d "$BLOG_DIR" ]; then
 	> "$BLOG_DIR/.nb_new_weblog"
 	nb_msg "copying default weblog files ..."
 	# copy default files and directories
@@ -1086,6 +1088,8 @@ if [ ! -d "$BLOG_DIR" ]; then
 	[Nn])
 		die "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later.";;
 	esac
+else
+	die "failed to create weblog directory!"
 fi
 check_config
 # create a new category 
