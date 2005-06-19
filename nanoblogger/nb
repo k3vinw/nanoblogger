@@ -575,9 +575,13 @@ fi
 		fi
 		}
 		query_db "$page_query" "$page_catquery" limit "$end" "$begin"
-		for entry_mod in $UPDATE_LIST; do
-			page_match=`echo "$DB_RESULTS" |grep "$entry_mod"`
-			[ ! -z "$page_match" ] && build_pagelist
+		for page_entry in $UPDATE_LIST; do
+			if [ -z "$Edit_EntryFile" ]; then
+				build_pagelist
+			else
+				page_match=`echo "$DB_RESULTS" |grep "$page_entry"`
+				[ ! -z "$page_match" ] && build_pagelist
+			fi
 		done
 		PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
 	}
