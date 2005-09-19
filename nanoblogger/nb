@@ -1,10 +1,11 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.2.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
+# Last modified: 2005-09-18T23:00:02-04:00
 
 # nanoblogger's version.
-VERSION="3.2.3"
+VERSION="3.3-CVS"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -937,9 +938,10 @@ for entry_id in $NUMVAR; do
 				fi
 			done
 			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
-			Delete_PermalinkFile=`chg_suffix "$Delete_EntryFile"`
+			set_entrylink "$Delete_EntryFile"
+			Delete_PermalinkFile="$permalink_file"
 			if [ -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile" ]; then
-				rm -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
+				rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
 			fi
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
@@ -1069,8 +1071,8 @@ if [ ! -d "$BLOG_DIR" ]; then
 	> "$BLOG_DIR/.nb_new_weblog"
 	nb_msg "copying default weblog files ..."
 	# copy default files and directories
-	cp "$NB_BASE_DIR"/default/*.* "$BLOG_DIR"
-	for weblog_dir in "$NB_BASE_DIR"/default/*/; do
+	#cp "$NB_BASE_DIR"/default/*.* "$BLOG_DIR"
+	for weblog_dir in "$NB_BASE_DIR"/default/*; do
 		cp -R "$weblog_dir" "$BLOG_DIR"
 	done
 	# create some critical empty directories

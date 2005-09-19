@@ -1,4 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
+# Last modified: 2005-09-18T23:00:49-04:00
 
 # <div class="sidetitle">
 # Links
@@ -25,15 +26,13 @@
 # </div>
 
 # command used to filter order of category links
-: ${CATLINKS_FILTER_CMD:=sort}
+: ${CATLINKS_FILTERCMD:=sort}
 
+set_baseurl "./"
 nb_msg "generating weblog links ..."
 # create main set of links
 load_template "$NB_TEMPLATE_DIR/$MAINLINKS_TEMPLATE"
 NB_MainLinks="$TEMPLATE_DATA"
-
-query_db
-set_baseurl "./"
 
 # create links for categories
 build_catlinks(){
@@ -52,7 +51,8 @@ for cat_link in $db_categories; do
 done
 }
 
-build_catlinks |$CATLINKS_FILTER_CMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
+query_db
+build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
 # create links for monthly archives
@@ -74,7 +74,7 @@ cat <<-EOF
 EOF
 }
 
-query_db "$QUERY_MODE"
+query_db all nocat limit 50 1
 loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
 
