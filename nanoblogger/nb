@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-09-18T23:00:02-04:00
+# Last modified: 2005-09-29T16:54:44-04:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -83,7 +83,6 @@ META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
 META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 }
 
-
 # write metadata to file
 write_metadata(){
 MTAG="$1"
@@ -111,6 +110,7 @@ else
 	fi
 fi
 }
+
 
 # load plugins from $PLUGINS_DIR
 load_plugins(){
@@ -598,12 +598,14 @@ for entry_id in $NUMVAR; do
 			done
 			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
 			set_entrylink "$Delete_EntryFile"
-			Delete_PermalinkFile="$permalink_file"
-			if [ -f "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile" ]; then
-				# TODO: delete empty sub-directories of deleted archive
-				#echo "deleting file: '$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
-				rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$Delete_PermalinkFile"
-			fi
+			Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+			Delete_PermalinkDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir"
+			# delete permalink file
+			[ -f "$Delete_PermalinkFile" ] && rm -fr "$Delete_PermalinkFile"
+			# delete permalink directory
+			[ ! -z "$entry_dir" ] && [ -d "$Delete_PermalinkDir" ] &&
+				rm -fr "$Delete_PermalinkDir"
+			# delete entry's cache file
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
 	fi
@@ -796,13 +798,11 @@ fi
 if [ -z "$USR_TEXT" ]; then
 	echo "editing body of entry ..."
 	# entry's new file for editing
-	#NB_EditFile="$TEMP_DIR/nb_entry$$.$NB_DATATYPE"
-	NB_EditFile="$BLOG_DIR/nb_entrybody$$.$NB_DATATYPE"
+	NB_EditFile="$BLOG_DIR/nb_entrybody-`NB_TimeStamp`.$NB_DATATYPE"
 	nb_edit "$NB_EditFile"
 	# load content of edited file into entry variable NB_EntryBody
 	if [ -f "$NB_EditFile" ]; then
 		NB_EntryBody=$(< "$NB_EditFile")
-		rm -f "$NB_EditFile"
 	fi
 else
 	NB_EntryBody="$USR_TEXT"
@@ -818,6 +818,7 @@ NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
 # reload configuration with new weblog directory
 check_config
 add_entry
+rm -f "$NB_EditFile"
 [ ! -z "$BLOG_PREVIEW_CMD" ] && preview_ask
 [ ! -z "$BLOG_PUBLISH_CMD" ] && publish_ask
 }

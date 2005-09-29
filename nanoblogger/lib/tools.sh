@@ -26,10 +26,10 @@ nb_edit(){
 # TODO: test with external editor (outside of script's process)
 EDIT_FILE="$1"
 $EDITOR "$EDIT_FILE"
-#if [ ! -f "$EDIT_FILE" ] || [ -N "$EDIT_FILE" ]; then
 if [ ! -f "$EDIT_FILE" ]; then
-	echo "nothing written yet, press [enter] to continue."
-	read enter_key
+	echo "File, '$EDIT_FILE' does not exist!"
+	echo "press [enter] to continue."
+	read -p "$NB_PROMPT" enter_key
 fi
 [ ! -f "$EDIT_FILE" ] && die "failed to write '$EDIT_FILE'! goodbye."
 }
