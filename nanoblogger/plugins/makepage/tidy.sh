@@ -17,8 +17,7 @@
 TIDY_CMD="tidy"
 
 # set additional arguments
-: ${TIDY_ARGS:=-asxhtml -n -utf8}
-: ${TIDY_HTML_ARGS:=$TIDY_ARGS}
+: ${TIDY_HTML_ARGS:=-asxhtml -n -utf8}
 : ${TIDY_XML_ARGS:=-xml -n -utf8 -wrap 0}
 
 # file to log tidy errors to
