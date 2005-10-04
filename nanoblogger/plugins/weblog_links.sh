@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2005-09-18T23:00:49-04:00
+# Last modified: 2005-10-04T13:09:04-04:00
 
 # <div class="sidetitle">
 # Links
@@ -28,6 +28,14 @@
 # command used to filter order of category links
 : ${CATLINKS_FILTERCMD:=sort}
 
+# maximum number of months to show for $NB_MonthLinks
+: ${MAX_MONTHLINKS:=12}
+
+# validate MAX_MONTHLINKS (must be greater than 0)
+MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c [0-9]`
+[ "$MONTHLINKS_NUMVAR" = 0 ] &&
+	die "MAX_MONTHLINKS must be set to a valid number!"
+
 set_baseurl "./"
 nb_msg "generating weblog links ..."
 # create main set of links
@@ -52,6 +60,19 @@ done
 }
 
 query_db
+# get total number of months and tally total entries from MAX_MONTHLINKS
+total_qmonths=`echo "$DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-7 |sort -ru`
+total_nmonths=`echo "$total_qmonths" |grep -c ""`
+NMONTHS_RESULTS=`echo "$total_qmonths" |sed "$MAX_MONTHLINKS"q`
+
+entry_tally=0
+for query_nmonth in $NMONTHS_RESULTS; do
+	query_db "$query_nmonth"
+	entries_nmonth=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+	[ "$entries_nmonth" -gt 0 ] &&
+		entry_tally=`expr $entry_tally + $entries_nmonth`
+done
+
 build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
@@ -74,7 +95,13 @@ cat <<-EOF
 EOF
 }
 
-query_db all nocat limit 50 1
+query_db all nocat limit $entry_tally 1
 loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
+# monthly archives continued
+if [ "$MAX_MONTHLINKS" -lt "$total_nmonths" ]; then
+	cat >> "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE" <<-EOF
+		<a href="${ARCHIVES_PATH}index.$NB_FILETYPE">$NB_NextPage</a>
+	EOF
+fi
 NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
 

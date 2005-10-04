@@ -48,7 +48,7 @@ x_id=e
 # cleanup for special temp files
 SCRATCH_FILE="$TEMP_DIR/nb_scratch$$"
 tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
-[ -z "$tmp_files" ] || trap "rm -fr $tmp_files; exit" 0 1 2 3 15
+[ ! -z "$tmp_files" ] && trap "rm -fr $tmp_files; exit" 0 1 2 3 15
 
 # load the modules
 . ${NB_LIB_DIR}/error.sh
@@ -818,7 +818,9 @@ NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
 # reload configuration with new weblog directory
 check_config
 add_entry
-rm -f "$NB_EditFile"
+# remove editing session file upon success
+[ -f "$NB_EditFile" ] && trap "rm -fr $NB_EditFile" 0
+#rm -f "$NB_EditFile"
 [ ! -z "$BLOG_PREVIEW_CMD" ] && preview_ask
 [ ! -z "$BLOG_PUBLISH_CMD" ] && publish_ask
 }
