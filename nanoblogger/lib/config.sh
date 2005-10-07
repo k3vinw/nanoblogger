@@ -43,6 +43,8 @@ export BLOG_DIR
 : ${NB_DBTYPE:=db}
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
+# default to no processing for entry body
+: ${ENTRY_FORMAT:=raw}
 # default to xml for feed suffix
 : ${NB_SYND_FILETYPE:=xml}
 # default to AUTO_TZD for iso dates
@@ -56,7 +58,7 @@ export BLOG_DIR
 # default for previous and next page symbols, using html entities
 : ${NB_NextPage:=[&#62;&#62;]}
 : ${NB_PrevPage:=[&#60;&#60;]}
-# default sort arguments (-u|nique is required)
+# default sort arguments (-u is required)
 : ${SORT_ARGS:=-ru}
 }
 

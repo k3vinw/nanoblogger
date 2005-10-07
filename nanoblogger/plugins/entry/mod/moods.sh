@@ -4,7 +4,7 @@
 : ${MOODS_DIR:=$BLOG_DIR/moods}
 MOODS_URL="${BASE_URL}moods"
 
-if [ -d "$MOODS_DIR" ] && [ "$AUTO_FORMAT" = "1" ]; then
+if [ -d "$MOODS_DIR" ]; then
 	load_moods(){
 	if [ -f "$MOODS_DIR/moods.conf" ]; then
 		if [ -z "$mood_lines" ]; then

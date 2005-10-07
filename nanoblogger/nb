@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-09-29T16:54:44-04:00
+# Last modified: 2005-10-07T02:56:03-04:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -112,15 +112,47 @@ fi
 }
 
 
-# load plugins from $PLUGINS_DIR
+# load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
+PLUGIN_LIST=( ${@:1} )
+add_plugin_script(){
+	plugin_file="$1"
+	if [ -f "$plugin_file" ] ; then
+		plugin_scripts=( ${plugin_scripts[@]} "$plugin_file" )
+	fi
+}
+# go to the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
 # loads plugins in alpha-numeric order (0-9, a-z)
-[ -d "$PLUGINS_DIR${PLUGIN_DIR}" ] &&
-	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
-		[ -f "$nb_plugin" ] && . "$nb_plugin"
+#[ -d "$PLUGINS_DIR${PLUGIN_DIR}" ] &&
+#	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
+#		[ -f "$nb_plugin" ] && . "$nb_plugin"
+#	done
+
+# stop short when directory doesn't exist
+[ ! -d "$PLUGINS_DIR${PLUGIN_DIR}" ] && return
+
+# Initialise the array of plugin scripts
+plugin_scripts=()
+# Were plugin names specified?
+PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
+if [ "$PLUGINLIST_VAR" != 0 ] ; then
+	# Yes, so get the scripts in specified order
+	for plugin in ${PLUGIN_LIST[@]} ; do
+		nb_plugin="$PLUGINS_DIR${PLUGIN_DIR}/${plugin}.sh"
+		add_plugin_script "$nb_plugin"
+ 	done
+else
+	# No specified plugins, so get them all
+	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh ; do
+		add_plugin_script "$nb_plugin"
 	done
+fi
+# Run each plugin
+for nb_plugin in ${plugin_scripts[@]} ; do
+	. "$nb_plugin"
+done
 }
 
 # write entry to file
@@ -131,6 +163,7 @@ cat > "$ENTRY_FILE" <<-EOF
 	AUTHOR: $NB_EntryAuthor
 	DATE: $NB_EntryDate
 	DESC: $NB_EntryDescription
+	FORMAT: $NB_EntryFormat
 	-----
 	BODY:
 	$NB_EntryBody
@@ -138,23 +171,37 @@ cat > "$ENTRY_FILE" <<-EOF
 EOF
 }
 
+# load entry metadata into tangible shell variables
+load_metadata(){
+METADATA_TYPE="$1" # ALL or NOBODY :)
+ENTRY_METADATAFILE="$2"
+if [ -f "$ENTRY_METADATAFILE" ]; then
+	read_metadata TITLE "$ENTRY_METADATAFILE"; NB_EntryTitle="$META_DATA"
+	read_metadata AUTHOR "$ENTRY_METADATAFILE"; NB_EntryAuthor="$META_DATA"
+	read_metadata DATE "$ENTRY_METADATAFILE"; NB_EntryDate="$META_DATA"
+	read_metadata DESC "$ENTRY_METADATAFILE"; NB_EntryDescription="$META_DATA"
+	read_metadata FORMAT "$ENTRY_METADATAFILE"; NB_EntryFormat="$META_DATA"
+	[ "$METADATA_TYPE" != NOBODY ] &&
+		read_metadata BODY "$ENTRY_METADATAFILE"; NB_EntryBody="$META_DATA"
+	: ${NB_EntryFormat:=$ENTRY_FORMAT}
+fi
+}
+
 # read an entry
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
 	NB_EntryID=`set_entryid $entry`
-	read_metadata TITLE "$ENTRY_FILE"; NB_EntryTitle="$META_DATA"
-	read_metadata AUTHOR "$ENTRY_FILE"; NB_EntryAuthor="$META_DATA"
-	read_metadata DATE "$ENTRY_FILE"; NB_EntryDate="$META_DATA"
-	read_metadata DESC "$ENTRY_FILE"; NB_EntryDescription="$META_DATA"
+	load_metadata NOBODY "$ENTRY_FILE"
 	load_plugins entry
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry" ]; then
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$META_DATA"
+		load_plugins entry/format "$NB_EntryFormat"
 		load_plugins entry/mod
-		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry"
-		update_cache build entry "$entry"
+		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"
+		update_cache build entry_body "$entry"
 	else
-		read_metadata BODY "$BLOG_DIR/$CACHE_DIR/$entry.entry"; NB_EntryBody="$META_DATA"
+		read_metadata BODY "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"; NB_EntryBody="$META_DATA"
 	fi
 fi
 }
@@ -178,8 +225,8 @@ mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
 # preserve content of the source, but let plugins modify it
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
-NB_Entries="$MKPAGE_CONTENT"
 load_plugins page
+NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TMPLFILE"
 echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
@@ -475,15 +522,15 @@ fi
 db_catquery=`cat_id`; check_catid
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
-update_cache all entry
+update_cache all entry_body
 load_plugins
 # update previously cached entries
-update_cache rebuild entry "$CACHE_LIST"
+update_cache rebuild entry_body "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
-update_cache "$QUERY_MODE" entry
+update_cache "$QUERY_MODE" entry_body
 nb_msg "generating main index page(s) ..."
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 }
@@ -532,9 +579,8 @@ done
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	nb_edit "$NB_DATA_DIR/$Edit_EntryFile"
-	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
+	[ -N "$NB_DATA_DIR/$Edit_EntryFile" ] &&
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
-	fi
 done
 UPDATE_LIST=$(< "$SCRATCH_FILE")
 if [ ! -z "$UPDATE_LIST" ]; then
@@ -725,7 +771,7 @@ esac
 add_weblog(){
 load_config
 [ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
-# automatically create new weblog directory.
+# automatically create new weblog directory ...
 if [ ! -d "$BLOG_DIR" ]; then
 	nb_msg "creating weblog directory '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
@@ -741,7 +787,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 	for weblog_emptydir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
 		[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
 	done
-	# but prompt for configuration.
+	# ... but prompt for configuration.
 	echo "would you like to configure the new weblog now? [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
@@ -796,13 +842,14 @@ if [ -z "$NB_EntryTitle" ]; then
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 if [ -z "$USR_TEXT" ]; then
-	echo "editing body of entry ..."
-	# entry's new file for editing
-	NB_EditFile="$BLOG_DIR/nb_entrybody-`NB_TimeStamp`.$NB_DATATYPE"
-	nb_edit "$NB_EditFile"
-	# load content of edited file into entry variable NB_EntryBody
+	echo "editing new entry ..."
+	# new entry temp file for editing
+	NB_EditFile="$BLOG_DIR/nb_newentry-`NB_TimeStamp`.$NB_DATATYPE"
+	# write current metadata to temp file and edit
+	write_entry "$NB_EditFile"; nb_edit "$NB_EditFile"
+	# load all new entry metadata from temp file
 	if [ -f "$NB_EditFile" ]; then
-		NB_EntryBody=$(< "$NB_EditFile")
+		load_metadata ALL "$NB_EditFile"
 	fi
 else
 	NB_EntryBody="$USR_TEXT"
@@ -837,7 +884,7 @@ cat <<-EOF
 	 -a, --add				create new entry, category, or weblog
 	 					(directory).
 	 -b, --blogdir <directory>		specify weblog directory.
-	 -B, --body <text>			set body of entry (for '--add').
+	 -B, --body <text>			deprecated please use -T or --text instead.
 	 -c, --category	<ID,cat>		specify category (for '--add', '--delete',
 	 					'--edit', '--list' and '--update').
 	 --configure				configure weblog (for '--update').
@@ -863,6 +910,7 @@ cat <<-EOF
 	 -t, --title <text>			set title of entry/category/page
 	 					(for '--add', '--category', and
 	 					'--makepage').
+	 -T, --text <text> 			set body (text) of entry (for '--add').
 	 -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
 	 					current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
@@ -914,6 +962,7 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-a|--add)		add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
+		# -B,--body deprecated in favor of -T,--text
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		check_config; config_weblog;;
@@ -939,6 +988,7 @@ while [ $# -gt 0 ]; do
 		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
+		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;

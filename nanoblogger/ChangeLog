@@ -1,61 +1,39 @@
-2005-06-19 18:28  n1xt3r
+2005-10-04 13:45  n1xt3r
 
-	* ChangeLog, nb: Now checks state of weblog directory before
-	  continuing, during creation process.
+	* default/blog.conf, plugins/fortune.sh, plugins/makepage/tidy.sh:
+	  - gregor herrmann: Patch for tidy plugin encoding problems.  -
+	  gregor herrmann: Patch for fortune plugin run from cron.
 
-2005-06-19 18:14  n1xt3r
+2005-10-04 13:18  n1xt3r
 
-	* ChangeLog, nb: Fixed update bug that failed to update date
-	  archives when moving entries.
+	* nb, plugins/weblog_links.sh: - Only remove edit session files
+	  upon success.  - Enhanced generation of monthly links
+	  ($NB_MonthLinks) for main index page.  - Limit monthly links to
+	  12, configurable through MAX_MONTHLINKS variable.
 
-2005-06-18 21:45  n1xt3r
+2005-09-29 18:02  n1xt3r
 
-	* ChangeLog, nb: Improved pagination code to handle modifications
-	  better.
+	* nb, lib/tools.sh, plugins/archive/master_index.sh: - Added
+	  measures for protection and privacy of new entry data.  - Added
+	  check for entry deletion in master_index.sh plugin.
 
-2005-06-18 18:21  n1xt3r
+2005-09-23 01:51  n1xt3r
 
-	* ChangeLog, nb: Fixed update bug that failed to build all of
-	  category when moving entries.
+	* nb, lib/config.sh, lib/error.sh, lib/query.sh, lib/tools.sh,
+	  plugins/zyx_articles.sh: - Ben Finney: Patch main script split
+	  into smaller files.  - Articles list can be filtered now.
 
-2005-06-18 17:49  n1xt3r
+2005-09-18 23:20  n1xt3r
 
-	* nb: Improved weblog creation routines.
-
-2005-06-18 17:26  n1xt3r
-
-	* nb: Fixed bug that caused full update to skip on new weblog
-	  directories.
-
-2005-06-18 16:29  n1xt3r
-
-	* nb, plugins/zyx_articles.sh: removed some default directories
-
-2005-06-18 15:36  n1xt3r
-
-	* ChangeLog, docs/nanoblogger.html: Several minor updates to the
-	  user manual.
-
-2005-06-16 23:25  n1xt3r
-
-	* nb, docs/nanoblogger.html, plugins/weblog_status.sh: Adrian Ho
-	  <blog_AT_03s.net>: removed extra space added to entry titles -
-	  Minor improvements to the layout of the user manual - Added
-	  example of PHP code with escaped variables to the user manual
-
-2005-06-13 00:13  n1xt3r
-
-	* nb, default/blog.conf, docs/nanoblogger.html,
-	  plugins/recent_entries.sh, plugins/weblog_links.sh,
-	  plugins/zyx_articles.sh, plugins/archive/master_index.sh,
-	  plugins/page/page_links.off: - Version Changed to 3.2.2 - Fixed
-	  broken weblog creation - Fixed bug that could lead to arbitrary
-	  command execution in various plugins.
-
-2005-06-11 00:56  n1xt3r
-
-	* nb, plugins/weblog_status.sh: - Fixed bug that failed to set
-	  BASE_DIR before loading external configurations.  - Fixed bug
-	  that would cause new weblog directory creation to fail.  - Fixed
-	  bug in the weblog status plugin's that failed to copy a template.
+	* TODO, nb, default/blog.conf, default/styles/nb_rusted.css,
+	  default/templates/category_archive.htm,
+	  default/templates/main_index.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm, plugins/weblog_links.sh,
+	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
+	  - Version changed to 3.3-CVS.  - Fix entry deletion when entry's
+	  part of a directory.	- Fix weblog creation copy bug.  - Patch to
+	  use $BLOG_CHARSET in templates again.  - Patch that adds setting
+	  for favorite icon shortcut.  - Replace limit of archive links
+	  with limit of 50 entries.
 

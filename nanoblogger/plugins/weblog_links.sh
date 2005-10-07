@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2005-10-04T13:09:04-04:00
+# Last modified: 2005-10-06T02:14:48-04:00
 
 # <div class="sidetitle">
 # Links
@@ -100,7 +100,7 @@ loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$
 # monthly archives continued
 if [ "$MAX_MONTHLINKS" -lt "$total_nmonths" ]; then
 	cat >> "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE" <<-EOF
-		<a href="${ARCHIVES_PATH}index.$NB_FILETYPE">$NB_NextPage</a>
+		<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
 	EOF
 fi
 NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
