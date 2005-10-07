@@ -43,7 +43,9 @@ export BLOG_DIR
 : ${NB_DBTYPE:=db}
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
-# default to no processing for entry body
+# default to raw processing for page content
+: ${PAGE_FORMAT:=raw}
+# default to raw processing for entry body
 : ${ENTRY_FORMAT:=raw}
 # default to xml for feed suffix
 : ${NB_SYND_FILETYPE:=xml}

@@ -1,3 +1,18 @@
+2005-10-07 03:21  n1xt3r
+
+	* plugins/entry/: format/markdown.sh, format/raw.sh,
+	  mod/line_break.sh: Some default plugins for text filtering.
+
+2005-10-07 03:16  n1xt3r
+
+	* ChangeLog, nb, default/blog.conf, lib/config.sh,
+	  plugins/weblog_links.sh, plugins/zyx_articles.sh,
+	  plugins/entry/mod/auto_break.sh, plugins/entry/mod/base_url.sh,
+	  plugins/entry/mod/moods.sh: - New entry files include metadata
+	  fields upon editing.	- Entries are processed uncoditionally
+	  (ignoring AUTO_FORMAT variable).  - ben finney: Patch adds
+	  conditional plugins for entry formatting.
+
 2005-10-04 13:45  n1xt3r
 
 	* default/blog.conf, plugins/fortune.sh, plugins/makepage/tidy.sh:

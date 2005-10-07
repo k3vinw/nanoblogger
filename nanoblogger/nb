@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-10-07T02:56:03-04:00
+# Last modified: 2005-10-07T14:27:12-04:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -111,7 +111,6 @@ else
 fi
 }
 
-
 # load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
@@ -122,34 +121,29 @@ add_plugin_script(){
 		plugin_scripts=( ${plugin_scripts[@]} "$plugin_file" )
 	fi
 }
-# go to the plugin direcory
+# determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-# loads plugins in alpha-numeric order (0-9, a-z)
-#[ -d "$PLUGINS_DIR${PLUGIN_DIR}" ] &&
-#	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh; do
-#		[ -f "$nb_plugin" ] && . "$nb_plugin"
-#	done
-
-# stop short when directory doesn't exist
-[ ! -d "$PLUGINS_DIR${PLUGIN_DIR}" ] && return
-
-# Initialise the array of plugin scripts
+# stop short when plugins directory doesn't exist
+plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
+[ ! -d "$plugin_path" ] && return
+# initialise the array of plugins
 plugin_scripts=()
-# Were plugin names specified?
+# were plugin names specified?
 PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
 if [ "$PLUGINLIST_VAR" != 0 ] ; then
-	# Yes, so get the scripts in specified order
+	# yes, so we add them in order specified
 	for plugin in ${PLUGIN_LIST[@]} ; do
-		nb_plugin="$PLUGINS_DIR${PLUGIN_DIR}/${plugin}.sh"
+		nb_plugin="$plugin_path/${plugin}.sh"
 		add_plugin_script "$nb_plugin"
  	done
 else
-	# No specified plugins, so get them all
-	for nb_plugin in "$PLUGINS_DIR${PLUGIN_DIR}"/*.sh ; do
+	# no specified plugins, so get them all
+	for nb_plugin in "$plugin_path"/*.sh ; do
 		add_plugin_script "$nb_plugin"
 	done
 fi
-# Run each plugin
+# load the plugins in alpha-numeric order (0-9, A-z)
+# ... except where specified elsewise
 for nb_plugin in ${plugin_scripts[@]} ; do
 	. "$nb_plugin"
 done
@@ -183,7 +177,6 @@ if [ -f "$ENTRY_METADATAFILE" ]; then
 	read_metadata FORMAT "$ENTRY_METADATAFILE"; NB_EntryFormat="$META_DATA"
 	[ "$METADATA_TYPE" != NOBODY ] &&
 		read_metadata BODY "$ENTRY_METADATAFILE"; NB_EntryBody="$META_DATA"
-	: ${NB_EntryFormat:=$ENTRY_FORMAT}
 fi
 }
 
@@ -196,6 +189,7 @@ if [ -f "$ENTRY_FILE" ]; then
 	load_plugins entry
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$META_DATA"
+		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
 		load_plugins entry/mod
 		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"
@@ -225,6 +219,8 @@ mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
 # preserve content of the source, but let plugins modify it
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
+[ -z "$NB_PageFormat" ] && NB_PageFormat="$PAGE_FORMAT"
+load_plugins page/format "$NB_PageFormat"
 load_plugins page
 NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TMPLFILE"
@@ -503,9 +499,9 @@ fi
 # build the weblog
 build_weblog(){
 # update archives based on a query match
-if [ -f "$BLOG_DIR/.nb_new_weblog" ]; then
+if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 	USR_QUERY=all
-	rm -f "$BLOG_DIR/.nb_new_weblog"
+	rm -f "$BLOG_DIR/.nb_newblogdir"
 fi
 if [ "$USR_QUERY" = all ]; then
 	nb_msg "updating all files! this may take a while ..."
@@ -777,7 +773,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 	mkdir -p "$BLOG_DIR"
 	[ ! -d "$BLOG_DIR" ] &&
 		die "failed to create weblog directory!"
-	> "$BLOG_DIR/.nb_new_weblog"
+	> "$BLOG_DIR/.nb_newblogdir"
 	nb_msg "copying default weblog files ..."
 	# copy default files and directories
 	for weblog_dir in "$NB_BASE_DIR"/default/*; do
@@ -844,7 +840,7 @@ fi
 if [ -z "$USR_TEXT" ]; then
 	echo "editing new entry ..."
 	# new entry temp file for editing
-	NB_EditFile="$BLOG_DIR/nb_newentry-`NB_TimeStamp`.$NB_DATATYPE"
+	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`NB_TimeStamp`.$NB_DATATYPE"
 	# write current metadata to temp file and edit
 	write_entry "$NB_EditFile"; nb_edit "$NB_EditFile"
 	# load all new entry metadata from temp file
@@ -855,11 +851,13 @@ else
 	NB_EntryBody="$USR_TEXT"
 fi
 [ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
-# prompt for descritption
+# prompt for description
 if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != 1 ]; then
 	echo "enter a short descriptive comment"
 	read -p "$NB_PROMPT" NB_EntryDescription
 fi
+# set a default entry format
+[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 # generate date format for entry's content
 NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
 # reload configuration with new weblog directory
