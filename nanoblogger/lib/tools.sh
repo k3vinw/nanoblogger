@@ -151,20 +151,18 @@ else
 fi
 }
 
-# helps update relative categories
+# tool to build list of related categories from list of entries
 find_categories(){
 UPDATE_CATLIST="$1"
-	build_catlist(){
-	if [ ! -z "$cat_var" ]; then
-		[ -z "$CAT_LIST" ] && CAT_LIST="$cat_db"
-		[ "$CAT_LIST" != "$OLD_CATLIST" ] && CAT_LIST="$OLD_CATLIST $cat_db"
-		OLD_CATLIST="$CAT_LIST"
-	fi
-	}
-# find related categories for a given set of entries
+category_list=()
+build_catlist(){
+if [ ! -z "$cat_var" ]; then
+	category_list=( ${category_list[@]} "$cat_db" )
+fi
+}
 if [ "$USR_QUERY" != all ]; then
+	query_db "$USR_QUERY"
 	for relative_entry in $UPDATE_CATLIST; do
-		query_db "$USR_QUERY"
 		for cat_db in $db_categories; do
 			cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
 			build_catlist
@@ -173,7 +171,11 @@ if [ "$USR_QUERY" != all ]; then
 else
 	query_db; CAT_LIST="$db_categories"
 fi
-[ -z "$CAT_LIST" ] && CAT_LIST="$db_catquery"
+if [ ! -z "$category_list" ]; then
+	CAT_LIST="${category_list[@]}"
+else
+	CAT_LIST="$db_catquery"
+fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 

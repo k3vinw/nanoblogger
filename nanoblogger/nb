@@ -189,9 +189,9 @@ if [ -f "$ENTRY_FILE" ]; then
 	load_plugins entry
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_body" ]; then
 		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$META_DATA"
+		load_plugins entry/mod
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
-		load_plugins entry/mod
 		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"
 		update_cache build entry_body "$entry"
 	else
@@ -219,9 +219,9 @@ mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
 # preserve content of the source, but let plugins modify it
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
+load_plugins page
 [ -z "$NB_PageFormat" ] && NB_PageFormat="$PAGE_FORMAT"
 load_plugins page/format "$NB_PageFormat"
-load_plugins page
 NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TMPLFILE"
 echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
@@ -230,7 +230,7 @@ nb_msg "$MKPAGE_OUTFILE"
 for mkpage_plugin in "$PLUGINS_DIR"/makepage/*.sh; do
 	[ -f "$mkpage_plugin" ] && . "$mkpage_plugin"
 done
-MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_EntryTitle=
+MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_PageFormat=; NB_EntryTitle=
 }
 
 # create individual page for an entry
@@ -563,7 +563,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 		die "no changes were made! goodbye."
 	fi
 fi
-NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id."
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"; ENTRY_LIST="$DB_RESULTS"
@@ -602,10 +602,10 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	done
 	cat_num=; [ ! -z "$UPDATE_LIST" ] && build_weblog; exit 0
 fi
-NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 if [ ! -z "$cat_list" ]; then
-	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 	[ -z "$CATNUMVAR" ] &&
 		die "must specify a single category when deleting entries from a category!"
 fi
@@ -701,7 +701,7 @@ done
 
 # move entries into other categories
 move_entry(){
-NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/\,/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "must specify a valid entry id!"
 query_db
 for entry_id in $NUMVAR; do
@@ -709,7 +709,7 @@ for entry_id in $NUMVAR; do
 	[ ! -f "$NB_DATA_DIR/$Move_EntryFile" ] && die "invalid entry id(s): $move_num"
 done
 db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
-nb_msg "moving weblog entry id(s): $move_num, to category id(s): $cat_num ..."
+nb_msg "moving weblog entry id(s): $move_num to category id(s): $cat_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
