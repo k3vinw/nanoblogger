@@ -3,13 +3,14 @@
 # filter custom date format for a new entry
 filter_dateformat(){
 FILTER_VAR="$1"
+DATE_CMD="date $DATE_ARGS"
 # use date's defaults, when no date format is specified
 if [ ! -z "$FILTER_VAR" ]; then
-	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date +"$FILTER_VAR"
-	[ -z "$DATE_LOCALE" ] && date +"$FILTER_VAR"
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD +"$FILTER_VAR"
+	[ -z "$DATE_LOCALE" ] && $DATE_CMD +"$FILTER_VAR"
 else
-	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" date
-	[ -z "$DATE_LOCALE" ] && date
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD 
+	[ -z "$DATE_LOCALE" ] && $DATE_CMD
 fi
 }
 
