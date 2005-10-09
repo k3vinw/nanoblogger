@@ -35,6 +35,8 @@ export BLOG_DIR
 [ ! -z "$USR_AUTHOR" ] && BLOG_AUTHOR="$USR_AUTHOR"
 # default to lynx for browser
 : ${BROWSER:=lynx}
+# default date command
+: ${DATE_CMD:=date $DATE_ARGS}
 # default to vi for editor
 : ${EDITOR:=vi}
 # default to txt for datatype suffix

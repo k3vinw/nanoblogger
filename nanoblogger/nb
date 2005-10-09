@@ -13,10 +13,6 @@ NB_BASE_DIR=`dirname $0`
 # nanoblogger's module directory.
 NB_LIB_DIR="${NB_BASE_DIR}/lib"
 
-# create a semi ISO 8601 formatted timestamp for archives
-# used explicitly, please don't edit unless you know what you're doing.
-NB_TimeStamp(){ date "+%Y-%m-%dT%H_%M_%S"; }
-
 # prompt to use when asking something.
 NB_PROMPT=": "
 

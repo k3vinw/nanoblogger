@@ -1,9 +1,12 @@
 # Module for utility functions
 
+# create a semi ISO 8601 formatted timestamp for archives
+# used explicitly, please don't edit unless you know what you're doing.
+NB_TimeStamp(){ $DATE_CMD "+%Y-%m-%dT%H_%M_%S"; }
+
 # filter custom date format for a new entry
 filter_dateformat(){
 FILTER_VAR="$1"
-DATE_CMD="date $DATE_ARGS"
 # use date's defaults, when no date format is specified
 if [ ! -z "$FILTER_VAR" ]; then
 	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD +"$FILTER_VAR"
