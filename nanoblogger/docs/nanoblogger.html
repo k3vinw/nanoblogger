@@ -244,7 +244,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>plugins for calendar, recent entries, weblog status, fortunes, etc.</li>
 
-      <li>auto-formatting, e.g. line breaks translate to HTML</li>
+      <li>plugins for text formatting, e.g. line breaks translate to HTML</li>
 
       <li>support for relative and absolute links</li>
 
@@ -1361,7 +1361,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">writes metadata to file</td>
 
-          <td align="left">MTAG=$1, META_DATA=$2, META_FILE=$3</td>
+          <td align="left">MTAG=$1, METADATA=$2, META_FILE=$3</td>
 
           <td align="left">$META_FILE</td>
 
@@ -1375,7 +1375,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">MTAG=$1, META_FILE=$2</td>
 
-          <td align="left">$META_DATA</td>
+          <td align="left">$METADATA</td>
 
           <td align="left">faster than read_entry, see plugin recent_entries.sh for a good example</td>
         </tr>
@@ -1485,6 +1485,7 @@ TITLE: A New Entry
 AUTHOR: foo
 DATE: January 30 2004, 12:00 PM
 DESC: keywords or a short, one line summary
+FORMAT: raw
 -----
 BODY:
 This is my new entry ...

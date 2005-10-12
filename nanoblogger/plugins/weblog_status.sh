@@ -29,7 +29,7 @@ TOTAL_CATEGORIES=`echo "$db_categories" |grep -c "."`
 TOTAL_ENTRIES=`echo "$DB_RESULTS" |grep -c "."`
 LAST_ENTRY=`echo "$DB_RESULTS" |sed 1q`
 [ ! -z "$LAST_ENTRY" ] &&
-	read_metadata DATE "$NB_DATA_DIR/$LAST_ENTRY"; NB_EntryDate="$META_DATA"
+	read_metadata DATE "$NB_DATA_DIR/$LAST_ENTRY"; NB_EntryDate="$METADATA"
 LAST_ENTRY_TIME="$NB_EntryDate"
 LAST_UPDATED=`filter_dateformat "$DATE_FORMAT"`
 

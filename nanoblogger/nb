@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-10-07T14:27:12-04:00
+# Last modified: 2005-10-10T23:31:29-04:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -52,61 +52,6 @@ tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 . ${NB_LIB_DIR}/config.sh
 . ${NB_LIB_DIR}/query.sh
 
-# filter content through a template
-load_template(){
-TEMPLATE_FILE="$1"
-if [ -f "$TEMPLATE_FILE" ]; then
-	# prefix lines with an X
-	TEMPLATE=`sed -e '/^/ s//X: /' < "$TEMPLATE_FILE"`
-	# remove X's and source variables into a temp file
-	cat > "$SCRATCH_FILE" <<-EOF
-		sed -e '/^X:[ ]/ s///' <<TMPL
-			$TEMPLATE
-		TMPL
-	EOF
-	TEMPLATE_DATA=`. "$SCRATCH_FILE"`
-else
-	die "template file, '$TEMPLATE_FILE' doesn't exist! goodbye."
-fi
-}
-
-# read file's metadata
-read_metadata(){
-MTAG="$1"
-META_FILE="$2"
-META_DATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
-[ "$MTAG" = BODY ] &&
-META_DATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
-}
-
-# write metadata to file
-write_metadata(){
-MTAG="$1"
-META_DATA="$2"
-META_FILE="$3"
-if [ "$MTAG" = BODY ]; then
-	if [ ! -z "$META_DATA" ]; then
-		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
-			echo "$META_OTHER" > "$META_FILE"
-		fi
-		cat >> "$META_FILE" <<-EOF
-			$MTAG:
-			$META_DATA
-			-----
-		EOF
-	fi
-else
-	if [ ! -z "$MTAG" ] && [ ! -z "$META_DATA" ]; then
-		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
-			echo "$META_OTHER" > "$META_FILE"
-		fi
-		echo "$MTAG: $META_DATA" >> "$META_FILE"
-	fi
-fi
-}
-
 # load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
@@ -145,10 +90,103 @@ for nb_plugin in ${plugin_scripts[@]} ; do
 done
 }
 
-# write entry to file
+# filter content through a template
+load_template(){
+TEMPLATE_FILE="$1"
+if [ -f "$TEMPLATE_FILE" ]; then
+	# prefix lines with an X
+	TEMPLATE=`sed -e '/^/ s//X: /' < "$TEMPLATE_FILE"`
+	# remove X's and source variables into a temp file
+	cat > "$SCRATCH_FILE" <<-EOF
+		sed -e '/^X:[ ]/ s///' <<TMPL
+			$TEMPLATE
+		TMPL
+	EOF
+	TEMPLATE_DATA=`. "$SCRATCH_FILE"`
+else
+	die "template file, '$TEMPLATE_FILE' doesn't exist! goodbye."
+fi
+}
+
+# read file's metadata
+read_metadata(){
+MTAG="$1"
+META_FILE="$2"
+METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
+[ "$MTAG" = BODY ] &&
+METADATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+}
+
+# write metadata to file
+write_metadata(){
+MTAG="$1"
+METADATA="$2"
+META_FILE="$3"
+if [ "$MTAG" = BODY ]; then
+	if [ ! -z "$METADATA" ]; then
+		if [ -f "$META_FILE" ]; then
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+			echo "$META_OTHER" > "$META_FILE"
+		fi
+		cat >> "$META_FILE" <<-EOF
+			$MTAG:
+			$METADATA
+			-----
+		EOF
+	fi
+else
+	if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
+		if [ -f "$META_FILE" ]; then
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
+			echo "$META_OTHER" > "$META_FILE"
+		fi
+		echo "$MTAG: $METADATA" >> "$META_FILE"
+	fi
+fi
+}
+
+# load file's metadata into tangible shell variables
+load_metadata(){
+METADATA_TYPE="$1" # ALL or NOBODY :)
+METADATA_FILE="$2"
+if [ -f "$METADATA_FILE" ]; then
+	read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
+	NB_EntryTitle="$NB_MetaTitle"
+	read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
+	NB_EntryAuthor="$NB_MetaAuthor"
+	read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
+	NB_EntryDate="$NB_MetaDate"
+	read_metadata DESC "$METADATA_FILE"; NB_MetaDescription="$METADATA"
+	NB_EntryDescription="$NB_MetaDescription"
+	read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
+	NB_EntryFormat="$NB_MetaFormat"
+	if [ "$METADATA_TYPE" != NOBODY ]; then
+		read_metadata BODY "$METADATA_FILE"; NB_MetaBody="$METADATA"
+		NB_EntryBody="$NB_MetaBody"
+	fi
+fi
+}
+
+# create file with metadata fields
+make_file(){
+WRITE_META_FILE="$1"
+cat > "$WRITE_META_FILE" <<-EOF
+	TITLE: $NB_MetaTitle
+	AUTHOR: $NB_MetaMetaAuthor
+	DATE: $NB_MetaDate
+	DESC: $NB_MetaDescription
+	FORMAT: $NB_MetaFormat
+	-----
+	BODY:
+	$NB_MetaBody
+	-----
+EOF
+}
+
+# write entry's metadata to file
 write_entry(){
-ENTRY_FILE="$1"
-cat > "$ENTRY_FILE" <<-EOF
+WRITE_ENTRY_FILE="$1"
+cat > "$WRITE_ENTRY_FILE" <<-EOF
 	TITLE: $NB_EntryTitle
 	AUTHOR: $NB_EntryAuthor
 	DATE: $NB_EntryDate
@@ -161,21 +199,6 @@ cat > "$ENTRY_FILE" <<-EOF
 EOF
 }
 
-# load entry metadata into tangible shell variables
-load_metadata(){
-METADATA_TYPE="$1" # ALL or NOBODY :)
-ENTRY_METADATAFILE="$2"
-if [ -f "$ENTRY_METADATAFILE" ]; then
-	read_metadata TITLE "$ENTRY_METADATAFILE"; NB_EntryTitle="$META_DATA"
-	read_metadata AUTHOR "$ENTRY_METADATAFILE"; NB_EntryAuthor="$META_DATA"
-	read_metadata DATE "$ENTRY_METADATAFILE"; NB_EntryDate="$META_DATA"
-	read_metadata DESC "$ENTRY_METADATAFILE"; NB_EntryDescription="$META_DATA"
-	read_metadata FORMAT "$ENTRY_METADATAFILE"; NB_EntryFormat="$META_DATA"
-	[ "$METADATA_TYPE" != NOBODY ] &&
-		read_metadata BODY "$ENTRY_METADATAFILE"; NB_EntryBody="$META_DATA"
-fi
-}
-
 # read an entry
 read_entry(){
 ENTRY_FILE="$1"
@@ -183,50 +206,73 @@ if [ -f "$ENTRY_FILE" ]; then
 	NB_EntryID=`set_entryid $entry`
 	load_metadata NOBODY "$ENTRY_FILE"
 	load_plugins entry
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_body" ]; then
-		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$META_DATA"
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata" ]; then
+		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$METADATA"
 		load_plugins entry/mod
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
-		write_metadata BODY "$NB_EntryBody" "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"
-		update_cache build entry_body "$entry"
+		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata"
+		update_cache build entry_metadata "$entry"
 	else
-		read_metadata BODY "$BLOG_DIR/$CACHE_DIR/$entry.entry_body"; NB_EntryBody="$META_DATA"
+		load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata"
 	fi
 fi
 }
 
-# create page from source and template files
+# create weblog page from text (parts) files
 make_page(){
 MKPAGE_SRCFILE="$1"
-MKPAGE_TMPLFILE="$2"
+MKPAGE_TEMPLATE="$2"
 MKPAGE_OUTFILE="$3"
 [ ! -z "$USR_TITLE" ] && MKPAGE_TITLE="$USR_TITLE"
-[ ! -z "$MKPAGE_TITLE" ] && NB_EntryTitle="$MKPAGE_TITLE"
-if [ ! -z "$USR_SRCFILE" ]; then
-	MKPAGE_SRCFILE="$USR_SRCFILE"; MKPAGE_OUTFILE="$USR_FILE"; MKPAGE_TMPLFILE="$USR_TEMPLATE"
-	[ -z "$USR_TEMPLATE" ] && MKPAGE_TMPLFILE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
+if [ ! -z "$MKPAGE_TITLE" ]; then
+	NB_MetaTitle="$MKPAGE_TITLE"
+	# Set NB_EntryTitle for backwards compatibility
+	NB_EntryTitle="$MKPAGE_TITLE"
 fi
+[ ! -z "$USR_SRCFILE" ] && MKPAGE_SRCFILE="$USR_SRCFILE"
+[ ! -z "$USR_TEMPLATE" ] && MKPAGE_TEMPLATE="$USR_TEMPLATE"
+[ ! -z "$USR_OUTFILE" ] && MKPAGE_OUTFILE="$USR_OUTFILE"
+[ -z "$MKPAGE_TEMPLATE" ] &&
+	MKPAGE_TEMPLATE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
 [ ! -f "$MKPAGE_SRCFILE" ] && die "source file, '$MKPAGE_SRCFILE' doesn't exist! goodbye."
 [ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
-[ ! -f "$MKPAGE_TMPLFILE" ] && die "template file, '$MKPAGE_TMPLFILE' doesn't exist! goodbye."
+[ ! -f "$MKPAGE_TEMPLATE" ] && die "template file, '$MKPAGE_TEMPLATE' doesn't exist! goodbye."
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
-# preserve content of the source, but let plugins modify it
+# load file as content
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
+# let plugins modify the content
 load_plugins page
-[ -z "$NB_PageFormat" ] && NB_PageFormat="$PAGE_FORMAT"
-load_plugins page/format "$NB_PageFormat"
-NB_Entries="$MKPAGE_CONTENT"
-load_template "$MKPAGE_TMPLFILE"
+: ${MKPAGE_FORMAT:=$PAGE_FORMAT}
+load_plugins page/format "$MKPAGE_FORMAT"
+# Set NB_Entries for backwards compatibility
+NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
+load_template "$MKPAGE_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 # load makepage plugins, but with reusable functionality
 for mkpage_plugin in "$PLUGINS_DIR"/makepage/*.sh; do
 	[ -f "$mkpage_plugin" ] && . "$mkpage_plugin"
 done
-MKPAGE_CONTENT=; MKPAGE_TITLE=; NB_PageFormat=; NB_EntryTitle=
+MKPAGE_CONTENT=; MKPAGE_FORMAT=; MKPAGE_TITLE=; NB_MetaTitle=; NB_EntryTitle=
+}
+
+# create weblog page from metadata files
+weblog_page(){
+BLOGPAGE_SRCFILE="$1"
+BLOGPAGE_TEMPLATE="$2"
+BLOGPAGE_OUTFILE="$3"
+[ ! -z "$USR_SRCFILE" ] && BLOGPAGE_SRCFILE="$USR_SRCFILE"
+[ ! -z "$USR_TEMPLATE" ] && BLOGPAGE_TEMPLATE="$USR_TEMPLATE"
+[ ! -z "$USR_OUTFILE" ] && BLOGPAGE_OUTFILE="$USR_OUTFILE"
+if [ -f "$BLOGPAGE_SRCFILE" ]; then
+	load_metadata ALL "$BLOGPAGE_SRCFILE"
+	MKPAGE_CONTENT="$NB_MetaBody"
+	MKPAGE_FORMAT="$NB_MetaFormat"
+	make_page "$BLOGPAGE_SRCFILE" "$BLOGPAGE_TEMPLATE" "$BLOGPAGE_OUTFILE"
+fi
 }
 
 # create individual page for an entry
@@ -243,18 +289,18 @@ fi
 
 # build entry archives
 build_entryarchives(){
-ENTRY_ARCHIVES_LIST="$1"
-entry_template="$2"
-for entry in $ENTRY_ARCHIVES_LIST; do
+ENTRYARCHIVES_LIST="$1"
+ENTRYARCHIVES_TEMPLATE="$2"
+for entry in $ENTRYARCHIVES_LIST; do
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
 		touch "$NB_DATA_DIR/$entry"
 		[ -z "$PARTS_FILE" ] &&
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
-		if [ "$entry_template" = "$PERMALINKENTRY_TEMPLATE" ]; then
+		if [ "$ENTRYARCHIVES_TEMPLATE" = "$PERMALINKENTRY_TEMPLATE" ]; then
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 			read_entry "$NB_DATA_DIR/$entry"
 			set_entrylink "$entry"
-			load_template "$NB_TEMPLATE_DIR/$entry_template"
+			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
 			build_permalink
@@ -262,7 +308,7 @@ for entry in $ENTRY_ARCHIVES_LIST; do
 			set_baseurl "$BASE_URL"
 			read_entry "$NB_DATA_DIR/$entry"
 			set_entrylink "$entry"
-			load_template "$NB_TEMPLATE_DIR/$entry_template"
+			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
 		fi
@@ -481,7 +527,7 @@ if [ "$USR_QUERY" = all ]; then
 	loop_archive "$DB_RESULTS" months build_montharchive
 	# build the entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
-		build_entryarchives "$DB_RESULTS" "$PERMALINKENTRY_TEMPLATE"
+		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE"
 else
 	# update relateive month archives
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sort $SORT_ARGS`
@@ -514,21 +560,42 @@ fi
 db_catquery=`cat_id`; check_catid
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
-update_cache all entry_body
+update_cache all entry_metadata
 load_plugins
 # update previously cached entries
-update_cache rebuild entry_body "$CACHE_LIST"
+update_cache rebuild entry_metadata "$CACHE_LIST"
 # build the archives
 nb_msg "generating $NB_FILETYPE pages ..."
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
-update_cache "$QUERY_MODE" entry_body
+update_cache "$QUERY_MODE" entry_metadata
 nb_msg "generating main index page(s) ..."
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 }
 
+# edit draft file
+nb_draft(){
+EDITDRAFT_FILE="$1"
+[ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
+if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
+	echo "draft file doesn't exist! create? [Y/n]"
+	read -p "$NB_PROMPT" choice
+	case $choice in
+		[Yy]|"")
+			make_file "$EDITDRAFT_FILE";;
+		[Nn])
+		;;
+	esac
+fi
+[ -f "$EDITDRAFT_FILE" ] &&
+	nb_edit "$EDITDRAFT_FILE"
+}
+
 # add a new entry
 add_entry(){
+db_catquery=`cat_id`; check_catid
+[ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
+nb_msg "adding new entry in '$BLOG_DIR'$cat_msg ..."
 New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
 write_entry "$NB_DATA_DIR/$New_EntryFile"
@@ -687,8 +754,8 @@ for entry in $DB_RESULTS; do
 	done
 	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
 	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$META_DATA" |cut -c1-32`..."
-	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$META_DATA"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$METADATA" |cut -c1-32`..."
+	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$METADATA"
 	id=`expr 1 + $id`
 	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
 	oldcat_title=; cat_title=; NB_Category=
@@ -819,8 +886,14 @@ if [ ! -z "$cat_num" ]; then
 		db_catquery=`cat_id`; check_catid
 	fi
 fi
-[ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
-nb_msg "creating new entry in '$BLOG_DIR'$cat_msg ..."
+# add new entry from metadata file
+if [ ! -z "$USR_ADDFILE" ]; then
+	if [ -f "$USR_ADDFILE" ]; then
+		load_metadata ALL "$USR_ADDFILE"
+	else
+		nb_msg "'$USR_ADDFILE' doesn't exist!"
+	fi
+fi
 # read user specified attributes for entry
 [ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
 [ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
@@ -833,7 +906,8 @@ if [ -z "$NB_EntryTitle" ]; then
 	echo "enter a title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
-if [ -z "$USR_TEXT" ]; then
+[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
+if [ -z "$NB_EntryBody" ]; then
 	echo "editing new entry ..."
 	# new entry temp file for editing
 	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`NB_TimeStamp`.$NB_DATATYPE"
@@ -843,8 +917,6 @@ if [ -z "$USR_TEXT" ]; then
 	if [ -f "$NB_EditFile" ]; then
 		load_metadata ALL "$NB_EditFile"
 	fi
-else
-	NB_EntryBody="$USR_TEXT"
 fi
 [ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 # prompt for description
@@ -869,42 +941,49 @@ add_entry
 show_help(){
 cat <<-EOF
 	NanoBlogger - Console weblog engine.
-	Version $VERSION, by Kevin Wood <un1xt3r@fastmail.fm>
+	Version $VERSION, by Kevin Wood <n1xt3r@fastmail.fm>
 
 	Usage:
 	 `basename $0` [-b blog_dir] [options]
 
 	Options:
-	 -a, --add				create new entry, category, or weblog
-	 					(directory).
+	 -a, --add				create new entry, category, or
+	 					weblog (directory).
 	 -b, --blogdir <directory>		specify weblog directory.
-	 -B, --body <text>			deprecated please use -T or --text instead.
-	 -c, --category	<ID,cat>		specify category (for '--add', '--delete',
-	 					'--edit', '--list' and '--update').
+	 -B, --body <text>			deprecated please use -T or --text
+	 					instead.
+	 -c, --category	<ID,cat>		specify category (for '--add',
+	 					'--delete', '--edit', '--list' and
+	 					'--update').
 	 --configure				configure weblog (for '--update').
 	 --datadir <directory>			specify weblog's data directory.
 	 -d, --delete <ID,cat>			delete an entry or category.
-	 -D, --desc <text>			set description of entry (for '--add').
+	 -D, --desc <text>			set description of entry (for
+	 					'--add').
 	 -e, --edit <ID,cat>			edit an entry or category.
-	 -f, --blogconf <file>			specify an alternate configuration file.
+	 -E, --draft <file> 			edit or create metadata file.
+	 -f, --blogconf <file>			specify an alternate configuration
+	 					file.
+	 -F, --file <file> 			specify metadata file to import as
+	 					entry (for '--add').
 	 -h, --help				show this help message.
 	 -l, --list <all,cat,current,DATE,max>	list entries or categories
 	 					(defaults to max).
-	 --makepage <source> <output>		specify source and output file to create
-	 					web page.
+	 -M, --makepage <file1> <file2> 	create new weblog page (file2) from
+	 					metadata file (file1).
 	 --manual				view the manual.
-	 -m, --move <ID>			move an entry to a specified category (for
-	 					'--category').
+	 -m, --move <ID>			move an entry to a specified
+	 					category (for '--category').
 	 -n, --author <text>			set author of entry (for '--add').
 	 -p, --preview				run command to preview weblog.
 	 -P, --publish				run command to publish weblog.
-	 --template <file>			specify file to load as template (for
-	 					'--makepage').
+	 --template <file>			specify file to load as template
+	 					(for '--addpage').
 	 --templatedir <directory>		specify weblog's template directory.
-	 -t, --title <text>			set title of entry/category/page
-	 					(for '--add', '--category', and
-	 					'--makepage').
-	 -T, --text <text> 			set body (text) of entry (for '--add').
+	 -t, --title <text>			set title of entry or category (for
+	 					'--add', '--category').
+	 -T, --text <text> 			set body (text) of entry (for
+	 					'--add').
 	 -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
 	 					current).
 	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
@@ -912,8 +991,8 @@ cat <<-EOF
 
 	 -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
 	 
-	 --list and --update accepts regular expressions to match entries by date.
-	 date = YYYY-MM-DD, YYYY-MM, ^YYYY
+	 --list and --update can match entries by date (does _not_ sort entry id's).
+	 date = YYYY-MM-DD, YYYY-MM, YYYY
 
 	Examples:
 	
@@ -923,14 +1002,12 @@ cat <<-EOF
 	 create new category and title it "News"
 	 	nb -b ~/public_html/weblog -t "News" -c new -a
 
-	 add new entry to category 1
-	 	nb -b ~/public_html/weblog -c 1 -a
+	 create new entry setting author, title, and body
+	 	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -B 'MyMessage!' -a
 
-	 remove entry 2 from category 1
-	 	nb -b ~/public_html/weblog -c 1 -d 2
-
-	 set author, title, and body for new entry
-	 	nb -b ~/public_html/weblog -n myname -t 'My Title' -B 'My message!' -a
+	 create draft file then add as new entry
+	 	nb -E ~/drafts/draft.txt
+	 	nb -b ~/public_html/weblog -F ~/drafts/draft.txt -a
 
 	More info:
 	 URL: http://nanoblogger.sourceforge.net
@@ -956,7 +1033,7 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-a|--add)		add_weblog;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
-		# -B,--body deprecated in favor of -T,--text
+		# -B, --body options deprecated
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--configure)		check_config; config_weblog;;
@@ -966,18 +1043,20 @@ while [ $# -gt 0 ]; do
 		-D|--desc)		desc_var=1; USR_DESC="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_config; edit_weblog;;
+		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
+					check_config; nb_draft;;
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
+		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
-		--makepage)		check_arg; USR_SRCFILE="$2"; USR_FILE="$3"; shift 2
-					check_config; make_page;;
+		-M|--makepage)		check_arg; USR_SRCFILE="$2"; USR_OUTFILE="$3"; shift 2
+					check_config; weblog_page;;
 		--manual)		check_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_config; move_entry;;
 		-p|--preview)		check_config; preview_weblog;;
-		-p|--preview)		preview_weblog;;
 		-P|--publish)		check_config; publish_weblog;;
 		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
 		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;

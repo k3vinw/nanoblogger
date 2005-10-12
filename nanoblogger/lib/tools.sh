@@ -26,6 +26,7 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
+# wrapper to editor command
 nb_edit(){
 # TODO: test with external editor (outside of script's process)
 EDIT_FILE="$1"
@@ -77,8 +78,9 @@ if [ "$ABSOLUTE_LINKS" = 1 ]; then
 else
 	BASE_URL="$node_var"
 	if [ "$base_dir" != . ]; then
-		blogdir_sedvar=`echo "$BLOG_DIR" |sed -e 's/\//\\\\\//g'`
-		BASE_URL=`echo "$base_dir" |sed -e 's/'$blogdir_sedvar'//g; s/[^ \/]*./..\//g; s/^[\.][\.]\///g'`
+		blogdir_sedvar=`echo "$BLOG_DIR" |sed -e 's/\//\\\\\//g; /$/ s//\\\\\//'`
+		base_dir="$base_dir/./"
+		BASE_URL=`echo "$base_dir" |sed -e 's/'$blogdir_sedvar'//g; /^[\.]\// s///; s/[^ \/]*./..\//g; s/^[\.][\.]\///g'`
 	fi
 	[ -z "$BASE_URL" ] && BASE_URL="./"
 fi
@@ -177,8 +179,8 @@ else
 fi
 if [ ! -z "$category_list" ]; then
 	CAT_LIST="${category_list[@]}"
-else
-	CAT_LIST="$db_catquery"
+elif [ -z "$CAT_LIST" ]; then
+	CAT_LIST=`cat_id`
 fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
