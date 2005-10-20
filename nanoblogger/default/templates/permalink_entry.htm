@@ -1,14 +1,14 @@
 <h2 class="date">
-$NB_EntryDate
+	$NB_EntryDate
 </h2>
 <div class="blogbody">
-<a id="$NB_EntryID"></a>
-<h3 class="title">$NB_EntryTitle</h3>
-$NB_EntryBody
+	<a id="$NB_EntryID"></a>
+	<h3 class="title">$NB_EntryTitle</h3>
+	$NB_EntryBody
 </div>
 
 <div class="posted">
-<br />Posted by $NB_EntryAuthor
+	<br />Posted by $NB_EntryAuthor
 $(if [ ! -z "$NB_EntryCategories" ]; then echo "| Categories: $NB_EntryCategories" |sed -e '{$ s/\,$//; }'; fi)
-<!-- <br /><a href="${BASE_URL}$BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_file#comments">Comments</a> -->
+<!-- <br /><a href="${BASE_URL}BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_file#comments">Comments</a> -->
 </div>

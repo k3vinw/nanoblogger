@@ -20,24 +20,23 @@ $NB_RSSAltLink
 <body>
 
 <div id="banner">
-<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-<span class="description">$BLOG_DESCRIPTION</span>
+	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+	<span class="description">$BLOG_DESCRIPTION</span>
 </div>
 
 <div id="container">
-
-<div class="blog">
-
-<div id="menu">
-	<a href="${BASE_URL}$NB_INDEX">Main</a>
-</div>
-
-</div>
-
-<div class="blog">
-$NB_MetaBody
-</div>
-
+	<a id="top"></a>
+	<div class="blog">
+		<div id="menu">
+			<a href="${BASE_URL}$NB_INDEX">Main</a>
+		</div>
+		$NB_MetaBody
+		<!--
+		<div id="menu">
+			<a href="#top">Return to Top</a>
+		</div>
+		-->
+	</div>
 </div>
 
 </body>

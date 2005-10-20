@@ -15,27 +15,25 @@
 <body>
 
 <div id="banner">
-<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-<span class="description">$BLOG_DESCRIPTION</span>
+	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+	<span class="description">$BLOG_DESCRIPTION</span>
 </div>
-
 <div id="container">
-
-<div class="blog">
-
-<div id="menu">
-	<a href="${BASE_URL}$NB_INDEX">Main</a>
-</div>
-
-</div>
-
-<div class="blog">
-	<div class="blogbody">
-	<h3 class="title">$NB_MetaTitle</h3>
-		$NB_MetaBody
+	<a id="top"></a>
+	<div class="blog">
+		<div id="menu">
+			<a href="${BASE_URL}$NB_INDEX">Main</a>
+		</div>
+		<h2 class="pagetitle">$NB_MetaTitle</h2>
+		<div class="blogbody">
+			$NB_MetaBody
+		</div>
+		<!--
+		<div id="menu">
+			<a href="#top">Return to Top</a>
+		</div>
+		-->
 	</div>
-</div>
-
 </div>
 
 </body>

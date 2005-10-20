@@ -123,7 +123,8 @@ NB_ArchiveMonthLink="$month_dir/$NB_INDEX"
 
 # generate entry's anchor/id
 set_entryid(){ entryid_var="$1"
-echo "$x_id$entryid_var" |sed -e '/[\/]/ s//-/g'; }
+echo "$x_id$entryid_var" |sed -e '/[\/]/ s//-/g'
+}
 
 # set link/file for given entry
 set_entrylink(){

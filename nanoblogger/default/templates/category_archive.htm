@@ -15,25 +15,23 @@ $NB_RSSAltLink
 <body>
 
 <div id="banner">
-<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-<span class="description">$BLOG_DESCRIPTION</span>
+	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+	<span class="description">$BLOG_DESCRIPTION</span>
 </div>
 
 <div id="container">
-
-<div class="blog">
-
-<div id="menu">
-	<a href="${BASE_URL}$NB_INDEX">Main</a><br />
-	$NB_PageLinks
-</div>
-
-</div>
-
-<div class="blog">
-$NB_MetaBody
-</div>
-
+	<a id="top"></a>
+	<div class="blog">
+		<div id="menu">
+			<a href="${BASE_URL}$NB_INDEX">Main</a><br />
+		</div>
+		<h2 class="pagetitle">$NB_ArchiveTitle Archives</h2>
+		$NB_MetaBody
+		<div id="menu">
+			<a href="#top">Return to Top</a><br />
+			$NB_PageLinks
+		</div>
+	</div>
 </div>
 
 </body>

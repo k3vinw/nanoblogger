@@ -310,3 +310,11 @@
 		text-decoration: underline;
 		color:#333;
 		}
+
+	.pagetitle {
+                font-family: verdana, arial, sans-serif;
+		color: #ee9d00;
+                text-align: center;
+                font-size:medium;
+                margin-bottom: 15px;
+                }

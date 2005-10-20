@@ -7,7 +7,7 @@ NB_AtomFile="atom.$NB_SYND_FILETYPE"
 # atom feed version
 NB_AtomVer="0.3"
 
-NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
+NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
 # set link to the archives
 NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
@@ -60,9 +60,9 @@ build_atomfeed(){
 	        read_entry "$NB_DATA_DIR/$entry"
 		set_entrylink "$entry"
 		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
-		Atom_EntryDate=`echo "$Atom_EntryTime$BLOG_TZD"`
+		Atom_EntryDate=`echo "$Atom_EntryTime${BLOG_TZD}"`
 		# non-portable find command!
-		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
+		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_TZD}"`
 		Atom_EntryModDate="$Atom_EntryDate"
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`

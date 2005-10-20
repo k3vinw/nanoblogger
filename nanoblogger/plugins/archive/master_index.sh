@@ -13,8 +13,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	NB_ArchiveEntryLinks=$(
 	for entry in $ENTRY_LIST; do
 		read_metadata TITLE "$NB_DATA_DIR/$entry"
-		NB_EntryTitle="$METADATA"
-		[ -z "$NB_EntryTitle" ] && NB_EntryTitle=Untitled
+		NB_ArchiveEntryTitle="$METADATA"
+		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
@@ -22,7 +22,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
 			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
-			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a> - <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_EntryTitle</a>
+			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a>
+			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
 	done; month=)
@@ -36,7 +37,8 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 			NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
 			cat <<-EOF
-				<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
+				<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a>
+				($cat_total) <br />
 			EOF
 		fi
 	done

@@ -29,12 +29,12 @@ if [ "$LIST_MODE" = "old" ]; then
 	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET"
 fi
 for entry in $DB_RESULTS ; do
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"
+	link_title="$METADATA"
 	NB_EntryID=`set_entryid $entry`
-	title_link="$NB_EntryTitle"
-	[ -z "$title_link" ] && title_link="Untitled"
+	[ -z "$link_title" ] && link_title="Untitled"
 	set_entrylink "$entry"
-	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$title_link'</a><br />'
+	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$link_title'</a><br />'
 done
 }
 

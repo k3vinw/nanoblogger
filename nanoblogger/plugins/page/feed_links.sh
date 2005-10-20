@@ -20,7 +20,7 @@ fdlinksprev_cat_arch="$cat_arch"
 
 # RSS 2.0
 if [ ! -z "$NB_RSS2Ver" ]; then
-	if [ "$MKPAGE_TMPLFILE" = "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ]; then
+	if [ "$MKPAGE_TEMPLATE" = "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ]; then
 		NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`
 		NB_RSS2Link="${ARCHIVES_PATH}$NB_RSS2CatFile"
 		NB_RSS2Title="RSS $NB_RSS2Ver: $NB_ArchiveTitle"
@@ -40,7 +40,7 @@ fi
 
 # RSS 1.0
 if [ ! -z "$NB_RSSVer" ]; then
-	if [ "$MKPAGE_TMPLFILE" = "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ]; then
+	if [ "$MKPAGE_TEMPLATE" = "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ]; then
 		NB_RSSCatFile=`chg_suffix "$category_file" $NB_SYND_FILETYPE`
 		NB_RSSLink="${ARCHIVES_PATH}$NB_RSSCatFile"
 		NB_RSSTitle="RSS $NB_RSSVer: $NB_ArchiveTitle"

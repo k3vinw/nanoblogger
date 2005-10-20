@@ -8,7 +8,7 @@ NB_RSS2File="rss.$NB_SYND_FILETYPE"
 # rss version
 NB_RSS2Ver="2.0"
 
-NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S$BLOG_TZD"`
+NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
 # set link to archives
 NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
@@ -66,8 +66,8 @@ build_rssfeed(){
 		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 	        read_entry "$NB_DATA_DIR/$entry"
 		set_entrylink "$entry"
-		# non-portable find command!
-		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS$BLOG_TZD"`
+		# non-portable find command! sets RFC822 date for pubDate
+		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%Ta, %Td %Tb %TY %TH:%TM:%TS %Tz\n"`
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
@@ -90,7 +90,7 @@ build_rssfeed(){
 			<item>
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
-				<dc:date>$NB_RSS2EntryTime$BLOG_TZD</dc:date>
+				<dc:date>$NB_RSS2EntryTime${BLOG_TZD}</dc:date>
 				<dc:creator>$NB_RSS2EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
 				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
