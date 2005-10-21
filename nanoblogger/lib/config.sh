@@ -59,9 +59,11 @@ export BLOG_DIR
 : ${MAX_ENTRIES:=10}; : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
 # defaults for index file name
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
-# default for previous and next page symbols, using html entities
-: ${NB_NextPage:=[&#62;&#62;]}
-: ${NB_PrevPage:=[&#60;&#60;]}
+# default for page navigation symbols (HTML entities)
+: ${NB_NextPage:=&#91;&#62;&#62;&#93;} # [>>]
+: ${NB_PrevPage:=&#91;&#60;&#60;&#93;} # [<<]
+: ${NB_TopPage:=&#91;&#47;&#92;&#93;} # [/\]
+: ${NB_EndPage:=&#91;&#92;&#47;&#93;} # [\/]
 # default sort arguments (-u is required)
 : ${SORT_ARGS:=-ru}
 }

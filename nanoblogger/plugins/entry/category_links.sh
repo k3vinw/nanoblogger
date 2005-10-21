@@ -11,6 +11,7 @@ for entry_catlinks in $db_categories; do
 		cat_title=`sed 1q "$NB_DATA_DIR"/"$entry_catlinks"`
 		set_catlink "$entry_catlinks"
 		cat_index="$category_link"
+		# following must fit on single line
 		$CATLINKS_FILTERCMD  >> "$SCRATCH_FILE".category_links <<-EOF
 			<!-- $cat_title --><a href="${ARCHIVES_PATH}$cat_index">$cat_title</a>,
 		EOF

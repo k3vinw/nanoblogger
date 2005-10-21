@@ -9,9 +9,9 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	# make NB_ArchiveEntryLinks placeholder
 	query_db all
 	set_baseurl "../"
-	ENTRY_LIST="$DB_RESULTS"
+	ARCHENTRY_LIST="$DB_RESULTS"
 	NB_ArchiveEntryLinks=$(
-	for entry in $ENTRY_LIST; do
+	for entry in $ARCHENTRY_LIST; do
 		read_metadata TITLE "$NB_DATA_DIR/$entry"
 		NB_ArchiveEntryTitle="$METADATA"
 		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
@@ -35,10 +35,10 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 			set_catlink "$cat_link"
 			cat_index="$category_link"
 			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
-			NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
+			NB_ArchiveCategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
+			# following needs to fit on single line
 			cat <<-EOF
-				<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a>
-				($cat_total) <br />
+<!-- $NB_ArchiveCategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_ArchiveCategoryTitle</a> ($cat_total) <br />
 			EOF
 		fi
 	done
@@ -55,14 +55,15 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	if [ "$CAL_VAR" = "1" ]; then
 		[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
 		[ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS $monthn $yearn`
-		Month_Title=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
+		NB_ArchiveMonthTitle=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
 	else
-		Month_Title="$month"
+		NB_ArchiveMonthTitle="$month"
 	fi
 	month_total=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 	set_monthlink "$month"
+	# following needs to fit on single line
 	cat <<-EOF
-		<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$Month_Title</a> ($month_total)<br />
+		<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$NB_ArchiveMonthTitle</a> ($month_total)<br />
 	EOF
 	}
 
@@ -78,7 +79,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 			<a id="category"></a>
 			<b>Browse by category</b>
 			<div>
-			$NB_ArchiveCategoryLinks
+				$NB_ArchiveCategoryLinks
 			</div>
 			<br />
 		EOF)
@@ -90,13 +91,13 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		<a id="date"></a>
 		<b>Browse by date</b>
 		<div>
-		$NB_ArchiveMonthLinks
+			$NB_ArchiveMonthLinks
 		</div>
 		<br />
 		<a id="entry"></a>
 		<b>Browse by entry</b>
 		<div>
-		$NB_ArchiveEntryLinks
+			$NB_ArchiveEntryLinks
 		</div>
 	EOF
 
