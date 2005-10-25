@@ -114,7 +114,7 @@ MTAG="$1"
 META_FILE="$2"
 METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
 [ "$MTAG" = BODY ] &&
-METADATA=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$METADATA_CLOSETAG'/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 }
 
 # write metadata to file
@@ -125,13 +125,13 @@ META_FILE="$3"
 if [ "$MTAG" = BODY ]; then
 	if [ ! -z "$METADATA" ]; then
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^[\-][\-][\-][\-][\-]/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$METADATA_CLOSETAG'/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 			echo "$META_OTHER" > "$META_FILE"
 		fi
 		cat >> "$META_FILE" <<-EOF
 			$MTAG:
 			$METADATA
-			-----
+			$METADATA_CLOSETAG
 		EOF
 	fi
 else
@@ -176,10 +176,10 @@ cat > "$WRITE_META_FILE" <<-EOF
 	DATE: $NB_MetaDate
 	DESC: $NB_MetaDescription
 	FORMAT: $NB_MetaFormat
-	-----
+	$METADATA_MARKER
 	BODY:
 	$NB_MetaBody
-	-----
+	$METADATA_CLOSETAG
 EOF
 }
 
@@ -192,10 +192,10 @@ cat > "$WRITE_ENTRY_FILE" <<-EOF
 	DATE: $NB_EntryDate
 	DESC: $NB_EntryDescription
 	FORMAT: $NB_EntryFormat
-	-----
+	$METADATA_MARKER
 	BODY:
 	$NB_EntryBody
-	-----
+	$METADATA_CLOSETAG
 EOF
 }
 
