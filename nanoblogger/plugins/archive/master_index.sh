@@ -5,7 +5,7 @@ MOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$USR_TITLE"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
-	nb_msg "generating archive index page ..."
+	nb_msg "$plugins_action archive index page ..."
 	# make NB_ArchiveEntryLinks placeholder
 	query_db all
 	set_baseurl "../"

@@ -14,7 +14,7 @@ OUTPUT_FILE="$BLOG_DIR/$PARTS_DIR/weblog_status.$NB_FILETYPE"
 TEMPLATE_COPY="$NB_BASE_DIR/default/templates/weblog_status.htm"
 WEBLOG_STATUSTEMPLATE="$NB_TEMPLATE_DIR/weblog_status.htm"
 
-nb_msg "generating weblog status ..."
+nb_msg "$plugins_action weblog status ..."
 if [ ! -f "$WEBLOG_STATUSTEMPLATE" ] ; then
 	# WEBLOG_STATUSTEMPLATE doesn't exist, get it from default
 	cp "$TEMPLATE_COPY" "$WEBLOG_STATUSTEMPLATE" ||
@@ -22,7 +22,7 @@ if [ ! -f "$WEBLOG_STATUSTEMPLATE" ] ; then
 fi
 
 [ -r "$WEBLOG_STATUSTEMPLATE" ] ||
-    die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' doens't exist! goodbye."
+    die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' - template doens't exist! goodbye."
 
 query_db all
 TOTAL_CATEGORIES=`echo "$db_categories" |grep -c "."`

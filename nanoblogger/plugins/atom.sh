@@ -106,7 +106,7 @@ build_atomfeed(){
 	}
 
 
-nb_msg "generating atom $NB_AtomVer feed ..."
+nb_msg "$plugins_action $NB_AtomVer feed ..."
 build_atomfeed nocat
 make_atomfeed
 

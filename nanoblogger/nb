@@ -2,13 +2,16 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-10-10T23:31:29-04:00
+# Last modified: 2005-11-01T01:40:59-05:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
+
+# nanoblogger's language definitions directory.
+NB_LANG_DIR="${NB_BASE_DIR}/lang"
 
 # nanoblogger's module directory.
 NB_LIB_DIR="${NB_BASE_DIR}/lib"
@@ -51,6 +54,21 @@ tmp_files="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 . ${NB_LIB_DIR}/tools.sh
 . ${NB_LIB_DIR}/config.sh
 . ${NB_LIB_DIR}/query.sh
+
+# insure a sane configuration or die
+check_config(){
+load_config
+# die without the base directory
+[ ! -d "$NB_BASE_DIR" ] &&
+	die "`basename $0`: '$NB_BASE_DIR' - $checkconf_nobase."
+[ -z "$BLOG_DIR" ] && die "$checkconf_noblog"
+[ ! -z "$USR_BLOGCONF" ] &&
+	[ ! -f "$USR_BLOGCONF" ] && die "'$USR_BLOGCONF' - $checkconf_nousrconf"
+[ ! -d "$BLOG_DIR" ] && die "'$BLOG_DIR' - $checkconf_noblogdir"
+[ ! -d "$NB_DATA_DIR" ] && die "'$NB_DATA_DIR' - $checkconf_nodata"
+[ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "'$CACHE_DIR' - $checkconf_nocache"
+[ ! -d "$NB_TEMPLATE_DIR" ] && die "'$NB_TEMPLATE_DIR' - $checkconf_notemplates"
+}
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
@@ -104,7 +122,7 @@ if [ -f "$TEMPLATE_FILE" ]; then
 	EOF
 	TEMPLATE_DATA=`. "$SCRATCH_FILE"`
 else
-	die "template file, '$TEMPLATE_FILE' doesn't exist! goodbye."
+	die "'$TEMPLATE_FILE' - $loadtemplate_nofile"
 fi
 }
 
@@ -112,9 +130,13 @@ fi
 read_metadata(){
 MTAG="$1"
 META_FILE="$2"
-METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
-[ "$MTAG" = BODY ] &&
-METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$METADATA_CLOSETAG'/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+MTAG_CLOSE=`echo "$MTAG" |sed -e '/[^ ].*[\,]/ s///'`
+if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
+	MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
+	METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+else
+	METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
+fi
 }
 
 # write metadata to file
@@ -122,26 +144,35 @@ write_metadata(){
 MTAG="$1"
 METADATA="$2"
 META_FILE="$3"
-if [ "$MTAG" = BODY ]; then
-	if [ ! -z "$METADATA" ]; then
+MTAG_CLOSE=`echo "$MTAG" |sed -e '/[^ ].*[\,]/ s///'`
+if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
+	if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
+		MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$METADATA_CLOSETAG'/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
 			echo "$META_OTHER" > "$META_FILE"
 		fi
 		cat >> "$META_FILE" <<-EOF
 			$MTAG:
 			$METADATA
-			$METADATA_CLOSETAG
+			$MTAG_CLOSE
 		EOF
-	fi
-else
-	if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
+	else
 		if [ -f "$META_FILE" ]; then
 			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
 			echo "$META_OTHER" > "$META_FILE"
 		fi
 		echo "$MTAG: $METADATA" >> "$META_FILE"
 	fi
+fi
+}
+
+# create/modify user metadata fields
+write_tag(){
+METATAG_FILE="$1"
+if [ ! -z "$USR_METATAG" ]; then
+	write_metadata "$USR_METATAG" "$USR_MTAGTEXT" \
+		"$METATAG_FILE"
 fi
 }
 
@@ -160,8 +191,8 @@ if [ -f "$METADATA_FILE" ]; then
 	NB_EntryDescription="$NB_MetaDescription"
 	read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
 	NB_EntryFormat="$NB_MetaFormat"
-	if [ "$METADATA_TYPE" != NOBODY ]; then
-		read_metadata BODY "$METADATA_FILE"; NB_MetaBody="$METADATA"
+	if [ "$METADATA_TYPE" = ALL ]; then
+		read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
 		NB_EntryBody="$NB_MetaBody"
 	fi
 fi
@@ -172,7 +203,7 @@ make_file(){
 WRITE_META_FILE="$1"
 cat > "$WRITE_META_FILE" <<-EOF
 	TITLE: $NB_MetaTitle
-	AUTHOR: $NB_MetaMetaAuthor
+	AUTHOR: $NB_MetaAuthor
 	DATE: $NB_MetaDate
 	DESC: $NB_MetaDescription
 	FORMAT: $NB_MetaFormat
@@ -197,6 +228,7 @@ cat > "$WRITE_ENTRY_FILE" <<-EOF
 	$NB_EntryBody
 	$METADATA_CLOSETAG
 EOF
+write_tag "$WRITE_ENTRY_FILE"
 }
 
 # read an entry
@@ -207,7 +239,8 @@ if [ -f "$ENTRY_FILE" ]; then
 	load_metadata NOBODY "$ENTRY_FILE"
 	load_plugins entry
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata" ]; then
-		read_metadata BODY "$ENTRY_FILE"; NB_EntryBody="$METADATA"
+		read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
+		NB_EntryBody="$METADATA"
 		load_plugins entry/mod
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
@@ -235,9 +268,9 @@ fi
 [ ! -z "$USR_OUTFILE" ] && MKPAGE_OUTFILE="$USR_OUTFILE"
 [ -z "$MKPAGE_TEMPLATE" ] &&
 	MKPAGE_TEMPLATE="$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE"
-[ ! -f "$MKPAGE_SRCFILE" ] && die "source file, '$MKPAGE_SRCFILE' doesn't exist! goodbye."
-[ -z "$MKPAGE_OUTFILE" ] && die "output file not specified."
-[ ! -f "$MKPAGE_TEMPLATE" ] && die "template file, '$MKPAGE_TEMPLATE' doesn't exist! goodbye."
+[ ! -f "$MKPAGE_SRCFILE" ] && die "'$MKPAGE_SRCFILE' - $makepage_nosource"
+[ -z "$MKPAGE_OUTFILE" ] && die "'$MKPAGE_OUTFILE' - $makepage_nooutput"
+[ ! -f "$MKPAGE_TEMPLATE" ] && die "'$MKPAGE_TEMPLATE' - $makepage_notemplate"
 # make sure the output directory is present before writing to it
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 set_baseurl "" "$MKPAGE_OUTFILE"
@@ -269,6 +302,10 @@ BLOGPAGE_OUTFILE="$3"
 [ ! -z "$USR_OUTFILE" ] && BLOGPAGE_OUTFILE="$USR_OUTFILE"
 if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
+	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
+	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
 	MKPAGE_CONTENT="$NB_MetaBody"
 	MKPAGE_FORMAT="$NB_MetaFormat"
 	make_page "$BLOGPAGE_SRCFILE" "$BLOGPAGE_TEMPLATE" "$BLOGPAGE_OUTFILE"
@@ -374,7 +411,7 @@ fi
 query_db "$page_query" "$page_catquery"
 total_items=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
 if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
-	nb_msg "paginating ${page_filedir}$page_file ..."
+	nb_msg "$paginate_action ${page_filedir}$page_file ..."
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`
@@ -518,7 +555,7 @@ CACHE_LIST=`echo "$CACHEUPDATE_LIST" |sort -u`
 # generate the archives
 build_archives(){
 load_plugins archive
-nb_msg "generating archives ..."
+nb_msg "$buildarchives_action"
 # build/update the category archives
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
@@ -546,7 +583,7 @@ if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 	rm -f "$BLOG_DIR/.nb_newblogdir"
 fi
 if [ "$USR_QUERY" = all ]; then
-	nb_msg "updating all files! this may take a while ..."
+	nb_msg "$buildweblog_all"
 	# remove all generated files for a clean build
 	rm -fr "$BLOG_DIR"/{"$ARCHIVES_DIR","$CACHE_DIR","$PARTS_DIR"}/*
 fi
@@ -565,11 +602,11 @@ load_plugins
 # update previously cached entries
 update_cache rebuild entry_metadata "$CACHE_LIST"
 # build the archives
-nb_msg "generating $NB_FILETYPE pages ..."
+nb_msg "$buildweblog_files"
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
 update_cache "$QUERY_MODE" entry_metadata
-nb_msg "generating main index page(s) ..."
+nb_msg "$buildweblog_main"
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 }
 
@@ -578,7 +615,7 @@ nb_draft(){
 EDITDRAFT_FILE="$1"
 [ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
 if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
-	echo "draft file doesn't exist! create? [Y/n]"
+	nb_msg "$draft_asknew [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
@@ -587,17 +624,25 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 		;;
 	esac
 fi
-[ -f "$EDITDRAFT_FILE" ] &&
+if [ -f "$EDITDRAFT_FILE" ]; then
+	load_metadata ALL "$EDITDRAFT_FILE"
+	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
+	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+	make_file "$EDITDRAFT_FILE"
+	write_tag "$EDITDRAFT_FILE"
 	nb_edit "$EDITDRAFT_FILE"
+fi
 }
 
 # add a new entry
 add_entry(){
 db_catquery=`cat_id`; check_catid
-[ ! -z "$db_catquery" ] && cat_msg=", using category id(s): $cat_num"
-nb_msg "adding new entry in '$BLOG_DIR'$cat_msg ..."
-New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
+[ ! -z "$cat_num" ] && nb_msg "$addentry_catinfo $cat_num ..."
+nb_msg "$addentry_action"
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
+New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
@@ -613,26 +658,28 @@ build_weblog
 edit_weblog(){
 if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	cat_var=`echo "$cat_num" |sed -e '/,/d'`
-	[ -z "$cat_var" ] && die "must specify one category at a time when editing a title!"
+	[ -z "$cat_var" ] && die "$editweblog_onecat"
 	db_catquery=`cat_id`; check_catid
 	query_db "$db_query" "$db_catquery"
 	if [ ! -z "$USR_TITLE" ]; then
-		nb_msg "changing title to '$USR_TITLE' for category id: $cat_num ..."
+		nb_msg "$editweblog_title"
+		nb_msg "$header_Title - [$header_Category]" 
+		nb_msg "$USR_TITLE - [$cat_num]"
 		echo "$USR_TITLE" > "$NB_DATA_DIR/$db_catquery"
 		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$NB_DATA_DIR/$db_catquery"
 		UPDATE_LIST="$DB_RESULTS"
 		build_weblog; exit 0
 	else
-		die "no changes were made! goodbye."
+		die "$editweblog_nomod"
 	fi
 fi
 NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-[ -z "$NUMVAR" ] && die "must specify a valid entry id."
+[ -z "$NUMVAR" ] && die "$novalid_entryid"
 db_catquery=`cat_id`; check_catid
 query_db "$db_query" "$db_catquery"; ENTRY_LIST="$DB_RESULTS"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "invalid entry id(s): $edit_num"
+	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "$invalid_entryid $edit_num"
 done
 > "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
@@ -643,10 +690,10 @@ for entry_id in $NUMVAR; do
 done
 UPDATE_LIST=$(< "$SCRATCH_FILE")
 if [ ! -z "$UPDATE_LIST" ]; then
-	nb_msg "processing modified weblog entries ..."
+	nb_msg "$editweblog_action"
 	build_weblog
 else
-	die "no changes were made! goodbye."
+	die "$editweblog_noaction"
 fi
 }
 
@@ -655,10 +702,9 @@ delete_weblog(){
 db_catquery=`cat_id`; check_catid
 if [ ! -z "$cat_num" ]; then
 	cat_list="$db_catquery"
-	cat_msg=", from category id(s): $cat_num"
 fi
 if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
-	nb_msg "deleting category id(s): $cat_num ..."
+	nb_msg "$deleteweblog_delcat $cat_num ..."
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
 		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
@@ -666,18 +712,19 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	cat_num=; [ ! -z "$UPDATE_LIST" ] && build_weblog; exit 0
 fi
 NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-[ -z "$NUMVAR" ] && die "must specify a valid entry id!"
+[ -z "$NUMVAR" ] && die "$novalid_entryid"
 if [ ! -z "$cat_list" ]; then
 	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 	[ -z "$CATNUMVAR" ] &&
-		die "must specify a single category when deleting entries from a category!"
+		die "$deleteweblog_onecat"
 fi
 query_db "$db_query" "$cat_list"; ENTRY_LIST="$DB_RESULTS"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
-	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "invalid entry id(s): $delete_num"
+	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_num"
 done
-nb_msg "deleting weblog entry id(s): $delete_num$cat_msg ..."
+[ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"
+nb_msg "$deleteweblog_delentry $delete_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 find_categories "$UPDATE_LIST"
 for entry_id in $NUMVAR; do
@@ -723,8 +770,8 @@ list_weblog(){
 query_db; db_query="$USR_QUERY"
 db_catquery=`cat_id`; check_catid
 if [ "$db_query" = cat ]; then
-	[ -z "$db_categories" ] && die "no categories exist yet! goodbye."
-	nb_msg "ID, Title"
+	[ -z "$db_categories" ] && die "$listweblog_nocat"
+	nb_msg "$header_ID, $header_Title"
 	id=0
 	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	while [ "$id" != "$cat_total" ]; do
@@ -740,8 +787,8 @@ fi
 [ -z "$db_query" ] && db_query="$QUERY_MODE"
 list_query="$db_query"
 query_db "$db_query" "$db_catquery"
-[ -z "$DB_RESULTS" ] && die "nothing matched your query: '$list_query'! goodbye."
-nb_msg "ID, Title - [Category] - Date"
+[ -z "$DB_RESULTS" ] && die "'$list_query' - $listweblog_nomatch"
+nb_msg "$header_ID, $header_Title - [$header_Category] - $header_Date"
 id=0
 for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
@@ -765,14 +812,15 @@ done
 # move entries into other categories
 move_entry(){
 NUMVAR=`echo "$move_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-[ -z "$NUMVAR" ] && die "must specify a valid entry id!"
+[ -z "$NUMVAR" ] && die "$novalid_entryid"
 query_db
 for entry_id in $NUMVAR; do
 	Move_EntryFile=`echo "$DB_RESULTS" |sed -n "$entry_id"p`
-	[ ! -f "$NB_DATA_DIR/$Move_EntryFile" ] && die "invalid entry id(s): $move_num"
+	[ ! -f "$NB_DATA_DIR/$Move_EntryFile" ] && die "$invalid_entryid $move_num"
 done
-db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "must specify category before entry!"
-nb_msg "moving weblog entry id(s): $move_num to category id(s): $cat_num ..."
+db_catquery=`cat_id`; check_catid; [ -z "$cat_num" ] && die "$moveentry_catfirst"
+nb_msg "$moveentry_catinfo $cat_num"
+nb_msg "$moveentry_moventry $move_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 query_db "$db_query" "$db_catquery"
 for entry_id in $UPDATE_LIST; do
@@ -793,13 +841,13 @@ build_weblog
 }
 
 preview_weblog(){
-[ -z "$BLOG_PREVIEW_CMD" ] && die "BLOG_PREVIEW_CMD is not set! goodbye."
-nb_msg "previewing weblog ..."
+[ -z "$BLOG_PREVIEW_CMD" ] && die "$preview_nocmd"
+nb_msg "$preview_action"
 $BLOG_PREVIEW_CMD
 }
 
 preview_ask(){
-echo "would you like to preview your weblog now? [y/N]"
+nb_msg "$preview_asknow [y/N]"
 read -p "$NB_PROMPT" choice
 case $choice in
 	[Yy])
@@ -810,13 +858,13 @@ esac
 }
 
 publish_weblog(){
-[ -z "$BLOG_PUBLISH_CMD" ] && die "BLOG_PUBLISH_CMD is not set! goodbye."
-nb_msg "publishing weblog ..."
+[ -z "$BLOG_PUBLISH_CMD" ] && die "$publish_nocmd"
+nb_msg "$publish_action"
 $BLOG_PUBLISH_CMD
 }
 
 publish_ask(){
-echo "would you like to publish the weblog now? [y/N]"
+nb_msg "$publish_asknow [y/N]"
 read -p "$NB_PROMPT" choice
 case $choice in
 	[Yy])
@@ -829,15 +877,15 @@ esac
 # create a new entry, category or weblog directory
 add_weblog(){
 load_config
-[ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
+[ -z "$BLOG_DIR" ] && die "$addweblog_noweblog"
 # automatically create new weblog directory ...
 if [ ! -d "$BLOG_DIR" ]; then
-	nb_msg "creating weblog directory '$BLOG_DIR' ..."
+	nb_msg "$addweblog_newblog '$BLOG_DIR' ..."
 	mkdir -p "$BLOG_DIR"
 	[ ! -d "$BLOG_DIR" ] &&
-		die "failed to create weblog directory!"
+		die "$addweblog_nocreate"
 	> "$BLOG_DIR/.nb_newblogdir"
-	nb_msg "copying default weblog files ..."
+	nb_msg "$addweblog_copyaction"
 	# copy default files and directories
 	for weblog_dir in "$NB_BASE_DIR"/default/*; do
 		cp -R "$weblog_dir" "$BLOG_DIR"
@@ -847,15 +895,15 @@ if [ ! -d "$BLOG_DIR" ]; then
 		[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
 	done
 	# ... but prompt for configuration.
-	echo "would you like to configure the new weblog now? [Y/n]"
+	nb_msg "$addweblog_askconf [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 	[Yy]|"")
-		nb_msg "configuring new weblog ..."
+		nb_msg "$addweblog_confaction"
 		nb_edit "$BLOG_DIR"/blog.conf
 		exit 0;;
 	[Nn])
-		die "weblog not configured! use '`basename $0` -b $BLOG_DIR --configure -u all' to configure later.";;
+		die "$addweblog_noconf";;
 	esac
 fi
 check_config
@@ -867,11 +915,11 @@ if [ ! -z "$cat_num" ]; then
 		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
 			id=`expr 1 + $id`
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
-				nb_msg "creating new category id: $id ..."
+				nb_msg "$addweblog_newcat id: $id ..."
 				if [ ! -z "$USR_TITLE" ]; then
 					cat_title=$USR_TITLE; USR_TITLE=
 				else
-					echo "enter the new category's title [Untitled]"
+					echo "$addweblog_titlecat [Untitled]"
 					read -p "$NB_PROMPT" cat_title
 					[ -z "$cat_title" ] && cat_title=Untitled
 				fi
@@ -881,7 +929,7 @@ if [ ! -z "$cat_num" ]; then
 				cat_total=`expr 1 + $cat_total`
 			fi
 		done
-		nb_msg "category database created for '$cat_title'."; exit 0
+		nb_msg "$addweblog_madecat '$cat_title'."; exit 0
 	else
 		db_catquery=`cat_id`; check_catid
 	fi
@@ -891,24 +939,24 @@ if [ ! -z "$USR_ADDFILE" ]; then
 	if [ -f "$USR_ADDFILE" ]; then
 		load_metadata ALL "$USR_ADDFILE"
 	else
-		nb_msg "'$USR_ADDFILE' doesn't exist!"
+		nb_msg "'$USR_ADDFILE' $addweblog_nofile"
 	fi
 fi
-# read user specified attributes for entry
+# read user specified attributes for entry (interactively)
 [ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
 [ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
-if [ -z "$NB_EntryAuthor" ]; then
-	echo "enter author's name [$BLOG_AUTHOR]"
+if [ -z "$NB_EntryAuthor" ] && [ "$BLOG_IPROMPT" = 1 ]; then
+	nb_msg "$addweblog_author [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
 fi
 [ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
-if [ -z "$NB_EntryTitle" ]; then
-	echo "enter a title"
+if [ -z "$NB_EntryTitle" ] && [ "$BLOG_IPROMPT" = 1 ]; then
+	nb_msg "$addweblog_title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 [ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
 if [ -z "$NB_EntryBody" ]; then
-	echo "editing new entry ..."
+	nb_msg "$addweblog_editnew"
 	# new entry temp file for editing
 	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`NB_TimeStamp`.$NB_DATATYPE"
 	# write current metadata to temp file and edit
@@ -920,15 +968,16 @@ if [ -z "$NB_EntryBody" ]; then
 fi
 [ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 # prompt for description
-if [ -z "$NB_EntryDescription" ] && [ "$desc_var" != 1 ]; then
-	echo "enter a short descriptive comment"
-	read -p "$NB_PROMPT" NB_EntryDescription
+if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
+	[ "$BLOG_IPROMPT" = 1 ]; then
+		nb_msg "$addweblog_desc"
+		read -p "$NB_PROMPT" NB_EntryDescription
 fi
 # set a default entry format
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 # generate date format for entry's content
 NB_EntryDate=$(filter_dateformat "$DATE_FORMAT")
-# reload configuration with new weblog directory
+# reload configuration
 check_config
 add_entry
 # remove editing session file upon success
@@ -939,87 +988,24 @@ add_entry
 }
 
 show_help(){
-cat <<-EOF
-	NanoBlogger - Console weblog engine.
-	Version $VERSION, by Kevin Wood <n1xt3r@fastmail.fm>
-
-	Usage:
-	 `basename $0` [-b blog_dir] [options]
-
-	Options:
-	 -a, --add				create new entry, category, or
-	 					weblog (directory).
-	 -b, --blogdir <directory>		specify weblog directory.
-	 -B, --body <text>			deprecated please use -T or --text
-	 					instead.
-	 -c, --category	<ID,cat>		specify category (for '--add',
-	 					'--delete', '--edit', '--list' and
-	 					'--update').
-	 --configure				configure weblog (for '--update').
-	 --datadir <directory>			specify weblog's data directory.
-	 -d, --delete <ID,cat>			delete an entry or category.
-	 -D, --desc <text>			set description of entry (for
-	 					'--add').
-	 -e, --edit <ID,cat>			edit an entry or category.
-	 -E, --draft <file> 			edit or create metadata file.
-	 -f, --blogconf <file>			specify an alternate configuration
-	 					file.
-	 -F, --file <file> 			specify metadata file to import as
-	 					entry (for '--add').
-	 -h, --help				show this help message.
-	 -l, --list <all,cat,current,DATE,max>	list entries or categories
-	 					(defaults to max).
-	 -M, --makepage <file1> <file2> 	create new weblog page (file2) from
-	 					metadata file (file1).
-	 --manual				view the manual.
-	 -m, --move <ID>			move an entry to a specified
-	 					category (for '--category').
-	 -n, --author <text>			set author of entry (for '--add').
-	 -p, --preview				run command to preview weblog.
-	 -P, --publish				run command to publish weblog.
-	 --template <file>			specify file to load as template
-	 					(for '--addpage').
-	 --templatedir <directory>		specify weblog's template directory.
-	 -t, --title <text>			set title of entry or category (for
-	 					'--add', '--category').
-	 -T, --text <text> 			set body (text) of entry (for
-	 					'--add').
-	 -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
-	 					current).
-	 -v, --verbose <1=on/0=off>		toggle level of verbosity.
-	 -V, --version				display version information.
-
-	 -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
-	 
-	 --list and --update can match entries by date (does _not_ sort entry id's).
-	 date = YYYY-MM-DD, YYYY-MM, YYYY
-
-	Examples:
-	
-	 specify the weblog directory to create or add new entry
-	 	nb -b ~/public_html/weblog -a
-
-	 create new category and title it "News"
-	 	nb -b ~/public_html/weblog -t "News" -c new -a
-
-	 create new entry setting author, title, and body
-	 	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -B 'MyMessage!' -a
-
-	 create draft file then add as new entry
-	 	nb -E ~/drafts/draft.txt
-	 	nb -b ~/public_html/weblog -F ~/drafts/draft.txt -a
-
-	More info:
-	 URL: http://nanoblogger.sourceforge.net
+NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.lang)
+BASENAME=`basename $0`
+sed -e '/[\$]VERSION/ s//'$VERSION'/g; /[\$]BASENAME/ s//'$BASENAME'/g' <<-EOF
+	$NB_ShowHelp
 EOF
 }
+
+# load global config
+load_globals
+# load language definitions
+. ${NB_LANG_DIR}/$NB_LANG/messages.lang
 
 argument=$@
 [ $# -lt 1 ] && show_help
 check_arg(){
 if [ -z "$argument" ]; then
-	echo "$bad_argument option requires an argument!"
-	echo "Try '`basename $0` --help' for more information."
+	echo "$bad_argument $checkarg_badarg"
+	echo "$checkarg_help"
 	exit 1
 fi
 }
@@ -1040,7 +1026,7 @@ while [ $# -gt 0 ]; do
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
 					check_config; delete_weblog;;
-		-D|--desc)		desc_var=1; USR_DESC="$2"; shift;;
+		-D|--desc)		DESC_PROMPT=1; USR_DESC="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
 					check_config; edit_weblog;;
 		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
@@ -1048,19 +1034,22 @@ while [ $# -gt 0 ]; do
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
+		-i|--interact) 		BLOG_IPROMPT=1;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
-		-M|--makepage)		check_arg; USR_SRCFILE="$2"; USR_OUTFILE="$3"; shift 2
-					check_config; weblog_page;;
 		--manual)		check_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_config; move_entry;;
+		-M|--makepage)		check_arg; USR_SRCFILE="$2"; USR_OUTFILE="$3"; shift 2
+					check_config; weblog_page;;
 		-p|--preview)		check_config; preview_weblog;;
 		-P|--publish)		check_config; publish_weblog;;
 		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
-		--templatedir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
+		--template-dir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
+		--tag) 			check_arg; USR_METATAG="$2"; shift;;
+		--tag-text) 		check_arg; USR_MTAGTEXT="$2"; shift;;
 		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;
@@ -1069,8 +1058,8 @@ while [ $# -gt 0 ]; do
 		--)			shift; break;;
 		*)
 					sanity_check
-					echo "invalid option: $@"
-					echo "Try '`basename $0` --help' for more information."
+					echo "$main_badopts $@"
+					echo "$main_panic"
 					exit 1
 					;;
 	esac

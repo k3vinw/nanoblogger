@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2005-10-06T02:14:48-04:00
+# Last modified: 2005-11-01T00:54:19-05:00
 
 # <div class="sidetitle">
 # Links
@@ -37,7 +37,7 @@ MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c [0-9]`
 	die "MAX_MONTHLINKS must be set to a valid number!"
 
 set_baseurl "./"
-nb_msg "generating weblog links ..."
+nb_msg "$plugins_action weblog links ..."
 # create main set of links
 load_template "$NB_TEMPLATE_DIR/$MAINLINKS_TEMPLATE"
 NB_MainLinks="$TEMPLATE_DATA"

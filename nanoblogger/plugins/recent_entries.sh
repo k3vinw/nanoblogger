@@ -17,7 +17,7 @@
 PLUGIN_OUTFILE1="$BLOG_DIR/$PARTS_DIR/recent_entries.$NB_FILETYPE"
 PLUGIN_OUTFILE2="$BLOG_DIR/$PARTS_DIR/older_entries.$NB_FILETYPE"
 
-nb_msg "generating recent entries links ..."
+nb_msg "$plugins_action recent entries links ..."
 set_baseurl "./"
 
 get_entries(){

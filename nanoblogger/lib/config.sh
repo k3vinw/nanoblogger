@@ -1,13 +1,20 @@
 # Module for configuration file management
 
-# loads global and user configurations
-load_config(){
-# set deprecated BASE_DIR for temporary compatibility
-BASE_DIR="$NB_BASE_DIR"
+# loads global config
+load_globals(){
 # always load global configs
 [ -f "$NB_BASE_DIR/nb.conf" ] && . "$NB_BASE_DIR/nb.conf"
 # check for user's .nb.conf in their home directory
 [ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
+# default language definition
+: ${NB_LANG:=en}
+}
+
+# loads global and user configurations
+load_config(){
+# set deprecated BASE_DIR for temporary compatibility
+BASE_DIR="$NB_BASE_DIR"
+load_globals
 # allow user specified weblog directories 
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # auto-detect blog.conf from our CWD
@@ -51,7 +58,7 @@ export BLOG_DIR
 #
 # default metadata marker (a.k.a. spacer)
 : ${METADATA_MARKER:=-----}
-# default metadata close tag (to close BODY)
+# default metadata close tag (e.g. 'END-----')
 : ${METADATA_CLOSETAG:=$METADATA_MARKER}
 #
 #### END WARNING ####
@@ -82,21 +89,6 @@ export BLOG_DIR
 deconfig(){ BLOG_AUTHOR=; PLUGINS_DIR=; NB_DATATYPE=; NB_DBTYPE=; \
 	NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; MAX_ENTRIES=; \
 	SORT_ARGS=; }
-
-# insure a sane configuration or die
-check_config(){
-load_config
-# die without the base directory
-[ ! -d "$NB_BASE_DIR" ] &&
-	die "`basename $0`: base directory '$NB_BASE_DIR' doesn't exist! goodbye."
-[ -z "$BLOG_DIR" ] && die "no weblog directory specified! goodbye."
-[ ! -z "$USR_BLOGCONF" ] &&
-	[ ! -f "$USR_BLOGCONF" ] && die "weblog config file '$USR_BLOGCONF' doesn't exist! goodbye."
-[ ! -d "$BLOG_DIR" ] && die "weblog directory '$BLOG_DIR' doesn't exist! goodbye."
-[ ! -d "$NB_DATA_DIR" ] && die "weblog's data directory '$NB_DATA_DIR' doesn't exist! goodbye."
-[ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "weblog's cache directory '$CACHE_DIR' doesn't exist! goodbye."
-[ ! -d "$NB_TEMPLATE_DIR" ] && die "weblog's templates directory '$NB_TEMPLATE_DIR' doesn't exist! goodbye."
-}
 
 # edit $BLOG_CONF
 config_weblog(){

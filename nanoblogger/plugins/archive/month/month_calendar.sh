@@ -12,7 +12,7 @@ PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/$month_dir/cal.$NB_FILETYPE"
 
 mkdir -p `dirname "$PLUGIN_OUTFILE"`
 if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
-nb_msg "generating monthly weblog calendar ..."
+nb_msg "$plugins_action monthly weblog calendar ..."
 cal_year=`echo $month |cut -c1-4`
 cal_month=`echo $month |cut -c6-7`
 

@@ -11,7 +11,7 @@ PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 : ${CAL_CMD:=cal}
 
 if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
-nb_msg "generating calendar ..."
+nb_msg "$plugins_action calendar ..."
 [ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS`
 [ ! -z "$CALENDAR" ] || CALENDAR=`$CAL_CMD $CAL_ARGS`
 CAL_HEAD=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
