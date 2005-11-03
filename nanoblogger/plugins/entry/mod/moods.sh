@@ -5,6 +5,13 @@
 MOODS_URL="${BASE_URL}moods"
 
 if [ -d "$MOODS_DIR" ]; then
+	create_moods(){
+	mood_url=`echo "$MOODS_URL/$mood_img" |sed -e '/[\/\]/ s//\\\\\//g'`
+	sed_sub=' <img src="'$mood_url'" alt="'$mood_var'" \/>'
+	sed_script='/[ ]'$mood_var'[ ]/ s// '$sed_sub' /g; /[ ]'$mood_var'$/ s// '$sed_sub'/g; /'$mood_var'[ ]/ s//'$sed_sub' /g'
+	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$sed_script"`
+	}
+
 	load_moods(){
 	if [ -f "$MOODS_DIR/moods.conf" ]; then
 		if [ -z "$mood_lines" ]; then
@@ -22,13 +29,6 @@ if [ -d "$MOODS_DIR" ]; then
 			fi
 		done
 	fi
-	}
-
-	create_moods(){
-	mood_url=`echo "$MOODS_URL/$mood_img" |sed -e '/[\/\]/ s//\\\\\//g'`
-	sed_sub=' <img src="'$mood_url'" alt="'$mood_var'" \/>'
-	sed_script='/[ ]'$mood_var'[ ]/ s// '$sed_sub' /g; /[ ]'$mood_var'$/ s// '$sed_sub'/g; /'$mood_var'[ ]/ s//'$sed_sub' /g'
-	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$sed_script"`
 	}
 
 	load_moods

@@ -1,0 +1,111 @@
+# NanoBlogger English language definitions
+# Messages
+# lang/en/messages.lang
+
+# main
+main_badopts="invalid option:"
+main_panic="Try '`basename $0` --help' for more information."
+
+# check_arg
+checkarg_badarg="option requires an argument!"
+checkarg_help="Try '`basename $0` --help' for more information."
+
+# check_conf
+checkconf_nobase="base directory doesn't exist! goodbye."
+checkconf_noblog="no weblog directory specified! goodbye."
+checkconf_nousrconf="weblog config file doesn't exist! goodbye."
+checkconf_noblogdir="weblog directory doesn't exist! goodbye."
+checkconf_nodata="weblog's data directory doesn't exist! goodbye."
+checkconf_nocache="weblog's cache directory doesn't exist! goodbye."
+checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
+
+# load_template
+loadtemplate_nofile="template file doesn't exist! goodbye."
+
+# make_page
+makepage_nosource="source file doesn't exist! goodbye."
+makepage_nooutput="output file not specified."
+makepage_notemplate="template file doesn't exist! goodbye."
+
+# paginate
+paginate_action="paginating"
+
+# build_archives
+buildarchives_action="generating archives ..."
+
+# build_weblog
+buildweblog_all="updating all files! this may take a while ..."
+buildweblog_files="generating weblog files ..."
+buildweblog_main="generating main index page(s) ..."
+
+# nb_draft
+draft_asknew="draft file doesn't exist! create?"
+
+# add_entry
+addentry_catinfo="selected category id(s):"
+addentry_action="adding new entry ..."
+
+# misc. validation errors
+novalid_entryid="must specify a valid entry id."
+invalid_entryid="invalid entry id(s):"
+
+# edit_weblog
+editweblog_onecat="only one category can be specified when editing a title!"
+editweblog_title="changing title ..."
+editweblog_nomod="no changes were made! goodbye."
+editweblog_action="processing modified weblog entries ..."
+editweblog_noaction="no changes were made! goodbye."
+
+# delete_weblog
+deleteweblog_delcat="deleting category id(s):"
+deleteweblog_onecat="only one category can be specified when deleting entries from a category!"
+deleteweblog_catinfo="selected category id(s):"
+deleteweblog_delentry="deleting entry id(s):"
+
+# header attributes
+header_ID="ID"
+header_Title="Title"
+header_Category="Category"
+header_Date="Date"
+
+# list_weblog
+listweblog_nocat="no categories exist yet! goodbye."
+listweblog_nomatch="nothing matched your query! goodbye."
+
+# move_entry
+moveentry_catfirst="must specify category before entry!"
+moveentry_catinfo="selected category id(s):"
+moveentry_moventry="moving weblog entry id(s):"
+
+# add_weblog
+addweblog_noweblog="no weblog directory specified! goodbye."
+addweblog_newblog="creating weblog directory"
+addweblog_nocreate="failed to create weblog directory!"
+addweblog_copyaction="copying default weblog files ..."
+addweblog_askconf="would you like to configure the new weblog now?"
+addweblog_confaction="configuring new weblog ..."
+addweblog_noconf="weblog not configured! use '`basename $0` -b [blog_dir] --configure -u all' to configure later."
+addweblog_newcat="creating new category"
+addweblog_titlecat="enter the new category's title"
+addweblog_madecat="category database created for"
+addweblog_nofile="doesn't exist!"
+addweblog_author="enter author's name"
+addweblog_title="enter a title"
+addweblog_desc="enter a short description"
+addweblog_editnew="editing new entry ..."
+
+# preview_weblog
+preview_nocmd="no preview commmand set! goodbye."
+preview_action="previewing weblog ..."
+preview_asknow="would you like to preview your weblog now?"
+
+# publish_weblog
+publish_nocmd="no publish command set! goodbye."
+publish_action="publishing weblog ..."
+publish_asknow="would you like to publish the weblog now?"
+
+# plugins - generic words
+plugins_action="generating"
+plugins_loadaction="loading"
+plugins_textformataction="formatting text - $plugins_loadaction"
+
