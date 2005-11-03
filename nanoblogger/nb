@@ -212,6 +212,7 @@ cat > "$WRITE_META_FILE" <<-EOF
 	$NB_MetaBody
 	$METADATA_CLOSETAG
 EOF
+write_tag "$WRITE_META_FILE"
 }
 
 # write entry's metadata to file
@@ -619,18 +620,16 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
+			[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+			[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
+			[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+			[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
 			make_file "$EDITDRAFT_FILE";;
 		[Nn])
 		;;
 	esac
 fi
 if [ -f "$EDITDRAFT_FILE" ]; then
-	load_metadata ALL "$EDITDRAFT_FILE"
-	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
-	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
-	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
-	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
-	make_file "$EDITDRAFT_FILE"
 	write_tag "$EDITDRAFT_FILE"
 	nb_edit "$EDITDRAFT_FILE"
 fi
