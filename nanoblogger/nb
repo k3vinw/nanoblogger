@@ -176,7 +176,7 @@ if [ ! -z "$USR_METATAG" ]; then
 fi
 }
 
-# load file's metadata into tangible shell variables
+# load standard metadata from file into tangible shell variables
 load_metadata(){
 METADATA_TYPE="$1" # ALL or NOBODY :)
 METADATA_FILE="$2"
@@ -201,6 +201,9 @@ fi
 # create file with metadata fields
 make_file(){
 WRITE_META_FILE="$1"
+# give upgraders a break :)
+[ ! -f "$NB_TEMPLATE_DI/$METADATAFILE_TEMPLATE" ] &&
+	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
 write_tag "$WRITE_META_FILE"
@@ -209,6 +212,9 @@ write_tag "$WRITE_META_FILE"
 # write entry's metadata to file
 write_entry(){
 WRITE_ENTRY_FILE="$1"
+# give upgraders a break :)
+[ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
+	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
 write_tag "$WRITE_ENTRY_FILE"

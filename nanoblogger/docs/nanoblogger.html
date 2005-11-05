@@ -701,6 +701,16 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">default template used by makepage option</td>
         </tr>
 
+	<tr>
+	  <td align="left">entry.metadata</td>
+	  <td align="left">controls the format of the entry's data file</td>
+ 	</tr>
+
+	<tr>
+	  <td align="left">file.metadata</td>
+	  <td align="left">controls the format of a metadata file</td>
+ 	</tr>
+
         <tr>
           <td align="left">month_archive.htm</td>
 
@@ -1437,7 +1447,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">$METADATA</td>
 
-          <td align="left">faster than read_entry, see plugin recent_entries.sh for a good example</td>
+          <td align="left">see plugin recent_entries.sh for a good example</td>
         </tr>
 
 	<tr>
@@ -1519,7 +1529,7 @@ mput *
 
     <p>To add support for comments, you can use a php script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
 
-    <p>Typically, integrating a comment system with your weblog involves editing the appropriate templates. To make things easier you should utilize <em>BLOG_URL_ACTION</em> in your weblog's blog.conf. Please see examples in blog.conf and templates.</p>
+    <p>Integrating a comment system with your weblog requires editing the appropriate templates. Please see examples in blog.conf and templates.</p>
   </div>
 
   <div id="entries.import">
@@ -1549,7 +1559,7 @@ FORMAT: raw
 -----
 BODY:
 This is my new entry ...
------
+END-----
         
 </pre>
 
@@ -1559,8 +1569,8 @@ This is my new entry ...
 
     <p>Steps to converting entries:</p>
     <pre>
-1. Convert each entry so they each contain the following metadata: TITLE, AUTHOR, DATE, DESC, BODY
-2. The BODY metadata must be terminated with five "-" dashes on a new line.
+1. Convert each entry so they each contain the following metadata: TITLE, AUTHOR, DATE, DESC, FORMAT, BODY
+2. The BODY metadata must be terminated by "END-----".
 3. Rename each entry's file name to it's corresponding date and time.
         
 </pre>
