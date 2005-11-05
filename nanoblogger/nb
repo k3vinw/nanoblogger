@@ -90,8 +90,8 @@ plugin_scripts=()
 # were plugin names specified?
 PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
 if [ "$PLUGINLIST_VAR" != 0 ] ; then
-	# yes, so we add them in order specified
-	for plugin in ${PLUGIN_LIST[@]} ; do
+	# yes, so we add them in order specified (removing any commas)
+	for plugin in `echo ${PLUGIN_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
 		nb_plugin="$plugin_path/${plugin}.sh"
 		add_plugin_script "$nb_plugin"
  	done
@@ -104,6 +104,7 @@ fi
 # load the plugins in alpha-numeric order (0-9, A-z)
 # ... except where specified elsewise
 for nb_plugin in ${plugin_scripts[@]} ; do
+	#nb_msg "loading `basename $nb_plugin` ..."
 	. "$nb_plugin"
 done
 }
