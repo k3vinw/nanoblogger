@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-01T01:40:59-05:00
+# Last modified: 2005-11-04T23:25:15-05:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -201,34 +201,16 @@ fi
 # create file with metadata fields
 make_file(){
 WRITE_META_FILE="$1"
-cat > "$WRITE_META_FILE" <<-EOF
-	TITLE: $NB_MetaTitle
-	AUTHOR: $NB_MetaAuthor
-	DATE: $NB_MetaDate
-	DESC: $NB_MetaDescription
-	FORMAT: $NB_MetaFormat
-	$METADATA_MARKER
-	BODY:
-	$NB_MetaBody
-	$METADATA_CLOSETAG
-EOF
+load_template "$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
+echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
 write_tag "$WRITE_META_FILE"
 }
 
 # write entry's metadata to file
 write_entry(){
 WRITE_ENTRY_FILE="$1"
-cat > "$WRITE_ENTRY_FILE" <<-EOF
-	TITLE: $NB_EntryTitle
-	AUTHOR: $NB_EntryAuthor
-	DATE: $NB_EntryDate
-	DESC: $NB_EntryDescription
-	FORMAT: $NB_EntryFormat
-	$METADATA_MARKER
-	BODY:
-	$NB_EntryBody
-	$METADATA_CLOSETAG
-EOF
+load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
+echo "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
 write_tag "$WRITE_ENTRY_FILE"
 }
 
@@ -302,6 +284,7 @@ BLOGPAGE_OUTFILE="$3"
 [ ! -z "$USR_TEMPLATE" ] && BLOGPAGE_TEMPLATE="$USR_TEMPLATE"
 [ ! -z "$USR_OUTFILE" ] && BLOGPAGE_OUTFILE="$USR_OUTFILE"
 if [ -f "$BLOGPAGE_SRCFILE" ]; then
+	write_tag "$BLOGPAGE_SRCFILE"
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
 	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
@@ -620,6 +603,7 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
+			# accept user metadata
 			[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 			[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 			[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
@@ -630,7 +614,6 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 	esac
 fi
 if [ -f "$EDITDRAFT_FILE" ]; then
-	write_tag "$EDITDRAFT_FILE"
 	nb_edit "$EDITDRAFT_FILE"
 fi
 }
