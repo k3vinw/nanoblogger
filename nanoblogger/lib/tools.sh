@@ -2,18 +2,56 @@
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
-NB_TimeStamp(){ $DATE_CMD "+%Y-%m-%dT%H_%M_%S"; }
+nb_timestamp(){ $DATE_CMD "+%Y-%m-%dT%H_%M_%S"; }
+
+# convert to a more printable date format
+filter_timestamp(){
+TIMESTAMP="$1"
+echo "$TIMESTAMP" |sed -e '/[\_]/ s//:/g; /[A-Z]/ s// /g'
+}
+
+# reverse filter time stamp to original form
+refilter_timestamp(){
+TIMESTAMP="$1"
+echo "$TIMESTAMP" |sed -e '/[\:]/ s//_/g; /[ ]/ s//T/'
+}
+
+# validate time stamp
+validate_timestamp(){
+TIMESTAMP="$1"
+echo "$TIMESTAMP" |grep '^[0-9][0-9][0-9][0-9][\-][0-9][0-9][\-][0-9][0-9][A-Z][0-9][0-9][\_][0-9][0-9][\_][0-9][0-9]$'
+}
 
 # filter custom date format for a new entry
 filter_dateformat(){
-FILTER_VAR="$1"
+FILTER_DATE="$1"
+FILTER_ARGS="$2"
+: ${FILTER_ARGS:=$DATE_ARGS}
 # use date's defaults, when no date format is specified
-if [ ! -z "$FILTER_VAR" ]; then
-	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD +"$FILTER_VAR"
-	[ -z "$DATE_LOCALE" ] && $DATE_CMD +"$FILTER_VAR"
+if [ ! -z "$FILTER_DATE" ]; then
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD $FILTER_ARGS +"$FILTER_DATE"
+	[ -z "$DATE_LOCALE" ] && $DATE_CMD $FILTER_ARGS +"$FILTER_DATE"
 else
-	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD 
-	[ -z "$DATE_LOCALE" ] && $DATE_CMD
+	[ ! -z "$DATE_LOCALE" ] && LC_ALL="$DATE_LOCALE" $DATE_CMD $FILTER_ARGS
+	[ -z "$DATE_LOCALE" ] && $DATE_CMD $FILTER_ARGS
+fi
+}
+
+filter_datestring(){
+FILTER_DATE="$1"
+FILTER_ARGS="$2"
+FILTER_STRING="$3"
+: ${FILTER_ARGS:=$DATE_ARGS}
+if [ ! -z "$DATE_FORMAT" ]; then
+	[ ! -z "$DATE_LOCALE" ] &&
+		LC_ALL="$DATE_LOCALE" $DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_STRING"
+	[ -z "$DATE_LOCALE" ] &&
+		$DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_STRING"
+else
+	[ ! -z "$DATE_LOCALE" ] &&
+		LC_ALL="$DATE_LOCALE" $DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
+	[ -z "$DATE_LOCALE" ] &&
+		$DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
 fi
 }
 
@@ -184,5 +222,64 @@ elif [ -z "$CAT_LIST" ]; then
 	CAT_LIST=`cat_id`
 fi
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
+}
+
+# tool to help change an entry's date/timestamp
+chg_entrydate(){
+EntryDate_File="$1"
+# (e.g. YYYY-MM-DD HH:MM:SS)
+EntryDate_TimeStamp="$2"
+# validate timestamp format
+New_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
+New_EntryTimeStamp=`validate_timestamp "$New_EntryTimeStamp"`
+if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ ! -z "$New_EntryTimeStamp" ] &&
+	[ "$New_EntryTimeStamp.$NB_DATATYPE" != "$EntryDate_File" ]; then
+	Old_EntryFile="$EntryDate_File"
+	[ -f "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE" ] &&
+		die "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE - $samefilename"
+	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
+	mv "$NB_DATA_DIR/$EntryDate_File" "$NB_DATA_DIR/$New_EntryDateFile"
+	NEWDATE_STRING=`echo "$New_EntryTimeStamp" |sed -e 's/[A-Z,a-z]/ /g; s/[\_]/:/g'`
+	NB_NewEntryDate=$(filter_datestring "$DATE_FORMAT" "" "$NEWDATE_STRING")
+	if [ ! -z "$NB_NewEntryDate" ]; then
+		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
+	else
+		# fallback to timestamp
+		nb_msg "$filterdate_failed"
+		NB_NewEntryDate="$EntryDate_TimeStamp"
+		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
+	fi
+	# update relative categories
+	if [ ! -z "$cat_list" ]; then
+		for cat_db in $cat_list; do
+			cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
+			if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
+				sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
+				> "$NB_DATA_DIR/$cat_db".tmp
+				mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+			fi
+		done
+	else
+		for cat_db in $db_categories; do
+			cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
+			if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
+				sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
+				> "$NB_DATA_DIR/$cat_db".tmp
+				mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+			fi
+		done
+		rm -f "$NB_DATA_DIR/$Old_EntryFile"
+		set_entrylink "$Old_EntryFile"
+		Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+		Delete_PermalinkDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir"
+		# delete old permalink file
+		[ -f "$Delete_PermalinkFile" ] && rm -fr "$Delete_PermalinkFile"
+		# delete old permalink directory
+		[ ! -z "$entry_dir" ] && [ -d "$Delete_PermalinkDir" ] &&
+			rm -fr "$Delete_PermalinkDir"
+		# delete old entry's cache file
+		rm -f "$BLOG_DIR/$CACHE_DIR/$Old_EntryFile".*
+	fi
+fi
 }
 

@@ -43,7 +43,7 @@ export BLOG_DIR
 # default to lynx for browser
 : ${BROWSER:=lynx}
 # default date command
-: ${DATE_CMD:=date $DATE_ARGS}
+: ${DATE_CMD:=date}
 # default to vi for editor
 : ${EDITOR:=vi}
 # default to txt for datatype suffix

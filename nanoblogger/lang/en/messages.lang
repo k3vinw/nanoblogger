@@ -104,6 +104,10 @@ publish_nocmd="no publish command set! goodbye."
 publish_action="publishing weblog ..."
 publish_asknow="would you like to publish the weblog now?"
 
+# misc.
+filterdate_failed="date filtering failed, using timestamp instead."
+samefilename="filename already exists!"
+
 # plugins - generic words
 plugins_action="generating"
 plugins_loadaction="loading"

@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-04T23:25:15-05:00
+# Last modified: 2005-11-07T00:59:41-05:00
 
 # nanoblogger's version.
 VERSION="3.3-CVS"
@@ -151,9 +151,9 @@ if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
 		MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
 		if [ -f "$META_FILE" ]; then
 			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
-			echo "$META_OTHER" > "$META_FILE"
 		fi
-		cat >> "$META_FILE" <<-EOF
+		cat > "$META_FILE" <<-EOF
+			$META_OTHER
 			$MTAG:
 			$METADATA
 			$MTAG_CLOSE
@@ -161,19 +161,26 @@ if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
 	else
 		if [ -f "$META_FILE" ]; then
 			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
-			echo "$META_OTHER" > "$META_FILE"
 		fi
-		echo "$MTAG: $METADATA" >> "$META_FILE"
+		# prepend modified or new single line tags
+		cat > "$META_FILE" <<-EOF
+			$MTAG: $METADATA
+			$META_OTHER
+		EOF
 	fi
 fi
 }
 
-# create/modify user metadata fields
+# create/modify user metadata field
 write_tag(){
-METATAG_FILE="$1"
-if [ ! -z "$USR_METATAG" ]; then
-	write_metadata "$USR_METATAG" "$USR_MTAGTEXT" \
-		"$METATAG_FILE"
+WRITE_MTAG="$1"
+WRITE_MTAGTEXT="$2"
+WRITEMETATAG_FILE="$3"
+[ ! -z "$USR_METATAG" ] && WRITE_MTAG="$USR_METATAG"
+[ ! -z "$USR_TAGTEXT" ] && WRITE_MTAGTEXT="$USR_TAGTEXT"
+if [ ! -z "$WRITE_MTAG" ]; then
+	write_metadata "$WRITE_MTAG" "$WRITE_MTAGTEXT" \
+		"$WRITEMETATAG_FILE"
 fi
 }
 
@@ -207,7 +214,7 @@ WRITE_META_FILE="$1"
 	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
-write_tag "$WRITE_META_FILE"
+write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
 }
 
 # write entry's metadata to file
@@ -218,7 +225,7 @@ WRITE_ENTRY_FILE="$1"
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
-write_tag "$WRITE_ENTRY_FILE"
+write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 }
 
 # read an entry
@@ -291,7 +298,7 @@ BLOGPAGE_OUTFILE="$3"
 [ ! -z "$USR_TEMPLATE" ] && BLOGPAGE_TEMPLATE="$USR_TEMPLATE"
 [ ! -z "$USR_OUTFILE" ] && BLOGPAGE_OUTFILE="$USR_OUTFILE"
 if [ -f "$BLOGPAGE_SRCFILE" ]; then
-	write_tag "$BLOGPAGE_SRCFILE"
+	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$BLOGPAGE_SRCFILE"
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
 	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
@@ -631,8 +638,28 @@ db_catquery=`cat_id`; check_catid
 [ ! -z "$cat_num" ] && nb_msg "$addentry_catinfo $cat_num ..."
 nb_msg "$addentry_action"
 NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
-New_EntryFile=`NB_TimeStamp`.$NB_DATATYPE
+NB_EntryTimeStamp=`nb_timestamp`
+# fallback to printable timestamp
+if [ -z "$NB_EntryDate" ]; then
+	nb_msg "$filter_datefailed"
+	NB_EntryDate=`filter_timestamp "$NB_EntryTimeStamp"`
+fi
+# load user specified timestamp
+if [ -f "$NB_EditFile" ]; then
+	read_metadata TIMESTAMP "$NB_EditFile"
+	New_TimeStamp="$METADATA"
+fi
+[ "$USR_METATAG" = TIMESTAMP ] &&
+	New_TimeStamp="$USR_TAGTEXT"
+if [ -f "$NB_DATA_DIR/$New_EntryDateFile" ]; then
+	New_EntryFile="$New_EntryDateFile"
+else
+	New_EntryFile="$NB_EntryTimeStamp.$NB_DATATYPE"
+fi
 write_entry "$NB_DATA_DIR/$New_EntryFile"
+chg_entrydate "$New_EntryFile" "$New_TimeStamp"
+[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+	New_EntryFile="$New_EntryDateFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
 	for cat_db in $db_catquery ; do 
@@ -673,7 +700,17 @@ done
 > "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
+	# write any user metadata
+	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_DATA_DIR/$Edit_EntryFile"
 	nb_edit "$NB_DATA_DIR/$Edit_EntryFile"
+	# load user specified timestamp
+	read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
+	New_TimeStamp="$METADATA"
+	[ "$USR_METATAG" = TIMESTAMP ] &&
+		New_TimeStamp="$USR_TAGTEXT"
+	chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
+	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+		Edit_EntryFile="$New_EntryDateFile"
 	[ -N "$NB_DATA_DIR/$Edit_EntryFile" ] &&
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 done
@@ -947,7 +984,9 @@ fi
 if [ -z "$NB_EntryBody" ]; then
 	nb_msg "$addweblog_editnew"
 	# new entry temp file for editing
-	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`NB_TimeStamp`.$NB_DATATYPE"
+	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`nb_timestamp`.$NB_DATATYPE"
+	# write any user metadata
+	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_EditFile"
 	# write current metadata to temp file and edit
 	write_entry "$NB_EditFile"; nb_edit "$NB_EditFile"
 	# load all new entry metadata from temp file
@@ -1038,7 +1077,7 @@ while [ $# -gt 0 ]; do
 		--template-dir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
 		--tag) 			check_arg; USR_METATAG="$2"; shift;;
-		--tag-text) 		check_arg; USR_MTAGTEXT="$2"; shift;;
+		--tag-text) 		check_arg; USR_TAGTEXT="$2"; shift;;
 		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;

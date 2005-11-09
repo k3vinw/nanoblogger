@@ -1,3 +1,4 @@
-* Fix deleting entries so they get removed from archives directory.
-* Simplify date and entry listings in the master archive index to years
-* Generate archive index for each year with listings for months and entries
+* Add "Categories" to language files
+* Previous and next links for entries
+* Fix articles plugin static "sidetitle" generation
+* Split date and entry listings in the master archive by year
