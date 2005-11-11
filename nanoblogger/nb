@@ -651,14 +651,10 @@ if [ -f "$NB_EditFile" ]; then
 fi
 [ "$USR_METATAG" = TIMESTAMP ] &&
 	New_TimeStamp="$USR_TAGTEXT"
-if [ -f "$NB_DATA_DIR/$New_EntryDateFile" ]; then
-	New_EntryFile="$New_EntryDateFile"
-else
-	New_EntryFile="$NB_EntryTimeStamp.$NB_DATATYPE"
-fi
+New_EntryFile="$NB_EntryTimeStamp.$NB_DATATYPE"
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 chg_entrydate "$New_EntryFile" "$New_TimeStamp"
-[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+[ ! -z "$New_EntryDateFile" ] &&
 	New_EntryFile="$New_EntryDateFile"
 if [ ! -z "$cat_num" ]; then
 	db_catquery=`cat_id`; check_catid
@@ -1027,6 +1023,7 @@ EOF
 load_globals
 # load language definitions
 . ${NB_LANG_DIR}/$NB_LANG/messages.lang
+. ${NB_LANG_DIR}/$NB_LANG/plugins.lang
 
 argument=$@
 [ $# -lt 1 ] && show_help

@@ -230,15 +230,19 @@ EntryDate_File="$1"
 # (e.g. YYYY-MM-DD HH:MM:SS)
 EntryDate_TimeStamp="$2"
 # validate timestamp format
-New_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
-New_EntryTimeStamp=`validate_timestamp "$New_EntryTimeStamp"`
-if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ ! -z "$New_EntryTimeStamp" ] &&
-	[ "$New_EntryTimeStamp.$NB_DATATYPE" != "$EntryDate_File" ]; then
+Edit_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
+New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
+# abort if we don't have a valid timestamp
+[ ! -z "$EntryDate_TimeStamp" ] && [ -z "$New_EntryTimeStamp" ] &&
+	die "TIMESTAMP != 'YYYY-MM-DD HH:MM:SS'"
+if [ ! -z "$New_EntryTimeStamp" ]; then
 	Old_EntryFile="$EntryDate_File"
 	[ -f "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE" ] &&
 		die "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE - $samefilename"
 	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
-	mv "$NB_DATA_DIR/$EntryDate_File" "$NB_DATA_DIR/$New_EntryDateFile"
+	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
+		mv "$NB_DATA_DIR/$EntryDate_File" "$NB_DATA_DIR/$New_EntryDateFile"
+	fi
 	NEWDATE_STRING=`echo "$New_EntryTimeStamp" |sed -e 's/[A-Z,a-z]/ /g; s/[\_]/:/g'`
 	NB_NewEntryDate=$(filter_datestring "$DATE_FORMAT" "" "$NEWDATE_STRING")
 	if [ ! -z "$NB_NewEntryDate" ]; then

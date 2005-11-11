@@ -108,8 +108,7 @@ publish_asknow="would you like to publish the weblog now?"
 filterdate_failed="date filtering failed, using timestamp instead."
 samefilename="filename already exists!"
 
-# plugins - generic words
-plugins_action="generating"
-plugins_loadaction="loading"
-plugins_textformataction="formatting text - $plugins_loadaction"
+# misc. template messages
+categorylinks_title="Categories"
+commentslink_title="Comments"
 
