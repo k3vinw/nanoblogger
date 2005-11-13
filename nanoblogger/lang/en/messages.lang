@@ -75,7 +75,7 @@ listweblog_nomatch="nothing matched your query! goodbye."
 # move_entry
 moveentry_catfirst="must specify category before entry!"
 moveentry_catinfo="selected category id(s):"
-moveentry_moventry="moving weblog entry id(s):"
+moveentry_moventry="moving entry id(s):"
 
 # add_weblog
 addweblog_noweblog="no weblog directory specified! goodbye."
@@ -109,6 +109,7 @@ filterdate_failed="date filtering failed, using timestamp instead."
 samefilename="filename already exists!"
 
 # misc. template messages
+permanentlink_title="Permanent Link"
 categorylinks_title="Categories"
 commentslink_title="Comments"
 

@@ -436,6 +436,10 @@ NB_INDEX="index.html"
 
     <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".</p>
 
+    <p><b>Setting the Default Text Formatting</b></p>
+    
+    <p><em>ENTRY_FORMAT</em>, specifies the default text formatting to use for an entry. Defaults to "raw".</p>
+
     <p><b>Toggling the Display of Permanent Links</b></p>
 
     <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
@@ -576,6 +580,25 @@ nb [-b blog_dir] -d 1,2,3
 nb [-b blog_dir] -c 1 -d 1
         
 </pre>
+
+    <p><b>Changing Entry's Date</b></p>
+   
+    <p>Specifying a new entry's date using the TIMESTAMP metatag:</p>
+    <pre>
+nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -a
+    </pre>
+     Changing an old entry's date:
+     <pre>
+nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -e 2
+     </pre>
+     Manually changing an entry's date:
+     <pre>
+1. nb [-b blog_dir] -e 2
+2. TIMESTAMP: YYYY-MM-DD HH:MM:SS
+     </pre>
+     <em>The date command must support the "<code>-d</code>" option 
+       for the date to follow the format set by
+       "<code>$DATE_FORMAT</code>".</em>
 
     <h3>Managing Categories</h3>
 
@@ -931,7 +954,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
-      <p>Similar to the entry modify plugins, these plugins are intitialized for each entry modified. The difference being the plugin initialized is determined by the metadata field FORMAT which can be set on a per-entry basis.</p>
+      <p>Similar to the entry modify plugins, these plugins are intitialized for each entry modified. The difference being the plugins initialized are determined by the metadata field FORMAT which can be set on a per-entry basis. More than one format may be specified using space or commas as a seperator.</p>
 
       <p><b>Page Plugins: plugins/page</b></p>
 
@@ -939,7 +962,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Page Formatting Plugins: plugins/page/format</b></p>
 
-      <p>Similar to the entry formatting plugins, these plugins are controlled using the FORMAT metadata field with the exception being that the formatting is only applied to the content of a page (usually $MKPAGE_CONTENT).</p>
+      <p>Similar to the entry formatting plugins, these plugins are controlled using the FORMAT metadata field with the exception being that the formatting is only applied to the content of a page (usually $MKPAGE_CONTENT). More than one format may be specified using space or commas as a seperator.</p>
 
       <p><b>Make Page Plugins: plugins/makepage</b></p>
 
@@ -1046,7 +1069,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">converts blank lines to html paragraph breaks</td>
 
-          <td align="left">$NB_MetaFormat, $NB_EntryFormat, $NB_PageFormat</td>
+          <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
@@ -1058,7 +1081,7 @@ nb [-b blog_dir] -c 1 -d cat
 
 	  <td align="left">uses markdown to handle formatting</td>
 
-          <td align="left">$NB_MetaFormat, $NB_EntryFormat, $NB_PageFormat</td>
+          <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
@@ -1070,7 +1093,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">helps set relative links</td>
 
-          <td align="left">AUTO_FORMAT, %base_url%</td>
+          <td align="left">%base_url%</td>
 
           <td align="left">$NB_EntryBody</td>
 
@@ -1082,7 +1105,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">converts mood variables into smiley icons</td>
 
-          <td align="left">AUTO_FORMAT, MOODS_URL</td>
+          <td align="left">MOODS_URL</td>
 
           <td align="left">$NB_EntryBody</td>
 
@@ -1154,7 +1177,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">converts blank lines to html paragraph breaks</td>
 
-          <td align="left">$NB_MetaFormat, $NB_EntryFormat, $NB_PageFormat</td>
+          <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
@@ -1166,11 +1189,23 @@ nb [-b blog_dir] -c 1 -d cat
 
 	  <td align="left">uses markdown to handle formatting</td>
 
-          <td align="left">$NB_MetaFormat, $NB_EntryFormat, $NB_PageFormat</td>
+          <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
           <td align="left">FORMAT: markdown</td>
+	</tr>
+
+	<tr>
+	  <td align="left">page/format/moods.sh</td>
+
+          <td align="left">converts mood variables into smiley icons</td>
+
+          <td align="left">MOODS_URL</td>
+
+          <td align="left">$NB_MetaBody, $NB_EntryBody</td>
+
+          <td align="left">FORMAT: moods</td>
 	</tr>
 
         <tr>
@@ -1590,11 +1625,28 @@ nb [-b blog_dir] -u all
   <div id="tips">
     <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
 
+    <p><b>Writing Metatags on the Fly</b></p>
+    
+    <p>Metatags can be written on the fly. For example, text formatting can be set from
+      the command line.</p>
+    <pre>
+nb [-b blogdir] --tag FORMAT --tag-text "markdown" -a
+    </pre>
+    <p>Custom Metatags can be used, but will be ignored unless a plugin is written
+      for them and templates have placeholders for their data:</p>
+    <pre>
+nb [-b blogdir] --tag TAGNAME --tag-text "the tag's value" -a
+nb [-b blogdir] --tag TAGNAME --tag-text "the tag's value" -e 2
+    </pre>
+
     <p><b>Set a Default Weblog Directory</b></p>
 
-    <p>By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to. Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em> and set <em>BLOG_DIR</em> to your weblog directory.</p>
+    <p>By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to. Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em>:</p>
+    <pre>
+BLOG_DIR="/path/to/weblog"
+    </pre>
 
-    <p><b>Adding Shell Scripting to your Templates</b></p>
+    <p><b>Adding Shell Scripting to Your Templates</b></p>
 
     <p>It's possible to use command substitution in your templates, using one of the following forms:</p>
     <pre>
@@ -1604,7 +1656,7 @@ or
                 
 </pre>
 
-    <p><b>Add an Introduction to your Weblog</b></p>
+    <p><b>Add an Introduction to Your Weblog</b></p>
 
     <p>Create a text file in your weblog directory called, "intro.txt". Edit the text file the way you like, then add the following to the main template:</p>
     <pre>
@@ -1612,7 +1664,7 @@ $(&lt; "$BLOG_DIR/intro.txt")
         
 </pre>
 
-    <p><b>Integrating Parts of your Weblog into a Site</b></p>
+    <p><b>Integrating Parts of Your Weblog Into a Site</b></p>
 
     <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a
     matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>

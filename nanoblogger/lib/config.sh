@@ -52,16 +52,15 @@ export BLOG_DIR
 : ${NB_DBTYPE:=db}
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
-#### WARNING ####
-# changing the following will require manual modification to each
-# entry's data file
+# WARNING: changing the following will require manually modifying any
+# existing entry data files!
 #
 # default metadata marker (a.k.a. spacer)
 : ${METADATA_MARKER:=-----}
 # default metadata close tag (e.g. 'END-----')
 : ${METADATA_CLOSETAG:=$METADATA_MARKER}
+# END WARNING
 #
-#### END WARNING ####
 # default to raw processing for page content
 : ${PAGE_FORMAT:=raw}
 # default to raw processing for entry body

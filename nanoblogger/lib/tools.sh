@@ -225,10 +225,13 @@ CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
 # tool to help change an entry's date/timestamp
+# (e.g. TIMESTAMP: YYYY-MM-DD HH:MM:SS)
 chg_entrydate(){
 EntryDate_File="$1"
-# (e.g. YYYY-MM-DD HH:MM:SS)
 EntryDate_TimeStamp="$2"
+# read timestamp from command line
+[ "$USR_METATAG" = TIMESTAMP ] &&
+	EntryDate_TimeStamp="$USR_TAGTEXT"
 # validate timestamp format
 Edit_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
 New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
@@ -236,43 +239,30 @@ New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
 [ ! -z "$EntryDate_TimeStamp" ] && [ -z "$New_EntryTimeStamp" ] &&
 	die "TIMESTAMP != 'YYYY-MM-DD HH:MM:SS'"
 if [ ! -z "$New_EntryTimeStamp" ]; then
-	Old_EntryFile="$EntryDate_File"
-	[ -f "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE" ] &&
-		die "$NB_DATA_DIR/$New_EntryTimeStamp.$NB_DATATYPE - $samefilename"
 	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
 	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
-		mv "$NB_DATA_DIR/$EntryDate_File" "$NB_DATA_DIR/$New_EntryDateFile"
-	fi
-	NEWDATE_STRING=`echo "$New_EntryTimeStamp" |sed -e 's/[A-Z,a-z]/ /g; s/[\_]/:/g'`
-	NB_NewEntryDate=$(filter_datestring "$DATE_FORMAT" "" "$NEWDATE_STRING")
-	if [ ! -z "$NB_NewEntryDate" ]; then
-		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
-	else
-		# fallback to timestamp
-		nb_msg "$filterdate_failed"
-		NB_NewEntryDate="$EntryDate_TimeStamp"
-		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
-	fi
-	# update relative categories
-	if [ ! -z "$cat_list" ]; then
-		for cat_db in $cat_list; do
-			cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
-			if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
-				sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
-				> "$NB_DATA_DIR/$cat_db".tmp
-				mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
-			fi
-		done
-	else
-		for cat_db in $db_categories; do
-			cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
-			if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
-				sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
-				> "$NB_DATA_DIR/$cat_db".tmp
-				mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
-			fi
-		done
-		rm -f "$NB_DATA_DIR/$Old_EntryFile"
+		Old_EntryFile="$EntryDate_File"
+		# update relative categories
+		if [ ! -z "$cat_list" ]; then
+			for cat_db in $cat_list; do
+				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
+				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
+					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
+					> "$NB_DATA_DIR/$cat_db".tmp
+					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+				fi
+			done
+		else
+			for cat_db in $db_categories; do
+				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
+				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
+					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
+					> "$NB_DATA_DIR/$cat_db".tmp
+					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+				fi
+			done
+		fi
+		mv "$NB_DATA_DIR/$Old_EntryFile" "$NB_DATA_DIR/$New_EntryDateFile"
 		set_entrylink "$Old_EntryFile"
 		Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 		Delete_PermalinkDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir"
@@ -283,6 +273,16 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 			rm -fr "$Delete_PermalinkDir"
 		# delete old entry's cache file
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Old_EntryFile".*
+	fi
+	NEWDATE_STRING=`echo "$New_EntryTimeStamp" |sed -e 's/[A-Z,a-z]/ /g; s/[\_]/:/g'`
+	NB_NewEntryDate=$(filter_datestring "$DATE_FORMAT" "" "$NEWDATE_STRING")
+	if [ ! -z "$NB_NewEntryDate" ]; then
+		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
+	else
+		# fallback to timestamp
+		nb_msg "$filterdate_failed"
+		NB_NewEntryDate="$EntryDate_TimeStamp"
+		write_metadata DATE "$NB_NewEntryDate" "$NB_DATA_DIR/$New_EntryDateFile"
 	fi
 fi
 }
