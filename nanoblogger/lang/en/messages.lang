@@ -19,6 +19,17 @@ checkconf_nodata="weblog's data directory doesn't exist! goodbye."
 checkconf_nocache="weblog's cache directory doesn't exist! goodbye."
 checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
 
+# validate category id(s)
+catid_bad="bad id(s)!"
+checkcatid_invalid="invalid category id(s):"
+checkcatid_novalid="must specify valid category id!"
+
+# validate metadata files
+checkmetatags_notag="missing metadata tag:"
+
+# config_weblog
+configweblog_nomod="no changes were made! goodbye."
+
 # load_template
 loadtemplate_nofile="template file doesn't exist! goodbye."
 
@@ -39,7 +50,12 @@ buildweblog_files="generating weblog files ..."
 buildweblog_main="generating main index page(s) ..."
 
 # nb_draft
-draft_asknew="draft file doesn't exist! create?"
+nbdraft_asknew="draft file doesn't exist! create?"
+
+# nb_edit
+nbedit_nofile="file doesn't exist!"
+nbedit_prompt="press [enter] to continue."
+nbedit_failed="failed to write file! goodbye."
 
 # add_entry
 addentry_catinfo="selected category id(s):"

@@ -70,11 +70,11 @@ nb_edit(){
 EDIT_FILE="$1"
 $EDITOR "$EDIT_FILE"
 if [ ! -f "$EDIT_FILE" ]; then
-	echo "File, '$EDIT_FILE' does not exist!"
-	echo "press [enter] to continue."
+	nb_msg "'$EDIT_FILE' - $nbedit_nofile"
+	echo "$nbedit_prompt"
 	read -p "$NB_PROMPT" enter_key
 fi
-[ ! -f "$EDIT_FILE" ] && die "failed to write '$EDIT_FILE'! goodbye."
+[ ! -f "$EDIT_FILE" ] && die "'$EDIT_FILE' - $nbedit_failed"
 }
 
 # convert category number to existing category database
@@ -86,7 +86,7 @@ if [ ! -z "$cat_query" ]; then
 		cat_valid=`echo "$db_categories" |grep cat_$cat_id.$NB_DBTYPE`
 		echo "$cat_valid"
 		[ -z "$cat_valid" ] &&
-			echo "bad id(s)!"
+			nb_msg "$catid_bad"
 	done
 fi
 }
@@ -96,9 +96,20 @@ check_catid(){
 cat_list=`cat_id`
 for cat_db in $cat_list; do
 	[ ! -f "$NB_DATA_DIR/$cat_db" ] &&
-		die "invalid category id(s): $cat_num"
+		die "$checkcatid_invalid $cat_num"
 done
-[ ! -z "$cat_num" ] && [ -z "$cat_list" ] && die "must specify a valid category id!"
+[ ! -z "$cat_num" ] && [ -z "$cat_list" ] && die "$checkcatid_novalid"
+}
+
+# check file for required metadata tags
+check_metatags(){
+VALIDATE_TAGS="$1"
+VALIDATE_METAFILE="$2"
+for mtag in $VALIDATE_TAGS; do
+	MTAG_NUM=`grep -c "^$mtag" "$VALIDATE_METAFILE"`
+	[ "$MTAG_NUM" = 0 ] &&
+		die "'$VALIDATE_METAFILE' - $checkmetatags_notag $mtag"
+done
 }
 
 # special conversion for titles to link form

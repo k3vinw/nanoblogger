@@ -614,7 +614,7 @@ nb_draft(){
 EDITDRAFT_FILE="$1"
 [ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
 if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
-	nb_msg "$draft_asknew [Y/n]"
+	nb_msg "$nbdraft_asknew [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
@@ -630,6 +630,8 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 fi
 if [ -f "$EDITDRAFT_FILE" ]; then
 	nb_edit "$EDITDRAFT_FILE"
+	# validate file's metadata
+	check_metatags "TITLE: BODY: $METADATA_CLOSETAG" "$EDITDRAFT_FILE"
 fi
 }
 
@@ -699,6 +701,9 @@ for entry_id in $NUMVAR; do
 	# write any user metadata
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_DATA_DIR/$Edit_EntryFile"
 	nb_edit "$NB_DATA_DIR/$Edit_EntryFile"
+	# validate file's metadata
+	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
+		"$NB_DATA_DIR/$Edit_EntryFile"
 	# load user specified timestamp
 	read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
 	New_TimeStamp="$METADATA"
@@ -961,6 +966,9 @@ fi
 # add new entry from metadata file
 if [ ! -z "$USR_ADDFILE" ]; then
 	if [ -f "$USR_ADDFILE" ]; then
+		# validate file's metadata
+		check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
+			"$USR_ADDFILE"
 		load_metadata ALL "$USR_ADDFILE"
 	else
 		nb_msg "'$USR_ADDFILE' $addweblog_nofile"
@@ -987,6 +995,9 @@ if [ -z "$NB_EntryBody" ]; then
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_EditFile"
 	# write current metadata to temp file and edit
 	write_entry "$NB_EditFile"; nb_edit "$NB_EditFile"
+	# validate file's metadata
+	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
+		"$NB_EditFile"
 	# load all new entry metadata from temp file
 	if [ -f "$NB_EditFile" ]; then
 		load_metadata ALL "$NB_EditFile"

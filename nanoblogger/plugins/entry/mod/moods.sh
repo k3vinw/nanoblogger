@@ -1,4 +1,4 @@
-# Auto-format plugin that converts mood variables
+# Entry Modify plugin that converts mood variables
 # to emoticons, controlled by moods.conf file
 
 : ${MOODS_DIR:=$BLOG_DIR/moods}

@@ -93,7 +93,7 @@ deconfig(){ BLOG_AUTHOR=; PLUGINS_DIR=; NB_DATATYPE=; NB_DBTYPE=; \
 config_weblog(){
 nb_edit "$BLOG_CONF"
 # check if file's been modified since opened
-[ ! -N "$BLOG_CONF" ] && die "no changes were made! goodbye."
+[ ! -N "$BLOG_CONF" ] && die "$configweblog_nomod"
 deconfig; load_config
 }
 
