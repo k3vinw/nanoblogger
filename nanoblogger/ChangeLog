@@ -1,30 +1,98 @@
+2005-11-14 21:18  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  more strange CVS issues.
+
+2005-11-14 21:14  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: More
+	  strange CVS issues.
+
+2005-11-14 21:11  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS Repository!
+
+2005-11-14 21:07  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS Repository!!!
+
+2005-11-14 21:04  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf:
+	  Strange CVS repository problems.
+
+2005-11-14 21:02  n1xt3r
+
+	* ChangeLog, default/blog.conf, nanoblogger/ChangeLog,
+	  nanoblogger/default/templates/blog.conf: Fix CVS repository!!!
+
+2005-11-14 20:57  n1xt3r
+
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS repository!
+
 2005-11-14 20:55  n1xt3r
 
-	* ChangeLog, default/blog.conf: Fix blog.conf in CVS repository.
+	* ChangeLog, default/blog.conf, nanoblogger/ChangeLog,
+	  nanoblogger/default/templates/blog.conf: Fix blog.conf in CVS
+	  repository.
 
 2005-11-14 20:49  n1xt3r
 
-	* default/: blog.conf: Fix CVS repository.
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS repository.
 
 2005-11-14 20:44  n1xt3r
 
-	* default/: blog.conf: Fix CVS repository.
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS repository.
 
 2005-11-14 20:37  n1xt3r
 
-	* default/: blog.conf: Fix CVS repository.
+	* default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS repository.
 
-2005-11-14 20:29  n1xt3r
+2005-11-14 20:28  n1xt3r
 
-	* default/blog.conf: Fix CVS repository.
+	* nanoblogger/default/data/2005-06-02T20_48_35.txt,
+	  default/blog.conf, nanoblogger/default/templates/blog.conf: Fix
+	  CVS repository.
+
+2005-11-14 20:22  n1xt3r
+
+	* nanoblogger/default/: templates/category_archive.htm,
+	  templates/entry.htm, templates/entry.metadata,
+	  templates/file.metadata, templates/main_index.htm,
+	  templates/main_links.htm, templates/makepage.htm,
+	  templates/month_archive.htm, templates/permalink.htm,
+	  templates/permalink_entry.htm, templates/weblog_status.htm,
+	  articles/example.html: Fix CVS repository.
+
+2005-11-14 20:08  n1xt3r
+
+	* nanoblogger/default/articles/example.txt: Fix CVS Repository.
+
+2005-11-14 19:59  n1xt3r
+
+	* nanoblogger/default/templates/: category_archive.htm, entry.htm,
+	  main_index.htm, main_links.htm, makepage.htm, month_archive.htm,
+	  permalink.htm, permalink_entry.htm, weblog_status.htm: Update
+	  default files.
 
 2005-11-14 19:45  n1xt3r
 
-	* nb: Update default files.
+	* nb, nanoblogger/nb, nanoblogger/default/data/cat_1.db: Update
+	  default files.
 
 2005-11-14 19:39  n1xt3r
 
-	* TODO, nb, welcome-to-nb.txt, lang/en/messages.lang, lib/tools.sh,
+	* TODO, nanoblogger/TODO, nb, welcome-to-nb.txt,
+	  lang/en/messages.lang, lib/tools.sh, nanoblogger/nb,
+	  nanoblogger/welcome-to-nb.txt, nanoblogger/lang/en/messages.lang,
+	  nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
 	  plugins/archive/master_index.sh: - Fix temp file cleanup when
 	  adding new entry.  - Automatically adds a welcome message type
 	  entry to new weblogs.
@@ -32,6 +100,10 @@
 2005-11-14 14:37  n1xt3r
 
 	* nb, lang/en/messages.lang, lib/config.sh, lib/tools.sh,
+	  nanoblogger/nb, nanoblogger/lang/en/messages.lang,
+	  nanoblogger/lib/config.sh, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/entry/mod/moods.sh,
+	  nanoblogger/plugins/page/format/moods.sh,
 	  plugins/entry/mod/moods.sh, plugins/page/format/moods.sh: -
 	  Validate file's metadata tags.  - Include some missing messages
 	  in language definitions
@@ -40,6 +112,14 @@
 
 	* ChangeLog, nb, nb.conf, docs/nanoblogger.html,
 	  lang/en/messages.lang, lib/config.sh, lib/tools.sh,
+	  nanoblogger/ChangeLog, nanoblogger/nb, nanoblogger/nb.conf,
+	  nanoblogger/docs/nanoblogger.html,
+	  nanoblogger/lang/en/messages.lang, nanoblogger/lib/config.sh,
+	  nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/zyx_articles_meta.off,
+	  nanoblogger/plugins/zyx_articles_meta.sh,
+	  nanoblogger/plugins/zyx_articles_text.off,
+	  nanoblogger/plugins/zyx_articles_text.sh,
 	  plugins/zyx_articles_meta.off, plugins/zyx_articles_meta.sh,
 	  plugins/zyx_articles_text.off, plugins/zyx_articles_text.sh: -
 	  Update user manual with information on latest features.  - Fix
@@ -47,7 +127,11 @@
 
 2005-11-11 00:21  n1xt3r
 
-	* nb, lang/en/messages.lang, lang/en/plugins.lang, lib/tools.sh,
+	* nb, nanoblogger/nb, lang/en/messages.lang, lang/en/plugins.lang,
+	  lib/tools.sh, nanoblogger/lang/en/messages.lang,
+	  nanoblogger/lang/en/plugins.lang, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/zyx_articles_meta.off,
+	  nanoblogger/plugins/zyx_articles_text.sh,
 	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh:
 	  Define word used for "Categories" and "Comments" in language
 	  file.
@@ -55,34 +139,49 @@
 2005-11-09 17:45  n1xt3r
 
 	* TODO, nb, lang/en/help.lang, lang/en/messages.lang,
-	  lib/config.sh, lib/tools.sh, plugins/page/format/markdown.sh,
-	  plugins/page/format/moods.sh: Change entry's date from special
-	  TIMESTAMP metadata field.
+	  nanoblogger/TODO, nanoblogger/nb, nanoblogger/lang/en/help.lang,
+	  nanoblogger/lang/en/messages.lang, lib/config.sh, lib/tools.sh,
+	  nanoblogger/lib/config.sh, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/page/format/markdown.sh,
+	  nanoblogger/plugins/page/format/moods.sh,
+	  plugins/page/format/markdown.sh, plugins/page/format/moods.sh:
+	  Change entry's date from special TIMESTAMP metadata field.
 
 2005-11-05 12:50  n1xt3r
 
-	* nb: Plugins list may be seperated by a comma, space or both (e.g.
-	  plugin1, plugin2).
+	* nb, nanoblogger/nb: Plugins list may be seperated by a comma,
+	  space or both (e.g. plugin1, plugin2).
 
 2005-11-05 11:27  n1xt3r
 
-	* nb, nb.conf, docs/nanoblogger.html: Updated templates and entry
-	  format in user manual.
+	* nb, nb.conf, docs/nanoblogger.html, nanoblogger/nb,
+	  nanoblogger/nb.conf, nanoblogger/docs/nanoblogger.html: Updated
+	  templates and entry format in user manual.
 
 2005-11-04 23:53  n1xt3r
 
-	* nb, nb.conf, lang/en/help.lang, plugins/page/format/moods.sh:
-	  Structure of entry and metadata files controlled through
-	  templates.
+	* nb, nb.conf, lang/en/help.lang, nanoblogger/nb,
+	  nanoblogger/nb.conf, nanoblogger/lang/en/help.lang,
+	  nanoblogger/plugins/page/format/moods.sh,
+	  plugins/page/format/moods.sh: Structure of entry and metadata
+	  files controlled through templates.
 
 2005-11-03 03:07  n1xt3r
 
-	* nb: - Metadata files retain user metatags.  - New metadata files
-	  accepts standard entry command options.
+	* nb, nanoblogger/nb: - Metadata files retain user metatags.  - New
+	  metadata files accepts standard entry command options.
 
 2005-11-03 02:21  n1xt3r
 
 	* docs/nanoblogger.html, lang/en/help.lang, lang/en/messages.lang,
+	  nanoblogger/docs/nanoblogger.html, nanoblogger/lang/en/help.lang,
+	  nanoblogger/lang/en/messages.lang,
+	  nanoblogger/plugins/01_mymood.off,
+	  nanoblogger/plugins/entry/format/autobr.sh,
+	  nanoblogger/plugins/entry/format/markdown.sh,
+	  nanoblogger/plugins/entry/format/raw.sh,
+	  nanoblogger/plugins/entry/mod/moods.sh,
+	  nanoblogger/plugins/page/format/markdown.sh,
 	  plugins/01_mymood.off, plugins/entry/format/autobr.sh,
 	  plugins/entry/format/markdown.sh, plugins/entry/format/raw.sh,
 	  plugins/entry/mod/moods.sh, plugins/page/format/markdown.sh:
@@ -90,30 +189,71 @@
 
 2005-11-01 01:49  n1xt3r
 
-	* nb, lib/config.sh, plugins/01_mymood.off, plugins/atom.sh,
-	  plugins/calendar.sh, plugins/fortune.sh,
-	  plugins/recent_entries.sh, plugins/rss.sh, plugins/rss2.sh,
-	  plugins/weblog_links.sh, plugins/weblog_status.sh,
-	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh,
-	  plugins/archive/master_index.sh,
+	* nb, lib/config.sh, nanoblogger/nb, nanoblogger/lib/config.sh,
+	  nanoblogger/plugins/01_mymood.off, nanoblogger/plugins/atom.sh,
+	  nanoblogger/plugins/calendar.sh, nanoblogger/plugins/fortune.sh,
+	  nanoblogger/plugins/recent_entries.sh,
+	  nanoblogger/plugins/rss.sh, nanoblogger/plugins/rss2.sh,
+	  nanoblogger/plugins/weblog_links.sh,
+	  nanoblogger/plugins/weblog_status.sh,
+	  nanoblogger/plugins/zyx_articles_meta.off,
+	  nanoblogger/plugins/zyx_articles_text.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
+	  nanoblogger/plugins/archive/month/month_calendar.sh,
+	  plugins/01_mymood.off, plugins/atom.sh, plugins/calendar.sh,
+	  plugins/fortune.sh, plugins/recent_entries.sh, plugins/rss.sh,
+	  plugins/rss2.sh, plugins/weblog_links.sh,
+	  plugins/weblog_status.sh, plugins/zyx_articles_meta.off,
+	  plugins/zyx_articles_text.sh, plugins/archive/master_index.sh,
 	  plugins/archive/month/month_calendar.sh: - Preliminary support
 	  for different languages.  - New entries skip prompts by default,
 	  can toggle interactive prompts.
 
 2005-10-25 00:55  n1xt3r
 
-	* nb, lib/config.sh: Configurable metadata fields to help reduce
-	  conflict with text filters.
+	* nb, lib/config.sh, nanoblogger/nb, nanoblogger/lib/config.sh:
+	  Configurable metadata fields to help reduce conflict with text
+	  filters.
 
 2005-10-21 01:42  n1xt3r
 
-	* lib/config.sh, plugins/archive/master_index.sh,
-	  plugins/entry/category_links.sh: Configurable symbols for top and
-	  end of page links.
+	* lib/config.sh,
+	  nanoblogger/default/templates/category_archive.htm,
+	  nanoblogger/default/templates/main_index.htm,
+	  nanoblogger/default/templates/makepage.htm,
+	  nanoblogger/default/templates/month_archive.htm,
+	  nanoblogger/default/templates/permalink.htm,
+	  nanoblogger/lib/config.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
+	  nanoblogger/plugins/entry/category_links.sh,
+	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
+	  Configurable symbols for top and end of page links.
 
 2005-10-20 02:20  n1xt3r
 
-	* docs/nanoblogger.html, lib/tools.sh, plugins/atom.sh,
+	* docs/nanoblogger.html, lib/tools.sh,
+	  nanoblogger/default/blog.conf,
+	  nanoblogger/default/styles/nb_clean.css,
+	  nanoblogger/default/styles/nb_default.css,
+	  nanoblogger/default/styles/nb_rusted.css,
+	  nanoblogger/default/styles/nb_spring.css,
+	  nanoblogger/default/templates/category_archive.htm,
+	  nanoblogger/default/templates/entry.htm,
+	  nanoblogger/default/templates/main_index.htm,
+	  nanoblogger/default/templates/makepage.htm,
+	  nanoblogger/default/templates/month_archive.htm,
+	  nanoblogger/default/templates/permalink.htm,
+	  nanoblogger/default/templates/permalink_entry.htm,
+	  nanoblogger/docs/nanoblogger.html, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/atom.sh,
+	  nanoblogger/plugins/recent_entries.sh,
+	  nanoblogger/plugins/rss.sh, nanoblogger/plugins/rss2.sh,
+	  nanoblogger/plugins/weblog_status.sh,
+	  nanoblogger/plugins/zyx_articles.sh,
+	  nanoblogger/plugins/zyx_articles_meta.off,
+	  nanoblogger/plugins/zyx_articles_text.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
+	  nanoblogger/plugins/page/feed_links.sh, plugins/atom.sh,
 	  plugins/recent_entries.sh, plugins/rss.sh, plugins/rss2.sh,
 	  plugins/weblog_status.sh, plugins/zyx_articles.sh,
 	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh,
@@ -124,7 +264,16 @@
 
 2005-10-11 21:31  n1xt3r
 
-	* nb, docs/nanoblogger.html, lib/tools.sh,
+	* nb, docs/nanoblogger.html, lib/tools.sh, nanoblogger/nb,
+	  nanoblogger/default/templates/category_archive.htm,
+	  nanoblogger/default/templates/main_index.htm,
+	  nanoblogger/default/templates/makepage.htm,
+	  nanoblogger/default/templates/month_archive.htm,
+	  nanoblogger/default/templates/permalink.htm,
+	  nanoblogger/docs/nanoblogger.html, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/recent_entries.sh,
+	  nanoblogger/plugins/weblog_status.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
 	  plugins/recent_entries.sh, plugins/weblog_status.sh,
 	  plugins/archive/master_index.sh: - Tools to create and edit
 	  metadata files.  - Support for drafting entries.  - Support to
@@ -134,22 +283,31 @@
 
 2005-10-09 01:15  n1xt3r
 
-	* nb, lib/config.sh, lib/tools.sh: Extended UTC date support to
-	  timestamp of entries.
+	* nb, nanoblogger/nb, lib/config.sh, lib/tools.sh,
+	  nanoblogger/lib/config.sh, nanoblogger/lib/tools.sh: Extended UTC
+	  date support to timestamp of entries.
 
 2005-10-09 00:53  n1xt3r
 
-	* lib/tools.sh: Added support for dates in UTC format.
+	* lib/tools.sh, nanoblogger/default/blog.conf,
+	  nanoblogger/lib/tools.sh: Added support for dates in UTC format.
 
 2005-10-08 01:01  n1xt3r
 
-	* nb, lib/tools.sh, moods/moods.conf: - Fix categories not being
-	  updated properly.  - Fix loading order of text formatting
-	  plugins.
+	* nb, lib/tools.sh, moods/moods.conf, nanoblogger/nb,
+	  nanoblogger/lib/tools.sh, nanoblogger/moods/moods.conf: - Fix
+	  categories not being updated properly.  - Fix loading order of
+	  text formatting plugins.
 
 2005-10-07 18:08  n1xt3r
 
-	* ChangeLog, nb, lib/config.sh, plugins/zyx_articles.sh,
+	* ChangeLog, nb, nanoblogger/ChangeLog, nanoblogger/nb,
+	  nanoblogger/default/blog.conf, lib/config.sh,
+	  nanoblogger/lib/config.sh, nanoblogger/plugins/zyx_articles.sh,
+	  nanoblogger/plugins/entry/format/autobr.sh,
+	  nanoblogger/plugins/entry/mod/line_break.sh,
+	  nanoblogger/plugins/page/format/markdown.sh,
+	  nanoblogger/plugins/page/format/raw.sh, plugins/zyx_articles.sh,
 	  plugins/entry/format/autobr.sh, plugins/entry/mod/line_break.sh,
 	  plugins/page/format/markdown.sh, plugins/page/format/raw.sh: -
 	  Create default metadata for text formatting in a new entry.  -
@@ -158,12 +316,22 @@
 
 2005-10-07 03:21  n1xt3r
 
-	* plugins/entry/: format/markdown.sh, format/raw.sh,
-	  mod/line_break.sh: Some default plugins for text filtering.
+	* nanoblogger/plugins/entry/format/markdown.sh,
+	  nanoblogger/plugins/entry/format/raw.sh,
+	  nanoblogger/plugins/entry/mod/line_break.sh,
+	  plugins/entry/format/markdown.sh, plugins/entry/format/raw.sh,
+	  plugins/entry/mod/line_break.sh: Some default plugins for text
+	  filtering.
 
 2005-10-07 03:16  n1xt3r
 
-	* ChangeLog, nb, lib/config.sh, plugins/weblog_links.sh,
+	* ChangeLog, nb, lib/config.sh, nanoblogger/ChangeLog,
+	  nanoblogger/nb, nanoblogger/default/blog.conf,
+	  nanoblogger/lib/config.sh, nanoblogger/plugins/weblog_links.sh,
+	  nanoblogger/plugins/zyx_articles.sh,
+	  nanoblogger/plugins/entry/mod/auto_break.sh,
+	  nanoblogger/plugins/entry/mod/base_url.sh,
+	  nanoblogger/plugins/entry/mod/moods.sh, plugins/weblog_links.sh,
 	  plugins/zyx_articles.sh, plugins/entry/mod/auto_break.sh,
 	  plugins/entry/mod/base_url.sh, plugins/entry/mod/moods.sh: - New
 	  entry files include metadata fields upon editing.  - Entries are
@@ -172,36 +340,55 @@
 
 2005-10-04 13:45  n1xt3r
 
-	* plugins/: fortune.sh, makepage/tidy.sh: - gregor herrmann: Patch
-	  for tidy plugin encoding problems.  - gregor herrmann: Patch for
-	  fortune plugin run from cron.
+	* nanoblogger/default/blog.conf, nanoblogger/plugins/fortune.sh,
+	  nanoblogger/plugins/makepage/tidy.sh, plugins/fortune.sh,
+	  plugins/makepage/tidy.sh: - gregor herrmann: Patch for tidy
+	  plugin encoding problems.  - gregor herrmann: Patch for fortune
+	  plugin run from cron.
 
 2005-10-04 13:18  n1xt3r
 
-	* nb, plugins/weblog_links.sh: - Only remove edit session files
-	  upon success.  - Enhanced generation of monthly links
-	  ($NB_MonthLinks) for main index page.  - Limit monthly links to
-	  12, configurable through MAX_MONTHLINKS variable.
+	* nb, nanoblogger/nb, nanoblogger/plugins/weblog_links.sh,
+	  plugins/weblog_links.sh: - Only remove edit session files upon
+	  success.  - Enhanced generation of monthly links ($NB_MonthLinks)
+	  for main index page.	- Limit monthly links to 12, configurable
+	  through MAX_MONTHLINKS variable.
 
 2005-09-29 18:02  n1xt3r
 
-	* nb, lib/tools.sh, plugins/archive/master_index.sh: - Added
-	  measures for protection and privacy of new entry data.  - Added
-	  check for entry deletion in master_index.sh plugin.
+	* nb, lib/tools.sh, nanoblogger/nb, nanoblogger/lib/tools.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
+	  plugins/archive/master_index.sh: - Added measures for protection
+	  and privacy of new entry data.  - Added check for entry deletion
+	  in master_index.sh plugin.
 
 2005-09-23 01:51  n1xt3r
 
-	* nb, lib/config.sh, lib/error.sh, lib/query.sh, lib/tools.sh,
+	* nb, nanoblogger/nb, lib/config.sh, lib/error.sh, lib/query.sh,
+	  lib/tools.sh, nanoblogger/lib/config.sh,
+	  nanoblogger/lib/error.sh, nanoblogger/lib/query.sh,
+	  nanoblogger/lib/tools.sh, nanoblogger/plugins/zyx_articles.sh,
 	  plugins/zyx_articles.sh: - Ben Finney: Patch main script split
 	  into smaller files.  - Articles list can be filtered now.
 
 2005-09-18 23:20  n1xt3r
 
-	* TODO, nb, plugins/weblog_links.sh,
-	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
-	  - Version changed to 3.3-CVS.  - Fix entry deletion when entry's
-	  part of a directory.	- Fix weblog creation copy bug.  - Patch to
-	  use $BLOG_CHARSET in templates again.  - Patch that adds setting
-	  for favorite icon shortcut.  - Replace limit of archive links
-	  with limit of 50 entries.
+	* TODO, nb, nanoblogger/TODO, nanoblogger/nb,
+	  nanoblogger/default/blog.conf,
+	  nanoblogger/default/styles/nb_rusted.css,
+	  nanoblogger/default/templates/category_archive.htm,
+	  nanoblogger/default/templates/main_index.htm,
+	  nanoblogger/default/templates/makepage.htm,
+	  nanoblogger/default/templates/month_archive.htm,
+	  nanoblogger/default/templates/permalink.htm,
+	  nanoblogger/plugins/weblog_links.sh,
+	  nanoblogger/plugins/archive/master_index.sh,
+	  nanoblogger/plugins/entry/category_links.sh,
+	  plugins/weblog_links.sh, plugins/archive/master_index.sh,
+	  plugins/entry/category_links.sh: - Version changed to 3.3-CVS.  -
+	  Fix entry deletion when entry's part of a directory.	- Fix
+	  weblog creation copy bug.  - Patch to use $BLOG_CHARSET in
+	  templates again.  - Patch that adds setting for favorite icon
+	  shortcut.  - Replace limit of archive links with limit of 50
+	  entries.
 
