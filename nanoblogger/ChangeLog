@@ -1,3 +1,46 @@
+2005-11-14 20:49  n1xt3r
+
+	* default/: blog.conf: Fix CVS repository.
+
+2005-11-14 20:44  n1xt3r
+
+	* default/: blog.conf: Fix CVS repository.
+
+2005-11-14 20:37  n1xt3r
+
+	* default/: blog.conf: Fix CVS repository.
+
+2005-11-14 20:29  n1xt3r
+
+	* default/blog.conf: Fix CVS repository.
+
+2005-11-14 19:45  n1xt3r
+
+	* nb: Update default files.
+
+2005-11-14 19:39  n1xt3r
+
+	* TODO, nb, welcome-to-nb.txt, lang/en/messages.lang, lib/tools.sh,
+	  plugins/archive/master_index.sh: - Fix temp file cleanup when
+	  adding new entry.  - Automatically adds a welcome message type
+	  entry to new weblogs.
+
+2005-11-14 14:37  n1xt3r
+
+	* nb, lang/en/messages.lang, lib/config.sh, lib/tools.sh,
+	  plugins/entry/mod/moods.sh, plugins/page/format/moods.sh: -
+	  Validate file's metadata tags.  - Include some missing messages
+	  in language definitions
+
+2005-11-13 17:24  n1xt3r
+
+	* ChangeLog, nb, nb.conf, docs/nanoblogger.html,
+	  lang/en/messages.lang, lib/config.sh, lib/tools.sh,
+	  plugins/zyx_articles_meta.off, plugins/zyx_articles_meta.sh,
+	  plugins/zyx_articles_text.off, plugins/zyx_articles_text.sh: -
+	  Update user manual with information on latest features.  - Fix
+	  logic in file handling when changing entry's timestamp.
+
 2005-11-11 00:21  n1xt3r
 
 	* nb, lang/en/messages.lang, lang/en/plugins.lang, lib/tools.sh,
@@ -60,32 +103,24 @@
 
 2005-10-21 01:42  n1xt3r
 
-	* default/category_archive.htm, default/main_index.htm,
-	  default/makepage.htm, default/month_archive.htm,
-	  default/permalink.htm, lib/config.sh,
-	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
-	  Configurable symbols for top and end of page links.
+	* lib/config.sh, plugins/archive/master_index.sh,
+	  plugins/entry/category_links.sh: Configurable symbols for top and
+	  end of page links.
 
 2005-10-20 02:20  n1xt3r
 
-	* default/category_archive.htm, default/entry.htm,
-	  default/main_index.htm, default/makepage.htm,
-	  default/month_archive.htm, default/permalink.htm,
-	  default/permalink_entry.htm, docs/nanoblogger.html, lib/tools.sh,
-	  plugins/atom.sh, plugins/recent_entries.sh, plugins/rss.sh,
-	  plugins/rss2.sh, plugins/weblog_status.sh,
-	  plugins/zyx_articles.sh, plugins/zyx_articles_meta.off,
-	  plugins/zyx_articles_text.sh, plugins/archive/master_index.sh,
-	  plugins/page/feed_links.sh: - Updated user manual with new entry,
-	  date, and plugin information.  - Improved use of HTML headers and
-	  CSS menu class in layout.  - Eliminated some ambiguous variable
-	  references found in plugins.
+	* docs/nanoblogger.html, lib/tools.sh, plugins/atom.sh,
+	  plugins/recent_entries.sh, plugins/rss.sh, plugins/rss2.sh,
+	  plugins/weblog_status.sh, plugins/zyx_articles.sh,
+	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh,
+	  plugins/archive/master_index.sh, plugins/page/feed_links.sh: -
+	  Updated user manual with new entry, date, and plugin information.
+	  - Improved use of HTML headers and CSS menu class in layout.  -
+	  Eliminated some ambiguous variable references found in plugins.
 
 2005-10-11 21:31  n1xt3r
 
-	* nb, default/category_archive.htm, default/main_index.htm,
-	  default/makepage.htm, default/month_archive.htm,
-	  default/permalink.htm, docs/nanoblogger.html, lib/tools.sh,
+	* nb, docs/nanoblogger.html, lib/tools.sh,
 	  plugins/recent_entries.sh, plugins/weblog_status.sh,
 	  plugins/archive/master_index.sh: - Tools to create and edit
 	  metadata files.  - Support for drafting entries.  - Support to
@@ -158,9 +193,7 @@
 
 2005-09-18 23:20  n1xt3r
 
-	* TODO, nb, default/category_archive.htm, default/main_index.htm,
-	  default/makepage.htm, default/month_archive.htm,
-	  default/permalink.htm, plugins/weblog_links.sh,
+	* TODO, nb, plugins/weblog_links.sh,
 	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
 	  - Version changed to 3.3-CVS.  - Fix entry deletion when entry's
 	  part of a directory.	- Fix weblog creation copy bug.  - Patch to
