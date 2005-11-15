@@ -1,3 +1,7 @@
+2005-11-14 20:55  n1xt3r
+
+	* ChangeLog, default/blog.conf: Fix blog.conf in CVS repository.
+
 2005-11-14 20:49  n1xt3r
 
 	* default/: blog.conf: Fix CVS repository.
