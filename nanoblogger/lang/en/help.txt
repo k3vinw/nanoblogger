@@ -1,0 +1,81 @@
+NanoBlogger - Console weblog engine.
+Version $VERSION, by Kevin Wood <n1xt3r@fastmail.fm>
+
+Usage:
+ $BASENAME [-b blog_dir] [options]
+
+Options:
+ -a, --add				create new entry, category, or
+					weblog (directory).
+ -b, --blogdir <directory>		specify weblog directory.
+ -B, --body <text>			deprecated, please use '-T' or
+					'--text' instead.
+ -c, --category	<ID,cat>		specify category (for '--add',
+					'--delete', '--edit', '--list' and
+					'--update').
+ --configure				configure weblog (for '--update').
+ --datadir <directory>			specify weblog's data directory.
+ -d, --delete <ID,cat>			delete an entry or category.
+ -D, --desc <text>			set text of description (for
+					'--add', '--draft' and
+					'--makepage').
+ -e, --edit <ID,cat>			edit an entry or category.
+ -E, --draft <file> 			edit or create metafile.
+ -f, --blogconf <file>			specify an alternate configuration
+					file.
+ -F, --file <file> 			specify metafile to import as
+					entry (for '--add').
+ -h, --help				show this help message.
+ -i, --interact 			add new entry interactively (for
+ 					'--add').
+ -l, --list <all,cat,current,DATE,max>	list entries or categories
+					(defaults to max).
+ --manual				view the manual.
+ -m, --move <ID>			move an entry to a specified
+					category (for '--category').
+ -M, --makepage <file1> <file2> 	create new weblog page (file2) from
+					metafile (file1).
+ --makefile <file> 			create new metafile.
+ -n, --author <text>			set text of author (for '--add',
+					'--draft', and '--makepage').
+ -p, --preview				run command to preview weblog.
+ -P, --publish				run command to publish weblog.
+ --template <file>			specify file to load as template
+					(for '--draft', '--makepage' and
+ 					'--makefile').
+ --template-dir <directory>		specify weblog's template directory.
+ -t, --title <text>			set text of title (for '--add',
+					'--category', '--draft', and
+					'--makepage').
+ --tag <TAG> 	 	 		specify tag (for '--add', '--draft',
+					'--edit', and '--makepage').
+ --tag-text <text> 			set text of tag (for '--tag').
+ -T, --text <text> 			set text of body (for '--add',
+					'--draft', and '--makepage').
+ -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
+					current).
+ -v, --verbose <1=on/0=off>		toggle level of verbosity.
+ -V, --version				display version information.
+
+ -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
+ 
+ --list and --update can match entries by date (does _not_ sort entry id's).
+ date = YYYY-MM-DD, YYYY-MM, YYYY
+
+Examples:
+
+ specify the weblog directory to create or add new entry
+	nb -b ~/public_html/weblog -a
+
+ create new category and title it "News"
+	nb -b ~/public_html/weblog -t "News" -c new -a
+
+ create new entry setting author, title, and body
+	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -B 'MyMessage!' -a
+
+ create draft file then add as new entry
+	nb -E ~/drafts/draft.txt
+	nb -b ~/public_html/weblog -F ~/drafts/draft.txt -a
+
+More info:
+ URL: http://nanoblogger.sourceforge.net

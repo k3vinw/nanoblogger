@@ -1017,16 +1017,28 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
-          <td align="left">articles.sh*</td>
+          <td align="left">articles_meta.sh*</td>
 
-          <td align="left">generates articles found in the "articles" directory</td>
+          <td align="left">generates articles from metafiles in the "articles" directory</td>
+
+          <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
 
           <td align="left">$NB_ArticleLinks</td>
 
-          <td align="left">$ARTICLE_DIR/article_title.$ARTICLE_SUFFIX</td>
-
-          <td align="left">requires makepage.htm template, should be last plugin to load</td>
+          <td align="left">requires makepage.htm template, plugin must be last to load</td>
         </tr>
+
+	<tr>
+	  <td align="left">articles_text.sh*</td>
+
+	  <td align="left">generates articles from text files in the "articles" directory</td>
+
+          <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
+
+	  <td align="left">$NB_ArticleLinks</td>
+
+          <td align="left">requires makepage.htm template, plugin must be last to load</td>
+	</tr>
 
         <tr>
           <td align="left">atom.sh</td>
@@ -1205,7 +1217,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
-          <td align="left">FORMAT: moods</td>
+          <td align="left">may combine with with others e.g. "FORMAT: moods, markdown"</td>
 	</tr>
 
         <tr>
@@ -1249,7 +1261,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">generates some useful links</td>
 
-          <td align="left">none</td>
+          <td align="left">MAX_MONTHLINKS</td>
 
           <td align="left">$NB_MainLinks, $NB_MonthLinks, $NB_CategoryLinks</td>
 
@@ -1261,7 +1273,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">generates some statistics</td>
 
-          <td align="left">see notes</td>
+          <td align="left">none</td>
 
           <td align="left">$NB_BlogStatus</td>
 
