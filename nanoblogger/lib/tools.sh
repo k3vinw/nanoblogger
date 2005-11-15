@@ -112,6 +112,19 @@ for mtag in $VALIDATE_TAGS; do
 done
 }
 
+# import metafile
+import_file(){
+IMPORT_FILE="$1"
+if [ -f "$IMPORT_FILE" ]; then
+	# validate file's metadata
+	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
+		"$IMPORT_FILE"
+	load_metadata ALL "$IMPORT_FILE"
+else
+	nb_msg "'$IMPORT_FILE' $importfile_nofile"
+fi
+}
+
 # special conversion for titles to link form
 set_title2link(){ title2link_var="$1"
 echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]//g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"

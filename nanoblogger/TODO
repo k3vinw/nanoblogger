@@ -1,4 +1,2 @@
-* Add "Categories" to language files
 * Previous and next links for entries
-* Fix articles plugin static "sidetitle" generation
 * Split date and entry listings in the master archive by year

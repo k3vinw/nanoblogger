@@ -1,7 +1,7 @@
 # NanoBlogger Plugin that creates a master archive index
 
 # concatenate modification variables
-MOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$USR_TITLE"
+MOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
 
 # check for weblog modifications
 if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
