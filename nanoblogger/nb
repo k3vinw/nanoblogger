@@ -282,7 +282,6 @@ set_baseurl "" "$MKPAGE_OUTFILE"
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 # let plugins modify the content
 load_plugins page
-r
 : ${MKPAGE_FORMAT:=$PAGE_FORMAT}
 load_plugins page/format "$MKPAGE_FORMAT"
 # Set NB_Entries for backwards compatibility
