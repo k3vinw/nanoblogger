@@ -1,3 +1,17 @@
+2005-11-15 14:19  n1xt3r
+
+	* ChangeLog, nb, docs/nanoblogger.html, lang/en/help.lang,
+	  lang/en/help.txt, plugins/zyx_articles_meta.sh,
+	  plugins/zyx_articles_text.off: - Update plugin table in user
+	  manual.  - New '--makefile' option simplifies metafile creation.
+
+2005-11-14 19:39  n1xt3r
+
+	* TODO, nb, welcome-to-nb.txt, lang/en/messages.lang, lib/tools.sh,
+	  plugins/archive/master_index.sh: - Fix temp file cleanup when
+	  adding new entry.  - Automatically adds a welcome message type
+	  entry to new weblogs.
+
 2005-11-14 14:37  n1xt3r
 
 	* nb, lang/en/messages.lang, lib/config.sh, lib/tools.sh,
@@ -7,7 +21,8 @@
 
 2005-11-13 17:24  n1xt3r
 
-	* ChangeLog, nb.conf, docs/nanoblogger.html,
+	* ChangeLog, nb, nb.conf, docs/nanoblogger.html,
+	  lang/en/messages.lang, lib/config.sh, lib/tools.sh,
 	  plugins/zyx_articles_meta.off, plugins/zyx_articles_meta.sh,
 	  plugins/zyx_articles_text.off, plugins/zyx_articles_text.sh: -
 	  Update user manual with information on latest features.  - Fix
@@ -15,324 +30,182 @@
 
 2005-11-11 00:21  n1xt3r
 
-	* lang/en/plugins.lang: Define word used for "Categories" and
-	  "Comments" in language file.
+	* nb, lang/en/messages.lang, lang/en/plugins.lang, lib/tools.sh,
+	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh:
+	  Define word used for "Categories" and "Comments" in language
+	  file.
 
 2005-11-09 17:45  n1xt3r
 
-	* TODO, lang/en/help.lang, plugins/page/format/markdown.sh: Change
-	  entry's date from special TIMESTAMP metadata field.
+	* TODO, nb, lang/en/help.lang, lang/en/messages.lang,
+	  lib/config.sh, lib/tools.sh, plugins/page/format/markdown.sh,
+	  plugins/page/format/moods.sh: Change entry's date from special
+	  TIMESTAMP metadata field.
+
+2005-11-05 12:50  n1xt3r
+
+	* nb: Plugins list may be seperated by a comma, space or both (e.g.
+	  plugin1, plugin2).
+
+2005-11-05 11:27  n1xt3r
+
+	* nb, nb.conf, docs/nanoblogger.html: Updated templates and entry
+	  format in user manual.
+
+2005-11-04 23:53  n1xt3r
+
+	* nb, nb.conf, lang/en/help.lang, plugins/page/format/moods.sh:
+	  Structure of entry and metadata files controlled through
+	  templates.
+
+2005-11-03 03:07  n1xt3r
+
+	* nb: - Metadata files retain user metatags.  - New metadata files
+	  accepts standard entry command options.
 
 2005-11-03 02:21  n1xt3r
 
-	* plugins/: 01_mymood.off, entry/format/autobr.sh,
-	  entry/format/markdown.sh, entry/format/raw.sh: Updated Link to
-	  NBComments in user manual.
+	* docs/nanoblogger.html, lang/en/help.lang, lang/en/messages.lang,
+	  plugins/01_mymood.off, plugins/entry/format/autobr.sh,
+	  plugins/entry/format/markdown.sh, plugins/entry/format/raw.sh,
+	  plugins/entry/mod/moods.sh, plugins/page/format/markdown.sh:
+	  Updated Link to NBComments in user manual.
 
 2005-11-01 01:49  n1xt3r
 
-	* plugins/: atom.sh, calendar.sh, fortune.sh, recent_entries.sh,
-	  rss.sh, rss2.sh, weblog_links.sh, weblog_status.sh,
-	  archive/master_index.sh, archive/month/month_calendar.sh: -
-	  Preliminary support for different languages.	- New entries skip
-	  prompts by default, can toggle interactive prompts.
+	* nb, lib/config.sh, plugins/01_mymood.off, plugins/atom.sh,
+	  plugins/calendar.sh, plugins/fortune.sh,
+	  plugins/recent_entries.sh, plugins/rss.sh, plugins/rss2.sh,
+	  plugins/weblog_links.sh, plugins/weblog_status.sh,
+	  plugins/zyx_articles_meta.off, plugins/zyx_articles_text.sh,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/month/month_calendar.sh: - Preliminary support
+	  for different languages.  - New entries skip prompts by default,
+	  can toggle interactive prompts.
+
+2005-10-25 00:55  n1xt3r
+
+	* nb, lib/config.sh: Configurable metadata fields to help reduce
+	  conflict with text filters.
 
 2005-10-21 01:42  n1xt3r
 
 	* default/templates/category_archive.htm,
 	  default/templates/main_index.htm, default/templates/makepage.htm,
 	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/entry/category_links.sh:
+	  default/templates/permalink.htm, lib/config.sh,
+	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
 	  Configurable symbols for top and end of page links.
 
 2005-10-20 02:20  n1xt3r
 
 	* default/blog.conf, default/styles/nb_clean.css,
 	  default/styles/nb_default.css, default/styles/nb_rusted.css,
-	  default/styles/nb_spring.css, default/templates/entry.htm,
-	  default/templates/permalink_entry.htm, plugins/zyx_articles.sh,
+	  default/styles/nb_spring.css,
+	  default/templates/category_archive.htm,
+	  default/templates/entry.htm, default/templates/main_index.htm,
+	  default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm,
+	  default/templates/permalink_entry.htm, docs/nanoblogger.html,
+	  lib/tools.sh, plugins/atom.sh, plugins/recent_entries.sh,
+	  plugins/rss.sh, plugins/rss2.sh, plugins/weblog_status.sh,
+	  plugins/zyx_articles.sh, plugins/zyx_articles_meta.off,
+	  plugins/zyx_articles_text.sh, plugins/archive/master_index.sh,
 	  plugins/page/feed_links.sh: - Updated user manual with new entry,
 	  date, and plugin information.  - Improved use of HTML headers and
 	  CSS menu class in layout.  - Eliminated some ambiguous variable
 	  references found in plugins.
 
+2005-10-11 21:31  n1xt3r
+
+	* nb, default/templates/category_archive.htm,
+	  default/templates/main_index.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm, docs/nanoblogger.html,
+	  lib/tools.sh, plugins/recent_entries.sh,
+	  plugins/weblog_status.sh, plugins/archive/master_index.sh: -
+	  Tools to create and edit metadata files.  - Support for drafting
+	  entries.  - Support to import metadata files as entries or export
+	  as weblog page.  - Fix logical bugs in update process exposed
+	  when plugins were disabled.
+
+2005-10-09 01:15  n1xt3r
+
+	* nb, lib/config.sh, lib/tools.sh: Extended UTC date support to
+	  timestamp of entries.
+
+2005-10-09 00:53  n1xt3r
+
+	* default/blog.conf, lib/tools.sh: Added support for dates in UTC
+	  format.
+
 2005-10-08 01:01  n1xt3r
 
-	* moods/moods.conf: - Fix categories not being updated properly.  -
-	  Fix loading order of text formatting plugins.
+	* nb, lib/tools.sh, moods/moods.conf: - Fix categories not being
+	  updated properly.  - Fix loading order of text formatting
+	  plugins.
 
 2005-10-07 18:08  n1xt3r
 
-	* plugins/: entry/mod/line_break.sh, page/format/raw.sh: - Create
-	  default metadata for text formatting in a new entry.	-
-	  Preliminary text formatting support for page content (e.g.
-	  articles).
+	* ChangeLog, nb, default/blog.conf, lib/config.sh,
+	  plugins/zyx_articles.sh, plugins/entry/format/autobr.sh,
+	  plugins/entry/mod/line_break.sh, plugins/page/format/markdown.sh,
+	  plugins/page/format/raw.sh: - Create default metadata for text
+	  formatting in a new entry.  - Preliminary text formatting support
+	  for page content (e.g. articles).
+
+2005-10-07 03:21  n1xt3r
+
+	* plugins/entry/: format/markdown.sh, format/raw.sh,
+	  mod/line_break.sh: Some default plugins for text filtering.
 
 2005-10-07 03:16  n1xt3r
 
-	* plugins/entry/mod/: auto_break.sh, base_url.sh: - New entry files
-	  include metadata fields upon editing.  - Entries are processed
-	  uncoditionally (ignoring AUTO_FORMAT variable).  - ben finney:
-	  Patch adds conditional plugins for entry formatting.
+	* ChangeLog, nb, default/blog.conf, lib/config.sh,
+	  plugins/weblog_links.sh, plugins/zyx_articles.sh,
+	  plugins/entry/mod/auto_break.sh, plugins/entry/mod/base_url.sh,
+	  plugins/entry/mod/moods.sh: - New entry files include metadata
+	  fields upon editing.	- Entries are processed uncoditionally
+	  (ignoring AUTO_FORMAT variable).  - ben finney: Patch adds
+	  conditional plugins for entry formatting.
 
 2005-10-04 13:45  n1xt3r
 
-	* plugins/makepage/tidy.sh: - gregor herrmann: Patch for tidy
-	  plugin encoding problems.  - gregor herrmann: Patch for fortune
-	  plugin run from cron.
+	* default/blog.conf, plugins/fortune.sh, plugins/makepage/tidy.sh:
+	  - gregor herrmann: Patch for tidy plugin encoding problems.  -
+	  gregor herrmann: Patch for fortune plugin run from cron.
+
+2005-10-04 13:18  n1xt3r
+
+	* nb, plugins/weblog_links.sh: - Only remove edit session files
+	  upon success.  - Enhanced generation of monthly links
+	  ($NB_MonthLinks) for main index page.  - Limit monthly links to
+	  12, configurable through MAX_MONTHLINKS variable.
+
+2005-09-29 18:02  n1xt3r
+
+	* nb, lib/tools.sh, plugins/archive/master_index.sh: - Added
+	  measures for protection and privacy of new entry data.  - Added
+	  check for entry deletion in master_index.sh plugin.
 
 2005-09-23 01:51  n1xt3r
 
-	* lib/: error.sh, query.sh: - Ben Finney: Patch main script split
+	* nb, lib/config.sh, lib/error.sh, lib/query.sh, lib/tools.sh,
+	  plugins/zyx_articles.sh: - Ben Finney: Patch main script split
 	  into smaller files.  - Articles list can be filtered now.
 
-2005-06-20 00:41  n1xt3r
+2005-09-18 23:20  n1xt3r
 
-	* ChangeLog, nb: - Version changed to 3.2.3 - Fixed "weblog
-	  configuration wont' stop!" bug.  - Fixed weblog directories
-	  created outside of weblog directory bug.
-
-2005-06-18 16:29  n1xt3r
-
-	* plugins/zyx_articles.sh: removed some default directories
-
-2005-06-18 15:36  n1xt3r
-
-	* docs/nanoblogger.html: Several minor updates to the user manual.
-
-2005-06-16 23:25  n1xt3r
-
-	* plugins/weblog_status.sh: Adrian Ho <blog_AT_03s.net>: removed
-	  extra space added to entry titles - Minor improvements to the
-	  layout of the user manual - Added example of PHP code with
-	  escaped variables to the user manual
-
-2005-06-13 00:13  n1xt3r
-
-	* default/blog.conf, plugins/recent_entries.sh,
-	  plugins/weblog_links.sh, plugins/archive/master_index.sh,
-	  plugins/page/page_links.off: - Version Changed to 3.2.2 - Fixed
-	  broken weblog creation - Fixed bug that could lead to arbitrary
-	  command execution in various plugins.
-
-2005-06-09 23:00  n1xt3r
-
-	* plugins/makepage/tidy.sh: Better tidy defaults, sticking to
-	  shorter options
-
-2005-06-09 22:23  n1xt3r
-
-	* nb.conf: Adrian Ho <blog_AT-symbol_03s.net>: - BLOG_DIR now gets
-	  exported for external use - Improved logic and reduced redundancy
-	  in loading configurations
-
-2005-06-07 00:02  n1xt3r
-
-	* default/: atom.xml, index.html, index.xml, articles/example.txt:
-	  Version Changed to 3.2
-
-2005-06-06 21:47  n1xt3r
-
-	* TODO: Enhanced loop_archive to use data base entry listings as
-	  input.
-
-2005-06-04 22:10  n1xt3r
-
-	* plugins/: atom.sh, rss.sh, rss2.sh: Fixed bug where characters in
-	  title and author of syndication feeds weren't being escaped.
-
-2005-06-04 00:22  n1xt3r
-
-	* default/templates/entry.htm,
-	  default/templates/permalink_entry.htm,
-	  plugins/archive/month/month_calendar.sh,
-	  plugins/entry/mod/auto_break.sh, plugins/entry/mod/base_url.sh,
-	  plugins/entry/mod/moods.sh: - Updated "Writing Plugins" and
-	  "About Plugins" in user manual.  - Renamed postformat plugins to
-	  makepage - Renamed entry/body plugins to entry/mod - Renamed
-	  plugins/monthly to plugins/month - Renamed plugin monthly_cal.sh
-	  to month_calendar.sh - Renamed plugin blog_links.sh to
-	  weblog_links.sh - Renamed plugin blog_status.sh to
-	  weblog_status.sh - Enhanced link generation in articles.sh
-	  plugin.
-
-2005-06-02 22:36  n1xt3r
-
-	* default/data/2004-11-07T18_52_16.txt,
-	  default/data/2005-06-02T20_48_35.txt, default/data/cat_1.db,
-	  default/templates/blog_status.htm,
-	  default/templates/weblog_status.htm, plugins/calendar.sh,
-	  plugins/archive/monthly/monthly-cal.sh: - Documented API's in the
-	  user manual.	- Major updates to the user manual.  - Enhanced
-	  query_db and paginate functions.
-
-2005-05-30 04:50  n1xt3r
-
-	* plugins/: entry/category_links.sh, page/page_links.sh: - Fixed
-	  bug in setting BASE_URL when directory didn't exist.	- Links
-	  with ' & ' are replaced with _and_.
-
-2005-05-30 00:59  n1xt3r
-
-	* default/templates/category_archive.htm,
-	  default/templates/main_index.htm,
+	* TODO, nb, default/blog.conf, default/styles/nb_rusted.css,
+	  default/templates/category_archive.htm,
+	  default/templates/main_index.htm, default/templates/makepage.htm,
 	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm, plugins/01_mymood.off,
-	  plugins/blog_links.sh, plugins/blog_status.sh,
-	  plugins/page/feed_links.sh, plugins/postformat/tidy.sh: -
-	  Implemented a small set of API functions.  - Permanent, category,
-	  and date links can now be customized.  - Added new type of
-	  plugin, page, helps set dynamic metadata.
-
-2005-05-15 21:46  n1xt3r
-
-	* plugins/entry/body/moods.sh: - Enhanced moods plugin to generate
-	  relative or absolute links.  - Enhanced tidy plugin to be more
-	  verbose and keep a log file.	- Changed atom and rss plugins to
-	  use the tidy plugin.	- Fixed bug that failed to build a new
-	  entry's archive page.
-
-2005-05-14 00:12  n1xt3r
-
-	* default/: styles/nb_clean.css, styles/nb_default.css,
-	  styles/nb_rusted.css, styles/nb_spring.css,
-	  templates/makepage.htm: - Added new config variable,
-	  BLOG_MIMETYPE, that sets content-type metadata.  - Fixed bug in
-	  moods plugin, that skipped more than one smiley per line.  -
-	  Fixed bug in tidy plugin, that could prevent tidy from modifying
-	  output.  - Fixed bug preventing entry archives from being updated
-	  properly.
-
-2005-05-13 01:35  n1xt3r
-
-	* default/templates/main_links.htm: - Fixed updating of archives
-	  upon entry deletion.	- Fixed building of monthly archives upon
-	  adding a new entry.
-
-2004-12-28 22:09  n1xt3r
-
-	* plugins/fortune.sh: - Improved integration of previously added
-	  caching routines.  - Removed "&nbsp;" tags from fortune plugin
-	  output.
-
-2004-12-23 12:45  n1xt3r
-
-	* default/articles/example.html: - Added shell scripting trick to
-	  "Tips and Tricks" section of manual.	- Updated manual.
-
-2004-12-21 18:54  n1xt3r
-
-	* default/styles/nb_smoke-signals.css: - Added "blockquote" class
-	  to the style sheets.	- Updated color scheme of the "rusted"
-	  style sheet.	- Minor improvements to regex of fortune plugin.  -
-	  Added <div> tags to fortune plugin's output.
-
-2004-12-20 17:43  n1xt3r
-
-	* default/styles/mt_clean.css: Fixed minor errors and added "intro"
-	  class, for the style sheets.
-
-2004-12-04 02:12  n1xt3r
-
-	* plugins/entry/: auto_break.sh, base_url.sh, moods.sh,
-	  body/auto_break.sh, body/base_url.sh: - Implemented cache system
-	  to improve speed.  - Changed order of the build process, entry
-	  archives have higher priority.
-
-2004-11-11 21:07  n1xt3r
-
-	* default/images/favicon.ico: Added favorite icon to default weblog
-	  and templates.
-
-2004-11-07 21:06  n1xt3r
-
-	* default/: archives.html, index.rdf, data/2004-01-18T17_12_12.txt:
-	  - Improved speed and use of sed commands, removed unecessary
-	  piping.  - Added many updates to the manual.
-
-2004-10-05 00:52  n1xt3r
-
-	* plugins/articles.off: - Enabled the articles plugin by default.
-	  - Added CSS to the user manual.
-
-2004-09-29 18:17  n1xt3r
-
-	* plugins/list_entries.sh: - Defaults are set through use of
-	  parameter expansion.	- Added verbosity to loading plugins.
-
-2004-09-23 03:16  n1xt3r
-
-	* default/data/2004-01-18T17_12_12.htm: Cleaned up default
-	  directory.
-
-2004-09-23 02:31  n1xt3r
-
-	* plugins/entry/entry_catlinks.sh: - Replaced $REL_URL with less
-	  ambigious $ARCHIVES_PATH variable.  - Replaced $BLOG_URL_MAIN
-	  with more precise $MAIN_LINK variable.  - Added configuration
-	  variable, ABSOLUTE_LINKS to toggle absolute links.
-
-2004-06-17 19:43  n1xt3r
-
-	* default/templates/: archive.htm, archive_links.htm, atom.xml,
-	  atom_entry.xml, category_links.htm, entry_links.htm,
-	  entrycat_links.htm, month_links.htm, rdf.xml, rdf_catfeed.xml,
-	  rdf_catfeedentry.xml, rdf_entry.xml: - Updated Atom, RSS, and
-	  Blog links, no longer use templates.	- Updated Master archive
-	  plugin, only uses makepage.htm template.  - Removed templates
-	  associated with the old plugins.  - Updated Documentation to
-	  reflect changes.
-
-2004-05-26 00:27  n1xt3r
-
-	* plugins/category_links.sh: - Replaced category_links plugin with
-	  more general, blog_links plugin.  - (build_blog): Moved code to
-	  generate links into new blog_links plugin.
-
-2004-05-25 02:14  n1xt3r
-
-	* plugins/master_index.sh: - Removed AUTO_FORMAT and autoformat
-	  plugins.  - Renamed autoformat plugins to entry plugins.  -
-	  (build_archives): new load_plugins plugins/archive -
-	  (read_entry): new load_plugins plugins/entry
-
-2004-03-24 22:01  n1xt3r
-
-	* plugins/articles.sh: Renamed articles.sh plugin to articles.off,
-	  so it's disabled by default.
-
-2004-03-05 00:16  n1xt3r
-
-	* plugins/mymood.off: Renamed plugins/mymood.off to
-	  plugins/01_mymood.off, so it loads 1st!
-
-2004-03-04 03:07  n1xt3r
-
-	* plugins/archive/monthly-cal.sh: It helps to use the CVS remove
-	  command.
-
-2004-03-04 00:11  n1xt3r
-
-	* COPYING, moods/moods.conf, moods/mymood.txt,
-	  moods/smilies/angry.gif, moods/smilies/cheesy.gif,
-	  moods/smilies/cool.gif, moods/smilies/cry.gif,
-	  moods/smilies/embarassed.gif, moods/smilies/grin.gif,
-	  moods/smilies/huh.gif, moods/smilies/kiss.gif,
-	  moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif,
-	  moods/smilies/rolleyes.gif, moods/smilies/sad.gif,
-	  moods/smilies/shocked.gif, moods/smilies/smiley.gif,
-	  moods/smilies/tongue.gif, moods/smilies/wink.gif: Initial import
-
-2004-03-04 00:11  n1xt3r
-
-	* COPYING, moods/moods.conf, moods/mymood.txt,
-	  moods/smilies/angry.gif, moods/smilies/cheesy.gif,
-	  moods/smilies/cool.gif, moods/smilies/cry.gif,
-	  moods/smilies/embarassed.gif, moods/smilies/grin.gif,
-	  moods/smilies/huh.gif, moods/smilies/kiss.gif,
-	  moods/smilies/laugh.gif, moods/smilies/lipsrsealed.gif,
-	  moods/smilies/rolleyes.gif, moods/smilies/sad.gif,
-	  moods/smilies/shocked.gif, moods/smilies/smiley.gif,
-	  moods/smilies/tongue.gif, moods/smilies/wink.gif: Initial
-	  revision
+	  default/templates/permalink.htm, plugins/weblog_links.sh,
+	  plugins/archive/master_index.sh, plugins/entry/category_links.sh:
+	  - Version changed to 3.3-CVS.  - Fix entry deletion when entry's
+	  part of a directory.	- Fix weblog creation copy bug.  - Patch to
+	  use $BLOG_CHARSET in templates again.  - Patch that adds setting
+	  for favorite icon shortcut.  - Replace limit of archive links
+	  with limit of 50 entries.
 

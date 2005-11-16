@@ -116,7 +116,7 @@ done
 import_file(){
 IMPORT_FILE="$1"
 if [ -f "$IMPORT_FILE" ]; then
-	# validate file's metadata
+	# validate metafile
 	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
 		"$IMPORT_FILE"
 	load_metadata ALL "$IMPORT_FILE"

@@ -84,8 +84,8 @@ li {
         }
 
 .warning {
-	text-decoration: underline overline;
-	}
+        text-decoration: underline overline;
+        }
         
 .copyright {
         border-top: 1px solid #999;
@@ -103,7 +103,7 @@ li {
   <div id="summary" style="border-top: 1px solid #999; border-bottom: 1px solid #999;">
     <h1>NanoBlogger User Manual</h1>
 
-    <h2>by <a href="mailto:un1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood)</h2>
+    <h2>by <a href="mailto:n1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood)</h2>
 
     <p><em>This document explains how to install and use NanoBlogger.</em></p>
   </div>
@@ -205,8 +205,7 @@ li {
   </div>
 
   <div id="intro">
-    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>
-    NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
   </div>
 
   <div id="synopsis">
@@ -260,27 +259,30 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>simple cache system to increase efficiency</li>
 
+      <li>entry date manipulation via TIMESTAMP tag</li>
+
       <li>no dependency on any java-script, server-side scripting, or server-side includes</li>
 
-      <li>no dependency on any special database (uses flat-file)</li>
+      <li>no dependency on any special database (stores data in flat-files)</li>
 
       <li>multi-platform portability (just bash and the required commands)</li>
     </ul>
   </div>
 
   <div id="install">
-    <h2><a id="s.3" name="s.3">3. Installation</a></h2>
-    To install nanoblogger:
+    <h2><a id="s.3" name="s.3">3. Installation</a></h2>To install nanoblogger:
     <pre>
 1. download the gzipped tar archive from the web site[1]
 2. decompress the gzipped tar archive (where "XX" equals the version number):
         tar xzf nanoblogger-XX.tar.gz
         
 </pre>
-    <p><b>Upgrading</b></p><p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any differences between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
+
+    <p><b>Upgrading</b></p>
+
+    <p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any differences between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
 
     <p>Three basic steps to upgrading:</p>
-
     <pre>
 1. create a new weblog directory using nanoblogger (skip the configuration):
         nb [-b blog_dir] -a
@@ -293,8 +295,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
         
 </pre>
 
-    <h2><a id="s.4" name="s.4">4. Requirements</a></h2>
-    Programs:
+    <h2><a id="s.4" name="s.4">4. Requirements</a></h2>Programs:
 
     <p>bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
 
@@ -309,8 +310,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 cd [nb_dir]
 ./nb --blogdir [myblog_dir] --add
         
-</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same
-command again on an existing weblog directory will add a new entry.
+</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
 
     <p>For easier invocation, add nb to your $PATH in Bash:</p>
     <pre>
@@ -328,8 +328,7 @@ export PATH="$PATH:[nanoblogger_dir]"
   </div>
 
   <div id="config">
-    <h2><a id="s.6" name="s.6">6. Settings and Configuration</a></h2>
-    To edit the weblog's configuration invoke:
+    <h2><a id="s.6" name="s.6">6. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
     <pre>
 nb --blogdir [myblog_dir] --configure -u all
         
@@ -337,18 +336,15 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Browser</b></p>
 
-    <p>The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your bash
-    environment. In Mac OS X, you would set this to "open".</p>
+    <p>The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your bash environment. In Mac OS X, you would set this to "open".</p>
 
     <p><b>Setting the Editor</b></p>
 
-    <p>The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your bash
-    environment.</p>
+    <p>The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your bash environment.</p>
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
-    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, usefull for specifying time in UTC. Please note that these setting has no effect on previous
-    entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.</p>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, usefull for specifying time in UTC. Please note that these setting has no effect on previous entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.</p>
 
     <p>Examples:</p>
     <pre>
@@ -359,8 +355,7 @@ DATE_ARGS="-u"
 
     <p><b>Setting the Timezone for Syndication Feeds</b></p>
 
-    <p><em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a non-standard extension of the date command. You'll have to set this manually, if the date command on your system doesn't support it or see if your
-    system administrator will install GNU date for you.</p>
+    <p><em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a non-standard extension of the date command. You'll have to set this manually, if the date command on your system doesn't support it or see if your system administrator will install GNU date for you.</p>
 
     <p>Example:</p>
     <pre>
@@ -378,9 +373,7 @@ BLOG_CHARSET="iso-8859-1"
 
 </pre>
 
-    <p><span class="warning">WARNING</span>:
-      If you have the tidy plugin enabled, this setting will be overridden by tidy. Please, refer to tidy's documentation for setting the character encoding.
-    </p>
+    <p><span class="warning">WARNING</span>: If you have the tidy plugin enabled, this setting will be overridden by tidy. Please, refer to tidy's documentation for setting the character encoding.</p>
 
     <p><b>Setting the Mime Type</b></p>
 
@@ -409,10 +402,18 @@ BLOG_URL="http://my-site.com/weblog"
     <p>Example:</p>
     <pre>
 BLOG_CSS="styles/nb_rusted.css"
-   
 </pre>
 
-    <p><b>Enabling Generation of Absolute Links</b></p>
+    <p><b>Setting the Favorite Icon</b></p>
+
+    <p><em>BLOG_ICON</em> sets the favorite icon to be used by your weblog. Favorite icons are located in the <em>images</em> directory.</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_ICON="images/favicon.ico"
+</pre>
+
+    <p><b>Toggling the use of Absolute Links</b></p>
 
     <p><em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to "0", disabled.</p>
 
@@ -437,7 +438,7 @@ NB_INDEX="index.html"
     <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".</p>
 
     <p><b>Setting the Default Text Formatting</b></p>
-    
+
     <p><em>ENTRY_FORMAT</em>, specifies the default text formatting to use for an entry. Defaults to "raw".</p>
 
     <p><b>Toggling the Display of Permanent Links</b></p>
@@ -462,18 +463,15 @@ NB_INDEX="index.html"
 
     <p><b>Plugin Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories
-    to the desired location.</p>
+    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
 
     <p><b>Global Configuration</b></p>
 
-    <p>NanoBlogger has it's own configuration file, <em>$NB_BASE_DIR/nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>$NB_BASE_DIR/nb.conf</em>. This configuration is also looked for under
-    the file, <em>$HOME/.nb.conf</em>.</p>
+    <p>NanoBlogger has it's own configuration file, <em>$NB_BASE_DIR/nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>$NB_BASE_DIR/nb.conf</em>. This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.</p>
   </div>
 
   <div id="mgmt">
-    <h2><a id="s.7" name="s.7">7. Managing Entries and Categories</a></h2>
-    Commands to manage entries and categories.
+    <h2><a id="s.7" name="s.7">7. Managing Entries and Categories</a></h2>Commands to manage entries and categories.
 
     <h3>Managing Entries</h3>
 
@@ -486,12 +484,14 @@ NB_INDEX="index.html"
     <p>Creating a new draft:</p>
     <pre>
 nb [-b blog_dir] --draft draft.txt
-    </pre>
+    
+</pre>
 
     <p>Importing the draft as a new entry:</p>
     <pre>
 nb [-b blog_dir] --file draft.txt -a
-    </pre>
+    
+</pre>
 
     <p><b>Creating Entries</b></p>
 
@@ -511,9 +511,8 @@ nb [-b blog_dir] -t "New Entry" -n [entry_author] -a
     <pre>
 nb [-b blog_dir] -t "New Entry" -n [entry_author] -T "This is my message." -a
         
-</pre>
-Importing new entry from file:
-<pre>
+</pre>Importing new entry from file:
+    <pre>
 nb [-b blog_dir] --file draft.txt -a
 </pre>
 
@@ -582,23 +581,21 @@ nb [-b blog_dir] -c 1 -d 1
 </pre>
 
     <p><b>Changing Entry's Date</b></p>
-   
+
     <p>Specifying a new entry's date using the TIMESTAMP metatag:</p>
     <pre>
 nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -a
-    </pre>
-     Changing an old entry's date:
-     <pre>
+    
+</pre>Changing an old entry's date:
+    <pre>
 nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -e 2
-     </pre>
-     Manually changing an entry's date:
-     <pre>
+     
+</pre>Manually changing an entry's date:
+    <pre>
 1. nb [-b blog_dir] -e 2
 2. TIMESTAMP: YYYY-MM-DD HH:MM:SS
-     </pre>
-     <em>The date command must support the "<code>-d</code>" option 
-       for the date to follow the format set by
-       "<code>$DATE_FORMAT</code>".</em>
+     
+</pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
 
     <h3>Managing Categories</h3>
 
@@ -632,17 +629,12 @@ nb [-b blog_dir] -c 1 -d cat
   </div>
 
   <div id="templates">
-    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>
-    Templates are located in the weblog's sub-directory, templates.
+    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
 
     <div class="tables">
+      <p><b>Special Template Characters</b></p>
 
-      <p>
-        <b>Special Template Characters</b>
-      </p>
-
-      <p><span class="warning">IMPORTANT</span>:
-      Escaping these characters prevents them from changing.</p>
+      <p><span class="warning">IMPORTANT</span>: Escaping these characters prevents them from changing.</p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
@@ -650,38 +642,41 @@ nb [-b blog_dir] -c 1 -d cat
         </caption>
 
         <tr>
-	  <th align="left">characters</th>
+          <th align="left">characters</th>
 
           <th align="left">description</th>
 
-	  <th align="left">notes</th>
+          <th align="left">notes</th>
         </tr>
 
-	<tr>
-	  <td align="left">$</td>
-	  <td align="left">dollar sign</td>
-	  <td align="left">prepend backslash to escape, e.g. "\$"</td>
-	</tr>
+        <tr>
+          <td align="left">$</td>
 
-	<tr>
-	  <td align="left">`</td>
-	  <td align="left">backquote</td>
-	  <td align="left">form of command substitution, prepend backslash to
-	  escape, e.g. "\`"</td>
-	</tr>
+          <td align="left">dollar sign</td>
 
-	<tr>
-	  <td align="left">$(</td>
-	  <td align="left">dollar sign and left parenthesis</td>
-	  <td align="left">form of command substitution, prepend backslash to escape, e.g. "\$("</td>
+          <td align="left">prepend backslash to escape, e.g. "\$"</td>
+        </tr>
+
+        <tr>
+          <td align="left">`</td>
+
+          <td align="left">backquote</td>
+
+          <td align="left">form of command substitution, prepend backslash to escape, e.g. "\`"</td>
+        </tr>
+
+        <tr>
+          <td align="left">$(</td>
+
+          <td align="left">dollar sign and left parenthesis</td>
+
+          <td align="left">form of command substitution, prepend backslash to escape, e.g. "\$("</td>
+        </tr>
       </table>
     </div>
 
     <div class="tables">
-
-      <p>
-        <b>Default Templates</b>
-      </p>
+      <p><b>Default Templates</b></p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
@@ -724,15 +719,17 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">default template used by makepage option</td>
         </tr>
 
-	<tr>
-	  <td align="left">entry.metadata</td>
-	  <td align="left">controls the format of the entry's data file</td>
- 	</tr>
+        <tr>
+          <td align="left">entry.metadata</td>
 
-	<tr>
-	  <td align="left">file.metadata</td>
-	  <td align="left">controls the format of a metadata file</td>
- 	</tr>
+          <td align="left">controls the format of the entry's metafile</td>
+        </tr>
+
+        <tr>
+          <td align="left">file.metadata</td>
+
+          <td align="left">controls the format of a metafile</td>
+        </tr>
 
         <tr>
           <td align="left">month_archive.htm</td>
@@ -752,19 +749,16 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">controls look of an entry within it's archive page</td>
         </tr>
 
-	<tr>
-	  <td align="left">weblog_status.htm</td>
+        <tr>
+          <td align="left">weblog_status.htm</td>
 
-	  <td align="left">controls look of weblog status</td>
-	</tr>
+          <td align="left">controls look of weblog status</td>
+        </tr>
       </table>
     </div>
 
     <div class="tables">
-
-      <p>
-        <b>Placeholders for Entries</b>
-      </p>
+      <p><b>Placeholders for Entries</b></p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="entry placeholders">
         <caption>
@@ -828,10 +822,7 @@ nb [-b blog_dir] -c 1 -d cat
     </div>
 
     <div class="tables">
-
-      <p>
-        <b>Placeholders for Main Index</b>
-      </p>
+      <p><b>Placeholders for Main Index</b></p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="main placeholders">
         <caption>
@@ -949,8 +940,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
 
-      <p>These plugins are initialized for each entry modified, meaning they only get run when an entry's data has been changed. This helps reduce redundancy when generating multiple entries for a page. A good example would be the plugin, moods.sh, which generates graphics for smiley icons. There
-      main use is for altering the data output for an entry. They typically modify the NB_EntryBody, variable. Formally known as entry body plugins.</p>
+      <p>These plugins are initialized for each entry modified, meaning they only get run when an entry's data has been changed. This helps reduce redundancy when generating multiple entries for a page. A good example would be the plugin, moods.sh, which generates graphics for smiley icons. There main use is for altering the data output for an entry. They typically modify the NB_EntryBody, variable. Formally known as entry body plugins.</p>
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
@@ -970,10 +960,7 @@ nb [-b blog_dir] -c 1 -d cat
     </div>
 
     <div class="tables">
-      
-      <p>
-        <b>Default Plugins</b>
-      </p>
+      <p><b>Default Plugins</b></p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="plugins">
         <caption>
@@ -1028,17 +1015,17 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">requires makepage.htm template, plugin must be last to load</td>
         </tr>
 
-	<tr>
-	  <td align="left">articles_text.sh*</td>
+        <tr>
+          <td align="left">articles_text.sh*</td>
 
-	  <td align="left">generates articles from text files in the "articles" directory</td>
+          <td align="left">generates articles from text files in the "articles" directory</td>
 
           <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
 
-	  <td align="left">$NB_ArticleLinks</td>
+          <td align="left">$NB_ArticleLinks</td>
 
           <td align="left">requires makepage.htm template, plugin must be last to load</td>
-	</tr>
+        </tr>
 
         <tr>
           <td align="left">atom.sh</td>
@@ -1088,17 +1075,17 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">FORMAT: autobr</td>
         </tr>
 
-	<tr>
-	  <td align="left">entry/format/markdown.sh</td>
+        <tr>
+          <td align="left">entry/format/markdown.sh</td>
 
-	  <td align="left">uses markdown to handle formatting</td>
+          <td align="left">uses markdown to handle formatting</td>
 
           <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
           <td align="left">FORMAT: markdown</td>
-	</tr>
+        </tr>
 
         <tr>
           <td align="left">entry/mod/base_url.sh</td>
@@ -1196,20 +1183,20 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">FORMAT: autobr</td>
         </tr>
 
-	<tr>
-	  <td align="left">page/format/markdown.sh</td>
+        <tr>
+          <td align="left">page/format/markdown.sh</td>
 
-	  <td align="left">uses markdown to handle formatting</td>
+          <td align="left">uses markdown to handle formatting</td>
 
           <td align="left">none</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
           <td align="left">FORMAT: markdown</td>
-	</tr>
+        </tr>
 
-	<tr>
-	  <td align="left">page/format/moods.sh</td>
+        <tr>
+          <td align="left">page/format/moods.sh</td>
 
           <td align="left">converts mood variables into smiley icons</td>
 
@@ -1218,7 +1205,7 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
           <td align="left">may combine with with others e.g. "FORMAT: moods, markdown"</td>
-	</tr>
+        </tr>
 
         <tr>
           <td align="left">recent_entries.sh</td>
@@ -1297,20 +1284,15 @@ nb [-b blog_dir] -c 1 -d cat
     <div>
       <p>These are a collection of functions that may be used when writing plugins.</p>
 
-      <p>Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. Some plugins may require you to identify it's unique
-      placeholder/destination and manually add it to your templates.</p>
+      <p>Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. Some plugins may require you to identify it's unique placeholder/destination and manually add it to your templates.</p>
 
-      <p>To write a plugin, you should begin by creating a text file with the <em>".sh"</em> suffix. plugins are basically shell scripts that get loaded (sourced in shell terms) depending on where the plugin is located in the plugins directory or one of the plugin sub-directories. It may be a good
-      idea to look at a simple plugin, such as fortune.sh for an idea on how a plugin works. When the new plugin is saved, it needs to have the appropriate read permissions, so it can be loaded by NanoBlogger. Executable permissions are not necessary for plugins.</p>
+      <p>To write a plugin, you should begin by creating a text file with the <em>".sh"</em> suffix. plugins are basically shell scripts that get loaded (sourced in shell terms) depending on where the plugin is located in the plugins directory or one of the plugin sub-directories. It may be a good idea to look at a simple plugin, such as fortune.sh for an idea on how a plugin works. When the new plugin is saved, it needs to have the appropriate read permissions, so it can be loaded by NanoBlogger. Executable permissions are not necessary for plugins.</p>
 
       <p>Below is a table of functions for plugins briefly describing their usage.</p>
     </div>
 
     <div class="tables">
-
-      <p>
-        <b>Plugin API</b>
-      </p>
+      <p><b>Plugin API</b></p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="api">
         <caption>
@@ -1497,17 +1479,17 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">see plugin recent_entries.sh for a good example</td>
         </tr>
 
-	<tr>
-	  <td align="left">loop_archive</td>
+        <tr>
+          <td align="left">loop_archive</td>
 
-	  <td align="left">loops through archives and executes intructions by years or months</td>
+          <td align="left">loops through archives and executes intructions by years or months</td>
 
-	  <td align="left">looparch_list=$1, looparch_type=$2, looparch_exec=$3</td>
+          <td align="left">looparch_list=$1, looparch_type=$2, looparch_exec=$3</td>
 
-	  <td align="left">determined by $looparch_exec</td>
+          <td align="left">determined by $looparch_exec</td>
 
-	  <td align="left">example: "query_db max; loop_archive "$DB_RESULTS" months make_monthlink"</td>
-	</tr>
+          <td align="left">example: "query_db max; loop_archive "$DB_RESULTS" months make_monthlink"</td>
+        </tr>
 
         <tr>
           <td align="left">read_entry</td>
@@ -1637,26 +1619,32 @@ nb [-b blog_dir] -u all
   <div id="tips">
     <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
 
+    <p><b>Useful Commands For Editing Sessions</b></p>Create a new metafile:
+    <pre>
+nb [-b blogdir] --makefile somefile.txt
+</pre>Import the metafile as a new weblog entry:
+    <pre>
+nb [-b blogdir] --file somefile.txt --add
+</pre>or export the metafile as a new weblog page:
+    <pre>
+nb [-b blogdir] --makepage somefile.txt somefile.html
+</pre>Unfortunately not all editors support running external commands from their editing sessions.
+
     <p><b>Writing Metatags on the Fly</b></p>
+
+    <p>Metatags can be written on the fly. For example, text formatting can be set from the command line.</p>
+    <pre>
+nb [-b blogdir] --tag FORMAT --tag-text "markdown" --makepage somefile.txt somefile.html
     
-    <p>Metatags can be written on the fly. For example, text formatting can be set from
-      the command line.</p>
-    <pre>
-nb [-b blogdir] --tag FORMAT --tag-text "markdown" -a
-    </pre>
-    <p>Custom Metatags can be used, but will be ignored unless a plugin is written
-      for them and templates have placeholders for their data:</p>
-    <pre>
-nb [-b blogdir] --tag TAGNAME --tag-text "the tag's value" -a
-nb [-b blogdir] --tag TAGNAME --tag-text "the tag's value" -e 2
-    </pre>
+</pre>
 
     <p><b>Set a Default Weblog Directory</b></p>
 
     <p>By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to. Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em>:</p>
     <pre>
 BLOG_DIR="/path/to/weblog"
-    </pre>
+    
+</pre>
 
     <p><b>Adding Shell Scripting to Your Templates</b></p>
 
@@ -1678,34 +1666,28 @@ $(&lt; "$BLOG_DIR/intro.txt")
 
     <p><b>Integrating Parts of Your Weblog Into a Site</b></p>
 
-    <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a
-    matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
+    <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
 
-    <p>Other clever uses include combining NanoBlogger's static output with some PHP or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP 
-    code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+    <p>Other clever uses include combining NanoBlogger's static output with some PHP or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
 
     <p><b>Embedding Variables in the Templates</b></p>
 
     <p>Any characters that are similar to the shell's variable or command substitution characters, will have to be escaped before they will work from the templates.</p>
-     
-     <p>
-       Example using variables in the PHP code:
-     </p>
 
-     <pre>
+    <p>Example using variables in the PHP code:</p>
+    <pre>
 &lt;?php
 \$VAR = array ();
 echo "\\\$VAR=\$VAR";
 php?&gt;
-     </pre>
-
+     
+</pre>
   </div>
 
   <div id="credits">
     <h2><a id="s.15" name="s.15">15. Credits</a></h2>
 
-    <p>Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration
-    of this project.</p>
+    <p>Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.</p>
 
     <p><a href="http://nanoblogger.sf.net/downloads/">1. http://nanoblogger.sf.net/downloads/</a><br />
     <a href="http://nhw.pl/blg/articles/nbcom/">2. http://nhw.pl/blg/articles/nbcom/</a><br />
