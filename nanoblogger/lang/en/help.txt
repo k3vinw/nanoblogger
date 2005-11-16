@@ -72,12 +72,8 @@ Examples:
  create new category and title it "News"
 	nb -b ~/public_html/weblog -t "News" -c new -a
 
- create new entry setting author, title, and body
-	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -B 'MyMessage!' -a
-
- create draft file then add as new entry
-	nb -E ~/drafts/draft.txt
-	nb -b ~/public_html/weblog -F ~/drafts/draft.txt -a
+ create new entry setting author, title, description, and text
+	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -D "msg" -T 'Msg!' -a
 
 More info:
  URL: http://nanoblogger.sourceforge.net

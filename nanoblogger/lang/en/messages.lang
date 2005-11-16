@@ -84,7 +84,7 @@ deleteweblog_delentry="deleting entry id(s):"
 # header attributes
 header_ID="ID"
 header_Title="Title"
-header_Category="Category"
+header_Category="Category ID(s)"
 header_Date="Date"
 
 # list_weblog

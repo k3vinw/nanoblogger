@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-15T20:10:54-05:00
+# Last modified: 2005-11-15T22:07:10-05:00
 
 # nanoblogger's version.
-VERSION="3.3-CVS"
+VERSION="3.3"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -140,7 +140,7 @@ else
 fi
 }
 
-# write metadata to file
+# write metadata out to file
 write_metadata(){
 MTAG="$1"
 METADATA="$2"
@@ -206,26 +206,6 @@ if [ -f "$METADATA_FILE" ]; then
 fi
 }
 
-# create file with metadata fields
-make_file(){
-WRITE_META_FILE="$1"
-WRITE_META_TEMPLATE="$2"
-# defaults to metafile template
-[ -z "$WRITE_META_TEMPLATE" ] &&
-	WRITE_META_TEMPLATE="$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
-# give upgraders a break :)
-[ ! -f "$NB_TEMPLATE_DI/$METADATAFILE_TEMPLATE" ] &&
-	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
-# accept user metadata
-[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
-[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
-[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
-[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
-load_template "$WRITE_META_TEMPLATE"
-echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
-write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
-}
-
 # write entry's metadata to file
 write_entry(){
 WRITE_ENTRY_FILE="$1"
@@ -258,6 +238,26 @@ if [ -f "$ENTRY_FILE" ]; then
 fi
 }
 
+# create file with metadata fields
+make_file(){
+WRITE_META_FILE="$1"
+WRITE_META_TEMPLATE="$2"
+# defaults to metafile template
+[ -z "$WRITE_META_TEMPLATE" ] &&
+	WRITE_META_TEMPLATE="$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
+# give upgraders a break :)
+[ ! -f "$NB_TEMPLATE_DI/$METADATAFILE_TEMPLATE" ] &&
+	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
+# accept user metadata
+[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
+[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+load_template "$WRITE_META_TEMPLATE"
+echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
+write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
+}
+
 # create weblog page from text (parts) files
 make_page(){
 MKPAGE_SRCFILE="$1"
@@ -282,6 +282,7 @@ set_baseurl "" "$MKPAGE_OUTFILE"
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 # let plugins modify the content
 load_plugins page
+r
 : ${MKPAGE_FORMAT:=$PAGE_FORMAT}
 load_plugins page/format "$MKPAGE_FORMAT"
 # Set NB_Entries for backwards compatibility
@@ -825,24 +826,24 @@ fi
 list_query="$db_query"
 query_db "$db_query" "$db_catquery"
 [ -z "$DB_RESULTS" ] && die "'$list_query' - $listweblog_nomatch"
-nb_msg "$header_ID, $header_Title - [$header_Category] - $header_Date"
+nb_msg "$header_ID, $header_Title - ($header_Date) - [$header_Category]"
 id=0
 for entry in $DB_RESULTS; do
 	for cat_db in $db_categories; do
 		cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 		if [ ! -z "$cat_var" ]; then
-			cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
-			[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
-			oldcat_title="$cat_title,"
+			cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
+			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
+			oldcat_idnum="$cat_idnum,"
 		fi
 	done
-	cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }'`
-	[ ! -z "$cat_title" ] && NB_Category="- [$cat_title] -" || NB_Category="-"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="`echo "$METADATA" |cut -c1-32`..."
-	read_metadata DATE "$NB_DATA_DIR/$entry"; NB_EntryDate="$METADATA"
+	cat_idnum=`echo $cat_idnum |sed -e '/\,[ ]$/ s///g'`
+	[ ! -z "$cat_idnum" ] && NB_Category="- [$cat_idnum]"
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
+	NB_EntryDate=`filter_timestamp "$entry" |sed -e '/[\.]'$NB_DATATYPE'/ s///g'`
 	id=`expr 1 + $id`
-	echo " $id, $NB_EntryTitle $NB_Category $NB_EntryDate"
-	oldcat_title=; cat_title=; NB_Category=
+	echo " $id, $NB_EntryTitle - ($NB_EntryDate) $NB_Category"
+	oldcat_idnum=; cat_idnum=; NB_Category=
 done
 }
 
@@ -1076,7 +1077,7 @@ while [ $# -gt 0 ]; do
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
-		--manual)		check_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
+		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
 					check_config; move_entry;;
 		-M|--makepage)		check_arg; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
