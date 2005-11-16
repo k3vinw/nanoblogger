@@ -53,7 +53,7 @@ buildweblog_main="generating main index page(s) ..."
 importfile_nofile="doesn't exist!"
 
 # nb_draft
-nbdraft_asknew="draft file doesn't exist! create?"
+nbdraft_asknew="file doesn't exist! create?"
 
 # nb_edit
 nbedit_nofile="file doesn't exist!"

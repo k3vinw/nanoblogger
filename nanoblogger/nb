@@ -127,6 +127,17 @@ else
 fi
 }
 
+# generate timestamp as metadata variables
+meta_timestamp(){
+NB_MetaDate=`filter_dateformat "$DATE_FORMAT"`
+NB_MetaTimeStamp=`nb_timestamp`
+# fallback to printable timestamp
+if [ -z "$NB_MetaDate" ]; then
+	nb_msg "$filter_datefailed"
+	NB_MetaDate=`filter_timestamp "$NB_MetaTimeStamp"`
+fi
+}
+
 # read file's metadata
 read_metadata(){
 MTAG="$1"
@@ -250,9 +261,11 @@ WRITE_META_TEMPLATE="$2"
 	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
 # accept user metadata
 [ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+[ -z "$NB_MetaAuthor" ] && NB_MetaAuthor="$BLOG_AUTHOR"
 [ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 [ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 [ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+meta_timestamp
 load_template "$WRITE_META_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
@@ -306,6 +319,7 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$BLOGPAGE_SRCFILE"
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
 	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
+	[ -z "$NB_MetaAuthor" ] && NB_MetaAuthor="$BLOG_AUTHOR"
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
@@ -624,7 +638,7 @@ nb_draft(){
 EDITDRAFT_FILE="$1"
 [ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
 if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
-	nb_msg "$nbdraft_asknew [Y/n]"
+	nb_msg "'$EDITDRAFT_FILE' - $nbdraft_asknew [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
@@ -637,6 +651,8 @@ if [ -f "$EDITDRAFT_FILE" ]; then
 	nb_edit "$EDITDRAFT_FILE"
 	# validate metafile
 	check_metatags "TITLE: BODY: $METADATA_CLOSETAG" "$EDITDRAFT_FILE"
+	# modify date (DATE metadata)
+	meta_timestamp && write_metadata DATE "$NB_MetaDate" "$EDITDRAFT_FILE"
 fi
 }
 
@@ -646,19 +662,13 @@ db_catquery=`cat_id`; check_catid
 [ ! -z "$cat_num" ] && nb_msg "$addentry_catinfo $cat_num ..."
 nb_msg "$addentry_action"
 # generate formatted date string for entry's metadata
-NB_EntryDate=`filter_dateformat "$DATE_FORMAT"`
-NB_EntryTimeStamp=`nb_timestamp`
-# fallback to printable timestamp
-if [ -z "$NB_EntryDate" ]; then
-	nb_msg "$filter_datefailed"
-	NB_EntryDate=`filter_timestamp "$NB_EntryTimeStamp"`
-fi
+meta_timestamp; NB_EntryDate="$NB_MetaDate"
 # load user specified timestamp
 if [ -f "$NB_EditFile" ]; then
 	read_metadata TIMESTAMP "$NB_EditFile"
 	New_TimeStamp="$METADATA"
 fi
-New_EntryFile="$NB_EntryTimeStamp.$NB_DATATYPE"
+New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
 write_entry "$NB_DATA_DIR/$New_EntryFile"
 # use specified timestamp as entry's new date
 chg_entrydate "$New_EntryFile" "$New_TimeStamp"
@@ -764,6 +774,7 @@ done
 nb_msg "$deleteweblog_delentry $delete_num ..."
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 find_categories "$UPDATE_LIST"
+> "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
 	Delete_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
@@ -797,8 +808,21 @@ for entry_id in $NUMVAR; do
 			# delete entry's cache file
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
+		prev_entryid=`expr "$entry_id" + 1`
+		next_entryid=`expr "$entry_id" - 1`
+		prev_entry=
+		[ "$prev_entryid" != 0 ] &&
+			prev_entry=`echo "$DB_RESULTS" |sed ''$prev_entryid'!d'`
+		[ ! -z "$prev_entry" ] &&
+			echo "$prev_entry" >> "$SCRATCH_FILE"
+		[ "$next_entryid" != 0 ] &&
+			next_entry=`echo "$DB_RESULTS" |sed ''$prev_entryid'!d'`
+		next_entry=
+		[ ! -z "$next_entry" ] &&
+			echo "$next_entry" >> "$SCRATCH_FILE"
 	fi
 done
+UPDATE_LIST=$(< "$SCRATCH_FILE")
 build_weblog
 }
 
