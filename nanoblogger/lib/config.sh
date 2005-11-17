@@ -1,5 +1,14 @@
 # Module for configuration file management
 
+### WARNING ###
+# config variables must always load
+
+# automatically set time zone using GNU specific, 'date +%z'
+tzd_mm=`date +%z |cut -c4-5`
+AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
+
+### end WARNING ###
+
 # loads global config
 load_globals(){
 # always load global configs
@@ -36,6 +45,34 @@ export BLOG_DIR
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # where plugins are located and run by default
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
+
+### WARNING ###
+# changing the following requires manually modifying
+# the "default" and weblog directory structure
+
+# load user defined directory to store archives
+ARCHIVES_DIR="$BLOG_ARCHIVES_DIR"
+# default directory to store archives of weblog
+: ${ARCHIVES_DIR:=archives}
+
+# load user defined directory to store cached data
+CACHE_DIR="$BLOG_CACHE_DIR"
+# default directory to store cached data of weblog
+: ${CACHE_DIR:=cache}
+
+# load user defined directory to store parts
+PARTS_DIR="$BLOG_PARTS_DIR"
+# default directory to store parts of weblog
+: ${PARTS_DIR=parts}
+
+### end WARNING ###
+
+# letter to prepend to entry's html id tag
+# WARNING: effects permanent links
+# load user defined id tag
+x_id="$BLOG_ENTRYID_TAG"
+: ${x_id:=e}
+
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
 # allow user specified author names
@@ -52,15 +89,18 @@ export BLOG_DIR
 : ${NB_DBTYPE:=db}
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
-# WARNING: changing the following will require manually modifying any
-# existing entry data files!
-#
+
+### WARNING ###
+# changing the following requires manually modifying
+# *all* existing entry data files!
+
 # default metadata marker (a.k.a. spacer)
 : ${METADATA_MARKER:=-----}
 # default metadata close tag (e.g. 'END-----')
 : ${METADATA_CLOSETAG:=$METADATA_MARKER}
-# END WARNING
-#
+
+### end WARNING ###
+
 # default to raw processing for page content
 : ${PAGE_FORMAT:=raw}
 # default to raw processing for entry body

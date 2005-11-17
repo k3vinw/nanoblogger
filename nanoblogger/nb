@@ -2,19 +2,24 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-17T04:02:06-05:00
+# Last modified: 2005-11-17T16:50:49-05:00
 
 # nanoblogger's version.
-VERSION="CVS-3.3"
+VERSION="3.3"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
 
+### hardcoded paths ###
+
 # nanoblogger's language definitions directory.
 NB_LANG_DIR="${NB_BASE_DIR}/lang"
-
 # nanoblogger's module directory.
 NB_LIB_DIR="${NB_BASE_DIR}/lib"
+# the world writable temp directory
+NB_TEMP_DIR=/tmp
+
+### end hardcoded paths ###
 
 # prompt to use when asking something.
 NB_PROMPT=": "
@@ -22,32 +27,13 @@ NB_PROMPT=": "
 # set current path
 CURR_PATH="$PWD"
 
-# the temp directory
-TEMP_DIR=/tmp
-
 # default verbosity, 0 = silent
 VERBOSE=1
 
-# automatically set time zone using GNU specific, 'date +%z'
-tzd_mm=`date +%z |cut -c4-5`
-AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
-
-# directory to store archives of weblog
-ARCHIVES_DIR="archives"
-
-# directory to store cached data of weblog
-CACHE_DIR="cache"
-
-# directory to store parts of weblog
-PARTS_DIR="parts"
-
-# letter to prepend to entry's html id tag
-x_id=e
-
 # cleanup for special temp files
-SCRATCH_FILE="$TEMP_DIR/nb_scratch$$"
-TEMP_FILES="$TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
-[ ! -z "$TEMP_FILES" ] && trap "rm -fr $TEMP_FILES; exit" 0 1 2 3 15
+SCRATCH_FILE="$NB_TEMP_DIR/nb_scratch$$"
+NB_TEMP_FILES="$NB_TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
+[ ! -z "$NB_TEMP_FILES" ] && trap "rm -fr $NB_TEMP_FILES; exit" 0 1 2 3 15
 
 # load the modules
 . ${NB_LIB_DIR}/error.sh
