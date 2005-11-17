@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-17T03:06:36-05:00
+# Last modified: 2005-11-17T04:02:06-05:00
 
 # nanoblogger's version.
 VERSION="CVS-3.3"
@@ -411,6 +411,14 @@ if [ "$USR_QUERY" = all ]; then
 fi
 # create master query results
 query_db master
+# update previous entry's nav. links for new entries
+if [ ! -z "$New_EntryFile" ]; then
+	set_entrynavlinks "$New_EntryFile"
+	if [ ! -z "$prev_entry" ]; then
+		echo "$prev_entry" >> "$SCRATCH_FILE".newentry_list
+		UPDATE_LIST=$(< "$SCRATCH_FILE".newentry_list)
+	fi
+fi
 # set the query type
 if [ -z "$USR_QUERY" ]; then
 	USR_QUERY="current"
@@ -460,9 +468,8 @@ if [ ! -z "$cat_num" ]; then
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
-# for adding more than one entry
-echo "$New_EntryFile" >> "$SCRATCH_FILE".newentrylist
-UPDATE_LIST=$(< "$SCRATCH_FILE".newentrylist)
+echo "$New_EntryFile" >> "$SCRATCH_FILE".newentry_list
+UPDATE_LIST=$(< "$SCRATCH_FILE".newentry_list)
 }
 
 # edit entry or category by id number
@@ -507,8 +514,16 @@ for entry_id in $NUMVAR; do
 	# use specified timestamp as entry's new date
 	chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
 	# add changed entries to update list
-	[ ! -z "$Old_EntryFile" ] &&
+	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
+		# update previous and next entries of modified entry
+		query_db master
+		set_entrynavlinks "$New_EntryDateFile"
+		[ ! -z "$prev_entry" ] &&
+			echo "$prev_entry" >> "$SCRATCH_FILE"
+		[ ! -z "$next_entry" ] &&
+			echo "$next_entry" >> "$SCRATCH_FILE"
+	fi
 	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
 		Edit_EntryFile="$New_EntryDateFile"
 	[ -N "$NB_DATA_DIR/$Edit_EntryFile" ] &&
@@ -843,7 +858,7 @@ while [ $# -gt 0 ]; do
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-i|--interact) 		BLOG_IPROMPT=1;;
+		-i|--interactive) 	BLOG_IPROMPT=1;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;

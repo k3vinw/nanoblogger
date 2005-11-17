@@ -34,6 +34,7 @@ else
 fi
 }
 
+# filter custom date string using GNU specific 'date -d'
 filter_datestring(){
 FILTER_DATE="$1"
 FILTER_ARGS="$2"

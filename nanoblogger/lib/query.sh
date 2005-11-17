@@ -60,7 +60,7 @@ query_data(){
 if [ "$db_query" = all ]; then
 	db_query=; query_data
 elif [ "$db_query" = master ]; then
-	# create master variable for complete query results
+	# create authoritive state of reference
 	db_query=; MASTER_DB_RESULTS=`cat_db |filter_query`
 elif [ "$db_query" = current ]; then
 	db_query="$current_date"; query_data

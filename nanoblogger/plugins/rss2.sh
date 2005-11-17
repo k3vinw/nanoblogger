@@ -13,6 +13,9 @@ NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 # set link to archives
 NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 
+# backwards support for deprecated BLOG_LANG
+: ${BLOG_FEED_LANG:=$BLOG_LANG}
+
 set_baseurl "$BLOG_URL/"
 
 # escape special characters to help create valid xml feeds
@@ -42,7 +45,7 @@ make_rssfeed(){
 			<title>$NB_RSS2Title</title>
 			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
-			<dc:language>$BLOG_LANG</dc:language>
+			<dc:language>$BLOG_FEED_LANG</dc:language>
 			<dc:creator>$NB_RSS2Author</dc:creator>
 			<dc:date>$NB_RSS2ModDate</dc:date>
 			<admin:generatorAgent rdf:resource="http://nanoblogger.sourceforge.net" />

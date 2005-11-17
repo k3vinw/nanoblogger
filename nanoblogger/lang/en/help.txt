@@ -25,8 +25,8 @@ Options:
  -F, --file <file> 			specify metafile to import as entry
  					(for '--add').
  -h, --help				show this help message.
- -i, --interact 			add new entry interactively (for
- 					'--add').
+ -i, --interactive 			run interactively (for '--add' and
+ 					'--delete').
  -l, --list <all,cat,current,DATE,max>	list entries or categories (defaults to
  					max).
  --manual				view the manual.

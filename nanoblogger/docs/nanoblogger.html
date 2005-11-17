@@ -231,7 +231,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>pagination</li>
 
-      <li>permanent links</li>
+      <li>permanent and navigational links</li>
 
       <li>Atom syndication (comes with 0.3 format)</li>
 
@@ -264,6 +264,8 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
       <li>no dependency on any java-script, server-side scripting, or server-side includes</li>
 
       <li>no dependency on any special database (stores data in flat-files)</li>
+
+      <li>multi-language support</li>
 
       <li>multi-platform portability (just bash and the required commands)</li>
     </ul>
@@ -363,7 +365,15 @@ BLOG_TZD="-0:500"
    
 </pre>
 
-    <p><b>Setting the Language</b></p>
+    <p><b>Setting the Language and Encoding</b></p>
+
+    <p><em>NB_LANG</em> sets the language definitions to load. The default is "en" for English.</p>
+
+    <p>Example:</p>
+    <pre>
+NB_LANG="en"
+    
+</pre>
 
     <p><em>BLOG_CHARSET</em> sets the character encoding to be used for your weblog.</p>
 
@@ -1224,7 +1234,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">adds rss 2.0 feeds</td>
 
-          <td align="left">LIMIT_ITEMS</td>
+          <td align="left">CATEGORY_FEEDS, BLOG_FEED_LANG, LIMIT_ITEMS</td>
 
           <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
 
@@ -1236,7 +1246,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">adds rss 1.0 feeds</td>
 
-          <td align="left">LIMIT_ITEMS</td>
+          <td align="left">CATEGORY_FEEDS, BLOG_FEED_LANG, LIMIT_ITEMS</td>
 
           <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
 
