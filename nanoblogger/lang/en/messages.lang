@@ -64,6 +64,9 @@ nbedit_failed="failed to write file! goodbye."
 addentry_catinfo="selected category id(s):"
 addentry_action="adding new entry ..."
 
+# confirm_action
+confirmaction_ask="are you sure?"
+
 # misc. validation errors
 novalid_entryid="must specify a valid entry id."
 invalid_entryid="invalid entry id(s):"
