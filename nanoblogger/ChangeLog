@@ -1,3 +1,57 @@
+2005-11-18 14:02  n1xt3r
+
+	* plugins/atom.sh: Fixed typo in messages.
+
+2005-11-18 13:54  n1xt3r
+
+	* nb, default/blog.conf, docs/nanoblogger.html, lang/en/help.txt,
+	  lang/en/messages.lang, lib/config.sh, lib/tools.sh: -
+	  Automatically build new weblog and add default entry.  -
+	  Configure "interactive" mode from blog.conf.	- Interactive mode
+	  effects "preview" and "publish" options.
+
+2005-11-17 16:58  n1xt3r
+
+	* nb, lib/config.sh: - Clear Warnings for special variables in
+	  comments.  - More configurable weblog directory structure.
+
+2005-11-17 16:03  n1xt3r
+
+	* TODO, nb, default/blog.conf, docs/nanoblogger.html,
+	  lang/en/help.txt, lib/query.sh, lib/tools.sh, plugins/rss.sh,
+	  plugins/rss2.sh: - Deprecated BLOG_LANG renamed to
+	  BLOG_FEED_LANG.  - Updated user manual with help for
+	  multi-language support.  - Improved updating of navigational
+	  links.
+
+2005-11-17 03:13  n1xt3r
+
+	* TODO, nb, default/templates/month_archive.htm,
+	  default/templates/permalink.htm, lang/en/messages.lang,
+	  lib/query.sh, lib/tools.sh: - Export all minor functions to tools
+	  library.  - Support for next and previous links in monthly and
+	  entry archives.
+
+2005-11-16 03:01  n1xt3r
+
+	* nb, lang/en/messages.lang: CVS repository maintenance.
+
+2005-11-15 23:21  n1xt3r
+
+	* nb: Fix stray typo at line 285 of nb.
+
+2005-11-15 23:17  n1xt3r
+
+	* nb, docs/nanoblogger.html, lang/en/help.txt,
+	  lang/en/messages.lang, plugins/page/format/autobr.sh: - Version
+	  changed to 3.3 - Redesign of entry listing.
+
+2005-11-15 21:09  n1xt3r
+
+	* ChangeLog, nb, docs/nanoblogger.html, lang/en/help.txt,
+	  lib/tools.sh, plugins/zyx_articles_meta.sh,
+	  plugins/zyx_articles_text.off: Cleanup of inconsistency in code.
+
 2005-11-15 14:19  n1xt3r
 
 	* ChangeLog, nb, docs/nanoblogger.html, lang/en/help.lang,
