@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-17T16:50:49-05:00
+# Last modified: 2005-11-17T19:01:21-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -53,6 +53,7 @@ load_config
 [ ! -d "$BLOG_DIR" ] && die "'$BLOG_DIR' - $checkconf_noblogdir"
 [ ! -d "$NB_DATA_DIR" ] && die "'$NB_DATA_DIR' - $checkconf_nodata"
 [ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "'$CACHE_DIR' - $checkconf_nocache"
+[ ! -d "$BLOG_DIR/$PARTS_DIR" ] && die "'$PARTS_DIR' - $checkconf_nocache"
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "'$NB_TEMPLATE_DIR' - $checkconf_notemplates"
 }
 
@@ -393,7 +394,10 @@ fi
 if [ "$USR_QUERY" = all ]; then
 	nb_msg "$buildweblog_all"
 	# remove all generated files for a clean build
-	rm -fr "$BLOG_DIR"/{"$ARCHIVES_DIR","$CACHE_DIR","$PARTS_DIR"}/*
+	for update_dir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
+		[ ! -z "$update_dir" ] && [ -d "$BLOG_DIR/$update_dir" ] &&
+			rm -fr "$BLOG_DIR"/"$update_dir"/*
+	done
 fi
 # create master query results
 query_db master
@@ -464,11 +468,10 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	cat_var=`echo "$cat_num" |sed -e '/,/d'`
 	[ -z "$cat_var" ] && die "$editweblog_onecat"
 	db_catquery=`cat_id`; check_catid
+	nb_msg "$editweblog_catinfo $cat_num"
 	query_db "$db_query" "$db_catquery"
 	if [ ! -z "$USR_TITLE" ]; then
-		nb_msg "$editweblog_title"
-		nb_msg "$header_Title - [$header_Category]" 
-		nb_msg "$USR_TITLE - [$cat_num]"
+		nb_msg "$editweblog_title '$USR_TITLE' ..."
 		echo "$USR_TITLE" > "$NB_DATA_DIR/$db_catquery"
 		[ ! -z "$DB_RESULTS" ] && echo "$DB_RESULTS" >> "$NB_DATA_DIR/$db_catquery"
 		UPDATE_LIST="$DB_RESULTS"
@@ -485,6 +488,7 @@ for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
 	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "$invalid_entryid $edit_num"
 done
+[ ! -z "$cat_num" ] && nb_msg "$editweblog_catinfo $cat_num"
 > "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
 	Edit_EntryFile=`echo "$ENTRY_LIST" |sed -n "$entry_id"p`
@@ -533,7 +537,7 @@ fi
 if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	nb_msg "$deleteweblog_delcat $cat_num ..."
 	# confirm delete in interactive mode
-	[ "$BLOG_IPROMPT" = 1 ] && confirm_action
+	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 	query_db "$db_query" "$cat_list"; UPDATE_LIST="$DB_RESULTS"
 	for cat_db in $cat_list; do
 		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
@@ -555,7 +559,7 @@ done
 [ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"
 nb_msg "$deleteweblog_delentry $delete_num ..."
 # confirm delete in interactive mode
-[ "$BLOG_IPROMPT" = 1 ] && confirm_action
+[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 find_categories "$UPDATE_LIST"
 # create master query results
@@ -710,9 +714,12 @@ if [ ! -d "$BLOG_DIR" ]; then
 	[Yy]|"")
 		nb_msg "$addweblog_confaction"
 		nb_edit "$BLOG_DIR"/blog.conf
+		check_config; build_weblog
 		exit 0;;
 	[Nn])
-		die "$addweblog_noconf";;
+		check_config; build_weblog
+		nb_msg "$addweblog_noconf"
+		exit 0;;
 	esac
 fi
 check_config
@@ -750,12 +757,12 @@ fi
 # read user specified attributes for entry (interactively)
 [ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
 [ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
-if [ -z "$NB_EntryAuthor" ] && [ "$BLOG_IPROMPT" = 1 ]; then
+if [ -z "$NB_EntryAuthor" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
 	nb_msg "$addweblog_author [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
 fi
 [ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
-if [ -z "$NB_EntryTitle" ] && [ "$BLOG_IPROMPT" = 1 ]; then
+if [ -z "$NB_EntryTitle" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
 	nb_msg "$addweblog_title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
@@ -779,7 +786,7 @@ fi
 [ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 # prompt for description
 if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
-	[ "$BLOG_IPROMPT" = 1 ]; then
+	[ "$BLOG_INTERACTIVE" = 1 ]; then
 		nb_msg "$addweblog_desc"
 		read -p "$NB_PROMPT" NB_EntryDescription
 fi
@@ -792,8 +799,8 @@ build_weblog
 # remove editing session file upon success
 [ $? = 0 ] && [ -f "$NB_EditFile" ] && rm -fr "$NB_EditFile"
 # prompt for some post-tasks
-[ ! -z "$BLOG_PREVIEW_CMD" ] && [ "$BLOG_IPROMPT" = 1 ] && preview_ask
-[ ! -z "$BLOG_PUBLISH_CMD" ] && [ "$BLOG_IPROMPT" = 1 ] &&  publish_ask
+[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
+[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog
 }
 
 show_help(){
@@ -844,7 +851,7 @@ while [ $# -gt 0 ]; do
 		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
 		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-i|--interactive) 	BLOG_IPROMPT=1;;
+		-i|--interactive) 	BLOG_INTERACTIVE=1;;
 		-l|--list)		USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;

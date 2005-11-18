@@ -73,7 +73,8 @@ invalid_entryid="invalid entry id(s):"
 
 # edit_weblog
 editweblog_onecat="only one category can be specified when editing a title!"
-editweblog_title="changing title ..."
+editweblog_title="changing title to:"
+editweblog_catinfo="selected category id(s):"
 editweblog_nomod="no changes were made! goodbye."
 editweblog_action="processing modified weblog entries ..."
 editweblog_noaction="no changes were made! goodbye."

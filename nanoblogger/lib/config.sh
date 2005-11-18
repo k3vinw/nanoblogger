@@ -53,17 +53,17 @@ export BLOG_DIR
 # load user defined directory to store archives
 ARCHIVES_DIR="$BLOG_ARCHIVES_DIR"
 # default directory to store archives of weblog
-: ${ARCHIVES_DIR:=archives}
+[ -z "$ARCHIVES_DIR" ] && ARCHIVES_DIR=archives
 
 # load user defined directory to store cached data
 CACHE_DIR="$BLOG_CACHE_DIR"
 # default directory to store cached data of weblog
-: ${CACHE_DIR:=cache}
+[ -z "$CACHE_DIR" ] && CACHE_DIR=cache
 
 # load user defined directory to store parts
 PARTS_DIR="$BLOG_PARTS_DIR"
 # default directory to store parts of weblog
-: ${PARTS_DIR=parts}
+[ -z "$PARTS_DIR" ] && PARTS_DIR=parts
 
 ### end WARNING ###
 

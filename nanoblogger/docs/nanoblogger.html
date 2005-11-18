@@ -221,11 +221,9 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
     <ul>
       <li>intuitive command line interface</li>
 
-      <li>support for multiple weblogs</li>
+      <li>highly configurable and scriptable :)</li>
 
-      <li>support for multiple categories</li>
-
-      <li>easy editing and management of entries</li>
+      <li>easy drafting, editing and management of entries</li>
 
       <li>archiving by category, entry, and month</li>
 
@@ -233,37 +231,35 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>permanent and navigational links</li>
 
+      <li>templates and CSS style sheets for full control over layout</li>
+
+      <li>placeholders for easy template manipulation</li>
+
+      <li>support for multiple weblogs</li>
+
+      <li>support for multiple categories</li>
+
+      <li>support for relative and absolute links</li>
+
+      <li>support for date manipulation of entries</li>
+
       <li>Atom syndication (comes with 0.3 format)</li>
 
       <li>RSS syndication (comes with RSS 2.0 and 1.0 formats)</li>
 
-      <li>templates and CSS style sheets for full control of appearance</li>
-
-      <li>metadata fields for easy content manipulation</li>
-
-      <li>placeholders for easy template manipulation</li>
-
       <li>plugins for calendar, recent entries, weblog status, etc.</li>
 
-      <li>plugins for text formatting, e.g. line breaks translate to HTML</li>
+      <li>plugins for text formatting (e.g. line breaks translate to HTML)</li>
 
-      <li>support for relative and absolute links</li>
+      <li>global (nb.conf) and per-weblog (blog.conf) configuration</li>
 
-      <li>global configuration to set defaults (nb.conf)</li>
+      <li>intelligent update system - only updates relative files</li>
 
-      <li>auto-detection of weblog from current directory</li>
+      <li>simple cache system for improved efficiency</li>
 
-      <li>per-weblog configuration to override global defaults (blog.conf)</li>
+      <li>independent of java-script and server-side scripting (e.g. PHP)</li>
 
-      <li>intelligent build system - only rebuilds what's necessary</li>
-
-      <li>simple cache system to increase efficiency</li>
-
-      <li>entry date manipulation via TIMESTAMP tag</li>
-
-      <li>no dependency on any java-script, server-side scripting, or server-side includes</li>
-
-      <li>no dependency on any special database (stores data in flat-files)</li>
+      <li>independent of external database (stores data in flat-files)</li>
 
       <li>multi-language support</li>
 
@@ -365,15 +361,7 @@ BLOG_TZD="-0:500"
    
 </pre>
 
-    <p><b>Setting the Language and Encoding</b></p>
-
-    <p><em>NB_LANG</em> sets the language definitions to load. The default is "en" for English.</p>
-
-    <p>Example:</p>
-    <pre>
-NB_LANG="en"
-    
-</pre>
+    <p><b>Setting the Encoding</b></p>
 
     <p><em>BLOG_CHARSET</em> sets the character encoding to be used for your weblog.</p>
 
@@ -397,7 +385,7 @@ BLOG_MIMETYPE="text/html"
 
     <p><b>Setting the Web Address</b></p>
 
-    <p><em>BLOG_URL</em> should be set as the full URL to your weblog, excluding the index file and any preceding "/".</p>
+    <p><em>BLOG_URL</em> should be set as the full URL to your weblog excluding the index file and any preceding "/". This setting is required for absolute links to work.</p>
 
     <p>Example:</p>
     <pre>
@@ -427,7 +415,7 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>ABSOLUTE_LINKS</em> enables the generation of absolute links. Defaults to "0", disabled.</p>
 
-    <p><b>Setting the Link to a Directory's Index</b></p>
+    <p><b>Setting the Link for a Directory's Index</b></p>
 
     <p><em>NB_INDEX</em> determines how a directory's index is accessed. The default is to leave this as blank.</p>Example:
     <pre>
@@ -455,25 +443,39 @@ NB_INDEX="index.html"
 
     <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
 
-    <p><b>Building Individual Archives for Each Entry</b></p>
+    <p><b>Toggling the Building of Entry Archives</b></p>
 
-    <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables individual archiving of each entry and reconfigures the links of the entries to point to their individual archives. Note that this will increase the rebuild time since more pages will have to be generated.</p>
+    <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the building of entry archives and reconfigures the links of the entries to point to their own archive page. Note that this will increase the rebuild time since more pages will have to be generated.</p>
 
     <p><b>Setting Actions for Previewing and Publishing</b></p>
 
     <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.</p>
 
+    <p><b>Toggling Interactive Mode</b></p>
+
+    <p><em>BLOG_INTERACTIVE</em> toggles interactive mode for your weblog and has the same effect as the <code>--interactive</code> command line option. The default is "0" for disabled, setting to "1" will toggle the mode back on.</p>
+
     <p><b>Changing the File Type</b></p>
 
-    <p><em>NB_FILETYPE</em>, specifies the file type or rather the suffix for the generated files. The default, of course, is set to <em>html</em>.</p>
+    <p><em>NB_FILETYPE</em> specifies the file type or rather the suffix for the generated files. The default, of course, is set to <em>html</em>.</p>
 
     <p><b>Changing the Default Query Mode</b></p>
 
-    <p><em>QUERY_MODE</em>, specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
+    <p><em>QUERY_MODE</em> specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
+
+    <p><b>Changing the Default Language of NanoBlogger</b></p>
+
+    <p><em>NB_LANG</em> sets the language definitions to load. The default is "en" for English.</p>
+
+    <p>Example:</p>
+    <pre>
+NB_LANG="en"
+    
+</pre>
 
     <p><b>Plugin Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em>, specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
+    <p><em>PLUGINS_DIR</em> specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
 
     <p><b>Global Configuration</b></p>
 

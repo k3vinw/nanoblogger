@@ -117,7 +117,7 @@ VALIDATE_METAFILE="$2"
 for mtag in $VALIDATE_TAGS; do
 	MTAG_NUM=`grep -c "^$mtag" "$VALIDATE_METAFILE"`
 	[ "$MTAG_NUM" = 0 ] &&
-		die "'$VALIDATE_METAFILE' - $checkmetatags_notag $mtag"
+		die "'$VALIDATE_METAFILE' - $checkmetatags_notag '$mtag'"
 done
 }
 
@@ -537,36 +537,38 @@ fi
 
 preview_weblog(){
 [ -z "$BLOG_PREVIEW_CMD" ] && die "$preview_nocmd"
-nb_msg "$preview_action"
-$BLOG_PREVIEW_CMD
-}
-
-preview_ask(){
-nb_msg "$preview_asknow [y/N]"
-read -p "$NB_PROMPT" choice
-case $choice in
-	[Yy])
-		preview_weblog;;
-	[Nn]|"")
-	;;
-esac
+if [ "$BLOG_INTERACTIVE" = 1 ]; then
+	nb_msg "$preview_asknow [y/N]"
+	read -p "$NB_PROMPT" choice
+	case $choice in
+		[Yy])
+			nb_msg "$preview_action"
+			$BLOG_PREVIEW_CMD;;
+		[Nn]|"")
+		;;
+	esac
+else
+	nb_msg "$preview_action"
+	$BLOG_PREVIEW_CMD
+fi
 }
 
 publish_weblog(){
 [ -z "$BLOG_PUBLISH_CMD" ] && die "$publish_nocmd"
-nb_msg "$publish_action"
-$BLOG_PUBLISH_CMD
-}
-
-publish_ask(){
-nb_msg "$publish_asknow [y/N]"
-read -p "$NB_PROMPT" choice
-case $choice in
-	[Yy])
-		publish_weblog;;
-	[Nn]|"")
-		;;
-esac
+if [ "$BLOG_INTERACTIVE" = 1 ]; then
+	nb_msg "$publish_asknow [y/N]"
+	read -p "$NB_PROMPT" choice
+	case $choice in
+		[Yy])
+			nb_msg "$publish_action"
+			$BLOG_PUBLISH_CMD;;
+		[Nn]|"")
+			;;
+	esac
+else
+	nb_msg "$publish_action"
+	$BLOG_PUBLISH_CMD
+fi
 }
 
 # tool to help change an entry's date/timestamp
