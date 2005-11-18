@@ -766,6 +766,7 @@ if [ -z "$NB_EntryTitle" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
 	nb_msg "$addweblog_title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
+[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 [ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
 if [ -z "$NB_EntryBody" ]; then
 	nb_msg "$addweblog_editnew"
