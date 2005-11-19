@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-18T22:32:09-05:00
+# Last modified: 2005-11-18T22:37:27-05:00
 
 # nanoblogger's version.
-VERSION="3.3-RC2"
+VERSION="3.3-RC1"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`

@@ -1,14 +1,7 @@
-2005-11-18 18:27  n1xt3r
+2005-11-18 22:33  n1xt3r
 
-	* nb: Reverted Version to 3.3-RC1.
-
-2005-11-18 15:36  n1xt3r
-
-	* nb: Writes default text formatting metadata to new entry.
-
-2005-11-18 14:32  n1xt3r
-
-	* ChangeLog: 3.3 ChangeLog.
+	* ChangeLog, nb, plugins/atom.sh, plugins/rss.sh, plugins/rss2.sh:
+	  - Fix overwriting scratch file for syndication plugins.
 
 2005-11-18 14:02  n1xt3r
 
@@ -70,119 +63,6 @@
 	  lang/en/help.txt, plugins/zyx_articles_meta.sh,
 	  plugins/zyx_articles_text.off: - Update plugin table in user
 	  manual.  - New '--makefile' option simplifies metafile creation.
-
-2005-11-14 22:21  n1xt3r
-
-	* default/blog.conf: Resolve CVS problems.
-
-2005-11-14 22:19  n1xt3r
-
-	* default/templates/: category_archive.htm, entry.htm,
-	  entry.metadata, file.metadata, main_index.htm, main_links.htm,
-	  makepage.htm, month_archive.htm, permalink.htm,
-	  permalink_entry.htm, weblog_status.htm: Fix CVS repository.
-
-2005-11-14 22:11  n1xt3r
-
-	* default/templates/blog.conf: sigh.
-
-2005-11-14 22:08  n1xt3r
-
-	* default/templates/blog.conf: I'm not a CVS expert! :(
-
-2005-11-14 22:03  n1xt3r
-
-	* default/templates/blog.conf: Fix CVS repository.
-
-2005-11-14 21:57  n1xt3r
-
-	* default/templates/: blog.conf, category_archive.htm, entry.htm,
-	  entry.metadata, file.metadata, main_index.htm, main_links.htm,
-	  makepage.htm, month_archive.htm, permalink.htm,
-	  permalink_entry.htm, weblog_status.htm: Fix CVS repository.
-
-2005-11-14 21:42  n1xt3r
-
-	* ChangeLog, default/templates/blog.conf: Yipeeeeeeeeeee!
-
-2005-11-14 21:40  n1xt3r
-
-	* default/templates/blog.conf: Fix strange CVS issues!
-
-2005-11-14 21:18  n1xt3r
-
-	* default/templates/blog.conf: Fix more strange CVS issues.
-
-2005-11-14 21:14  n1xt3r
-
-	* default/templates/blog.conf: More strange CVS issues.
-
-2005-11-14 21:11  n1xt3r
-
-	* default/templates/blog.conf: Fix CVS Repository!
-
-2005-11-14 21:07  n1xt3r
-
-	* default/templates/blog.conf: Fix CVS Repository!!!
-
-2005-11-14 21:04  n1xt3r
-
-	* default/templates/blog.conf: Strange CVS repository problems.
-
-2005-11-14 21:02  n1xt3r
-
-	* ChangeLog, default/templates/blog.conf: Fix CVS repository!!!
-
-2005-11-14 20:57  n1xt3r
-
-	* default/templates/blog.conf: Fix CVS repository!
-
-2005-11-14 20:55  n1xt3r
-
-	* ChangeLog, default/templates/blog.conf: Fix blog.conf in CVS
-	  repository.
-
-2005-11-14 20:49  n1xt3r
-
-	* default/templates/: blog.conf: Fix CVS repository.
-
-2005-11-14 20:44  n1xt3r
-
-	* default/templates/: blog.conf: Fix CVS repository.
-
-2005-11-14 20:37  n1xt3r
-
-	* default/templates/: blog.conf: Fix CVS repository.
-
-2005-11-14 20:28  n1xt3r
-
-	* default/: data/2005-06-02T20_48_35.txt, templates/blog.conf: Fix
-	  CVS repository.
-
-2005-11-14 20:22  n1xt3r
-
-	* default/: templates/category_archive.htm, templates/entry.htm,
-	  templates/entry.metadata, templates/file.metadata,
-	  templates/main_index.htm, templates/main_links.htm,
-	  templates/makepage.htm, templates/month_archive.htm,
-	  templates/permalink.htm, templates/permalink_entry.htm,
-	  templates/weblog_status.htm, articles/example.html: Fix CVS
-	  repository.
-
-2005-11-14 20:08  n1xt3r
-
-	* default/articles/example.txt: Fix CVS Repository.
-
-2005-11-14 19:59  n1xt3r
-
-	* default/templates/: category_archive.htm, entry.htm,
-	  main_index.htm, main_links.htm, makepage.htm, month_archive.htm,
-	  permalink.htm, permalink_entry.htm, weblog_status.htm: Update
-	  default files.
-
-2005-11-14 19:45  n1xt3r
-
-	* nb, default/data/cat_1.db: Update default files.
 
 2005-11-14 19:39  n1xt3r
 
