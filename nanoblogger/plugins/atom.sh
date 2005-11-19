@@ -55,7 +55,7 @@ build_atomfeed(){
 	db_catquery="$1"
 	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
 	ARCHIVE_LIST="$DB_RESULTS"
-	> "$SCRATCH_FILE"
+	> "$SCRATCH_FILE".atomfeed
 	for entry in $ARCHIVE_LIST; do
 	        read_entry "$NB_DATA_DIR/$entry"
 		set_entrylink "$entry"
@@ -81,7 +81,7 @@ build_atomfeed(){
 		fi
 		#Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
 		Atom_EntryExcerpt="$NB_EntryBody"
-		cat >> "$SCRATCH_FILE" <<-EOF
+		cat >> "$SCRATCH_FILE".atomfeed <<-EOF
 			<entry>
 				<title mode="escaped">$Atom_EntryTitle</title>
 				<author>
@@ -102,11 +102,10 @@ build_atomfeed(){
 			</entry>
 		EOF
 	done
-	NB_AtomEntries=$(< "$SCRATCH_FILE")
+	NB_AtomEntries=$(< "$SCRATCH_FILE".atomfeed)
 	}
 
 
 nb_msg "$plugins_action atom $NB_AtomVer feed ..."
 build_atomfeed nocat
 make_atomfeed
-

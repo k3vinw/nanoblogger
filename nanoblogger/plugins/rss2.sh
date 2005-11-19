@@ -64,7 +64,7 @@ build_rssfeed(){
 	db_catquery="$1"
 	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
 	ARCHIVE_LIST="$DB_RESULTS"
-	> "$SCRATCH_FILE"
+	> "$SCRATCH_FILE".rss2feed
 	for entry in $ARCHIVE_LIST; do
 		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 	        read_entry "$NB_DATA_DIR/$entry"
@@ -89,7 +89,7 @@ build_rssfeed(){
 		#NB_RSS2EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
 		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
 		NB_RSS2EntryExcerpt="$NB_EntryBody"
-		cat >> "$SCRATCH_FILE" <<-EOF
+		cat >> "$SCRATCH_FILE".rss2feed <<-EOF
 			<item>
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
 				<title>$NB_RSS2EntryTitle</title>
@@ -100,7 +100,7 @@ build_rssfeed(){
 			</item>
 		EOF
 	done
-	NB_RSS2Entries=$(< "$SCRATCH_FILE")
+	NB_RSS2Entries=$(< "$SCRATCH_FILE".rss2feed)
 	}
 
 # generate category feed entries
