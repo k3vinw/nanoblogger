@@ -807,7 +807,7 @@ build_weblog
 show_help(){
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
-sed -e '/[\$]VERSION/ s//'$VERSION'/g; /[\$]BASENAME/ s//'$BASENAME'/g' <<-EOF
+sed -e "/[\$]VERSION/ s//$VERSION/g; /[\$]BASENAME/ s//$BASENAME/g" <<-EOF
 	$NB_ShowHelp
 EOF
 }
