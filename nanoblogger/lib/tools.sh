@@ -327,7 +327,7 @@ META_FILE="$2"
 MTAG_CLOSE=`echo "$MTAG" |sed -e '/[^ ].*[\,]/ s///'`
 if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
 	MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
-	METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/!d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+	METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/!d; /^'$MTAG'[\:]/d; /^'$MTAG_CLOSE'/d' "$META_FILE"`
 else
 	METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
 fi
@@ -343,7 +343,7 @@ if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
 	if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
 		MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/d; //d; /^'$MTAG'[\:]/d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/d; /^'$MTAG'[\:]/d; /^'$MTAG_CLOSE'/d' "$META_FILE"`
 		fi
 		cat > "$META_FILE" <<-EOF
 			$META_OTHER
