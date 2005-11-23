@@ -10,7 +10,7 @@ NB_AtomFile="atom.$NB_SYND_FILETYPE"
 # atom feed version
 NB_AtomVer="1.0"
 # atom feed unique id (should be IRI as defined by RFC3987)
-NB_AtomID="$BLOG_URL"
+NB_AtomID="$BLOG_URL/"
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
