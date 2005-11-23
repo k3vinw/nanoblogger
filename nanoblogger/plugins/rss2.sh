@@ -1,7 +1,9 @@
 # NanoBlogger RSS 2.0 Feed Plugin
 
-# Limit number of items to include in feed
+# limit number of items to include in feed
 : ${LIMIT_ITEMS:=10}
+# build rss2 feeds for categories (0/1 = off/on)
+: ${RSS2_CATFEEDS:=0}
 
 # output filename of rss feed
 NB_RSS2File="rss.$NB_SYND_FILETYPE"
@@ -28,8 +30,7 @@ NB_RSS2Author=`echo "$BLOG_AUTHOR" |esc_chars`
 
 # make rss feed
 make_rssfeed(){
-	feed_outfile="$1"
-	MKPAGE_OUTFILE="$feed_outfile"
+	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL"
 	[ ! -z "$NB_RSS2CatLink" ] && BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
@@ -105,7 +106,7 @@ build_rssfeed(){
 
 # generate category feed entries
 build_rss_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ]; then
+	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$RSS2_CATFEEDS" = 1 ]; then
 		db_categories="$CAT_LIST"
 		if [ ! -z "$db_categories" ]; then
 			for cat_db in $db_categories; do

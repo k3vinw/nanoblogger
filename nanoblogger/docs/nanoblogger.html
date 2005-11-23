@@ -1044,9 +1044,9 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">adds an atom feed</td>
 
-          <td align="left">LIMIT_ITEMS</td>
+          <td align="left">LIMIT_ITEMS, ATOM_CATFEEDS, BLOG_FEED_LANG</td>
 
-          <td align="left">$NB_AtomVer, $NB_AtomFile</td>
+          <td align="left">$NB_AtomVer, $NB_AtomFile, index-atom.$NB_SYND_FILETYPE</td>
 
           <td align="left">none</td>
         </tr>
@@ -1236,7 +1236,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">adds rss 2.0 feeds</td>
 
-          <td align="left">CATEGORY_FEEDS, BLOG_FEED_LANG, LIMIT_ITEMS</td>
+          <td align="left">LIMIT_ITEMS, RSS2_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
 
@@ -1248,7 +1248,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">adds rss 1.0 feeds</td>
 
-          <td align="left">CATEGORY_FEEDS, BLOG_FEED_LANG, LIMIT_ITEMS</td>
+          <td align="left">LIMIT_ITEMS, RSS_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
 

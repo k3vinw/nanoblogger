@@ -25,7 +25,7 @@ checkcatid_invalid="invalid category id(s):"
 checkcatid_novalid="must specify valid category id!"
 
 # validate metadata files
-checkmetatags_notag="missing metadata tag:"
+checkmetatags_notag="missing metatag:"
 
 # config_weblog
 configweblog_nomod="no changes were made! goodbye."

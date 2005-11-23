@@ -1,5 +1,9 @@
+2005-11-20 00:31  n1xt3r
+
+	* nb: Fix bug which caused show help not to display correctly.
+
 2005-11-19 20:40  n1xt3r
 
-	* lib/tools.sh: Fix bug which caused data not to read/writte
-	  correctly on particular systems (e.g. busybox).
+	* lib/tools.sh, ChangeLog, nb: Fix bug which caused data not to
+	  read/write correctly on particular systems (e.g. busybox).
 

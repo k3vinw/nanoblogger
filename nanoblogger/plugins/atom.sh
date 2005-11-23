@@ -2,15 +2,23 @@
 
 # limit number of items to include in feed
 : ${LIMIT_ITEMS:=10}
+# build atom feeds for categories (0/1 = off/on)
+: ${ATOM_CATFEEDS:=0}
+
 # filename of atom feed
 NB_AtomFile="atom.$NB_SYND_FILETYPE"
 # atom feed version
-NB_AtomVer="0.3"
+NB_AtomVer="1.0"
+# atom feed unique id (should be IRI as defined by RFC3987)
+NB_AtomID="$BLOG_URL"
 
 NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
 # set link to the archives
 NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
+
+# backwards support for deprecated BLOG_LANG
+: ${BLOG_FEED_LANG:=$BLOG_LANG}
 
 set_baseurl "$BLOG_URL/"
 
@@ -24,21 +32,26 @@ NB_AtomAuthor=`echo "$BLOG_AUTHOR" |esc_chars`
 
 # make atom feed
 make_atomfeed(){
-MKPAGE_OUTFILE="$BLOG_DIR/$NB_AtomFile"
+MKPAGE_OUTFILE="$1"
+mkdir -p `dirname "$MKPAGE_OUTFILE"`
+BLOG_FEED_URL="$BLOG_URL/$NB_AtomFile"
+[ ! -z "$NB_AtomCatLink" ] && BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_AtomCatFile"
 
 cat > "$MKPAGE_OUTFILE" <<-EOF
 	<?xml version="1.0" encoding="$BLOG_CHARSET"?>
-	<feed version="$NB_AtomVer"
-		xmlns="http://purl.org/atom/ns#"
-		xmlns:dc="http://purl.org/dc/elements/1.1/"
-	>
-	<title mode="escaped">$NB_AtomTitle</title>
+	<feed xmlns="http://www.w3.org/2005/Atom">
+	<title type="html">$NB_AtomTitle</title>
 	<link rel="alternate" type="text/html" href="$BLOG_URL"/>
-	<modified>$NB_AtomModDate</modified>
+	<link rel="self" type="application/atom+xml" href="$BLOG_FEED_URL"/>
+	<updated>$NB_AtomModDate</updated>
 	<author>
 		<name>$NB_AtomAuthor</name>
-		<url>$BLOG_URL</url>
+		<uri>$BLOG_URL</uri>
 	</author>
+	<id>$NB_AtomID</id>
+	<generator uri="http://nanoblogger.sourceforge.net" version="$VERSION">
+		NanoBlogger
+	</generator>
 
 	$NB_AtomEntries
 
@@ -66,37 +79,38 @@ build_atomfeed(){
 		Atom_EntryModDate="$Atom_EntryDate"
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
-		Atom_EntrySubject=; cat_title=; oldcat_title=
+		Atom_EntryCategory=; cat_title=
+		> "$SCRATCH_FILE".atomfeed-category
 		for cat_db in $db_categories; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
 				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
-				[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
-				oldcat_title="$cat_title,"
+				cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+				if [ ! -z "$cat_title" ]; then
+					cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
+						<category term="$cat_title" />
+					EOF
+				fi
 			fi
 		done
-		if [ ! -z "$cat_title" ]; then
-			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
-			Atom_EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
-		fi
+		Atom_EntryCategory=$(< "$SCRATCH_FILE".atomfeed-category)
 		#Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
 		Atom_EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE".atomfeed <<-EOF
 			<entry>
-				<title mode="escaped">$Atom_EntryTitle</title>
+				<title type="html">$Atom_EntryTitle</title>
 				<author>
 					<name>$Atom_EntryAuthor</name>
 				</author>
 				<link rel="alternate" type="text/html" href="${NB_AtomArchivesPath}$NB_EntryPermalink"/>
 				<id>${NB_AtomArchivesPath}$NB_EntryPermalink</id>
-				<issued>$Atom_EntryDate</issued>
-				<modified>$Atom_EntryModDate</modified>
-				<created>$Atom_EntryDate</created>
-				$Atom_EntrySubject
-				<content type="application/xhtml+xml" xml:lang="en" xml:space="preserve" mode="escaped">
-					<![CDATA[
-					$Atom_EntryExcerpt
-					]]>
+				<published>$Atom_EntryDate</published>
+				<updated>$Atom_EntryModDate</updated>
+				$Atom_EntryCategory
+				<content type="xhtml">
+					<div xmlns="http://www.w3.org/1999/xhtml">
+						$Atom_EntryExcerpt
+					</div>
 				</content>
 
 			</entry>
@@ -105,7 +119,29 @@ build_atomfeed(){
 	NB_AtomEntries=$(< "$SCRATCH_FILE".atomfeed)
 	}
 
+# generate category feed entries
+build_atom_catfeeds(){
+	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ]; then
+		db_categories="$CAT_LIST"
+		if [ ! -z "$db_categories" ]; then
+			for cat_db in $db_categories; do
+				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
+					set_catlink "$cat_db"
+					NB_AtomTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
+					NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
+					NB_AtomCatLink="$category_link"
+					nb_msg "$plugins_action atom $NB_AtomVer feed for category ..."
+					build_atomfeed "$cat_db"
+					make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomCatFile"
+				fi
+			done
+		fi
+	fi
+	}
+
 
 nb_msg "$plugins_action atom $NB_AtomVer feed ..."
 build_atomfeed nocat
-make_atomfeed
+make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomFile"
+build_atom_catfeeds
+

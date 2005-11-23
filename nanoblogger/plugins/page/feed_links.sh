@@ -1,22 +1,30 @@
 # NanoBlogger Page Plugin: Feed links
 
-# Atom 0.3
-if [ ! -z "$NB_AtomVer" ]; then
-	NB_AtomAltLink=$(
-	cat <<-EOF
-		<link rel="alternate" type="application/atom+xml"
-			title="Atom $NB_AtomVer"
-			href="${BASE_URL}$NB_AtomFile"
-		/>
-	EOF
-	)
-fi
-
 # update category info
 if [ ! -z "$cat_arch" ] && [ "$cat_arch" != "$fdlinksprev_cat_arch" ]; then
 	set_catlink "$cat_arch"
 fi
 fdlinksprev_cat_arch="$cat_arch"
+
+# Atom 1.0
+if [ ! -z "$NB_AtomVer" ]; then
+	if [ "$MKPAGE_TEMPLATE" = "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ]; then
+		NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
+		NB_AtomLink="${ARCHIVES_PATH}$NB_AtomCatFile"
+		NB_AtomTitle="Atom $NB_AtomVer: $NB_ArchiveTitle"
+	else
+		NB_AtomLink="${BASE_URL}atom.$NB_SYND_FILETYPE"
+		NB_AtomTitle="Atom $NB_AtomVer"
+	fi
+	NB_AtomAltLink=$(
+	cat <<-EOF
+		<link rel="alternate" type="application/atom+xml"
+			title="Atom $NB_AtomVer"
+			href="$NB_AtomLink"
+		/>
+	EOF
+	)
+fi
 
 # RSS 2.0
 if [ ! -z "$NB_RSS2Ver" ]; then

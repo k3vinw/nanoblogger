@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-18T22:37:27-05:00
+# Last modified: 2005-11-23T12:06:58-05:00
 
 # nanoblogger's version.
-VERSION="3.3 RC2"
+VERSION="3.3 CVS-RC3"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -807,7 +807,7 @@ build_weblog
 show_help(){
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
-sed -e "/[\$]VERSION/ s//$VERSION/g; /[\$]BASENAME/ s//$BASENAME/g" <<-EOF
+sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g" <<-EOF
 	$NB_ShowHelp
 EOF
 }
