@@ -19,7 +19,7 @@ if [ ! -z "$NB_AtomVer" ]; then
 	NB_AtomAltLink=$(
 	cat <<-EOF
 		<link rel="alternate" type="application/atom+xml"
-			title="Atom $NB_AtomVer"
+			title="$NB_AtomTitle"
 			href="$NB_AtomLink"
 		/>
 	EOF
