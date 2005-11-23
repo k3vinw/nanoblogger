@@ -142,6 +142,6 @@ build_atom_catfeeds(){
 
 nb_msg "$plugins_action atom $NB_AtomVer feed ..."
 build_atomfeed nocat
-make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomFile"
+make_atomfeed "$BLOG_DIR/$NB_AtomFile"
 build_atom_catfeeds
 
