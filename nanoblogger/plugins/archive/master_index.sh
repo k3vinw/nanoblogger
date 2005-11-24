@@ -1,32 +1,16 @@
-# NanoBlogger Plugin that creates a master archive index
+# NanoBlogger Plugin that creates a master archive index that
+# compliments the archive/year/year_index.sh plugin
 
 # concatenate modification variables
-MOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
+MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
+MASTERIMOD_QUERY=`echo "$USR_QUERY" |grep "^[0-9].*"`
 
 # check for weblog modifications
-if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
 	nb_msg "$plugins_action archive index page ..."
 	# make NB_ArchiveEntryLinks placeholder
-	query_db all
+	query_db
 	set_baseurl "../"
-	ARCHENTRY_LIST="$DB_RESULTS"
-	NB_ArchiveEntryLinks=$(
-	for entry in $ARCHENTRY_LIST; do
-		read_metadata TITLE "$NB_DATA_DIR/$entry"
-		NB_ArchiveEntryTitle="$METADATA"
-		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
-		NB_EntryID=`set_entryid $entry`
-		set_entrylink "$entry"
-		set_monthlink "$month"
-		# load category links plugin
-		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
-			. "$PLUGINS_DIR"/entry/category_links.sh
-		cat <<-EOF
-			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a>
-			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
-			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
-		EOF
-	done; month=)
 
 	# create links for categories
 	build_catlinks(){
@@ -47,29 +31,21 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$SCRATCH_FILE.category_links.$NB_FILETYPE"
 	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.category_links.$NB_FILETYPE")
 
-	# create links for monthly archives
-	[ -z "$CAL_CMD" ] && CAL_CMD="cal"
-	$CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
-		
-	make_monthlink(){
-	if [ "$CAL_VAR" = "1" ]; then
-		[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
-		[ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS $monthn $yearn`
-		NB_ArchiveMonthTitle=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
-	else
-		NB_ArchiveMonthTitle="$month"
-	fi
-	month_total=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
-	set_monthlink "$month"
+	make_yearlink(){
+	NB_ArchiveYearTitle="$masteriyearn"
+	year_total=`echo "$DB_RESULTS" |grep -c "^$masteriyearn-[0-9]*.*[\.]$NB_DATATYPE"`
 	# following needs to fit on single line
 	cat <<-EOF
-		<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$NB_ArchiveMonthTitle</a> ($month_total)<br />
+		<a href="${ARCHIVES_PATH}$masteriyearn/$NB_INDEXFILE">$NB_ArchiveYearTitle</a> ($year_total)<br />
 	EOF
 	}
 
 	query_db all
-	loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.month_links.$NB_FILETYPE"
-	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.month_links.$NB_FILETYPE")
+	MASTERIYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
+	for masteriyearn in $MASTERIYEAR_LIST; do
+		make_yearlink
+	done |sort $SORT_ARGS > "$SCRATCH_FILE.year_links.$NB_FILETYPE"
+	NB_ArchiveYearLinks=$(< "$SCRATCH_FILE.year_links.$NB_FILETYPE")
 
 	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 	if [ "$cat_total" -gt 0 ]; then
@@ -91,13 +67,7 @@ if [ ! -z "$MOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		<a id="date"></a>
 		<b>Browse by date</b>
 		<div>
-			$NB_ArchiveMonthLinks
-		</div>
-		<br />
-		<a id="entry"></a>
-		<b>Browse by entry</b>
-		<div>
-			$NB_ArchiveEntryLinks
+			$NB_ArchiveYearLinks
 		</div>
 	EOF
 

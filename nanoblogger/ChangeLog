@@ -1,3 +1,26 @@
+2005-11-23 12:59  n1xt3r
+
+	* docs/nanoblogger.html, plugins/page/feed_links.sh: - Update atom
+	  format supported in user manual.  - Add title to atom based
+	  category feeds.
+
+2005-11-23 12:48  n1xt3r
+
+	* plugins/atom.sh: Fix Atom feed's URI in id changed to valid
+	  canonical form.
+
+2005-11-23 12:20  n1xt3r
+
+	* plugins/atom.sh: Relocated Atom 1.0 feed to root of $BLOG_DIR.
+
+2005-11-23 12:10  n1xt3r
+
+	* ChangeLog, TODO, nb, default/blog.conf,
+	  default/templates/category_archive.htm, docs/nanoblogger.html,
+	  lang/en/messages.lang, plugins/atom.sh, plugins/rss.sh,
+	  plugins/rss2.sh, plugins/page/feed_links.sh: Atom 1.0 feed and
+	  optional category feeds.
+
 2005-11-20 00:31  n1xt3r
 
 	* nb: Fix bug which caused show help not to display correctly.
