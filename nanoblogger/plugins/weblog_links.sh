@@ -1,5 +1,4 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2005-11-01T00:54:19-05:00
 
 # <div class="sidetitle">
 # Links
@@ -31,10 +30,18 @@
 # maximum number of months to show for $NB_MonthLinks
 : ${MAX_MONTHLINKS:=12}
 
+# maximum number of years to show for $NB_YearLinks
+: ${MAX_YEARLINKS:=12}
+
 # validate MAX_MONTHLINKS (must be greater than 0)
 MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c [0-9]`
 [ "$MONTHLINKS_NUMVAR" = 0 ] &&
-	die "MAX_MONTHLINKS must be set to a valid number!"
+	die "MAX_MONTHLINKS != > 0"
+
+# validate MAX_YEARLINKS (must be greater than 0)
+YEARLINKS_NUMVAR=`echo "$MAX_YEARLINKS" |grep -c [0-9]`
+[ "$YEARLINKS_NUMVAR" = 0 ] &&
+	die "MAX_YEARLINKS != > 0"
 
 set_baseurl "./"
 nb_msg "$plugins_action weblog links ..."
@@ -59,9 +66,22 @@ for cat_link in $db_categories; do
 done
 }
 
-query_db
+# get total number of years and tally total months from MAX_YEARLINKS
+total_qyears=`echo "$MASTER_DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-4 |sort $SORT_ARGS`
+total_nyears=`echo "$total_qyears" |grep -c ""`
+NYEARS_RESULTS=`echo "$total_qyears" |sed "$MAX_YEARLINKS"q`
+
+month_tally=0
+for query_nyear in $NYEARS_RESULTS; do
+	query_db "$query_nyear"
+	months_nyear=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+	[ "$months_nyear" -gt 0 ] &&
+		month_tally=`expr $month_tally + $months_nyear`
+done
+
 # get total number of months and tally total entries from MAX_MONTHLINKS
-total_qmonths=`echo "$DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-7 |sort -ru`
+query_db
+total_qmonths=`echo "$DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-7 |sort $SORT_ARGS`
 total_nmonths=`echo "$total_qmonths" |grep -c ""`
 NMONTHS_RESULTS=`echo "$total_qmonths" |sed "$MAX_MONTHLINKS"q`
 
@@ -76,10 +96,21 @@ done
 build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
-# create links for monthly archives
+# tool to create yearly archive links
+make_yearlink(){
+NB_YearTitle="$webloglinksyearn"
+year_total=`echo "$DB_RESULTS" |grep -c "^$webloglinksyearn-[0-9]*.*[\.]$NB_DATATYPE"`
+# following needs to fit on single line
+cat <<-EOF
+	<a href="${ARCHIVES_PATH}$webloglinksyearn/$NB_INDEXFILE">$NB_YearTitle</a> ($year_total)<br />
+EOF
+}
+
+# cal command test to retrieve locale month titles
 [ -z "$CAL_CMD" ] && CAL_CMD="cal"
 $CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
-	
+
+# tool to create monthly archive links
 make_monthlink(){
 if [ "$CAL_VAR" = "1" ]; then
 	[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
@@ -95,6 +126,21 @@ cat <<-EOF
 EOF
 }
 
+# create yearly archive links
+query_db all nocat limit $month_tally 1
+WEBLOGLINKSYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
+for webloglinksyearn in $WEBLOGLINKSYEAR_LIST; do
+	make_yearlink
+done |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE"
+# yearly archives continued
+if [ "$MAX_YEARLINKS" -lt "$total_nyears" ]; then
+	cat >> "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE" <<-EOF
+		<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
+	EOF
+fi
+NB_YearLinks=$(< "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE")
+
+# create monthly archive links
 query_db all nocat limit $entry_tally 1
 loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 # monthly archives continued

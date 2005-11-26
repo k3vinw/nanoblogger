@@ -1,3 +1,11 @@
+2005-11-24 00:31  n1xt3r
+
+	* ChangeLog, nb, nb.conf, plugins/archive/master_fullindex.off,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/year/year_index.sh: - New plugins and templates
+	  for yearly archives.	- Modularized archive indexing between two
+	  plugins.
+
 2005-11-23 12:59  n1xt3r
 
 	* docs/nanoblogger.html, plugins/page/feed_links.sh: - Update atom

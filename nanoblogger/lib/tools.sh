@@ -402,7 +402,7 @@ fi
 # write entry's metadata to file
 write_entry(){
 WRITE_ENTRY_FILE="$1"
-# give upgraders a break :)
+# help ease transition from 3.2.x or earlier
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
@@ -414,19 +414,25 @@ write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 read_entry(){
 ENTRY_FILE="$1"
 if [ -f "$ENTRY_FILE" ]; then
-	NB_EntryID=`set_entryid $entry`
+	[ -z "$ENTRY_CACHETYPE" ] &&
+		ENTRY_CACHETYPE=entry_metadata
 	load_metadata NOBODY "$ENTRY_FILE"
 	load_plugins entry
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata" ]; then
+	NB_EntryID=`set_entryid $entry`
+	# load entry data from cache for unchanged entries
+	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
+		#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 		read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
 		NB_EntryBody="$METADATA"
 		load_plugins entry/mod
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
-		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata"
-		update_cache build entry_metadata "$entry"
+		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
+		# update cache list for future cache management
+		update_cache build $ENTRY_CACHETYPE "$entry"
 	else
-		load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.entry_metadata"
+		#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"
+		load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
 	fi
 fi
 }
@@ -438,7 +444,7 @@ WRITE_META_TEMPLATE="$2"
 # defaults to metafile template
 [ -z "$WRITE_META_TEMPLATE" ] &&
 	WRITE_META_TEMPLATE="$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
-# give upgraders a break :)
+# help ease transition from 3.2.x or earlier
 [ ! -f "$NB_TEMPLATE_DI/$METADATAFILE_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
 # accept user metadata
@@ -618,7 +624,7 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 		# delete old permalink directory
 		[ ! -z "$entry_dir" ] && [ -d "$Delete_PermalinkDir" ] &&
 			rm -fr "$Delete_PermalinkDir"
-		# delete old entry's cache file
+		# delete the old cache data
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Old_EntryFile".*
 	fi
 	NEWDATE_STRING=`echo "$New_EntryTimeStamp" |sed -e 's/[A-Z,a-z]/ /g; s/[\_]/:/g'`

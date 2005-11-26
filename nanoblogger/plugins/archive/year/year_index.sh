@@ -38,7 +38,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	fi
 	}
 
-	nb_msg "$plugins_action yearly archive index page for $yearn ..."
+	nb_msg "$plugins_action archive index page for year ..."
 	# make NB_ArchiveEntryLinks placeholder
 	set_baseurl "../../"
 

@@ -1260,7 +1260,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">generates some useful links</td>
 
-          <td align="left">MAX_MONTHLINKS</td>
+          <td align="left">MAX_YEARLINKS, MAX_MONTHLINKS</td>
 
           <td align="left">$NB_MainLinks, $NB_MonthLinks, $NB_CategoryLinks</td>
 
@@ -1508,9 +1508,9 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">converts entry data for use in templates</td>
 
-          <td align="left">ENTRY_FILE=$1</td>
+          <td align="left">ENTRY_FILE=$1, ENTRY_CACHETYPE=$2</td>
 
-          <td align="left">$NB_EntryTitle, ..., $NB_EntryBody</td>
+          <td align="left">$NB_EntryTitle, $NB_EntryBody, ...</td>
 
           <td align="left">see plugin atom.sh for a good example</td>
         </tr>

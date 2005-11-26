@@ -1,5 +1,6 @@
-# NanoBlogger Plugin that creates a master archive index that
-# compliments the archive/year/year_index.sh plugin
+# NanoBlogger Plugin that creates a master archive index
+# in conjunction with the yearly archive indexes created
+# by archive/year/year_index.sh plugin
 
 # concatenate modification variables
 MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
@@ -8,6 +9,13 @@ MASTERIMOD_QUERY=`echo "$USR_QUERY" |grep "^[0-9].*"`
 # check for weblog modifications
 if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
 	nb_msg "$plugins_action archive index page ..."
+	# help ease transition from 3.2.x or earlier
+	YEAR_TEMPLATECOPY="$NB_BASE_DIR/default/templates/$YEAR_TEMPLATE"
+	if [ ! -f "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" ] ; then
+		# YEAR_TEMPLATE doesn't exist, get it from default
+		cp "$YEAR_TEMPLATECOPY" "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" ||
+			die "$nb_plugin: failed to copy '$YEAR_TEMPLATECOPY!' repair nanoblogger! goodbye."
+	fi
 	# make NB_ArchiveEntryLinks placeholder
 	query_db
 	set_baseurl "../"
@@ -32,17 +40,17 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.category_links.$NB_FILETYPE")
 
 	make_yearlink(){
-	NB_ArchiveYearTitle="$masteriyearn"
-	year_total=`echo "$DB_RESULTS" |grep -c "^$masteriyearn-[0-9]*.*[\.]$NB_DATATYPE"`
+	NB_ArchiveYearTitle="$masterindex_yearn"
+	year_total=`echo "$DB_RESULTS" |grep -c "^$masterindex_yearn-[0-9]*.*[\.]$NB_DATATYPE"`
 	# following needs to fit on single line
 	cat <<-EOF
-		<a href="${ARCHIVES_PATH}$masteriyearn/$NB_INDEXFILE">$NB_ArchiveYearTitle</a> ($year_total)<br />
+		<a href="${ARCHIVES_PATH}$masterindex_yearn/$NB_INDEXFILE">$NB_ArchiveYearTitle</a> ($year_total)<br />
 	EOF
 	}
 
 	query_db all
-	MASTERIYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
-	for masteriyearn in $MASTERIYEAR_LIST; do
+	MASTERINDEXYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
+	for masterindex_yearn in $MASTERINDEXYEAR_LIST; do
 		make_yearlink
 	done |sort $SORT_ARGS > "$SCRATCH_FILE.year_links.$NB_FILETYPE"
 	NB_ArchiveYearLinks=$(< "$SCRATCH_FILE.year_links.$NB_FILETYPE")
