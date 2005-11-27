@@ -428,8 +428,8 @@ if [ -f "$ENTRY_FILE" ]; then
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
 		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
-		# update cache list for future cache management
-		update_cache build $ENTRY_CACHETYPE "$entry"
+		# update cache list for post-cache management
+		#update_cache build $ENTRY_CACHETYPE "$entry"
 	else
 		#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"
 		load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"

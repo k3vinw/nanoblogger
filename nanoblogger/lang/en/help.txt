@@ -55,6 +55,7 @@ Options:
  -T, --text <text> 			set text of body (for '--add',
 					'--draft', '--makefile' and
  					'--makepage').
+ -U, --update-cache <query> <type> 	clear cache by query and type or all.
  -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
 					current).
  -v, --verbose <1=on/0=off>		toggle level of verbosity.

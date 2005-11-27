@@ -313,21 +313,27 @@ cache_update="$1"
 cache_def="$2"
 CACHEUPDATE_LIST="$3"
 if [ "$cache_update" = build ]; then
+	[ -z "$cache_def" ] &&
+		cache_def=entry_metadata
 	for cache_item in $CACHEUPDATE_LIST; do
-		echo "$cache_item" >> "$SCRATCH_FILE.$cache_def-cache_list"
+		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 	done
-	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE.$cache_def-cache_list")
+	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE".$cache_def-cache_list)
 elif [ "$cache_update" = rebuild ]; then
-	> "$SCRATCH_FILE.$cache_def-cache_list"
+	> "$SCRATCH_FILE".$cache_def-cache_list
+	[ -z "$cache_def" ] &&
+		cache_def=entry_metadata
 	for cache_item in $CACHEUPDATE_LIST; do
-		echo "$cache_item" >> "$SCRATCH_FILE.$cache_def-cache_list"
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item.$cache_def"
+		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
-	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE.$cache_def-cache_list")
+	CACHEUPDATE_LIST=$(< "$SCRATCH_FILE".$cache_def-cache_list)
 else
+	[ -z "$cache_def" ] &&
+		cache_def="*"
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
-	for cache_item in $DB_RESULTS; do	
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item.$cache_def"
+	for cache_item in $DB_RESULTS; do
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
 fi
 CACHE_LIST=`echo "$CACHEUPDATE_LIST" |sort -u`
@@ -406,7 +412,8 @@ fi
 if [ "$USR_QUERY" = all ]; then
 	nb_msg "$buildweblog_all"
 	# remove all generated files for a clean build
-	for update_dir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
+	# use "--update-cache all" to clear cached data
+	for update_dir in "$ARCHIVES_DIR" "$PARTS_DIR"; do
 		[ ! -z "$update_dir" ] && [ -d "$BLOG_DIR/$update_dir" ] &&
 			rm -fr "$BLOG_DIR"/"$update_dir"/*
 	done
@@ -869,11 +876,11 @@ while [ $# -gt 0 ]; do
 					check_config; edit_weblog;;
 		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
 					check_config; nb_draft;;
-		-f|--blogconf)		USR_BLOGCONF="$2"; shift;;
+		-f|--blogconf)		check_arg; USR_BLOGCONF="$2"; shift;;
 		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-i|--interactive) 	BLOG_INTERACTIVE=1;;
-		-l|--list)		USR_QUERY="$2"; shift
+		-l|--list)		check_arg; USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
 		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
@@ -898,6 +905,8 @@ while [ $# -gt 0 ]; do
 		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;
+		-U|--update-cache) 	check_arg; USR_QUERY="$2"; USR_CACHEDEF="$3"; shift 2
+					check_config; update_cache "$USR_QUERY" "$USR_CACHEDEF";;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;

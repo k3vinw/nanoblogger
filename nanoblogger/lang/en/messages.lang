@@ -45,7 +45,7 @@ paginate_action="paginating"
 buildarchives_action="generating archives ..."
 
 # build_weblog
-buildweblog_all="updating all files! this may take a while ..."
+buildweblog_all="updating all weblog files! this may take a while ..."
 buildweblog_files="generating weblog files ..."
 buildweblog_main="generating main index page(s) ..."
 
