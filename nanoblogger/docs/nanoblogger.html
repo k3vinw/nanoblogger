@@ -437,7 +437,7 @@ NB_INDEX="index.html"
 
     <p><b>Setting the Default Text Formatting</b></p>
 
-    <p><em>ENTRY_FORMAT</em>, specifies the default text formatting to use for an entry. Defaults to "raw".</p>
+    <p><em>ENTRY_FORMAT</em> specifies the default text formatting to use for an entry. Defaults to "raw".</p>
 
     <p><b>Toggling the Display of Permanent Links</b></p>
 
@@ -451,9 +451,11 @@ NB_INDEX="index.html"
 
     <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.</p>
 
-    <p><b>Toggling Automatic Management of the Cache</b></p>
+    <p><b>Setting the Cache Preferences</b></p>
 
-    <p>Setting <em>BLOG_CACHEMNG</em> to "0" disables automatic management of the cache. The cache may be controlled manually using the <code>--update-cache</code> command line option.</p>
+    <p><em>MAX_CACHE_ENTRIES</em> sets the maximum number of entries to store in the cache. Defaults to "$MAX_ENTRIES".</p>
+
+    <p>Setting <em>BLOG_CACHEMNG</em> to "0" disables automatic management of the cache. The cache may be managed manually using the <code>--update-cache</code> command line option.</p>
 
     <p><b>Toggling Interactive Mode</b></p>
 

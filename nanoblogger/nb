@@ -331,11 +331,14 @@ elif [ "$cache_update" = rebuild ]; then
 elif [ "$cache_update" = expire ]; then
 	[ -z "$cache_def" ] &&
 		cache_def="*"
-	[ -z "$MASTER_DB_RESULTS" ] && query_db master
 	[ -z "$CACHEUPDATE_LIST" ] &&
-		CACHEOLD_LIST=`echo "$MASTER_DB_RESULTS" |sed '1,'$MAX_ENTRIES'd'`
-	for cache_item in $CACHEOLD_LIST; do
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
+		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES"
+	cd "$BLOG_DIR/$CACHE_DIR"
+	for cache_item in *.$cache_def; do
+		cache_regex=`echo "$cache_item" |sed -e '/[\.]'$cache_def'[^. ]*$/ s///g'`
+		cache_match=`echo "$DB_RESULTS" |grep -c "$cache_regex"`
+		[ "$cache_match" != 1 ] &&
+			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
 	done
 else
 	[ -z "$cache_def" ] &&
@@ -462,9 +465,7 @@ paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_I
 if [ "$USR_QUERY" != main ]; then
 	if [ "$BLOG_CACHEMNG" != 0 ]; then
 		nb_msg "$buildweblog_cache"
-		# save cache of type cat for faster category updates
-		update_cache expire entry
-		update_cache expire month
+		update_cache expire
 	fi
 fi
 }
@@ -879,6 +880,7 @@ while [ $# -gt 0 ]; do
 		# -B and --body options deprecated in favor of -T and --text
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
+		--cfgfile)		check_arg; USR_BLOGCONF="$2"; shift;;
 		--configure)		check_config; config_weblog;;
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
@@ -888,8 +890,7 @@ while [ $# -gt 0 ]; do
 					check_config; edit_weblog;;
 		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
 					check_config; nb_draft;;
-		-f|--blogconf)		check_arg; USR_BLOGCONF="$2"; shift;;
-		-F|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
+		-f|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-i|--interactive) 	BLOG_INTERACTIVE=1;;
 		-l|--list)		check_arg; USR_QUERY="$2"; shift
@@ -917,9 +918,9 @@ while [ $# -gt 0 ]; do
 		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
 					check_config; build_weblog;;
-		-U|--update-cache) 	check_arg; USR_QUERY="$2"; shift
+		-U|--update-cache) 	check_arg; USR_CACHEQUERY="$2"; shift
 					check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-					update_cache "$USR_QUERY" "*";;
+					update_cache "$USR_CACHEQUERY" "*";;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;

@@ -13,6 +13,7 @@ Options:
  -c, --category	<ID,cat>		specify category (for '--add',
 					'--delete', '--edit', '--list',
 					'--update', and '--update-cache').
+ --cfgfile <file>			specify an alternate configuration file.
  --configure				configure weblog (for '--update').
  --datadir <directory>			specify weblog's data directory.
  -d, --delete <ID,cat>			delete an entry or category.
@@ -21,8 +22,7 @@ Options:
  					'--makepage').
  -e, --edit <ID,cat>			edit an entry or category.
  -E, --draft <file> 			edit or create metafile.
- -f, --blogconf <file>			specify an alternate configuration file.
- -F, --file <file> 			specify metafile to import as entry
+ -f, --file <file> 			specify metafile to import as entry
  					(for '--add').
  -h, --help				show this help message.
  -i, --interactive 			run interactively (for '--add',

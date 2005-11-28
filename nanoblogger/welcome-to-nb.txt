@@ -21,7 +21,7 @@ BODY:
 <li>delete category = <code>nb -c [cat_id] -d <em>cat</em></code></li>
 <li>delete entry from category = <code>nb -c [cat_id] -d [entry_id]</code></li>
 <li>draft entry = <code>nb -E [draft_file]</code></li>
-<li>import draft as entry = <code>nb -F [draft_file] -a</code></li>
+<li>import draft as entry = <code>nb -f [draft_file] -a</code></li>
 <li>force update of weblog files = <code>nb -u [all|DATE|main]</code></li>
 </ul>
 <p>

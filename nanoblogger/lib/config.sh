@@ -120,6 +120,10 @@ x_id="$BLOG_ENTRYID_TAG"
 : ${NB_PrevPage:=&#91;&#60;&#60;&#93;} # [<<]
 : ${NB_TopPage:=&#91;&#47;&#92;&#93;} # [/\]
 : ${NB_EndPage:=&#91;&#92;&#47;&#93;} # [\/]
+# default to auto cache management
+: ${BLOG_CACHEMNG:=1}
+# default for maximum entries to save in cache
+: ${MAX_CACHE_ENTRIES:=$MAX_ENTRIES}
 # default sort arguments (-u is required)
 : ${SORT_ARGS:=-ru}
 }
