@@ -1,3 +1,20 @@
+2005-11-28 15:49  n1xt3r
+
+	* nb, lang/en/help.txt, lib/config.sh: Updating defaults to maximum
+	  number of entries (max).
+
+2005-11-28 13:04  n1xt3r
+
+	* nb, welcome-to-nb.txt, default/blog.conf, docs/nanoblogger.html,
+	  lang/en/help.txt, lib/config.sh: Settings to control maximum
+	  number or entries stored in cache.
+
+2005-11-28 01:44  n1xt3r
+
+	* ChangeLog, nb, default/blog.conf,
+	  default/templates/year_archive.htm, docs/nanoblogger.html:
+	  Automatic or manual control of cache to save disk space.
+
 2005-11-28 01:17  n1xt3r
 
 	* nb, welcome-to-nb.txt, docs/nanoblogger.html, lang/en/help.txt,
