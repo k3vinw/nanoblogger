@@ -1,3 +1,26 @@
+2005-11-28 01:17  n1xt3r
+
+	* nb, welcome-to-nb.txt, docs/nanoblogger.html, lang/en/help.txt,
+	  lang/en/messages.lang, lib/config.sh, lib/query.sh, lib/tools.sh:
+	  - Automatically expire older cache data to save disk space.  -
+	  Remove "current" from listing and updating command line options.
+
+2005-11-26 23:12  n1xt3r
+
+	* nb, lang/en/help.txt, lang/en/messages.lang, lib/tools.sh:
+	  Ability to control cache from command line.
+
+2005-11-25 23:25  n1xt3r
+
+	* ChangeLog, TODO, nb, default/blog.conf,
+	  default/templates/main_index.htm, docs/nanoblogger.html,
+	  lib/tools.sh, plugins/weblog_links.sh, plugins/weblog_status.sh,
+	  plugins/archive/master_fullindex.off,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/year/year_index.sh: - New master archive index
+	  branches out to yearly archive indexes.  - Fix broken cache
+	  routines.
+
 2005-11-24 00:31  n1xt3r
 
 	* ChangeLog, nb, nb.conf, plugins/archive/master_fullindex.off,

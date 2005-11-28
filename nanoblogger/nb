@@ -460,7 +460,7 @@ CACHE_TYPE=main
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 # automatically remove old cache data (of type entry and month) to save disk space
 if [ "$USR_QUERY" != main ]; then
-	if [ "$BLOG_CACHESIZE" != large ]; then
+	if [ "$BLOG_CACHEMNG" != 0 ]; then
 		nb_msg "$buildweblog_cache"
 		# save cache of type cat for faster category updates
 		update_cache expire entry
