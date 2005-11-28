@@ -12,7 +12,6 @@ db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
-current_date=`date "+%Y.%m"`
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
@@ -25,7 +24,8 @@ if [ "$db_categories" = "cat_*.$NB_DBTYPE" ]; then db_categories=; fi
 # list amount of entries based on db_limit
 filter_limit(){
 	[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
-	[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
+	#[ ! -z "$db_limit" ] && sed -n "$db_offset,$db_limit"p
+	[ ! -z "$db_limit" ] && sed ''$db_offset,$db_limit'!d'
 	db_setlimit=; db_limit=; db_offset=
 	}
 filter_query(){ grep "$db_query." |sort $SORT_ARGS; } # allow for empty $db_query
@@ -60,10 +60,8 @@ query_data(){
 if [ "$db_query" = all ]; then
 	db_query=; query_data
 elif [ "$db_query" = master ]; then
-	# create authoritive state of reference
+	# create authoritive results for reference
 	db_query=; MASTER_DB_RESULTS=`cat_db |filter_query`
-elif [ "$db_query" = current ]; then
-	db_query="$current_date"; query_data
 elif [ "$db_query" = max ]; then
 	db_setlimit=limit; db_query=; query_data
 else

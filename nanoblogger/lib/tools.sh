@@ -88,7 +88,7 @@ fi
 
 # convert category number to existing category database
 cat_id(){
-cat_query=`echo "$cat_num" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`
+cat_query=`echo "$1" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`
 query_db
 if [ ! -z "$cat_query" ]; then
 	for cat_id in $cat_query; do
@@ -102,12 +102,12 @@ fi
 
 # validate category's id number
 check_catid(){
-cat_list=`cat_id`
+cat_list=`cat_id "$1"`
 for cat_db in $cat_list; do
 	[ ! -f "$NB_DATA_DIR/$cat_db" ] &&
-		die "$checkcatid_invalid $cat_num"
+		die "$checkcatid_invalid $1"
 done
-[ ! -z "$cat_num" ] && [ -z "$cat_list" ] && die "$checkcatid_novalid"
+[ ! -z "$1" ] && [ -z "$cat_list" ] && die "$checkcatid_novalid"
 }
 
 # check file for required metadata tags
@@ -413,13 +413,16 @@ write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 # read an entry
 read_entry(){
 ENTRY_FILE="$1"
+ENTRY_CACHETYPE="$2"
 if [ -f "$ENTRY_FILE" ]; then
+	[ ! -z "$CACHE_TYPE" ] &&
+		ENTRY_CACHETYPE="$CACHE_TYPE"
 	[ -z "$ENTRY_CACHETYPE" ] &&
-		ENTRY_CACHETYPE=entry_metadata
+		ENTRY_CACHETYPE=metadata
 	load_metadata NOBODY "$ENTRY_FILE"
 	load_plugins entry
 	NB_EntryID=`set_entryid $entry`
-	# load entry data from cache for unchanged entries
+	# use cache when entry data unchanged
 	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 		#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 		read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
@@ -428,7 +431,7 @@ if [ -f "$ENTRY_FILE" ]; then
 		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 		load_plugins entry/format "$NB_EntryFormat"
 		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
-		# update cache list for post-cache management
+		# update cache list for some post-cache management
 		#update_cache build $ENTRY_CACHETYPE "$entry"
 	else
 		#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"

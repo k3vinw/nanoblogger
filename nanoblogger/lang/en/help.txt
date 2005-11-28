@@ -11,8 +11,8 @@ Options:
  -B, --body <text>			deprecated, please use '-T' or '--text'
  					instead.
  -c, --category	<ID,cat>		specify category (for '--add',
-					'--delete', '--edit', '--list' and
-					'--update').
+					'--delete', '--edit', '--list',
+					'--update', and '--update-cache').
  --configure				configure weblog (for '--update').
  --datadir <directory>			specify weblog's data directory.
  -d, --delete <ID,cat>			delete an entry or category.
@@ -28,7 +28,7 @@ Options:
  -i, --interactive 			run interactively (for '--add',
  					'--delete', '--preview', and
  					'--publish').
- -l, --list <all,cat,current,DATE,max>	list entries or categories (defaults to
+ -l, --list <all,cat,DATE,max>		list entries or categories (defaults to
  					max).
  --manual				view the manual.
  -m, --move <ID>			move an entry to a specified
@@ -55,9 +55,10 @@ Options:
  -T, --text <text> 			set text of body (for '--add',
 					'--draft', '--makefile' and
  					'--makepage').
- -U, --update-cache <query> <type> 	clear cache by query and type or all.
- -u, --update <all,current,DATE,main> 	force update of weblog (defaults to
-					current).
+ -U, --update-cache <all,DATE,expire>  	force update of weblog's cache. 'expire'
+ 					only removes older cached data.
+ -u, --update <all,DATE,main> 		force update of weblog (defaults to
+					main).
  -v, --verbose <1=on/0=off>		toggle level of verbosity.
  -V, --version				display version information.
 

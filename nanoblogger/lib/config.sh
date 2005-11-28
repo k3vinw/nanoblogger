@@ -127,7 +127,8 @@ x_id="$BLOG_ENTRYID_TAG"
 # deconfigure, clear some auto-default variables
 deconfig(){ BLOG_AUTHOR=; PLUGINS_DIR=; NB_DATATYPE=; NB_DBTYPE=; \
 	NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; QUERY_MODE=; MAX_ENTRIES=; \
-	SORT_ARGS=; }
+	SORT_ARGS=; METADATA_MARKER=; METADATA_CLOSETAG=; PAGE_FORMAT=; \
+	ENTRY_FORMAT=; }
 
 # edit $BLOG_CONF
 config_weblog(){
