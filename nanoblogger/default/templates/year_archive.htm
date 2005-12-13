@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="$BLOG_MIMETYPE; charset=$BLOG_CHARSET" />
 <meta name="generator" content="NanoBlogger $VERSION" />
 
-<title>$BLOG_TITLE: $NB_MetaTitle</title>
+<title>$NB_MetaTitle | $BLOG_TITLE</title>
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
@@ -22,8 +22,11 @@
 	<a id="top"></a>
 	<div class="blog">
 		<div id="menu">
+			<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+			<br />
 $([ ! -z "$prev_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveYearLink'">'$NB_PrevPage'</a>')
-			<a href="${BASE_URL}$NB_INDEX">Main</a>
+			<a href="${ARCHIVES_PATH}$yearn/$NB_INDEX">$yearn</a>
 $([ ! -z "$next_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveYearLink'">'$NB_NextPage'</a>')
 		</div>
 		<h2 class="pagetitle">$NB_MetaTitle</h2>

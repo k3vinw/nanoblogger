@@ -62,6 +62,10 @@ if [ "$db_query" = all ]; then
 elif [ "$db_query" = master ]; then
 	# create authoritive results for reference
 	db_query=; MASTER_DB_RESULTS=`cat_db |filter_query`
+elif [ "$db_query" = years ]; then
+	db_query=; YEAR_DB_RESULTS=`cat_db |cut -c1-4 |filter_query`
+elif [ "$db_query" = months ]; then
+	db_query=; MONTH_DB_RESULTS=`cat_db |cut -c1-7 |filter_query`
 elif [ "$db_query" = max ]; then
 	db_setlimit=limit; db_query=; query_data
 else

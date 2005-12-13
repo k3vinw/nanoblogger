@@ -205,7 +205,7 @@ li {
   </div>
 
   <div id="intro">
-    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed. It's free to use and modify under the GNU General Public License.
+    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed to create static HTML content. It's free to use and modify under the GNU General Public License.
   </div>
 
   <div id="synopsis">
@@ -342,7 +342,7 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
-    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, usefull for specifying time in UTC. Please note that these setting has no effect on previous entries. Read the man pages of the date command to see more on how to customize the format of the date command's output.</p>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, usefull for specifying time in UTC. Please note that these settings have no effect on previous entries. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
 
     <p>Examples:</p>
     <pre>
@@ -385,7 +385,7 @@ BLOG_MIMETYPE="text/html"
 
     <p><b>Setting the Web Address</b></p>
 
-    <p><em>BLOG_URL</em> should be set as the full URL to your weblog excluding the index file and any preceding "/". This setting is required for absolute links to work.</p>
+    <p><em>BLOG_URL</em> should be set as the full URL to your weblog excluding the index file and any preceding "/". This setting is required for absolute links and syndication feeds.</p>
 
     <p>Example:</p>
     <pre>
@@ -463,21 +463,11 @@ NB_INDEX="index.html"
 
     <p><b>Changing the File Type</b></p>
 
-    <p><em>NB_FILETYPE</em> specifies the file type or rather the suffix for the generated files. The default, of course, is set to <em>html</em>.</p>
+    <p><em>NB_FILETYPE</em> specifies the file type or rather the suffix for the generated files. The default is set to "html".</p>
 
     <p><b>Changing the Default Query Mode</b></p>
 
     <p><em>QUERY_MODE</em> specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
-
-    <p><b>Changing the Default Language of NanoBlogger</b></p>
-
-    <p><em>NB_LANG</em> sets the language definitions to load. The default is "en" for English.</p>
-
-    <p>Example:</p>
-    <pre>
-NB_LANG="en"
-    
-</pre>
 
     <p><b>Plugin Configuration</b></p>
 
@@ -486,6 +476,16 @@ NB_LANG="en"
     <p><b>Global Configuration</b></p>
 
     <p>NanoBlogger has it's own configuration file, <em>$NB_BASE_DIR/nb.conf</em> that holds settings which effect all weblogs. The global configuration file is read first meaning that settings in the weblog's configuration may override settings in <em>$NB_BASE_DIR/nb.conf</em>. This configuration is also looked for under the file, <em>$HOME/.nb.conf</em>.</p>
+
+    <p><b>Changing the Default Language of NanoBlogger</b></p>
+
+    <p><em>NB_LANG</em> is a global configuration variable that sets the language definitions to load. The default is "en" for English</p>
+
+    <p>Example:</p>
+    <pre>
+NB_LANG="en"
+    
+</pre>
   </div>
 
   <div id="mgmt">

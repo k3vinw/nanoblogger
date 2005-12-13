@@ -7,7 +7,7 @@
 <meta name="robots" content="all" />
 <meta name="revisit-after" content="31 days" />
 
-<title>$BLOG_TITLE: $NB_ArchiveTitle Archives</title>
+<title>$NB_ArchiveTitle Archives | $BLOG_TITLE</title>
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
@@ -26,8 +26,12 @@ $NB_RSSAltLink
 	<a id="top"></a>
 	<div class="blog">
 		<div id="menu">
+			<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+			<a href="${BASE_URL}$ARCHIVES_DIR/$year/$NB_INDEX">$yearn</a> &#62;
+			<br />
 $([ ! -z "$prev_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveMonthLink'">'$NB_PrevPage'</a>')
-			<a href="${BASE_URL}$NB_INDEX">Main</a>
+			<a href="${BASE_URL}$ARCHIVES_DIR/$year/$monthn/$NB_INDEX">$monthn</a>
 $([ ! -z "$next_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveMonthLink'">'$NB_NextPage'</a>')
 		</div>
 		<h2 class="pagetitle">$NB_ArchiveTitle Archives</h2>

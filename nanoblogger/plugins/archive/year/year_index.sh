@@ -6,22 +6,22 @@ YEARIMOD_QUERY=`echo "$USR_QUERY" |grep "^$yearn"`
 
 # check for weblog modifications
 if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
-	# tool to lookup year's id from "all" query type
+	# tool to lookup year's id from "years" query type
 	lookup_yearid(){
-	echo "$2" |cut -c1-4 |sort $SORT_ARGS |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+	echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 	}
 	# set previous and next links for given year
 	set_yearnavlinks(){
 	yearnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
 	year_id=
 	[ ! -z "$yearnavlinks_var" ] &&
-		year_id=`lookup_yearid "$yearnavlinks_var" "$MASTER_DB_RESULTS"`
+		year_id=`lookup_yearid "$yearnavlinks_var" "$YEAR_DB_RESULTS"`
 	if [ ! -z "$year_id" ] && [ $year_id -gt 0 ]; then
 		prev_yearid=`expr $year_id + 1`
 		next_yearid=`expr $year_id - 1`
 		prev_year=; NB_PrevArchiveYearLink=
 		[ $prev_yearid -gt 0 ] &&
-			prev_year=`echo "$MASTER_DB_RESULTS" |cut -c1-4 |sort $SORT_ARGS |sed ''$prev_yearid'!d'`
+			prev_year=`echo "$YEAR_DB_RESULTS" |sed ''$prev_yearid'!d'`
 		if [ ! -z "$prev_year" ]; then
 			prev_year_dir=`echo $prev_year |sed -e '/[-]/ s//\//g'`
 			prev_year_file="$prev_year_dir/$NB_INDEXFILE"
@@ -29,7 +29,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 		fi
 		next_year=; NB_NextArchiveYearLink=
 		[ $next_yearid -gt 0 ] &&
-			next_year=`echo "$MASTER_DB_RESULTS" |cut -c1-4 |sort $SORT_ARGS |sed ''$next_yearid'!d'`
+			next_year=`echo "$YEAR_DB_RESULTS" |sed ''$next_yearid'!d'`
 		if [ ! -z "$next_year" ]; then
 			next_year_dir=`echo $next_year |sed -e '/[-]/ s//\//g'`
 			next_year_file="$next_year_dir/$NB_INDEXFILE"
@@ -81,6 +81,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	EOF
 	}
 
+	[ -z "$YEAR_DB_RESULTS" ] && query_db years
 	loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE"
 	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE")
 	set_yearnavlinks "$yearn"

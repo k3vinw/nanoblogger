@@ -67,7 +67,8 @@ done
 }
 
 # get total number of years and tally total months from MAX_YEARLINKS
-total_qyears=`echo "$MASTER_DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-4 |sort $SORT_ARGS`
+[ -z "$YEAR_DB_RESULTS" ] && query_db years
+total_qyears="$YEAR_DB_RESULTS"
 total_nyears=`echo "$total_qyears" |grep -c ""`
 NYEARS_RESULTS=`echo "$total_qyears" |sed "$MAX_YEARLINKS"q`
 
@@ -80,8 +81,8 @@ for query_nyear in $NYEARS_RESULTS; do
 done
 
 # get total number of months and tally total entries from MAX_MONTHLINKS
-query_db
-total_qmonths=`echo "$DB_RESULTS" |grep "[\.]$NB_DATATYPE" |cut -c1-7 |sort $SORT_ARGS`
+[ -z "$MONTH_DB_RESULTS" ] && query_db months
+total_qmonths="$MONTH_DB_RESULTS"
 total_nmonths=`echo "$total_qmonths" |grep -c ""`
 NMONTHS_RESULTS=`echo "$total_qmonths" |sed "$MAX_MONTHLINKS"q`
 

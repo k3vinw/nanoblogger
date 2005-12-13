@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="$BLOG_MIMETYPE; charset=$BLOG_CHARSET" />
 
-<title>$BLOG_TITLE: $NB_ArchiveTitle Archives</title>
+<title>$NB_ArchiveTitle Archives | $BLOG_TITLE</title>
 
 <link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
@@ -24,10 +24,13 @@ $NB_RSSAltLink
 	<a id="top"></a>
 	<div class="blog">
 		<div id="menu">
-			<a href="${BASE_URL}$NB_INDEX">Main</a><br />
+			<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a>
 		</div>
 		<h2 class="pagetitle">$NB_ArchiveTitle Archives</h2>
-		$NB_MetaBody
+		<div class="blogbody">
+			$NB_MetaBody
+		</div>
 		<div class="menu">
 			<a href="#top">$NB_TopPage</a><br />
 			$NB_PageLinks

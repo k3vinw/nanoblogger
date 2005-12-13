@@ -25,9 +25,9 @@ Options:
  -f, --file <file> 			specify metafile to import as entry
  					(for '--add').
  -h, --help				show this help message.
- -i, --interactive 			run interactively (for '--add',
- 					'--delete', '--preview', and
- 					'--publish').
+ -i, --interactive <1=on/0=off> 	toggle interactive mode (for '--add',
+ 					'--delete', '--preview', '--publish',
+ 					and '--update').
  -l, --list <all,cat,DATE,max>		list entries or categories (defaults to
  					max).
  --manual				view the manual.
@@ -79,7 +79,7 @@ Examples:
 	nb -b ~/public_html/weblog -t "News" -c new -a
 
  create new entry using nothing but command line options!
-	nb -b ~/public_html/weblog -n myname -t 'MyTitle' -D "msg" -T 'Msg!' -a
+	nb -b ~/public_html/weblog -n 'myname' -t 'Title' -T 'Text!' -a
 
 More info:
  URL: http://nanoblogger.sourceforge.net

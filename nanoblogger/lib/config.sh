@@ -112,7 +112,9 @@ x_id="$BLOG_ENTRYID_TAG"
 # default to max filter for query mode
 : ${QUERY_MODE:=max}
 # defaults for maximum entries to display on each page
-: ${MAX_ENTRIES:=10}; : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
+: ${MAX_ENTRIES:=10}
+: ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
+: ${MAX_CATPAGE_ENTRIES:=$MAX_PAGE_ENTRIES}
 # defaults for index file name
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
 # default for page navigation symbols (HTML entities)
@@ -126,6 +128,9 @@ x_id="$BLOG_ENTRYID_TAG"
 : ${MAX_CACHE_ENTRIES:=$MAX_ENTRIES}
 # default sort arguments (-u is required)
 : ${SORT_ARGS:=-ru}
+# override configuration's interactive mode
+[ ! -z "$USR_INTERACTIVE" ] &&
+	BLOG_INTERACTIVE="$USR_INTERACTIVE"
 }
 
 # deconfigure, clear some auto-default variables

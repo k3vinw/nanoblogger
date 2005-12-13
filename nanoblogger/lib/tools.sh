@@ -49,7 +49,6 @@ else
 	[ ! -z "$DATE_LOCALE" ] &&
 		LC_ALL="$DATE_LOCALE" $DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
 	[ -z "$DATE_LOCALE" ] &&
-a
 		$DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
 fi
 }
@@ -63,7 +62,7 @@ old_suffix=`echo $filename |cut -d"." -f2`
 echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 }
 
-# function to require confirmation
+# tool to require confirmation
 confirm_action(){
 nb_msg "$confirmaction_ask [y/N]"
 read -p "$NB_PROMPT" confirm
@@ -164,9 +163,27 @@ lookup_entryid(){
 echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
-# tool to lookup month's id from "all" query type
+# tool to lookup month's id from "months" query type
 lookup_monthid(){
-echo "$2" |cut -c1-7 |sort $SORT_ARGS |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+}
+
+# tool to find entry before and after from entry's id
+findba_entry(){
+entryid_var=`lookup_entryid "$1" "$2"`
+# assumes chronological date order
+before_entryid=`expr $entryid_var + 1`
+after_entryid=`expr $entryid_var - 1`
+if [ "$before_entryid" -gt 0 ]; then
+	before_entry=`echo "$2" |sed -e ''$before_entryid'!d'`
+else
+	before_entry=
+fi
+if [ "$after_entryid" -gt 0 ]; then
+	after_entry=`echo "$2" |sed -e ''$after_entryid'!d'`
+else
+	after_entry=
+fi
 }
 
 # set link/file for given category
@@ -196,8 +213,9 @@ set_monthnavlinks(){
 monthnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
 month_id=
 [ ! -z "$monthnavlinks_var" ] &&
-	month_id=`lookup_monthid "$monthnavlinks_var" "$MASTER_DB_RESULTS"`
+	month_id=`lookup_monthid "$monthnavlinks_var" "$MONTH_DB_RESULTS"`
 if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
+	# assumes reverse chronological date order
 	prev_monthid=`expr $month_id + 1`
 	next_monthid=`expr $month_id - 1`
 	prev_month=; NB_PrevArchiveMonthLink=
@@ -255,29 +273,25 @@ fi
 
 # set previous and next links for given entry
 set_entrynavlinks(){
-entrynavlinks_var=`echo "$1" |grep '^[0-9].*'`
-entry_id=
-[ ! -z "$entrynavlinks_var" ] &&
-	entry_id=`lookup_entryid "$entrynavlinks_var" "$MASTER_DB_RESULTS"`
-if [ ! -z "$entry_id" ] && [ $entry_id -gt 0 ]; then
-	prev_entryid=`expr $entry_id + 1`
-	next_entryid=`expr $entry_id - 1`
+entrynavlinks_type="$1"
+entrynavlinks_entry=`echo "$2" |grep '^[0-9].*'`
+if [ "$entrynavlinks_type" = prev ]; then
 	prev_entry=; NB_PrevEntryPermalink=
-	[ $prev_entryid -gt 0 ] &&
-		prev_entry=`echo "$MASTER_DB_RESULTS" |sed ''$prev_entryid'!d'`
-	if [ ! -z "$prev_entry" ]; then
-		prev_entry_dir=`echo "$prev_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
-		prev_permalink_file="$prev_entry_dir/$NB_INDEXFILE"
-		NB_PrevEntryPermalink="$prev_entry_dir/$NB_INDEX"
-	fi
+	prev_entry="$entrynavlinks_entry"
+fi
+if [ "$entrynavlinks_type" = next ]; then
 	next_entry=; NB_NextEntryPermalink=
-	[ $next_entryid -gt 0 ] &&
-		next_entry=`echo "$MASTER_DB_RESULTS" |sed ''$next_entryid'!d'`
-	if [ ! -z "$next_entry" ]; then
-		next_entry_dir=`echo "$next_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
-		next_permalink_file="$next_entry_dir/$NB_INDEXFILE"
-		NB_NextEntryPermalink="$next_entry_dir/$NB_INDEX"
-	fi
+	next_entry="$entrynavlinks_entry"
+fi
+if [ ! -z "$prev_entry" ]; then
+	prev_entry_dir=`echo "$prev_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
+	prev_permalink_file="$prev_entry_dir/$NB_INDEXFILE"
+	NB_PrevEntryPermalink="$prev_entry_dir/$NB_INDEX"
+fi
+if [ ! -z "$next_entry" ]; then
+	next_entry_dir=`echo "$next_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
+	next_permalink_file="$next_entry_dir/$NB_INDEXFILE"
+	NB_NextEntryPermalink="$next_entry_dir/$NB_INDEX"
 fi
 }
 
@@ -290,17 +304,13 @@ if [ ! -z "$cat_var" ]; then
 	category_list=( ${category_list[@]} "$cat_db" )
 fi
 }
-if [ "$USR_QUERY" != all ]; then
-	query_db "$USR_QUERY"
-	for relative_entry in $UPDATE_CATLIST; do
-		for cat_db in $db_categories; do
-			cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
-			build_catlist
-		done
+query_db "$USR_QUERY"
+for relative_entry in $UPDATE_CATLIST; do
+	for cat_db in $db_categories; do
+		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
+		build_catlist
 	done
-else
-	query_db; CAT_LIST="$db_categories"
-fi
+done
 if [ ! -z "$category_list" ]; then
 	CAT_LIST="${category_list[@]}"
 elif [ -z "$CAT_LIST" ]; then

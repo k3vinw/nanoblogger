@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-11-28T14:46:24-05:00
+# Last modified: 2005-12-13T17:05:20-05:00
 
 # nanoblogger's version.
-VERSION="3.3 RC3"
+VERSION="3.3 RC4"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -137,7 +137,11 @@ for entry in $ENTRYARCHIVES_LIST; do
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 			read_entry "$NB_DATA_DIR/$entry"
 			set_entrylink "$entry"
-			set_entrynavlinks "$entry"
+			year=`echo "$month" |cut -c1-4`
+			month=`echo "$month" |cut -c6-7`
+			findba_entry "$entry" "$MASTER_DB_RESULTS"
+			set_entrynavlinks prev "$before_entry"
+			set_entrynavlinks next "$after_entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
 				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
@@ -158,7 +162,7 @@ done
 make_archive(){
 query_type="$1"
 db_catquery="$2"
-archive_template="$3"
+MKARCH_ENTRY_TEMPLATE="$3"
 PARTS_FILE="$4"
 db_setlimit="$5"
 db_limit="$6"
@@ -167,7 +171,10 @@ query_db "$query_type" "$db_catquery" "$db_setlimit" "$db_limit" "$db_offset"
 ARCHIVE_LIST="$DB_RESULTS"
 mkdir -p `dirname "$PARTS_FILE"`
 > "$PARTS_FILE"
-build_entryarchives "$ARCHIVE_LIST" "$archive_template"
+# fallback to default entry template
+[ ! -f "$NB_TEMPLATE_DIR/$MKARCH_ENTRY_TEMPLATE" ] &&
+	MKARCH_ENTRY_TEMPLATE="$ENTRY_TEMPLATE"
+build_entryarchives "$ARCHIVE_LIST" "$MKARCH_ENTRY_TEMPLATE"
 }
 
 # divide larger archives into multiple pages
@@ -176,8 +183,9 @@ page_query="$1"
 page_catquery="$2"
 page_items="$3"
 page_template="$4"
-page_dir="$5"
-page_file="$6"
+page_entrytemplate="$5"
+page_dir="$6"
+page_file="$7"
 page_fbasedir=`dirname "$page_file"`
 if [ "$page_fbasedir" != . ]; then
 	page_filedir="$page_fbasedir/"
@@ -204,7 +212,7 @@ fi
 	}
 	page_bynumber(){
 		set_baseurl "" "${page_dir}${page_filedir}$page_file"
-		make_archive "$page_query" "$page_catquery" "$ENTRY_TEMPLATE" \
+		make_archive "$page_query" "$page_catquery" "$page_entrytemplate" \
 			"$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" limit "$end" "$begin"
 		make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" \
 			"$NB_TEMPLATE_DIR/$page_template" "${page_dir}${page_filedir}$arch_file"
@@ -261,7 +269,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 	done
 else
 	set_baseurl "" "${page_dir}${page_filedir}$page_file"
-	make_archive "$page_query" "$db_catquery" "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/${page_filedir}$page_file"
+	make_archive "$page_query" "$db_catquery" "$page_entrytemplate" "$BLOG_DIR/$PARTS_DIR/${page_filedir}$page_file"
 	make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$page_file" "$NB_TEMPLATE_DIR/$page_template" \
 		"${page_dir}${page_filedir}$page_file"
 fi
@@ -283,7 +291,7 @@ if [ ! -z "$DB_RESULTS" ]; then
 	set_monthlink "$month"
 	set_monthnavlinks "$month"
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
-	make_archive "$month" nocat "$ENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
+	make_archive "$month" nocat "$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
 	NB_ArchiveTitle="$month"
 	load_plugins archive/month
 	make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
@@ -300,8 +308,8 @@ if [ ! -z "$db_categories" ]; then
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
 			set_catlink "$cat_arch"
-			paginate all "$cat_arch" "$MAX_PAGE_ENTRIES" "$CATEGORY_TEMPLATE" \
-				"$BLOG_DIR/$ARCHIVES_DIR/" "$category_file"
+			paginate all "$cat_arch" "$MAX_CATPAGE_ENTRIES" "$CATEGORY_TEMPLATE" \
+				"$CATENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$category_file"
 		fi
 	done
 fi
@@ -373,6 +381,7 @@ for yearn in $ARCHIVE_YEARS; do
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
 			ARCHIVE_MONTHS=`echo "$ARCHIVE_MASTER" |grep $yearn'[-]'$monthn'[-]' |sed 1q`
 			for entry_month in $ARCHIVE_MONTHS; do
+				year="$yearn"
 				month="$yearn-$monthn"
 				query_db "$month"
 				# execute instructions for each month
@@ -392,7 +401,8 @@ nb_msg "$buildarchives_action"
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
 	# build the monthly archives
-	query_db all
+	db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+	query_db all "$db_catquery"
 	LOOP_LIST="$DB_RESULTS"
 	loop_archive "$LOOP_LIST" years build_yeararchive
 	loop_archive "$LOOP_LIST" months build_montharchive
@@ -412,56 +422,66 @@ fi
 
 # build the weblog
 build_weblog(){
-# update archives based on a query match
+# add welcome message with cat id 1 (NanoBlogger Help) to new weblogs
 if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 	# force full update
 	USR_QUERY=all
-	# add welcome message with cat id 1 (NanoBlogger Help) to new weblog
 	import_file "$NB_BASE_DIR/welcome-to-nb.txt"
 	old_catnum="$cat_num"; cat_num=1
 	add_entry; cat_num="$old_catnum"
 	rm -f "$BLOG_DIR/.nb_newblogdir"
 fi
-if [ "$USR_QUERY" = all ]; then
+# for clean build remove all generated files
+if [ "$USR_QUERY" = all ] && [ -z "$cat_num" ]; then
 	nb_msg "$buildweblog_all"
-	# remove all generated files for a clean build
+	# confirm removal of any previously generated files
+	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 	# use "--update-cache all" to clear cached data
 	for update_dir in "$ARCHIVES_DIR" "$PARTS_DIR"; do
 		[ ! -z "$update_dir" ] && [ -d "$BLOG_DIR/$update_dir" ] &&
 			rm -fr "$BLOG_DIR"/"$update_dir"/*
 	done
 fi
-# create master query results
+# create/update master query results
 query_db master
+# create/update special query results for months and years
+query_db months
+query_db years
 # update previous entry's nav. links for new entries
 if [ ! -z "$New_EntryFile" ]; then
-	set_entrynavlinks "$New_EntryFile"
-	if [ ! -z "$prev_entry" ]; then
+	findba_entry "$New_EntryFile" "$MASTER_DB_RESULTS"
+	set_entrynavlinks prev "$before_entry"
+	set_entrynavlinks next "$after_entry"
+	[ ! -z "$prev_entry" ] &&
 		echo "$prev_entry" >> "$SCRATCH_FILE".newentry_list
-		UPDATE_LIST=$(< "$SCRATCH_FILE".newentry_list)
-	fi
-fi
-# set the default query type for updates
-if [ -z "$USR_QUERY" ]; then
-	USR_QUERY="max"
-else
-	db_query="$USR_QUERY"; query_db "$db_query"
-	UPDATE_LIST="$DB_RESULTS"
+	[ ! -z "$next_entry" ] &&
+		echo "$next_entry" >> "$SCRATCH_FILE".newentry_list
+	UPDATE_LIST=$(< "$SCRATCH_FILE".newentry_list)
 fi
 # query database and check for categories
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+# set default query type for updates
+[ -z "$USR_QUERY" ] &&
+	USR_QUERY=max
+# set default list for updates
+if [ -z "$UPDATE_LIST" ]; then
+	db_query="$USR_QUERY"
+	query_db "$db_query" "$db_catquery"
+	UPDATE_LIST="$DB_RESULTS"
+fi
+# find relative categories
 [ -z "$CAT_LIST" ] &&
 	find_categories "$UPDATE_LIST"
 # setup cache for plugins
 CACHE_TYPE=plugin
 load_plugins
-# build the archives
+# build/update archives based on the query results
 nb_msg "$buildweblog_files"
 [ "$USR_QUERY" != main ] && build_archives
 # build main index
 nb_msg "$buildweblog_main"
 CACHE_TYPE=main
-paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
+paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$ENTRY_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 # remove expired cache data to save disk space
 if [ "$USR_QUERY" != main ]; then
 	if [ "$BLOG_CACHEMNG" != 0 ]; then
@@ -541,19 +561,21 @@ for entry_id in $NUMVAR; do
 	New_TimeStamp="$METADATA"
 	# use specified timestamp as entry's new date
 	chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
+	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+		Edit_EntryFile="$New_EntryDateFile"
 	# add changed entries to update list
 	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 		# update previous and next entries of modified entry
 		query_db master
-		set_entrynavlinks "$New_EntryDateFile"
+		findba_entry "$Edit_EntryFile" "$MASTER_DB_RESULTS"
+		set_entrynavlinks prev "$before_entry"
+		set_entrynavlinks next "$after_entry"
 		[ ! -z "$prev_entry" ] &&
 			echo "$prev_entry" >> "$SCRATCH_FILE"
 		[ ! -z "$next_entry" ] &&
 			echo "$next_entry" >> "$SCRATCH_FILE"
 	fi
-	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
-		Edit_EntryFile="$New_EntryDateFile"
 	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 		# throw out old cache data
@@ -640,7 +662,9 @@ for entry_id in $NUMVAR; do
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
 		# update previous and next entries of deleted entry
-		set_entrynavlinks "$Delete_EntryFile"
+		findba_entry "$Delete_EntryFile" "$MASTER_DB_RESULTS"
+		set_entrynavlinks prev "$before_entry"
+		set_entrynavlinks next "$after_entry"
 		[ ! -z "$prev_entry" ] &&
 			echo "$prev_entry" >> "$SCRATCH_FILE"
 		[ ! -z "$next_entry" ] &&
@@ -648,8 +672,6 @@ for entry_id in $NUMVAR; do
 	fi
 done
 UPDATE_LIST=$(< "$SCRATCH_FILE")
-# update master query results
-query_db master
 build_weblog
 }
 
@@ -893,7 +915,7 @@ while [ $# -gt 0 ]; do
 					check_config; nb_draft;;
 		-f|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-i|--interactive) 	BLOG_INTERACTIVE=1;;
+		-i|--interactive) 	check_arg; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		check_arg; USR_QUERY="$2"; shift
 					check_config; list_weblog;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
