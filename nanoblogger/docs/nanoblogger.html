@@ -710,13 +710,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">category_archive.htm</td>
 
-          <td align="left">controls look of the categories pages</td>
-        </tr>
-
-        <tr>
-          <td align="left">entry.htm</td>
-
-          <td align="left">controls look of the weblog entries</td>
+          <td align="left">controls look of the category pages</td>
         </tr>
 
         <tr>
@@ -738,18 +732,6 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
-          <td align="left">entry.metadata</td>
-
-          <td align="left">controls the format of the entry's metafile</td>
-        </tr>
-
-        <tr>
-          <td align="left">file.metadata</td>
-
-          <td align="left">controls the format of a metafile</td>
-        </tr>
-
-        <tr>
           <td align="left">month_archive.htm</td>
 
           <td align="left">controls look of the monthly archive pages</td>
@@ -762,15 +744,45 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
+          <td align="left">entry.htm</td>
+
+          <td align="left">controls look of the default archive entries</td>
+        </tr>
+
+        <tr>
+          <td align="left">category_entry.htm</td>
+
+          <td align="left">controls look of the category entries</td>
+        </tr>
+
+        <tr>
           <td align="left">permalink_entry.htm</td>
 
-          <td align="left">controls look of an entry within it's archive page</td>
+          <td align="left">controls look of the permanent archive entries</td>
         </tr>
 
         <tr>
           <td align="left">weblog_status.htm</td>
 
           <td align="left">controls look of weblog status</td>
+        </tr>
+
+        <tr>
+          <td align="left">year_archive.htm</td>
+
+          <td align="left">controls look of yearly archive pages</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry.metadata</td>
+
+          <td align="left">controls the format of the entry's metafile</td>
+        </tr>
+
+        <tr>
+          <td align="left">file.metadata</td>
+
+          <td align="left">controls the format of a metafile</td>
         </tr>
       </table>
     </div>
@@ -942,39 +954,43 @@ nb [-b blog_dir] -c 1 -d cat
     <div>
       <p><b>Regular Plugins: plugins</b></p>
 
-      <p>These plugins are initialized first.</p>
+      <p>Plugins that are always initialized.</p>
 
       <p><b>Archive Plugins: plugins/archive</b></p>
 
-      <p>These plugins are initialized when the archives are built.</p>
+      <p>Plugins that are initialized when the archives are built.</p>
 
       <p><b>Monthly Plugins: plugins/archive/month</b></p>
 
-      <p>These plugins are initialized for each month. Formally known as monthly plugins.</p>
+      <p>Plugins that are initialized for each month.</p>
+
+      <p><b>Yearly Plugins: plugins/archive/year</b></p>
+
+      <p>Plugins that are intialized for each year.</p>
 
       <p><b>Entry Plugins: plugins/entry</b></p>
 
-      <p>These plugins are initialized for each entry.</p>
+      <p>Plugins that are initialized for each entry.</p>
 
       <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
 
-      <p>These plugins are initialized for each entry modified, meaning they only get run when an entry's data has been changed. This helps reduce redundancy when generating multiple entries for a page. A good example would be the plugin, moods.sh, which generates graphics for smiley icons. There main use is for altering the data output for an entry. They typically modify the NB_EntryBody, variable. Formally known as entry body plugins.</p>
+      <p>Plugins that are initialized for each modified entry.</p>
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
-      <p>Similar to the entry modify plugins, these plugins are intitialized for each entry modified. The difference being the plugins initialized are determined by the metadata field FORMAT which can be set on a per-entry basis. More than one format may be specified using space or commas as a seperator.</p>
+      <p>Plugins that are intitialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a seperator.</p>
 
       <p><b>Page Plugins: plugins/page</b></p>
 
-      <p>These plugins are initialized for each page. They were initially developed to implement a cleaner way for setting dynamic metadata in the templates.</p>
+      <p>Plugins that are initialized before each page.</p>
 
       <p><b>Page Formatting Plugins: plugins/page/format</b></p>
 
-      <p>Similar to the entry formatting plugins, these plugins are controlled using the FORMAT metadata field with the exception being that the formatting is only applied to the content of a page (usually $MKPAGE_CONTENT). More than one format may be specified using space or commas as a seperator.</p>
+      <p>Plugins that are initialized for each page based on the FORMAT metadata field. More than one format may be specified using space or commas as a seperator.</p>
 
       <p><b>Make Page Plugins: plugins/makepage</b></p>
 
-      <p>These plugins are initialized after each page generated. Formally known as post-format plugins.</p>
+      <p>Plugins that are initialized after each page generated.</p>
     </div>
 
     <div class="tables">
@@ -1004,7 +1020,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">none</td>
 
-          <td align="left">$ARCHIVES_DIR/index.html</td>
+          <td align="left">$ARCHIVES_DIR/index.$NB_FILETYPE</td>
 
           <td align="left">requires makepage.htm template</td>
         </tr>
@@ -1019,6 +1035,18 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">$NB_MonthlyCalendar</td>
 
           <td align="left">requires cal</td>
+        </tr>
+
+        <tr>
+          <td align="left">archives/year/year_index.sh</td>
+
+          <td align="left">generates yearly indexes of the archives</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$ARCHIVES_DIR/$yearn/index.$NB_FILETYPE</td>
+
+          <td align="left">requires makepage.htm template</td>
         </tr>
 
         <tr>
@@ -1297,16 +1325,14 @@ nb [-b blog_dir] -c 1 -d cat
   <div id="writing.plugins">
     <h2><a id="s.10" name="s.10">Writing Plugins</a></h2>
 
-    <h3>Functions for Plugins</h3>
+    <h3>Tools for Developing Plugins</h3>
 
     <div>
-      <p>These are a collection of functions that may be used when writing plugins.</p>
-
       <p>Plugins typically work by creating placeholders for the templates, but are in no way limited to creating placeholders. Placeholders allow for a great deal of control in how the plugins output is placed in the template. Some plugins may require you to identify it's unique placeholder/destination and manually add it to your templates.</p>
 
       <p>To write a plugin, you should begin by creating a text file with the <em>".sh"</em> suffix. plugins are basically shell scripts that get loaded (sourced in shell terms) depending on where the plugin is located in the plugins directory or one of the plugin sub-directories. It may be a good idea to look at a simple plugin, such as fortune.sh for an idea on how a plugin works. When the new plugin is saved, it needs to have the appropriate read permissions, so it can be loaded by NanoBlogger. Executable permissions are not necessary for plugins.</p>
 
-      <p>Below is a table of functions for plugins briefly describing their usage.</p>
+      <p>The following is a collection of tools that might be useful when developing your own plugins.</p>
     </div>
 
     <div class="tables">
@@ -1318,7 +1344,7 @@ nb [-b blog_dir] -c 1 -d cat
         </caption>
 
         <tr>
-          <th align="left">function</th>
+          <th align="left">command</th>
 
           <th align="left">description</th>
 
@@ -1354,6 +1380,18 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
+          <td align="left">confirm_action</td>
+
+          <td align="left">ask user to confirm action</td>
+
+          <td align="left">none</td>
+
+          <td align="left">console</td>
+
+          <td align="left">can be used with $BLOG_INTERACTIVE</td>
+        </tr>
+
+        <tr>
           <td align="left">chg_suffix</td>
 
           <td align="left">changes a file's suffix</td>
@@ -1375,6 +1413,30 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">$DB_RESULTS</td>
 
           <td align="left">example (retrieves entries 1 through 10): "query_db all nocat limit 10 1"</td>
+        </tr>
+
+        <tr>
+          <td align="left">lookup_entryid</td>
+
+          <td align="left">lookup entry's id from "master" query type</td>
+
+          <td align="left">$1, $2</td>
+
+          <td align="left">console or redirect</td>
+
+          <td align="left">example: lookup_entryid 2005-12-14T00_00_00.$NB_DATATYPE "$MASTER_DB_RESULTS"</td>
+        </tr>
+
+        <tr>
+          <td align="left">lookup_monthid</td>
+
+          <td align="left">lookup month's id from "months" query type</td>
+
+          <td align="left">$1, $2</td>
+
+          <td align="left">console or redirect</td>
+
+          <td align="left">example: query_db months; lookup_monthid 2005-12 "$MONTH_DB_RESULTS"</td>
         </tr>
 
         <tr>
@@ -1498,6 +1560,18 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
+          <td align="left">write_tag</td>
+
+          <td align="left">create/modify user metedata field</td>
+
+          <td align="left">WRITE_MTAG=$1, WRITE_MTAGTEXT=$2, WRITEMETATAG_FILE=$3</td>
+
+          <td align="left">$WRITEMETATAG_FILE</td>
+
+          <td align="left">example: write_tag MODTIME "$(date)"</td>
+        </tr>
+
+        <tr>
           <td align="left">loop_archive</td>
 
           <td align="left">loops through archives and executes intructions by years or months</td>
@@ -1510,11 +1584,11 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
-          <td align="left">read_entry</td>
+          <td align="left">load_entry</td>
 
-          <td align="left">converts entry data for use in templates</td>
+          <td align="left">loads entry data for templates</td>
 
-          <td align="left">ENTRY_FILE=$1, ENTRY_CACHETYPE=$2</td>
+          <td align="left">ENTRY_FILE=$1, ENTRY_DATATYPE=$2, ENTRY_CACHETYPE=$3</td>
 
           <td align="left">$NB_EntryTitle, $NB_EntryBody, ...</td>
 
@@ -1524,13 +1598,25 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">make_page</td>
 
-          <td align="left">generates page from source file and template</td>
+          <td align="left">creates weblog page from text file</td>
 
           <td align="left">MKPAGE_SRCFILE=$1, MKPAGE_TMPLFILE=$2, MKPAGE_OUTFILE=$3</td>
 
           <td align="left">$MKPAGE_CONTENT, $NB_MetaBody</td>
 
-          <td align="left">see plugin articles.sh for a good example</td>
+          <td align="left">see plugin articles_text.sh for a good example</td>
+        </tr>
+
+        <tr>
+          <td align="left">weblog_page</td>
+
+          <td align="left">creates weblog page from metafile</td>
+
+          <td align="left">BLOGPAGE_SRCFILE=$1, BLOGPAGE_TEMPLATE=$2, $BLOGPAGE_OUTFILE=$3</td>
+
+          <td align="left">$MKPAGE_CONTENT, $NB_MetaBody</td>
+
+          <td align="left">see plugin articles_meta.sh for good example</td>
         </tr>
       </table>
     </div>

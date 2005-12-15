@@ -68,7 +68,7 @@ build_rssfeed(){
 	> "$SCRATCH_FILE".rss2feed
 	for entry in $ARCHIVE_LIST; do
 		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
-	        read_entry "$NB_DATA_DIR/$entry"
+	        load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
 		# non-portable find command! sets RFC822 date for pubDate
 		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%Ta, %Td %Tb %TY %TH:%TM:%TS %Tz\n"`

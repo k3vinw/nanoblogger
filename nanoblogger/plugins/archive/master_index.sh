@@ -44,7 +44,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 	year_total=`echo "$DB_RESULTS" |grep -c "^$masterindex_yearn-[0-9]*.*[\.]$NB_DATATYPE"`
 	# following needs to fit on single line
 	cat <<-EOF
-		<a href="${ARCHIVES_PATH}$masterindex_yearn/$NB_INDEXFILE">$NB_ArchiveYearTitle</a> ($year_total)<br />
+		<a href="${ARCHIVES_PATH}$masterindex_yearn/$NB_INDEX">$NB_ArchiveYearTitle</a> ($year_total)<br />
 	EOF
 	}
 

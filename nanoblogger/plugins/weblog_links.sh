@@ -103,7 +103,7 @@ NB_YearTitle="$webloglinksyearn"
 year_total=`echo "$DB_RESULTS" |grep -c "^$webloglinksyearn-[0-9]*.*[\.]$NB_DATATYPE"`
 # following needs to fit on single line
 cat <<-EOF
-	<a href="${ARCHIVES_PATH}$webloglinksyearn/$NB_INDEXFILE">$NB_YearTitle</a> ($year_total)<br />
+	<a href="${ARCHIVES_PATH}$webloglinksyearn/$NB_INDEX">$NB_YearTitle</a> ($year_total)<br />
 EOF
 }
 

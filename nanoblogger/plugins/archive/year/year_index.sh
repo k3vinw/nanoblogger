@@ -45,15 +45,12 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	ARCHENTRY_LIST="$DB_RESULTS"
 	NB_ArchiveEntryLinks=$(
 	for entry in $ARCHENTRY_LIST; do
-		read_metadata TITLE "$NB_DATA_DIR/$entry"
-		NB_ArchiveEntryTitle="$METADATA"
+		load_entry "$NB_DATA_DIR/$entry" NOBODY
+		NB_ArchiveEntryTitle="$NB_EntryTitle"
 		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
-		# load category links plugin
-		[ -f "$PLUGINS_DIR"/entry/category_links.sh ] &&
-			. "$PLUGINS_DIR"/entry/category_links.sh
 		cat <<-EOF
 			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a>
 			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>

@@ -169,7 +169,7 @@ echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
 # tool to find entry before and after from entry's id
-findba_entry(){
+findba_entries(){
 entryid_var=`lookup_entryid "$1" "$2"`
 # assumes chronological date order
 before_entryid=`expr $entryid_var + 1`
@@ -420,32 +420,39 @@ echo "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 }
 
-# read an entry
-read_entry(){
+# load entry from it's metadata file
+load_entry(){
 ENTRY_FILE="$1"
-ENTRY_CACHETYPE="$2"
+ENTRY_DATATYPE="$2"
+ENTRY_CACHETYPE="$3"
 if [ -f "$ENTRY_FILE" ]; then
 	[ ! -z "$CACHE_TYPE" ] &&
 		ENTRY_CACHETYPE="$CACHE_TYPE"
 	[ -z "$ENTRY_CACHETYPE" ] &&
 		ENTRY_CACHETYPE=metadata
-	load_metadata NOBODY "$ENTRY_FILE"
-	load_plugins entry
-	NB_EntryID=`set_entryid $entry`
-	# use cache when entry data unchanged
-	if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
-		#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
-		read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
-		NB_EntryBody="$METADATA"
-		load_plugins entry/mod
-		[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-		load_plugins entry/format "$NB_EntryFormat"
-		write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
-		# update cache list for some post-cache management
-		#update_cache build $ENTRY_CACHETYPE "$entry"
+	if [ "$ENTRY_DATATYPE" = NOBODY ]; then
+		load_metadata NOBODY "$ENTRY_FILE"
+		load_plugins entry
+		NB_EntryID=`set_entryid $entry`
 	else
-		#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"
-		load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
+		load_metadata NOBODY "$ENTRY_FILE"
+		load_plugins entry
+		NB_EntryID=`set_entryid $entry`
+		# use cache when entry data unchanged
+		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
+			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
+			read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
+			NB_EntryBody="$METADATA"
+			load_plugins entry/mod
+			[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
+			load_plugins entry/format "$NB_EntryFormat"
+			write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
+			# update cache list for some post-cache management
+			#update_cache build $ENTRY_CACHETYPE "$entry"
+		else
+			#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"
+			load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
+		fi
 	fi
 fi
 }
@@ -510,7 +517,7 @@ done
 MKPAGE_CONTENT=; MKPAGE_FORMAT=; MKPAGE_TITLE=; NB_MetaTitle=; NB_EntryTitle=
 }
 
-# create weblog page from metafiles
+# creates weblog page from metafile
 weblog_page(){
 BLOGPAGE_SRCFILE="$1"
 BLOGPAGE_TEMPLATE="$2"

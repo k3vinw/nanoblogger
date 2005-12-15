@@ -133,13 +133,12 @@ for entry in $ENTRYARCHIVES_LIST; do
 		[ -z "$PARTS_FILE" ] &&
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
 		if [ "$ENTRYARCHIVES_TEMPLATE" = "$PERMALINKENTRY_TEMPLATE" ]; then
-			CACHE_TYPE=entry
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
-			read_entry "$NB_DATA_DIR/$entry"
+			load_entry "$NB_DATA_DIR/$entry" ALL entry
 			set_entrylink "$entry"
 			year=`echo "$month" |cut -c1-4`
 			month=`echo "$month" |cut -c6-7`
-			findba_entry "$entry" "$MASTER_DB_RESULTS"
+			findba_entries "$entry" "$MASTER_DB_RESULTS"
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
@@ -148,7 +147,7 @@ for entry in $ENTRYARCHIVES_LIST; do
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"
-			read_entry "$NB_DATA_DIR/$entry"
+			load_entry "$NB_DATA_DIR/$entry" ALL
 			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
@@ -401,9 +400,7 @@ nb_msg "$buildarchives_action"
 build_catarchives
 if [ "$USR_QUERY" = all ]; then
 	# build the monthly archives
-	db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-	query_db all "$db_catquery"
-	LOOP_LIST="$DB_RESULTS"
+	LOOP_LIST="$UPDATE_LIST"
 	loop_archive "$LOOP_LIST" years build_yeararchive
 	loop_archive "$LOOP_LIST" months build_montharchive
 	# build the entry archives
@@ -449,7 +446,7 @@ query_db months
 query_db years
 # update previous entry's nav. links for new entries
 if [ ! -z "$New_EntryFile" ]; then
-	findba_entry "$New_EntryFile" "$MASTER_DB_RESULTS"
+	findba_entries "$New_EntryFile" "$MASTER_DB_RESULTS"
 	set_entrynavlinks prev "$before_entry"
 	set_entrynavlinks next "$after_entry"
 	[ ! -z "$prev_entry" ] &&
@@ -568,7 +565,7 @@ for entry_id in $NUMVAR; do
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 		# update previous and next entries of modified entry
 		query_db master
-		findba_entry "$Edit_EntryFile" "$MASTER_DB_RESULTS"
+		findba_entries "$Edit_EntryFile" "$MASTER_DB_RESULTS"
 		set_entrynavlinks prev "$before_entry"
 		set_entrynavlinks next "$after_entry"
 		[ ! -z "$prev_entry" ] &&
@@ -662,7 +659,7 @@ for entry_id in $NUMVAR; do
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 		fi
 		# update previous and next entries of deleted entry
-		findba_entry "$Delete_EntryFile" "$MASTER_DB_RESULTS"
+		findba_entries "$Delete_EntryFile" "$MASTER_DB_RESULTS"
 		set_entrynavlinks prev "$before_entry"
 		set_entrynavlinks next "$after_entry"
 		[ ! -z "$prev_entry" ] &&

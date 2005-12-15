@@ -70,7 +70,7 @@ build_atomfeed(){
 	ARCHIVE_LIST="$DB_RESULTS"
 	> "$SCRATCH_FILE".atomfeed
 	for entry in $ARCHIVE_LIST; do
-	        read_entry "$NB_DATA_DIR/$entry"
+	        load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
 		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 		Atom_EntryDate=`echo "$Atom_EntryTime${BLOG_TZD}"`
