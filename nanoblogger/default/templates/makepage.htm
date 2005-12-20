@@ -7,32 +7,38 @@
 
 <title>$NB_MetaTitle | $BLOG_TITLE</title>
 
-<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
+<script type="text/javascript" src="${BASE_URL}scripts/global.js"></script>
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" media="all" />
+<link rel="stylesheet" href="${BASE_URL}styles/print.css" type="text/css" media="print" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
 
 </head>
 
 <body>
 
-<div id="banner">
-	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-	<span class="description">$BLOG_DESCRIPTION</span>
+<div id="container" class="clearfix">
+	<div id="header" class="clearfix">
+		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+		<span class="description">$BLOG_DESCRIPTION</span>
+	</div>
+	<div id="widecolumn">
+		<div id="wrap">
+			<a id="top"></a>
+			<h2>$NB_MetaTitle</h2>
+			<div class="pages">
+				<div id="menu">
+					<a href="${BASE_URL}$NB_INDEX">Main</a>
+				</div>
+				$NB_MetaBody
+			</div>
+		</div>
+	</div>
 </div>
-<div id="container">
-	<a id="top"></a>
-	<div class="blog">
-		<div id="menu">
-			<a href="${BASE_URL}$NB_INDEX">Main</a>
-		</div>
-		<h2 class="pagetitle">$NB_MetaTitle</h2>
-		<div class="blogbody">
-			$NB_MetaBody
-		</div>
-		<!--
-		<div class="menu">
-			<a href="#top">$NB_TopPage</a>
-		</div>
-		-->
+<div id="metainfo" style="clear:both;">
+</div>
+<div id="footer">
+	<div class="menu">
+		<a href="#top">$NB_TopPage</a><br />
 	</div>
 </div>
 

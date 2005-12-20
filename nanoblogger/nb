@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-12-13T17:05:20-05:00
+# Last modified: 2005-12-16T01:59:16-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC4"
@@ -138,6 +138,7 @@ for entry in $ENTRYARCHIVES_LIST; do
 			set_entrylink "$entry"
 			year=`echo "$month" |cut -c1-4`
 			month=`echo "$month" |cut -c6-7`
+			day=`echo "$entry" |cut -c9-10`
 			findba_entries "$entry" "$MASTER_DB_RESULTS"
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"
@@ -301,9 +302,8 @@ fi
 # build category archives
 build_catarchives(){
 CACHE_TYPE=cat
-db_categories="$CAT_LIST"
-if [ ! -z "$db_categories" ]; then
-	for cat_arch in $db_categories; do
+if [ ! -z "$CAT_LIST" ]; then
+	for cat_arch in $CAT_LIST; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
 			set_catlink "$cat_arch"
@@ -471,6 +471,7 @@ fi
 	find_categories "$UPDATE_LIST"
 # setup cache for plugins
 CACHE_TYPE=plugin
+# always load main plugins
 load_plugins
 # build/update archives based on the query results
 nb_msg "$buildweblog_files"
@@ -486,6 +487,8 @@ if [ "$USR_QUERY" != main ]; then
 		update_cache expired
 	fi
 fi
+# always load post plugins for any additional tasks
+load_plugins post
 }
 
 # add a new entry

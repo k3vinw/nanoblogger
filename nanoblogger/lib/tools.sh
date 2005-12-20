@@ -311,11 +311,11 @@ for relative_entry in $UPDATE_CATLIST; do
 		build_catlist
 	done
 done
-if [ ! -z "$category_list" ]; then
-	CAT_LIST="${category_list[@]}"
-elif [ -z "$CAT_LIST" ]; then
-	CAT_LIST=`cat_id`
-fi
+CAT_LIST="${category_list[@]}"
+[ -z "$CAT_LIST" ] &&
+	CAT_LIST=`cat_id "$cat_num"`
+[ "$USR_QUERY" = all ] &&
+	CAT_LIST="$db_categories"
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 
@@ -426,10 +426,15 @@ ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
 if [ -f "$ENTRY_FILE" ]; then
-	[ ! -z "$CACHE_TYPE" ] &&
-		ENTRY_CACHETYPE="$CACHE_TYPE"
-	[ -z "$ENTRY_CACHETYPE" ] &&
-		ENTRY_CACHETYPE=metadata
+	entry_day=`echo "$entry" |cut -c9-10`
+	entry_time=`filter_timestamp "$entry" |cut -c12-19`
+	if [ -z "$ENTRY_CACHETYPE" ]; then
+		if [ ! -z "$CACHE_TYPE" ]; then
+			ENTRY_CACHETYPE="$CACHE_TYPE"
+		else
+			ENTRY_CACHETYPE=metadata
+		fi
+	fi
 	if [ "$ENTRY_DATATYPE" = NOBODY ]; then
 		load_metadata NOBODY "$ENTRY_FILE"
 		load_plugins entry

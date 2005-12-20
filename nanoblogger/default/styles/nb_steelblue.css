@@ -1,0 +1,468 @@
+/*
+NanoBlogger SteelBlue
+ box model hack with 2 column layout
+*/
+
+html { background: #999; }
+body {
+	background: #999;
+	margin: 0;
+	padding: 0;
+	text-align: center; /* IE 5.x hack */
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	}
+
+a 		{ color: #4682B4; text-decoration: none; }
+a:link		{ color: #4682B4; text-decoration: underline; }
+a:visited	{ color: #4682B4; text-decoration: underline; }
+a:active	{ color: #4682B4; text-decoration: none; background: #BCD2EE; }
+a:hover		{ color: #4682B4; text-decoration: underline; background: #BCD2EE; }
+
+h1 {
+	margin: 0;
+	padding: 0;
+	font-size: medium; /*feed to IE 5.5*/
+	f\ont-size: large; /*feed to compliant browsers*/
+	}
+
+h2 {
+	font-family: verdana, arial, sans-serif;
+	color: #666;
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: small; /*feed to IE 5.5*/
+	f\ont-size: medium; /*feed to compliant browsers*/
+	font-weight: bold;
+	}
+
+h3 {
+	margin: 0;
+	padding: 0;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	}
+
+h4, h5, h6 {
+	font-size: xx-small; /*feed to IE 5.5*/
+	f\ont-size: x-small; /*feed to compliant browsers*/
+	}
+
+#content h2 {
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	}
+
+#content h3 {
+	color: #678b99;
+	text-transform: none;
+	margin-bottom: 0;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	}
+
+blockquote {
+	background-color: #EEE;
+	padding: 2mm;
+	border-left: 5px solid #BBB;
+	}
+
+img {
+	border: 0;
+	}
+
+pre {
+	background:#EEE;
+	padding: 2mm;
+	border: 1px solid #999;
+	}
+
+#header {
+	font-family: verdana, arial, sans-serif;
+	background-color: #4682B4;
+	font-size:large;
+	font-weight:normal;
+	text-align:left;
+	margin-bottom: 10px;
+	padding: 15px;
+	/* border-top:1px dotted #999;
+	border-bottom:1px dotted #999; */
+	line-height: 120%;
+	}
+
+#header h1 {
+	margin: 0;
+	padding: 0 0 0 10px;
+	}
+
+#header a,
+#header a:link,
+#header a:visited,
+#header a:active,
+#header a:hover {
+	font-family: verdana, arial, sans-serif;
+	font-size: large;
+	color: #FFF;
+	text-decoration: none;
+	}
+
+.description {
+	font-family: verdana, arial, serif;
+	color:#FFF;
+	font-size:small;
+	font-weight:bold;
+	text-transform:lowercase;
+	margin: 0;
+	padding: 0 0 0 10px;
+	}
+
+#container, .container {
+	width: 758px;
+	background: #FFF;
+	margin: 0 auto;
+	/* detach box model from top of page */
+	margin-top: 20px;
+	padding: 9px 23px 23px 23px;
+	/* recover from center-alignment IE hack */
+	text-align: left;
+	width: 701px;
+	/* poor man's drop shadow effects */
+	border-right: 5px solid #555;
+	border-bottom: 5px solid #555;
+	}
+
+/* the "be nice to Opera 5 rule" */
+html>body #container {
+	width: 701px;
+	}
+
+#content, .content {
+	background: #FFF;
+	width: 510px;
+	float: right;
+	padding: 0 11px 0 0;
+	/* border: 1px solid red; */
+	/* ugly IE hack */
+	width: 474px;
+	}
+
+#widecolumn {
+	background: #FFF;
+	padding: 0 11px 0 0;
+	}
+
+#links {
+	float: left;
+	background: #FBFBFB;
+	margin: 20px 0;
+	padding: 2px;
+	width: 174px;
+	}
+
+#wrap {
+	margin-left: 10px;
+	margin-top: 10px;
+	}
+
+.intro {
+	font-family: verdana, arial, sans-serif;
+	border-bottom: 1px solid #4682B4;
+	background: #FFF;
+	color: #333;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	font-weight: normal;
+	line-height: 140%;
+	padding: 10px;
+	margin-bottom: 45px;
+	}
+
+.intro a {
+	font-weight: normal;
+	text-decoration: underline;
+	color:#333;
+	}
+
+.blog {
+	padding:15px;
+	}
+
+.blogbody, .archives, .pages {
+	font-family: verdana, arial, sans-serif;
+	color:#333;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	font-weight:normal;
+	line-height:120%;
+	}
+
+.blogbody a,
+.blogbody a:link,
+.blogbody a:visited,
+.blogbody a:active,
+.blogbody a:hover {
+	font-weight: normal;
+	text-decoration: underline;
+	}
+
+.title	{
+	font-family: verdana, arial, sans-serif;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	text-transform:uppercase;
+	color: #36648B;
+	margin-bottom:15px;
+	}
+
+#menu, .menu {
+	font-family:verdana, arial, sans-serif;
+	font-size: small;
+	margin-bottom:15px;
+	text-align:center;
+	}
+
+.date	{
+	font-family:verdana, arial, sans-serif; 
+	font-size: small; /*feed to IE 5.5*/
+	f\ont-size: x-small; /*feed to compliant browsers*/
+	color: #666; 
+	border-bottom:1px solid #999;
+	margin-bottom:10px;
+	font-weight:bold;
+	text-align: left;
+	}
+
+.posted	{
+	font-family:verdana, arial, sans-serif; 
+	font-size: xx-small; /*feed to IE 5.5*/
+	f\ont-size: x-small; /*feed to compliant browsers*/
+	color: #000000; 
+	margin-bottom:25px;
+	}
+
+.calendar {
+	font-family:verdana, arial, sans-serif;
+	color:#4682B4;
+        font-size: xx-small; /*feed to IE 5.5*/
+        f\ont-size: x-small; /*feed to compliant browsers*/
+	font-weight:normal;
+	line-height:150%;
+	padding:2px;
+	text-align:left;
+	}
+
+.calendar a,
+.calendar a:link,
+.calendar a:active,
+.calendar a:hover {
+	font-weight: bold;
+	text-decoration: underline;
+	}
+
+.calendarhead {	
+	font-family:verdana, arial, sans-serif;
+	color:#36648B;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	font-weight: bold;
+	padding:2px;
+	letter-spacing: .3em;
+	text-transform:uppercase;
+	text-align:center;
+	border-bottom: 1px solid #999;
+	}
+
+.calendarday {
+	font-family:verdana, arial, sans-serif;
+	color:#4682B4;
+	font-size: xx-small; /*feed to IE 5.5*/
+	f\ont-size: x-small; /*feed to compliant browsers*/
+	font-weight:bold;
+	text-align:center;
+	}
+
+.side {
+	font-family:verdana, arial, sans-serif;
+	color:#333;
+	font-size: xx-small; /*feed to IE 5.5*/
+	f\ont-size: x-small; /*feed to compliant browsers*/
+	font-weight:normal;
+	line-height:150%;
+	padding:2px;
+	}
+
+.sidetitle {
+	font-family:verdana, arial, sans-serif;
+	color: #36648B;
+	font-size: x-small; /*feed to IE 5.5*/
+	f\ont-size: small; /*feed to compliant browsers*/
+	font-weight:normal;
+	padding:2px;
+	margin-top:10px;
+	letter-spacing: .1em;
+	border-bottom:1px dotted #999;
+	text-align:center;
+	text-transform:lowercase;
+	}
+
+.syndicate {
+	font-family:verdana, arial, sans-serif;
+	font-size:xx-small;
+	line-height:150%;
+	padding:2px;
+	margin-top:10px;
+	text-align:center;
+	background:#EEE;
+	}
+
+#metainfo {
+	clear: both;
+	width: 758px;
+	margin: auto;
+	background: #999;
+	padding: 5px 25px;
+	text-align: left;
+	width: 701px;
+	color: #CCC;
+	font-size: 85%;
+	}
+
+#metainfo a, #metainfo a span {
+	font-weight: bold;
+	}
+
+#footer {
+	color: #FFF;
+	width: 758px;
+	background: #999;
+	line-height: 1.3em;
+        text-align: center;
+	margin: 0 auto;
+	padding: 5px 25px;
+	width: 701px;
+        font-size: xx-small; /*feed to IE 5.5*/
+        f\ont-size: x-small; /*feed to compliant browsers*/
+        font-weight: normal;
+	}
+
+/* the "be nice to Opera 5 rule" */
+html>body #footer {
+	width:701px;
+	} 
+
+/* --- tools --- */
+
+.clear {clear: both;}
+.right { float: right; margin: 0 0 10px 10px; }
+.left { float: left; margin: 0 10px 10px 0; }
+
+img.left {
+	float: left;
+	margin: 0 10px 10px 0;
+	}
+
+img.right {
+	float: right;
+	margin: 0 0 10px 10px;
+	}
+
+/* class to hide elements */
+.hide {
+	display: none;
+	}
+
+/* used to clear the floats: http://www.positioniseverything.net/easyclearing.html */
+.clearfix:after {
+	content: "."; 
+	display: block; 
+	height: 0; 
+	clear: both; 
+	visibility: hidden;
+	}
+
+/* hide float from IE on mac \*/
+* html .clearfix {
+	height: 1%;
+	}
+/* end hide from IE on mac */
+
+/* clears div added to #dom-fix via javascript hack for IE5 mac */
+.mac-clearfix {
+	clear:both;
+	height:0;
+	overflow:hidden;
+	}
+
+/* --- extras --- */
+
+.comments-body {
+	font-family:verdana, arial, sans-serif;
+	color:#666;
+	font-size:small;
+	font-weight:normal;
+	line-height:120%;
+	padding-bottom:10px;
+	padding-top:10px;
+	border-bottom:1px dotted #999;
+	}
+
+.comments-post {
+	font-family:verdana, arial, sans-serif;
+	color:#666;
+	font-size:x-small;
+	font-weight:normal;
+	}
+
+.trackback-url {
+	font-family:verdana, arial, sans-serif;
+	color:#666;
+	font-size:small;
+	font-weight:normal;
+	line-height:150%;
+	padding:5px;
+	border:1px dotted #999;
+	}
+
+.trackback-body {
+	font-family:verdana, arial, sans-serif;
+	color:#666;
+	font-size:small;
+	font-weight:normal;
+	line-height:120%;
+	padding-bottom:10px;
+	padding-top:10px;
+	border-bottom:1px dotted #999;
+	}
+
+.trackback-post {
+	font-family:verdana, arial, sans-serif;
+	color:#666;
+	font-size:x-small;
+	font-weight:normal;
+	}
+
+
+.comments-head	{
+	font-family:verdana, arial, sans-serif;
+	font-size:small;
+	color: #666;
+	border-bottom:1px solid #999;
+	margin-top:20px;
+	font-weight:bold;
+	}
+
+#header-commentspop {
+	font-family:verdana, arial, sans-serif;
+	color:#FFF;
+	font-size:large;
+	font-weight:bold;
+	border-left:1px solid #FFF;
+	border-right:1px solid #FFF;
+	border-top:1px solid #FFF;
+	padding-left:15px;
+	padding-right:15px;
+	padding-top:5px;
+	padding-bottom:5px;
+	}
+

@@ -6,7 +6,9 @@
 
 <title>$NB_ArchiveTitle Archives | $BLOG_TITLE</title>
 
-<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
+<script type="text/javascript" src="${BASE_URL}scripts/global.js"></script>
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" media="all" />
+<link rel="stylesheet" href="${BASE_URL}styles/print.css" type="text/css" media="print" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
 $NB_AtomAltLink
 $NB_RSS2AltLink
@@ -15,26 +17,31 @@ $NB_RSSAltLink
 
 <body>
 
-<div id="banner">
-	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-	<span class="description">$BLOG_DESCRIPTION</span>
-</div>
-
-<div id="container">
+<div id="container" class="clearfix">
+	<div id="header" class="clearfix">
+		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+		<span class="description">$BLOG_DESCRIPTION</span>
+	</div>
 	<a id="top"></a>
-	<div class="blog">
+	<div id="widecolumn">
 		<div id="menu">
 			<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
 			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a>
 		</div>
-		<h2 class="pagetitle">$NB_ArchiveTitle Archives</h2>
-		<div class="blogbody">
+		<h2>$NB_ArchiveTitle Archives</h2>
+		<div class="archives">
 			$NB_MetaBody
 		</div>
 		<div class="menu">
-			<a href="#top">$NB_TopPage</a><br />
 			$NB_PageLinks
 		</div>
+	</div>
+</div>
+<div id="metainfo" style="clear:both;">
+</div>
+<div id="footer">
+	<div class="menu">
+		<a href="#top">$NB_TopPage</a><br />
 	</div>
 </div>
 

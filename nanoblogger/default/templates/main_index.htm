@@ -9,7 +9,9 @@
 
 <title>$BLOG_TITLE</title>
 
-<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
+<script type="text/javascript" src="${BASE_URL}scripts/global.js"></script>
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" media="all" />
+<link rel="stylesheet" href="${BASE_URL}styles/print.css" type="text/css" media="print" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
 $NB_AtomAltLink
 $NB_RSS2AltLink
@@ -18,72 +20,80 @@ $NB_RSSAltLink
 
 <body>
 
-<div id="banner">
-	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-	<span class="description">$BLOG_DESCRIPTION</span>
-</div>
-<div id="content">
-	<a id="top"></a>
-	<div class="blog">
-		$NB_MetaBody
+<div id="container" class="clearfix">
+	<div id="header" class="clearfix">
+		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+		<span class="description">$BLOG_DESCRIPTION</span>
+	</div>
+	<div id="content">
+		<div id="wrap">
+			<a id="top"></a>
+			<div class="blog">
+				$NB_MetaBody
+			</div>
+		</div>
 		<div class="menu">
-			<a href="#top">$NB_TopPage</a>
 			$NB_PageLinks
 		</div>
 	</div>
+	<div id="links">
+		<div class="calendar">
+			$NB_Calendar
+		</div>
+		<div class="side">
+			$NB_ArticleLinks
+		</div>
+		<div class="sidetitle">
+			Links
+		</div>
+		<div class="side">
+			$NB_MainLinks
+		</div>
+		<div class="sidetitle">
+			Recent Entries
+		</div>
+		<div class="side">
+			$NB_RecentEntries
+		</div>
+		<div class="sidetitle">
+			Categories
+		</div>
+		<div class="side">
+			$NB_CategoryLinks
+		</div>
+		<div class="sidetitle">
+			Archives
+		</div>
+		<div class="side">
+			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archive Index</a><br />
+			$NB_YearLinks
+			<!-- $NB_MonthLinks -->
+		</div>
+		<div class="syndicate">
+			Syndicate this site: <a href="${BASE_URL}rss.$NB_SYND_FILETYPE">RSS</a>,
+			<a href="${BASE_URL}atom.$NB_SYND_FILETYPE">Atom</a>
+		</div>
+		<div class="sidetitle">
+			Contact
+		</div>
+		<div class="side">
+			$BLOG_CONTACT
+		</div>
+		<div class="sidetitle">
+			Weblog Status
+		</div>
+		<div class="side">
+			$NB_BlogStatus
+		</div>
+	</div>
 </div>
-<div id="links">
-	<div class="calendar">
-		$NB_Calendar
-	</div>
-	<div class="side">
-		$NB_ArticleLinks
-	</div>
-	<div class="sidetitle">
-		Links
-	</div>
-	<div class="side">
-		$NB_MainLinks
-	</div>
-	<div class="sidetitle">
-		Recent Entries
-	</div>
-	<div class="side">
-		$NB_RecentEntries
-	</div>
-	<div class="sidetitle">
-		Categories
-	</div>
-	<div class="side">
-		$NB_CategoryLinks
-	</div>
-	<div class="sidetitle">
-		Archives
-	</div>
-	<div class="side">
-		<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archive Index</a><br />
-		$NB_YearLinks
-		<!-- $NB_MonthLinks -->
-	</div>
-	<div class="syndicate">
-		Syndicate this site: <a href="${BASE_URL}rss.$NB_SYND_FILETYPE">RSS</a>,
-		<a href="${BASE_URL}atom.$NB_SYND_FILETYPE">Atom</a>
-	</div>
-	<div class="sidetitle">
-		Contact
-	</div>
-	<div class="side">
-		$BLOG_CONTACT
-	</div>
-	<div class="sidetitle">
-		Weblog Status
-	</div>
-	<div class="side">
-		$NB_BlogStatus
-	</div>
-	<div class="powered">
-		Powered by<br />
-		<a href="http://nanoblogger.sourceforge.net">NanoBlogger $VERSION</a><br />
+<div id="metainfo" style="clear:both;">
+	powered by &#36;EDITOR, bash, cat, grep, sed, and
+	<a href="http://nanoblogger.sourceforge.net">nb $VERSION</a>
+</div>
+<div id="footer">
+	<div class="menu">
+		<a href="#top">$NB_TopPage</a><br />
 	</div>
 </div>
 

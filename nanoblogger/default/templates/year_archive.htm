@@ -7,37 +7,43 @@
 
 <title>$NB_MetaTitle | $BLOG_TITLE</title>
 
-<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" />
+<script type="text/javascript" src="${BASE_URL}scripts/global.js"></script>
+<link rel="stylesheet" href="${BASE_URL}$BLOG_CSS" type="text/css" media="all" />
+<link rel="stylesheet" href="${BASE_URL}styles/print.css" type="text/css" media="print" />
 <link rel="shortcut icon" href="${BASE_URL}$BLOG_ICON" />
 
 </head>
 
 <body>
 
-<div id="banner">
-	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-	<span class="description">$BLOG_DESCRIPTION</span>
-</div>
-<div id="container">
-	<a id="top"></a>
-	<div class="blog">
-		<div id="menu">
-			<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
-			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
-			<br />
+<div id="container" class="clearfix">
+	<div id="header" class="clearfix">
+		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+		<span class="description">$BLOG_DESCRIPTION</span>
+	</div>
+	<div id="widecolumn">
+		<div id="wrap">
+			<a id="top"></a>
+			<h2>$NB_MetaTitle</h2>
+			<div class="archives">
+				<div id="menu">
+					<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+					<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+					<br />
 $([ ! -z "$prev_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveYearLink'">'$NB_PrevPage'</a>')
-			<a href="${ARCHIVES_PATH}$yearn/$NB_INDEX">$yearn</a>
+					$yearn
 $([ ! -z "$next_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveYearLink'">'$NB_NextPage'</a>')
+				</div>
+				$NB_MetaBody
+			</div>
 		</div>
-		<h2 class="pagetitle">$NB_MetaTitle</h2>
-		<div class="blogbody">
-			$NB_MetaBody
-		</div>
-		<!--
-		<div class="menu">
-			<a href="#top">$NB_TopPage</a>
-		</div>
-		-->
+	</div>
+</div>
+<div id="metainfo" style="clear:both;">
+</div>
+<div id="footer">
+	<div class="menu">
+		<a href="#top">$NB_TopPage</a><br />
 	</div>
 </div>
 
