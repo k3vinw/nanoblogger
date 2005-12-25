@@ -28,20 +28,32 @@
 : ${CATLINKS_FILTERCMD:=sort}
 
 # maximum number of months to show for $NB_MonthLinks
+# -1 = all
 : ${MAX_MONTHLINKS:=12}
 
 # maximum number of years to show for $NB_YearLinks
+# -1 = all
 : ${MAX_YEARLINKS:=12}
 
 # validate MAX_MONTHLINKS (must be greater than 0)
 MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c [0-9]`
 [ "$MONTHLINKS_NUMVAR" = 0 ] &&
 	die "MAX_MONTHLINKS != > 0"
+# unlimited links
+if [ "$MAX_MONTHLINKS" = -1 ]; then
+	ALL_MONTHLINKS="1"
+	MAX_MONTHLINKS="1"
+fi
 
 # validate MAX_YEARLINKS (must be greater than 0)
 YEARLINKS_NUMVAR=`echo "$MAX_YEARLINKS" |grep -c [0-9]`
 [ "$YEARLINKS_NUMVAR" = 0 ] &&
 	die "MAX_YEARLINKS != > 0"
+# unlimited links
+if [ "$MAX_YEARLINKS" = -1 ]; then
+	ALL_YEARLINKS="1"
+	MAX_YEARLINKS="1"
+fi
 
 set_baseurl "./"
 nb_msg "$plugins_action weblog links ..."
@@ -128,13 +140,17 @@ EOF
 }
 
 # create yearly archive links
-query_db all nocat limit $month_tally 1
+if [ "$ALL_YEARLINKS" = 1 ]; then
+	query_db all
+else
+	query_db all nocat limit $month_tally 1
+fi
 WEBLOGLINKSYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
 for webloglinksyearn in $WEBLOGLINKSYEAR_LIST; do
 	make_yearlink
 done |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE"
 # yearly archives continued
-if [ "$MAX_YEARLINKS" -lt "$total_nyears" ]; then
+if [ "$ALL_YEARLINKS" != 1 ] && [ "$MAX_YEARLINKS" -lt "$total_nyears" ]; then
 	cat >> "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE" <<-EOF
 		<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
 	EOF
@@ -142,10 +158,14 @@ fi
 NB_YearLinks=$(< "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE")
 
 # create monthly archive links
-query_db all nocat limit $entry_tally 1
+if [ "$ALL_MONTHLINKS" = 1 ]; then
+	query_db all
+else
+	query_db all nocat limit $entry_tally 1
+fi
 loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
 # monthly archives continued
-if [ "$MAX_MONTHLINKS" -lt "$total_nmonths" ]; then
+if [ "$ALL_MONTHLINKS" != 1 ] && [ "$MAX_MONTHLINKS" -lt "$total_nmonths" ]; then
 	cat >> "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE" <<-EOF
 		<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
 	EOF

@@ -898,7 +898,7 @@ while [ $# -gt 0 ]; do
 	[ $# -gt 1 ] && argument=$2
 	bad_argument=$1
 	case "$1" in
-		-a|--add)		add_weblog;;
+		-a|--add)		ADD_WEBLOG=1;;
 		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
 		# -B and --body options deprecated in favor of -T and --text
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
@@ -957,6 +957,9 @@ while [ $# -gt 0 ]; do
 	esac
 	shift
 done
+
+[ "$ADD_WEBLOG" = 1 ] &&
+	add_weblog
 
 exit 0
 
