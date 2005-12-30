@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2005-12-16T01:59:16-05:00
+# Last modified: 2005-12-30T02:24:09-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC4"
@@ -439,9 +439,12 @@ if [ "$USR_QUERY" = all ] && [ -z "$cat_num" ]; then
 			rm -fr "$BLOG_DIR"/"$update_dir"/*
 	done
 fi
-# create/update master query results
-query_db master
-# create/update special query results for months and years
+# update master.db
+if [ "$USR_QUERY" != main ]; then
+	nb_msg "$querydb_init"
+	query_db master
+fi
+# update special query results for months and years
 query_db months
 query_db years
 # update previous entry's nav. links for new entries
@@ -567,6 +570,7 @@ for entry_id in $NUMVAR; do
 	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 		# update previous and next entries of modified entry
+		nb_msg "$querydb_update"
 		query_db master
 		findba_entries "$Edit_EntryFile" "$MASTER_DB_RESULTS"
 		set_entrynavlinks prev "$before_entry"
@@ -625,7 +629,8 @@ nb_msg "$deleteweblog_delentry $delete_num ..."
 [ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 UPDATE_LIST=`for entry_id in $NUMVAR; do echo "$DB_RESULTS" |sed -n "$entry_id"p; done`
 find_categories "$UPDATE_LIST"
-# create master query results
+# update master.db
+nb_msg "$querydb_update"
 query_db master
 > "$SCRATCH_FILE"
 for entry_id in $NUMVAR; do
@@ -640,6 +645,7 @@ for entry_id in $NUMVAR; do
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
 				fi
 			done
+			echo "$Delete_EntryFile" >> "$SCRATCH_FILE"
 		else
 			for cat_db in $db_categories; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
@@ -660,15 +666,16 @@ for entry_id in $NUMVAR; do
 				rm -fr "$Delete_PermalinkDir"
 			# throw out old cache data
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
-		fi
-		# update previous and next entries of deleted entry
-		findba_entries "$Delete_EntryFile" "$MASTER_DB_RESULTS"
-		set_entrynavlinks prev "$before_entry"
-		set_entrynavlinks next "$after_entry"
-		[ ! -z "$prev_entry" ] &&
-			echo "$prev_entry" >> "$SCRATCH_FILE"
-		[ ! -z "$next_entry" ] &&
-			echo "$next_entry" >> "$SCRATCH_FILE"
+			# update previous and next entries of deleted entry
+			findba_entries "$Delete_EntryFile" "$MASTER_DB_RESULTS"
+			set_entrynavlinks prev "$before_entry"
+			set_entrynavlinks next "$after_entry"
+			[ ! -z "$prev_entry" ] &&
+				echo "$prev_entry" >> "$SCRATCH_FILE"
+			[ ! -z "$next_entry" ] &&
+				echo "$next_entry" >> "$SCRATCH_FILE"
+
+			fi
 	fi
 done
 UPDATE_LIST=$(< "$SCRATCH_FILE")

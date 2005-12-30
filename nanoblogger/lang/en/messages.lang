@@ -19,6 +19,10 @@ checkconf_nodata="weblog's data directory doesn't exist! goodbye."
 checkconf_nocache="weblog's cache directory doesn't exist! goodbye."
 checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
 
+# query_db
+querydb_init="initializing master database ..."
+querydb_update="updating master database ..."
+
 # validate category id(s)
 catid_bad="bad id(s)!"
 checkcatid_invalid="invalid category id(s):"

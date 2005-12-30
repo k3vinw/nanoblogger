@@ -158,9 +158,9 @@ fi
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 }
 
-# tool to lookup entry's id from "master" query type
+# tool to lookup entry's id from master database
 lookup_entryid(){
-echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+grep -n "$1" "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
 # tool to lookup month's id from "months" query type
@@ -170,7 +170,7 @@ echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 
 # tool to find entry before and after from entry's id
 findba_entries(){
-entryid_var=`lookup_entryid "$1" "$2"`
+entryid_var=`lookup_entryid "$1"`
 # assumes chronological date order
 before_entryid=`expr $entryid_var + 1`
 after_entryid=`expr $entryid_var - 1`
@@ -220,7 +220,7 @@ if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 	next_monthid=`expr $month_id - 1`
 	prev_month=; NB_PrevArchiveMonthLink=
 	[ $prev_monthid -gt 0 ] &&
-		prev_month=`echo "$MASTER_DB_RESULTS" |cut -c1-7 |sort $SORT_ARGS |sed ''$prev_monthid'!d'`
+		prev_month=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS |sed ''$prev_monthid'!d'`
 	if [ ! -z "$prev_month" ]; then
 		prev_month_dir=`echo $prev_month |sed -e '/[-]/ s//\//g'`
 		prev_month_file="$prev_month_dir/$NB_INDEXFILE"
@@ -228,7 +228,7 @@ if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 	fi
 	next_month=; NB_NextArchiveMonthLink=
 	[ $next_monthid -gt 0 ] &&
-		next_month=`echo "$MASTER_DB_RESULTS" |cut -c1-7 |sort $SORT_ARGS |sed ''$next_monthid'!d'`
+		next_month=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS |sed ''$next_monthid'!d'`
 	if [ ! -z "$next_month" ]; then
 		next_month_dir=`echo $next_month |sed -e '/[-]/ s//\//g'`
 		next_month_file="$next_month_dir/$NB_INDEXFILE"

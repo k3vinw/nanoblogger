@@ -29,8 +29,8 @@ filter_limit(){
 	db_setlimit=; db_limit=; db_offset=
 	}
 filter_query(){ grep "$db_query." |sort $SORT_ARGS; } # allow for empty $db_query
-# list all entries
-list_db(){
+# update master db
+update_db(){
 	DB_YYYY=`echo "$db_query" |cut -c1-4`
 	DB_MM=`echo "$db_query" |cut -c6-7`
 	DB_DD=`echo "$db_query" |cut -c9-10`
@@ -39,9 +39,33 @@ list_db(){
 	: ${DB_DD:=[0-9][0-9]}
 	DB_DATE="${DB_YYYY}*${DB_MM}"
 	for entry in ${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
-		[ -f "$entry" ] && echo "$entry"
-	done
-	}
+		# index related categories by id
+		for cat_db in $db_categories; do
+			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
+			if [ ! -z "$cat_var" ]; then
+				cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
+				[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
+				oldcat_idnum="$cat_idnum,"
+			fi
+		done
+		cat_idnum=`echo $cat_idnum |sed -e '/\,[ ]$/ s///g'`
+		[ ! -z "$cat_idnum" ] && cat_ids="$cat_idnum"
+		[ -f "$entry" ] &&
+			echo "$entry $cat_ids"
+		oldcat_idnum=; cat_idnum=; cat_ids=
+	done |filter_query
+}
+# list all entries
+list_db(){
+# gracefully recover master db
+[ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ] &&
+	update_db > "$NB_DATA_DIR/master.$NB_DBTYPE"
+# force update of master db
+if [ "$db_query" = update ]; then
+	db_query=; update_db > "$NB_DATA_DIR/master.$NB_DBTYPE"
+fi
+cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 1
+}
 # include categorized entries
 cat_db(){
 	[ -z "$db_catquery" ] && list_db
@@ -61,7 +85,8 @@ if [ "$db_query" = all ]; then
 	db_query=; query_data
 elif [ "$db_query" = master ]; then
 	# create authoritive results for reference
-	db_query=; MASTER_DB_RESULTS=`cat_db |filter_query`
+	db_query=; MASTER_DB_RESULTS=`update_db`
+	echo "$MASTER_DB_RESULTS" > "$NB_DATA_DIR/master.$NB_DBTYPE"
 elif [ "$db_query" = years ]; then
 	db_query=; YEAR_DB_RESULTS=`cat_db |cut -c1-4 |filter_query`
 elif [ "$db_query" = months ]; then
