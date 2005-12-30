@@ -201,7 +201,7 @@ fi
 		}
 		query_db "$page_query" "$page_catquery" limit "$end" "$begin"
 		for page_entry in $UPDATE_LIST; do
-			if [ -z "$Edit_EntryFile" ]; then
+			if [ "$USR_QUERY" = all ]; then
 				build_pagelist
 			else
 				page_match=`echo "$DB_RESULTS" |grep "$page_entry"`
