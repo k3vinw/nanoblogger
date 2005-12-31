@@ -55,16 +55,17 @@ update_db(){
 		[ -f "$entry" ] &&
 			echo "$entry $cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
-	done
+	done |sort $SORT_ARGS > "$SCRATCH_FILE.master.$NB_DBTYPE"
+	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
 # list all entries
 list_db(){
 # gracefully recover master db
 [ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ] &&
-	update_db > "$NB_DATA_DIR/master.$NB_DBTYPE"
+	update_db
 # force update of master db
 if [ "$db_query" = update ]; then
-	db_query=; update_db > "$NB_DATA_DIR/master.$NB_DBTYPE"
+	db_query=; update_db
 fi
 if [ -z "$db_catquery" ]; then
 	grep "[\.]$NB_DATATYPE" "master.$NB_DBTYPE"
@@ -87,8 +88,8 @@ if [ "$db_query" = all ]; then
 	db_query=; query_data
 elif [ "$db_query" = master ]; then
 	# create authoritive results for reference
-	db_query=; MASTER_DB_RESULTS=`update_db`
-	echo "$MASTER_DB_RESULTS" > "$NB_DATA_DIR/master.$NB_DBTYPE"
+	db_query=; update_db
+	MASTER_DB_RESULTS=$(< "$NB_DATA_DIR/master.$NB_DBTYPE")
 elif [ "$db_query" = years ]; then
 	db_query=; YEAR_DB_RESULTS=`list_db |cut -c1-4 |filter_query`
 elif [ "$db_query" = months ]; then
