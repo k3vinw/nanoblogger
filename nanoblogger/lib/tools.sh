@@ -170,7 +170,7 @@ echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 
 # tool to find entry before and after from entry's id
 findba_entries(){
-entryid_var=`lookup_entryid "$1"`
+entryid_var=`lookup_entryid "$1" "$2"`
 # assumes chronological date order
 before_entryid=`expr $entryid_var + 1`
 after_entryid=`expr $entryid_var - 1`
