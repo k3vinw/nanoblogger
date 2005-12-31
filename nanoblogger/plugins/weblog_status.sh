@@ -26,8 +26,8 @@ fi
 
 query_db all
 TOTAL_CATEGORIES=`echo "$db_categories" |grep -c "."`
-TOTAL_ENTRIES=`echo "$DB_RESULTS" |grep -c "."`
-LAST_ENTRY=`echo "$DB_RESULTS" |sed 1q`
+TOTAL_ENTRIES=`grep -c "." "$NB_DATA_DIR/master.$NB_DBTYPE"`
+LAST_ENTRY=`sed 1q "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 1`
 [ ! -z "$LAST_ENTRY" ] &&
 	read_metadata DATE "$NB_DATA_DIR/$LAST_ENTRY"
 LAST_ENTRY_TIME="$METADATA"

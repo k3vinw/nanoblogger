@@ -160,7 +160,7 @@ ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 
 # tool to lookup entry's id from master database
 lookup_entryid(){
-grep -n "$1" "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d":" -f 1 |grep '^[0-9].*$'
+echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
 # tool to lookup month's id from "months" query type

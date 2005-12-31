@@ -1,6 +1,6 @@
 # Module for querying existing records
 
-# create list of entries based on a month or interval
+# search, filter, and create makeshift and master db references
 query_db(){
 db_query="$1"
 db_catquery="$2"
@@ -12,6 +12,7 @@ db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
+: ${db_filter:=query}
 cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
@@ -20,7 +21,7 @@ if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 else
 	db_categories="$db_catquery"
 fi
-if [ "$db_categories" = "cat_*.$NB_DBTYPE" ]; then db_categories=; fi
+[ "$db_categories" = "cat_*.$NB_DBTYPE" ] && db_categories=
 # list amount of entries based on db_limit
 filter_limit(){
 	[ "$db_limit" = 0 ] && grep "." # regex hack for non-GNU versions
@@ -28,7 +29,8 @@ filter_limit(){
 	[ ! -z "$db_limit" ] && sed ''$db_offset,$db_limit'!d'
 	db_setlimit=; db_limit=; db_offset=
 	}
-filter_query(){ grep "$db_query." |sort $SORT_ARGS; } # allow for empty $db_query
+filter_query(){ grep "$db_query." |cut -d" " -f 1 |sort $SORT_ARGS; } # allow for empty $db_query
+filter_raw(){ grep "$db_query." |sort $SORT_ARGS; }
 # update master db
 update_db(){
 	DB_YYYY=`echo "$db_query" |cut -c1-4`
@@ -53,7 +55,7 @@ update_db(){
 		[ -f "$entry" ] &&
 			echo "$entry $cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
-	done |filter_query
+	done
 }
 # list all entries
 list_db(){
@@ -64,22 +66,22 @@ list_db(){
 if [ "$db_query" = update ]; then
 	db_query=; update_db > "$NB_DATA_DIR/master.$NB_DBTYPE"
 fi
-cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 1
-}
-# include categorized entries
-cat_db(){
-	[ -z "$db_catquery" ] && list_db
+if [ -z "$db_catquery" ]; then
+	grep "[\.]$NB_DATATYPE" "master.$NB_DBTYPE"
+else
+	# list by category
 	for cat_db in $db_categories; do
-		[ ! -z "$cat_db" ] &&
+		[ -f "$NB_DATA_DIR/$cat_db" ] &&
 			grep "[\.]$NB_DATATYPE" "$cat_db"
 	done
-	}
+fi
+}
 query_data(){
-	if [ "$db_setlimit" = limit ]; then
-		DB_RESULTS=`cat_db |filter_query |filter_limit`
-	else
-		DB_RESULTS=`cat_db |filter_query`
-	fi
+if [ "$db_setlimit" = limit ]; then
+	DB_RESULTS=`list_db |filter_$db_filter |filter_limit`
+else
+	DB_RESULTS=`list_db |filter_$db_filter`
+fi
 }
 if [ "$db_query" = all ]; then
 	db_query=; query_data
@@ -88,14 +90,20 @@ elif [ "$db_query" = master ]; then
 	db_query=; MASTER_DB_RESULTS=`update_db`
 	echo "$MASTER_DB_RESULTS" > "$NB_DATA_DIR/master.$NB_DBTYPE"
 elif [ "$db_query" = years ]; then
-	db_query=; YEAR_DB_RESULTS=`cat_db |cut -c1-4 |filter_query`
+	db_query=; YEAR_DB_RESULTS=`list_db |cut -c1-4 |filter_query`
 elif [ "$db_query" = months ]; then
-	db_query=; MONTH_DB_RESULTS=`cat_db |cut -c1-7 |filter_query`
+	db_query=; MONTH_DB_RESULTS=`list_db |cut -c1-7 |filter_query`
 elif [ "$db_query" = max ]; then
 	db_setlimit=limit; db_query=; query_data
 else
 	query_data
 fi
-db_query=; cd "$CURR_PATH"
+db_query=; db_filter=; cd "$CURR_PATH"
+}
+
+# search, filter, and create raw db references
+raw_db(){
+db_filter=raw
+query_db "$1" "$2" "$3" "$4" "$5"
 }
 

@@ -514,8 +514,7 @@ chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 	New_EntryFile="$New_EntryDateFile"
 # add to specified categories
 if [ ! -z "$cat_num" ]; then
-	db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-	for cat_db in $db_catquery ; do 
+	for cat_db in $db_catquery; do 
 		echo "$New_EntryFile" >> "$NB_DATA_DIR/$cat_db"
 	done
 fi
@@ -700,30 +699,31 @@ if [ "$db_query" = cat ]; then
 		fi
 	done; exit 0
 fi
+explode_list(){
+EXPLODE_RESULTS="$1"
+list_entryid=0
+last_item=0
+total_items=`echo "$EXPLODE_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+while [ "$last_item" -lt "$total_items" ]; do
+	last_item=`expr 1 + $last_item`
+	list_entryid=`expr 1 + $list_entryid`
+	entry_line=`echo "$EXPLODE_RESULTS" |sed ''$last_item'!d'`
+	entry=`echo "$entry_line" |cut -d" " -f 1`
+	entry_cat=`echo "$entry_line" |grep '[ ][0-9]' |cut -d" " -f 2`
+	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
+	[ ! -z "$entry_cat" ] && entry_catids="- [$entry_cat]"
+	NB_EntryDate=`filter_timestamp "$entry" |sed -e '/[\.]'$NB_DATATYPE'/ s///g'`
+	echo " $list_entryid, $NB_EntryTitle - ($NB_EntryDate) $entry_catids"
+	entry_cat=; entry_catids=; entry=
+done
+}
 # list entries in main page by default
 [ -z "$db_query" ] && db_query="$QUERY_MODE"
 list_query="$db_query"
-query_db "$db_query" "$db_catquery"
-[ -z "$DB_RESULTS" ] && die "'$list_query' - $listweblog_nomatch"
 nb_msg "$header_ID, $header_Title - ($header_Date) - [$header_Category]"
-list_entryid=0
-for entry in $DB_RESULTS; do
-	list_entryid=`expr 1 + $list_entryid`
-	for cat_db in $db_categories; do
-		cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
-		if [ ! -z "$cat_var" ]; then
-			cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
-			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
-			oldcat_idnum="$cat_idnum,"
-		fi
-	done
-	cat_idnum=`echo $cat_idnum |sed -e '/\,[ ]$/ s///g'`
-	[ ! -z "$cat_idnum" ] && NB_Category="- [$cat_idnum]"
-	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
-	NB_EntryDate=`filter_timestamp "$entry" |sed -e '/[\.]'$NB_DATATYPE'/ s///g'`
-	echo " $list_entryid, $NB_EntryTitle - ($NB_EntryDate) $NB_Category"
-	oldcat_idnum=; cat_idnum=; NB_Category=
-done
+raw_db "$db_query" "$db_catquery"
+[ -z "$DB_RESULTS" ] && die "'$list_query' - $listweblog_nomatch"
+explode_list "$DB_RESULTS"
 }
 
 # move entries into other categories
@@ -810,7 +810,8 @@ if [ ! -z "$cat_num" ]; then
 					[ -z "$cat_title" ] && cat_title=Untitled
 				fi
 				echo "$cat_title" > "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE
-				cat_num="$id"; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"; cat_total="$id"
+				cat_num="$id"; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+				cat_total="$id"
 			else
 				cat_total=`expr 1 + $cat_total`
 			fi
