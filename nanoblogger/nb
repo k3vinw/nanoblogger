@@ -128,13 +128,14 @@ fi
 build_entryarchives(){
 ENTRYARCHIVES_LIST="$1"
 ENTRYARCHIVES_TEMPLATE="$2"
+ENTRYARCHIVES_DATATYPE="$3"
 for entry in $ENTRYARCHIVES_LIST; do
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
 		[ -z "$PARTS_FILE" ] &&
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
 		if [ "$ENTRYARCHIVES_TEMPLATE" = "$PERMALINKENTRY_TEMPLATE" ]; then
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
-			load_entry "$NB_DATA_DIR/$entry" ALL entry
+			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE" entry
 			set_entrylink "$entry"
 			year=`echo "$month" |cut -c1-4`
 			month=`echo "$month" |cut -c6-7`
@@ -148,7 +149,7 @@ for entry in $ENTRYARCHIVES_LIST; do
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"
-			load_entry "$NB_DATA_DIR/$entry" ALL
+			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE"
 			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
@@ -174,7 +175,7 @@ mkdir -p `dirname "$PARTS_FILE"`
 # fallback to default entry template
 [ ! -f "$NB_TEMPLATE_DIR/$MKARCH_ENTRY_TEMPLATE" ] &&
 	MKARCH_ENTRY_TEMPLATE="$ENTRY_TEMPLATE"
-build_entryarchives "$ARCHIVE_LIST" "$MKARCH_ENTRY_TEMPLATE"
+build_entryarchives "$ARCHIVE_LIST" "$MKARCH_ENTRY_TEMPLATE" "$ARCH_DATATYPE"
 }
 
 # divide larger archives into multiple pages
@@ -187,6 +188,9 @@ page_entrytemplate="$5"
 page_dir="$6"
 page_file="$7"
 page_fbasedir=`dirname "$page_file"`
+[ -z "$ARCH_DATATYPE" ] &&
+	ARCH_DATATYPE=ALL
+ENTRY_DATATYPE="$ARCH_DATATYPE"
 if [ "$page_fbasedir" != . ]; then
 	page_filedir="$page_fbasedir/"
 	page_file=`basename "$page_file"`
@@ -273,7 +277,7 @@ else
 	make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$page_file" "$NB_TEMPLATE_DIR/$page_template" \
 		"${page_dir}${page_filedir}$page_file"
 fi
-page_filedir=
+ARCH_DATATYPE=; page_filedir=
 }
 
 # create archive of given year (plugins only)
@@ -307,6 +311,8 @@ if [ ! -z "$CAT_LIST" ]; then
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
 			set_catlink "$cat_arch"
+			[ ! -z "$CATARCH_DATATYPE" ] &&
+				ARCH_DATATYPE="$CATARCH_DATATYPE"
 			paginate all "$cat_arch" "$MAX_CATPAGE_ENTRIES" "$CATEGORY_TEMPLATE" \
 				"$CATENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$category_file"
 		fi
@@ -405,7 +411,7 @@ if [ "$USR_QUERY" = all ]; then
 	loop_archive "$LOOP_LIST" months build_montharchive
 	# build the entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
-		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE"
+		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE" ALL
 else
 	# update relateive month archives
 	MOD_MONTHS=`echo "$UPDATE_LIST" |sort $SORT_ARGS`
@@ -413,7 +419,7 @@ else
 	loop_archive "$MOD_MONTHS" months build_montharchive
 	# update relative entry archives
 	[ "$ENTRY_ARCHIVES" = 1 ] &&
-		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE"
+		build_entryarchives "$UPDATE_LIST" "$PERMALINKENTRY_TEMPLATE" ALL
 fi
 }
 
@@ -476,9 +482,14 @@ fi
 CACHE_TYPE=plugin
 # always load main plugins
 load_plugins
-# build/update archives based on the query results
 nb_msg "$buildweblog_files"
-[ "$USR_QUERY" != main ] && build_archives
+if [ "$USR_QUERY" = all ] && [ ! -z "$cat_num" ]; then
+	# only build/update category archives specified
+	build_catarchives
+elif [ "$USR_QUERY" != main ]; then
+	# build/update archives based on the query results
+	build_archives
+fi
 # build main index
 nb_msg "$buildweblog_main"
 CACHE_TYPE=main

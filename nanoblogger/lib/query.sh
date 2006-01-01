@@ -67,10 +67,11 @@ list_db(){
 if [ "$db_query" = update ]; then
 	db_query=; update_db
 fi
+# list entries from master.db
 if [ -z "$db_catquery" ]; then
 	grep "[\.]$NB_DATATYPE" "master.$NB_DBTYPE"
 else
-	# list by category
+	# or list entries from cat_n.db
 	for cat_db in $db_categories; do
 		[ -f "$NB_DATA_DIR/$cat_db" ] &&
 			grep "[\.]$NB_DATATYPE" "$cat_db"

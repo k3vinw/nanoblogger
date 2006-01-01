@@ -447,6 +447,16 @@ NB_INDEX="index.html"
 
     <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the building of entry archives and reconfigures the links of the entries to point to their own archive page. Note that this will increase the rebuild time since more pages will have to be generated.</p>
 
+    <p><b>Special Category Archiving Features</b></p>
+
+    <p><em>CATARCH_DATATYPE</em> determines the set of data to load for the category archives. There's two types of data that can be specified, "ALL" and "NOBODY".</p>
+    <pre>
+ALL = full entry metadata (slow and bigger cache)
+NOBODY = all except entry's BODY metadata (faster and smaller cache)
+edit the category_entry.htm template accordingly
+    
+</pre>
+
     <p><b>Setting Actions for Previewing and Publishing</b></p>
 
     <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.</p>

@@ -314,8 +314,6 @@ done
 CAT_LIST="${category_list[@]}"
 [ -z "$CAT_LIST" ] &&
 	CAT_LIST=`cat_id "$cat_num"`
-[ "$USR_QUERY" = all ] &&
-	CAT_LIST="$db_categories"
 CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
 }
 

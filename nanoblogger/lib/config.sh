@@ -131,6 +131,8 @@ x_id="$BLOG_ENTRYID_TAG"
 # override configuration's interactive mode
 [ ! -z "$USR_INTERACTIVE" ] &&
 	BLOG_INTERACTIVE="$USR_INTERACTIVE"
+# default for showing category links
+: ${CATEGORY_LINKS:=1}
 }
 
 # deconfigure, clear some auto-default variables
