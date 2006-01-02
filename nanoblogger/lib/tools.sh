@@ -300,11 +300,11 @@ find_categories(){
 UPDATE_CATLIST="$1"
 category_list=()
 build_catlist(){
-if [ ! -z "$cat_var" ]; then
+[ ! -z "$cat_var" ] &&
 	category_list=( ${category_list[@]} "$cat_db" )
-fi
 }
-query_db "$USR_QUERY"
+# acquire all the categories
+query_db
 for relative_entry in $UPDATE_CATLIST; do
 	for cat_db in $db_categories; do
 		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
@@ -615,6 +615,8 @@ New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
 [ ! -z "$EntryDate_TimeStamp" ] && [ -z "$New_EntryTimeStamp" ] &&
 	die "TIMESTAMP != 'YYYY-MM-DD HH:MM:SS'"
 if [ ! -z "$New_EntryTimeStamp" ]; then
+	[ ! -f "$SCRATCH_FILE.mod-catdbs" ] &&
+		> "$SCRATCH_FILE.mod-catdbs"
 	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
 	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
 		Old_EntryFile="$EntryDate_File"
@@ -626,6 +628,7 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+					echo "$cat_db" >> "$SCRATCH_FILE.mod-catdbs"
 				fi
 			done
 		else
@@ -635,6 +638,7 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
 					> "$NB_DATA_DIR/$cat_db".tmp
 					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
+					echo "$cat_db" >> "$SCRATCH_FILE.mod-catdbs"
 				fi
 			done
 		fi
