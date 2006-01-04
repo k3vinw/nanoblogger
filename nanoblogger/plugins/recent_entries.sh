@@ -28,7 +28,7 @@ if [ "$LIST_MODE" = "old" ]; then
 	XLIST_N=`expr $LIST_N + $LIST_N`
 	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET"
 fi
-for entry in $DB_RESULTS ; do
+for entry in ${DB_RESULTS[*]}; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"
 	link_title="$METADATA"
 	NB_EntryID=`set_entryid $entry`

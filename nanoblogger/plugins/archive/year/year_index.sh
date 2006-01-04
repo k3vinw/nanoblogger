@@ -8,28 +8,33 @@ YEARIMOD_QUERY=`echo "$USR_QUERY" |grep "^$yearn"`
 if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
 	# tool to lookup year's id from "years" query type
 	lookup_yearid(){
-	echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+	YEAR_IDLIST=($2)
+	for yid in ${YEAR_IDLIST[@]}; do
+		echo $yid
+	done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 	}
 	# set previous and next links for given year
 	set_yearnavlinks(){
 	yearnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
 	year_id=
 	[ ! -z "$yearnavlinks_var" ] &&
-		year_id=`lookup_yearid "$yearnavlinks_var" "$YEAR_DB_RESULTS"`
-	if [ ! -z "$year_id" ] && [ $year_id -gt 0 ]; then
+		year_id=`lookup_yearid "$yearnavlinks_var" "${YEAR_DB_RESULTS[*]}"`
+	if [ ! -z "$year_id" ] && [ $year_id -ge 0 ]; then
+		# adjust for bash array - 1 = 0
+		((year_id--))
 		prev_yearid=`expr $year_id + 1`
 		next_yearid=`expr $year_id - 1`
 		prev_year=; NB_PrevArchiveYearLink=
-		[ $prev_yearid -gt 0 ] &&
-			prev_year=`echo "$YEAR_DB_RESULTS" |sed ''$prev_yearid'!d'`
+		[ $prev_yearid -ge 0 ] &&
+			prev_year=${YEAR_DB_RESULTS[$prev_yearid]}
 		if [ ! -z "$prev_year" ]; then
 			prev_year_dir=`echo $prev_year |sed -e '/[-]/ s//\//g'`
 			prev_year_file="$prev_year_dir/$NB_INDEXFILE"
 			NB_PrevArchiveYearLink="$prev_year_dir/$NB_INDEX"
 		fi
 		next_year=; NB_NextArchiveYearLink=
-		[ $next_yearid -gt 0 ] &&
-			next_year=`echo "$YEAR_DB_RESULTS" |sed ''$next_yearid'!d'`
+		[ $next_yearid -ge 0 ] &&
+			next_year=${YEAR_DB_RESULTS[$next_yearid]}
 		if [ ! -z "$next_year" ]; then
 			next_year_dir=`echo $next_year |sed -e '/[-]/ s//\//g'`
 			next_year_file="$next_year_dir/$NB_INDEXFILE"
@@ -42,9 +47,9 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	# make NB_ArchiveEntryLinks placeholder
 	set_baseurl "../../"
 
-	ARCHENTRY_LIST="$DB_RESULTS"
+	ARCHENTRY_LIST=${DB_RESULTS[*]}
 	NB_ArchiveEntryLinks=$(
-	for entry in $ARCHENTRY_LIST; do
+	for entry in ${ARCHENTRY_LIST[*]}; do
 		load_entry "$NB_DATA_DIR/$entry" NOBODY
 		NB_ArchiveEntryTitle="$NB_EntryTitle"
 		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
@@ -70,7 +75,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	else
 		NB_ArchiveMonthTitle="$month"
 	fi
-	month_total=`echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+	month_total=${#DB_RESULTS[*]}
 	set_monthlink "$month"
 	# following needs to fit on single line
 	cat <<-EOF
@@ -78,10 +83,11 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	EOF
 	}
 
-	[ -z "$YEAR_DB_RESULTS" ] && query_db years
-	loop_archive "$DB_RESULTS" months make_monthlink |sort $SORT_ARGS > "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE"
-	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE")
+	[ -z "${YEAR_DB_RESULTS[*]}" ] && query_db years
 	set_yearnavlinks "$yearn"
+	loop_archive "${DB_RESULTS[*]}" months make_monthlink |sort $SORT_ARGS \
+		> "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE"
+	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE")
 
 	# make NB_ArchiveLinks placeholder
 	mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$yearn/archive_links.$NB_FILETYPE"`

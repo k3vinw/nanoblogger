@@ -22,11 +22,12 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 
 	# create links for categories
 	build_catlinks(){
-	for cat_link in $db_categories; do
+	for cat_link in ${db_categories[*]}; do
 		if [ -f "$NB_DATA_DIR/$cat_link" ]; then
 			set_catlink "$cat_link"
 			cat_index="$category_link"
-			cat_total=`query_db "$db_query" "$cat_link"; echo "$DB_RESULTS" |grep -c "[\.]$NB_DATATYPE"`
+			query_db "$db_query" "$cat_link"
+			cat_total=${#DB_RESULTS[*]}
 			NB_ArchiveCategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
 			# following needs to fit on single line
 			cat <<-EOF
@@ -40,22 +41,25 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.category_links.$NB_FILETYPE")
 
 	make_yearlink(){
-	NB_ArchiveYearTitle="$masterindex_yearn"
-	year_total=`echo "$DB_RESULTS" |grep -c "^$masterindex_yearn-[0-9]*.*[\.]$NB_DATATYPE"`
+	NB_ArchiveYearTitle="$yearlink"
+	query_db "$yearlink"
+	year_total=${#DB_RESULTS[*]}
 	# following needs to fit on single line
 	cat <<-EOF
-		<a href="${ARCHIVES_PATH}$masterindex_yearn/$NB_INDEX">$NB_ArchiveYearTitle</a> ($year_total)<br />
+		<a href="${ARCHIVES_PATH}$yearlink/$NB_INDEX">$NB_ArchiveYearTitle</a> ($year_total)<br />
 	EOF
 	}
 
 	query_db all
-	MASTERINDEXYEAR_LIST=`echo "$DB_RESULTS" |cut -c1-4 |sort -u`
-	for masterindex_yearn in $MASTERINDEXYEAR_LIST; do
+	YEARLINKS_LIST=(`for yearlink in ${DB_RESULTS[*]}; do
+			echo $yearlink
+		done |cut -c1-4 |sort $SORT_ARGS`)
+	for yearlink in ${YEARLINKS_LIST[*]}; do
 		make_yearlink
 	done |sort $SORT_ARGS > "$SCRATCH_FILE.year_links.$NB_FILETYPE"
 	NB_ArchiveYearLinks=$(< "$SCRATCH_FILE.year_links.$NB_FILETYPE")
 
-	cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
+	cat_total=${#db_categories[*]}
 	if [ "$cat_total" -gt 0 ]; then
 		# make NB_CategoryLinks placeholder
 		NB_BrowseCatLinks=$(

@@ -5,9 +5,8 @@ if [ "$CATEGORY_LINKS" = 1 ]; then
 	# Command to help filter order of categories
 	: ${CATLINKS_FILTERCMD:=sort}
 	>"$SCRATCH_FILE".category_links
-	#entry_catids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2 |sed -e '/[\,]/ s// /g'`
-	entry_catids=`sed '/'$entry'/!d; /[\,]/ s// /g' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`
-	for entry_catnum in $entry_catids; do
+	entry_catids=(`sed '/'$entry'[\>]/!d; /[\>\,]/ s// /g' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
+	for entry_catnum in ${entry_catids[*]}; do
 		cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$entry_catnum.$NB_DBTYPE"`
 		set_catlink cat_"$entry_catnum.$NB_DBTYPE"
 		cat_index="$category_link"

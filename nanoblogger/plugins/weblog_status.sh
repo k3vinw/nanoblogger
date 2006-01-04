@@ -24,10 +24,9 @@ fi
 [ -r "$WEBLOG_STATUSTEMPLATE" ] ||
     die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' - template doens't exist! goodbye."
 
-query_db all
-TOTAL_CATEGORIES=`echo "$db_categories" |grep -c "."`
+TOTAL_CATEGORIES=`for catdbs in "$NB_DATA_DIR"/cat_*."$NB_DBTYPE"; do echo $catdbs; done |grep -c "."`
 TOTAL_ENTRIES=`grep -c "." "$NB_DATA_DIR/master.$NB_DBTYPE"`
-LAST_ENTRY=`sed 1q "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 1`
+LAST_ENTRY=`sed 1q "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d">" -f 1`
 [ ! -z "$LAST_ENTRY" ] &&
 	read_metadata DATE "$NB_DATA_DIR/$LAST_ENTRY"
 LAST_ENTRY_TIME="$METADATA"

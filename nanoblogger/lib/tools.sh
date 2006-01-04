@@ -87,11 +87,11 @@ fi
 
 # convert category number to existing category database
 cat_id(){
-cat_query=`echo "$1" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`
+cat_query=(`echo "$1" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`)
 query_db
-if [ ! -z "$cat_query" ]; then
-	for cat_id in $cat_query; do
-		cat_valid=`echo "$db_categories" |grep cat_$cat_id.$NB_DBTYPE`
+if [ ! -z "${cat_query[*]}" ]; then
+	for cat_id in ${cat_query[@]}; do
+		cat_valid=`for cat_db in ${db_categories[@]}; do echo $cat_db; done |grep cat_$cat_id.$NB_DBTYPE`
 		echo "$cat_valid"
 		[ -z "$cat_valid" ] &&
 			nb_msg "$catid_bad"
@@ -101,12 +101,12 @@ fi
 
 # validate category's id number
 check_catid(){
-cat_list=`cat_id "$1"`
-for cat_db in $cat_list; do
+cat_list=(`cat_id "$1"`)
+for cat_db in ${cat_list[@]}; do
 	[ ! -f "$NB_DATA_DIR/$cat_db" ] &&
 		die "$checkcatid_invalid $1"
 done
-[ ! -z "$1" ] && [ -z "$cat_list" ] && die "$checkcatid_novalid"
+[ ! -z "$1" ] && [ -z "${cat_list[*]}" ] && die "$checkcatid_novalid"
 }
 
 # check file for required metadata tags
@@ -160,27 +160,36 @@ ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 
 # tool to lookup entry's id from master database
 lookup_entryid(){
-echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+ENTRY_IDLIST=($2)
+for db_item in ${ENTRY_IDLIST[@]}; do
+	echo $db_item
+done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
 # tool to lookup month's id from "months" query type
 lookup_monthid(){
-echo "$2" |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+MONTH_IDLIST=($2)
+for db_item in ${MONTH_IDLIST[@]}; do
+	echo $db_item
+done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
 # tool to find entry before and after from entry's id
 findba_entries(){
-entryid_var=`lookup_entryid "$1" "$2"`
+BAENTRY_IDLIST=($2)
+entryid_var=`lookup_entryid "$1" "${BAENTRY_IDLIST[*]}"`
+# adjust offset by 1 for bash arrays (1 = 0)
+((entryid_var--))
 # assumes chronological date order
 before_entryid=`expr $entryid_var + 1`
 after_entryid=`expr $entryid_var - 1`
-if [ "$before_entryid" -gt 0 ]; then
-	before_entry=`echo "$2" |sed -e ''$before_entryid'!d'`
+if [ "$before_entryid" -ge 0 ]; then
+	before_entry=${BAENTRY_IDLIST[$before_entryid]%>[0-9]*}
 else
 	before_entry=
 fi
-if [ "$after_entryid" -gt 0 ]; then
-	after_entry=`echo "$2" |sed -e ''$after_entryid'!d'`
+if [ "$after_entryid" -ge 0 ]; then
+	after_entry=${BAENTRY_IDLIST[$after_entryid]%>[0-9]*}
 else
 	after_entry=
 fi
@@ -213,7 +222,7 @@ set_monthnavlinks(){
 monthnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
 month_id=
 [ ! -z "$monthnavlinks_var" ] &&
-	month_id=`lookup_monthid "$monthnavlinks_var" "$MONTH_DB_RESULTS"`
+	month_id=`lookup_monthid "$monthnavlinks_var" "${MONTH_DB_RESULTS[*]}"`
 if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 	# assumes reverse chronological date order
 	prev_monthid=`expr $month_id + 1`
@@ -297,24 +306,26 @@ fi
 
 # tool to build list of related categories from list of entries
 find_categories(){
-UPDATE_CATLIST="$1"
+UPDATE_CATLIST=($1)
 category_list=()
 build_catlist(){
 [ ! -z "$cat_var" ] &&
-	category_list=( ${category_list[@]} "$cat_db" )
+	category_list=( ${category_list[@]} $cat_db )
 }
 # acquire all the categories
 query_db
-for relative_entry in $UPDATE_CATLIST; do
-	for cat_db in $db_categories; do
+for relative_entry in ${UPDATE_CATLIST[@]}; do
+	for cat_db in ${db_categories[@]}; do
 		cat_var=`grep "$relative_entry" "$NB_DATA_DIR/$cat_db"`
 		build_catlist
 	done
 done
-CAT_LIST="${category_list[@]}"
-[ -z "$CAT_LIST" ] &&
-	CAT_LIST=`cat_id "$cat_num"`
-CAT_LIST=`for cat_id in $CAT_LIST; do echo "$cat_id"; done |sort -u`
+CAT_LIST=( ${category_list[@]} )
+[ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
+	CAT_LIST=( `cat_id "$cat_num"` )
+[ -z "$cat_num" ] && [ "$USR_QUERY" = all ] &&
+	CAT_LIST=${db_categories[@]}
+CAT_LIST=(`for cat_id in ${CAT_LIST[@]}; do echo "$cat_id"; done |sort -u`)
 }
 
 # generate timestamp as metadata variables
@@ -621,8 +632,8 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
 		Old_EntryFile="$EntryDate_File"
 		# update relative categories
-		if [ ! -z "$cat_list" ]; then
-			for cat_db in $cat_list; do
+		if [ ! -z "${cat_list[*]}" ]; then
+			for cat_db in ${cat_list[@]}; do
 				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
 				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
 					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
@@ -632,7 +643,7 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 				fi
 			done
 		else
-			for cat_db in $db_categories; do
+			for cat_db in ${db_categories[@]}; do
 				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
 				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
 					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \

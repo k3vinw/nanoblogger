@@ -67,9 +67,9 @@ nb_msg "$MKPAGE_OUTFILE"
 build_atomfeed(){
 	db_catquery="$1"
 	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
-	ARCHIVE_LIST="$DB_RESULTS"
+	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".atomfeed
-	for entry in $ARCHIVE_LIST; do
+	for entry in ${ARCHIVE_LIST[@]}; do
 	        load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
 		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
@@ -81,7 +81,7 @@ build_atomfeed(){
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		Atom_EntryCategory=; cat_title=
 		> "$SCRATCH_FILE".atomfeed-category
-		for cat_db in $db_categories; do
+		for cat_db in ${db_categories[@]}; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
 				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
@@ -122,9 +122,9 @@ build_atomfeed(){
 # generate category feed entries
 build_atom_catfeeds(){
 	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ]; then
-		db_categories="$CAT_LIST"
-		if [ ! -z "$db_categories" ]; then
-			for cat_db in $db_categories; do
+		db_categories=(${CAT_LIST[@]})
+		if [ ! -z "${db_categories[*]}" ]; then
+			for cat_db in ${db_categories[@]}; do
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					set_catlink "$cat_db"
 					NB_AtomTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`

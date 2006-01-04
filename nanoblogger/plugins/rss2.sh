@@ -64,9 +64,9 @@ make_rssfeed(){
 build_rssfeed(){
 	db_catquery="$1"
 	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
-	ARCHIVE_LIST="$DB_RESULTS"
+	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".rss2feed
-	for entry in $ARCHIVE_LIST; do
+	for entry in ${ARCHIVE_LIST[@]}; do
 		NB_RSS2EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 	        load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
@@ -75,7 +75,7 @@ build_rssfeed(){
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
-		for cat_db in $db_categories; do
+		for cat_db in ${db_categories[@]}; do
 			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
 				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
@@ -107,9 +107,9 @@ build_rssfeed(){
 # generate category feed entries
 build_rss_catfeeds(){
 	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$RSS2_CATFEEDS" = 1 ]; then
-		db_categories="$CAT_LIST"
-		if [ ! -z "$db_categories" ]; then
-			for cat_db in $db_categories; do
+		db_categories=(${CAT_LIST[@]})
+		if [ ! -z "${db_categories[*]}" ]; then
+			for cat_db in ${db_categories[@]}; do
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					set_catlink "$cat_db"
 					NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`

@@ -332,6 +332,14 @@ img.right {
 	margin: 0 0 10px 10px;
 	}
 
+.center {
+	text-align: center;
+	}
+
+.block {
+	display: block;
+	}
+
 /* class to hide elements */
 .hide {
 	display: none;

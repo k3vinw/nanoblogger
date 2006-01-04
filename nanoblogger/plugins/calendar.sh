@@ -15,30 +15,30 @@ nb_msg "$plugins_action calendar ..."
 [ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS`
 [ ! -z "$CALENDAR" ] || CALENDAR=`$CAL_CMD $CAL_ARGS`
 CAL_HEAD=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
-WEEK_DAYS=`echo "$CALENDAR" |sed -n 2p`
+WEEK_DAYS=(`echo "$CALENDAR" |sed -n 2p`)
 DAYS=`echo "$CALENDAR" |sed 1,2d`
-NUM_DAY_LINES=`echo "$DAYS" |grep -n "." |cut -c1`
+NUM_DAY_LINES=(`echo "$DAYS" |grep -n "." |cut -d":" -f 1`)
 
 curr_month=`date +%Y.%m`
-query_db all
+query_db "$curr_month"
 set_baseurl "./"
-MONTH_LIST=`echo "$DB_RESULTS" |sort $SORT_ARGS |grep ''$curr_month''`
+MONTH_LIST=(${DB_RESULTS[*]})
 
 echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with links to days with entries">' > "$PLUGIN_OUTFILE"
 echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 echo '<tr>' >> "$PLUGIN_OUTFILE"
-for wd in $WEEK_DAYS ; do
+for wd in ${WEEK_DAYS[*]}; do
 	echo '<th style="text-align: center;"><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
 done
 echo '</tr>' >> "$PLUGIN_OUTFILE"
-for line in $NUM_DAY_LINES ; do
+for line in ${NUM_DAY_LINES[*]}; do
 	DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
 	echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td style="text-align: center;"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
-	for dn in $DN_LINES ; do
+	for dn in $DN_LINES; do
 		set_link=0
-		MONTH_LINE=`echo "$MONTH_LIST" |grep $dn`
-		for entry in $MONTH_LINE ; do
+		CALENTRY_LIST=(`for day in ${MONTH_LIST[*]}; do echo $day; done |grep $dn`)
+		for entry in ${CALENTRY_LIST[*]}; do
 			entry_year=`echo $entry |cut -c1-4`
 			entry_month=`echo $entry |cut -c6-7`
 			entry_day=`echo $entry |cut -c9-10 |sed -e '/^0/ s///g'`
