@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-01-04T09:26:15-05:00
+# Last modified: 2006-01-04T22:46:22-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC4"
@@ -328,7 +328,7 @@ CACHEUPDATE_LIST=($3)
 if [ "$cache_update" = build ]; then
 	[ -z "$cache_def" ] &&
 		cache_def=entry_metadata
-	for cache_item in ${CACHEUPDATE_LIST[*]}; do
+	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 	done
 	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
@@ -336,7 +336,7 @@ elif [ "$cache_update" = rebuild ]; then
 	> "$SCRATCH_FILE".$cache_def-cache_list
 	[ -z "$cache_def" ] &&
 		cache_def=entry_metadata
-	for cache_item in ${CACHEUPDATE_LIST[*]}; do
+	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
@@ -349,7 +349,7 @@ elif [ "$cache_update" = expired ]; then
 	cd "$BLOG_DIR/$CACHE_DIR"
 	for cache_item in *.$cache_def; do
 		cache_regex=`echo "$cache_item" |sed -e '/[\.]'$cache_def'[^. ]*$/ s///g'`
-		cache_match=`for db_item in ${DB_RESULTS[*]}; do echo $db_item; done |grep -c "$cache_regex"`
+		cache_match=`for db_item in ${DB_RESULTS[@]}; do echo $db_item; done |grep -c "$cache_regex"`
 		[ "$cache_match" != 1 ] &&
 			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
 	done
@@ -358,11 +358,11 @@ else
 	[ -z "$cache_def" ] &&
 		cache_def="*"
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
-	for cache_item in ${DB_RESULTS[*]}; do
+	for cache_item in ${DB_RESULTS[@]}; do
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
 fi
-CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[*]}; do echo $cache_item; done |sort -u`)
+CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[@]}; do echo $cache_item; done |sort -u`)
 }
 
 # loops through archives, and executes instructions by years or months
@@ -377,15 +377,15 @@ elif [ "$looparch_type" = months ]; then
 	looparchexec_months="$looparch_exec"
 fi
 ARCHIVE_MASTER=(${looparch_list[*]})
-ARCHIVE_YEARS=(`for db_item in ${ARCHIVE_MASTER[*]}; do echo $db_item |cut -c1-4; done |sort $SORT_ARGS`)
-for yearn in ${ARCHIVE_YEARS[*]}; do
+ARCHIVE_YEARS=(`for db_item in ${ARCHIVE_MASTER[@]}; do echo $db_item |cut -c1-4; done |sort $SORT_ARGS`)
+for yearn in ${ARCHIVE_YEARS[@]}; do
 	# execute instructions for each year
 	if [ "$looparch_type" = years ] && [ ! -z "$looparchexec_years" ]; then
 		$looparchexec_years
 	else
 		for monthn in 12 11 10 09 08 07 06 05 04 03 02 01; do
-			ARCHIVE_MONTHS=(`for db_item in ${ARCHIVE_MASTER[*]}; do echo $db_item; done |grep $yearn'[-]'$monthn'[-]' |sed 1q`)
-			for entry_month in ${ARCHIVE_MONTHS[*]}; do
+			ARCHIVE_MONTHS=(`for db_item in ${ARCHIVE_MASTER[@]}; do echo $db_item; done |grep $yearn'[-]'$monthn'[-]' |sed 1q`)
+			for entry_month in ${ARCHIVE_MONTHS[@]}; do
 				year="$yearn"
 				month="$yearn-$monthn"
 				query_db "$month"
@@ -414,7 +414,7 @@ if [ "$USR_QUERY" = all ]; then
 		build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 else
 	# update relateive month archives
-	MOD_MONTHS=`for moditem in ${UPDATE_LIST[*]}; do echo $moditem; done |sort $SORT_ARGS`
+	MOD_MONTHS=`for moditem in ${UPDATE_LIST[@]}; do echo $moditem; done |sort $SORT_ARGS`
 	loop_archive "$MOD_MONTHS" years build_yeararchive
 	loop_archive "$MOD_MONTHS" months build_montharchive
 	# update relative entry archives
@@ -550,7 +550,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	if [ ! -z "$USR_TITLE" ] && [ ! -z "${DB_RESULTS[*]}" ]; then
 		nb_msg "$editweblog_title '$USR_TITLE' ..."
 		echo "$USR_TITLE" > "$NB_DATA_DIR/$db_catquery"
-		for db_item in ${DB_RESULTS[*]}; do
+		for db_item in ${DB_RESULTS[@]}; do
 			echo $db_item >> "$NB_DATA_DIR/$db_catquery"
 		done
 		UPDATE_LIST=(${DB_RESULTS[*]})
@@ -619,7 +619,7 @@ if [ ! -z "${UPDATE_LIST[*]}" ]; then
 	CAT_MODLIST=(`sort -u "$SCRATCH_FILE.mod-catdbs"`)
 	# update all categories effected by entry modifications
 	[ ! -z "${CAT_MODLIST[*]}" ] &&
-		CAT_LIST=(`for modcatdb in ${CAT_LIST[*]} ${CAT_MODLIST[*]}; do echo $modcatdb; done |sort -u`)
+		CAT_LIST=(`for modcatdb in ${CAT_LIST[@]} ${CAT_MODLIST[*]}; do echo $modcatdb; done |sort -u`)
 	build_weblog
 else
 	die "$editweblog_noaction"
@@ -720,7 +720,7 @@ UPDATE_LIST=($(< "$SCRATCH_FILE"))
 CAT_XLIST=(`sort -u "$SCRATCH_FILE.x-catdbs"`)
 # update all categories with removed entries
 [ ! -z "$CAT_XLIST" ] &&
-	CAT_LIST=(`for xcatdb in ${CAT_LIST[*]} ${CAT_XLIST[*]}; do echo $xcatdb; done |sort -u`)
+	CAT_LIST=(`for xcatdb in ${CAT_LIST[@]} ${CAT_XLIST[@]}; do echo $xcatdb; done |sort -u`)
 # hide prev and next entries from category updates
 [ ! -z "$prev_entry" ] &&
 	echo "$prev_entry" >> "$SCRATCH_FILE"
@@ -788,7 +788,7 @@ total_items=${#EXPLODE_RESULTS[*]}
 while [ "$id" -lt "$total_items" ]; do
 	list_entryid=`expr 1 + $list_entryid`
 	entry=${EXPLODE_RESULTS[$id]//>[0-9]*}
-	entry_cat=${EXPLODE_RESULTS[$id]//$entry?}
+	entry_cat=${EXPLODE_RESULTS[$id]//*\>}
 	[ "$entry_cat" = "$entry" ] && entry_cat=
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
 	[ ! -z "$entry_cat" ] && entry_catids="- [$entry_cat]"

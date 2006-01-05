@@ -39,7 +39,7 @@ update_db(){
 	for entry in ${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
 		# index related categories by id
 		for cat_db in ${db_categories[*]}; do
-			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
+			cat_var=`grep "$entry" "$cat_db"`
 			if [ ! -z "$cat_var" ]; then
 				cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
 				[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
@@ -52,15 +52,12 @@ update_db(){
 			echo "$entry$cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
 	done |sort $SORT_ARGS > "$SCRATCH_FILE.master.$NB_DBTYPE"
-	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
+	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "master.$NB_DBTYPE"
 }
 # list all entries
 list_db(){
-# gracefully recover master db
-[ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ] &&
-	update_db
-# force update of master db
-if [ "$db_query" = update ]; then
+# force update or gracefully recover master db reference file
+if [ ! -f "master.$NB_DBTYPE" ] || [ "$db_query" = update ]; then
 	db_query=; update_db
 fi
 # list entries from master.db
@@ -69,7 +66,7 @@ if [ -z "$db_catquery" ]; then
 else
 	# or list entries from cat_n.db
 	for cat_db in ${db_categories[*]}; do
-		[ -f "$NB_DATA_DIR/$cat_db" ] &&
+		[ -f "$cat_db" ] &&
 			grep "[\.]$NB_DATATYPE" "$cat_db"
 	done
 fi
@@ -88,9 +85,9 @@ fi
 if [ "$db_query" = all ]; then
 	db_query=; query_data
 elif [ "$db_query" = master ]; then
-	# create authoritive results for reference
+	# create master reference db
 	db_query=; update_db
-	MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"))
+	MASTER_DB_RESULTS=($(< "master.$NB_DBTYPE"))
 elif [ "$db_query" = years ]; then
 	db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`)
 elif [ "$db_query" = months ]; then
@@ -100,7 +97,8 @@ elif [ "$db_query" = max ]; then
 else
 	query_data
 fi
-db_query=; db_filter=; cd "$CURR_PATH"
+cd "$CURR_PATH"
+db_query=; db_filter=
 }
 
 # search, filter, and create raw db references

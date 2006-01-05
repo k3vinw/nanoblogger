@@ -184,12 +184,12 @@ entryid_var=`lookup_entryid "$1" "${BAENTRY_IDLIST[*]}"`
 before_entryid=`expr $entryid_var + 1`
 after_entryid=`expr $entryid_var - 1`
 if [ "$before_entryid" -ge 0 ]; then
-	before_entry=${BAENTRY_IDLIST[$before_entryid]%>[0-9]*}
+	before_entry=${BAENTRY_IDLIST[$before_entryid]%%\>[0-9]*}
 else
 	before_entry=
 fi
 if [ "$after_entryid" -ge 0 ]; then
-	after_entry=${BAENTRY_IDLIST[$after_entryid]%>[0-9]*}
+	after_entry=${BAENTRY_IDLIST[$after_entryid]%%\>[0-9]*}
 else
 	after_entry=
 fi
