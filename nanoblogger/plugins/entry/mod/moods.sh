@@ -15,18 +15,19 @@ if [ -d "$MOODS_DIR" ]; then
 	load_moods(){
 	if [ -f "$MOODS_DIR/moods.conf" ]; then
 		if [ -z "$mood_lines" ]; then
-			mood_lines=`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /[\#\]/d' |grep -n "" |cut -c1-2 |sed -e '/[\:\]/ s///g'`
+			mood_lines=(`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /[\#\]/d' |grep -n "" |cut -c1-2 |sed -e '/[\:\]/ s///g'`)
 		fi
 		if [ -z "$mood_list" ]; then
-			mood_list=`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /^[\#\]/d'`
+			mood_list=(`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /^[\#\]/d'`)
 		fi
-		for mood in $mood_lines; do
-			mood_line=`echo "$mood_list" |sed -n "$mood"p`
-			if [ ! -z "$mood_line" ] ; then
-				mood_var=`echo "$mood_line" |cut -d" " -f1 | sed -e '/[\*\]/ s//[*]/'`
-				mood_img=`echo "$mood_line" |cut -d" " -f3`
-				create_moods
-			fi
+		moodoffset=0; moodlimit=3
+		for mood in ${mood_lines[@]}; do
+			[ -z "${mood_list[*]:$moodoffset:$moodlimit}" ] &&
+				break
+			mood_var=`echo "${mood_list[@]:$moodoffset:$moodlimit}" |cut -d" " -f1 | sed -e '/[\*\]/ s//[*]/'`
+			mood_img=`echo "${mood_list[@]:$moodoffset:$moodlimit}" |cut -d" " -f3`
+			create_moods
+			moodoffset=`expr $moodoffset + $moodlimit`
 		done
 	fi
 	}
