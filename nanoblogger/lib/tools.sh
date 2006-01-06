@@ -450,13 +450,13 @@ if [ -f "$ENTRY_FILE" ]; then
 		NB_EntryID=`set_entryid $entry`
 	else
 		load_metadata NOBODY "$ENTRY_FILE"
-		load_plugins entry
 		NB_EntryID=`set_entryid $entry`
 		# use cache when entry data unchanged
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 			read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
 			NB_EntryBody="$METADATA"
+			load_plugins entry
 			load_plugins entry/mod
 			[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 			load_plugins entry/format "$NB_EntryFormat"
@@ -466,6 +466,7 @@ if [ -f "$ENTRY_FILE" ]; then
 		else
 			#nb_msg "LOADING CACHE - $entry.$ENTRY_CACHETYPE"
 			load_metadata ALL "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
+			load_plugins entry
 		fi
 	fi
 fi

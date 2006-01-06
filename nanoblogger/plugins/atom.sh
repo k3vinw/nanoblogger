@@ -1,5 +1,9 @@
 # NanoBlogger Atom Feed Plugin
 
+# use entry excerpts from entry excerpts plugin
+# (excerpts plugin must be enabled to work)
+ENTRY_EXCERPTS=0
+
 # limit number of items to include in feed
 : ${LIMIT_ITEMS:=10}
 # build atom feeds for categories (0/1 = off/on)
@@ -81,21 +85,24 @@ build_atomfeed(){
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		Atom_EntryCategory=; cat_title=
 		> "$SCRATCH_FILE".atomfeed-category
-		for cat_db in ${db_categories[@]}; do
-			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
-			if [ ! -z "$cat_var" ]; then
-				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
-				cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
-				if [ ! -z "$cat_title" ]; then
-					cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
-						<category term="$cat_title" />
-					EOF
-				fi
+		atom_catids=(`sed -e '/'$entry'[\>]/!d; /[\>\,]/ s// /g' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
+		for atom_catnum in ${atom_catids[@]}; do
+			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$atom_catnum.$NB_DBTYPE"`
+			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+			if [ ! -z "$cat_title" ]; then
+				cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
+					<category term="$cat_title" />
+				EOF
 			fi
 		done
 		Atom_EntryCategory=$(< "$SCRATCH_FILE".atomfeed-category)
-		#Atom_EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
-		Atom_EntryExcerpt="$NB_EntryBody"
+		if [ "$ENTRY_EXCERPTS" = 1 ]; then
+			#Atom_EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
+			Atom_EntryExcerpt="$NB_EntryExcerpt"
+		else
+			#Atom_EntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
+			Atom_EntryExcerpt="$NB_EntryBody"
+		fi
 		cat >> "$SCRATCH_FILE".atomfeed <<-EOF
 			<entry>
 				<title type="html">$Atom_EntryTitle</title>

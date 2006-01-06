@@ -1,5 +1,9 @@
 # NanoBlogger RSS 2.0 Feed Plugin
 
+# use entry excerpts from entry excerpts plugin
+# (excerpts plugin must be enabled to work)
+ENTRY_EXCERPTS=0
+
 # limit number of items to include in feed
 : ${LIMIT_ITEMS:=10}
 # build rss2 feeds for categories (0/1 = off/on)
@@ -75,21 +79,25 @@ build_rssfeed(){
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
-		for cat_db in ${db_categories[@]}; do
-			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
-			if [ ! -z "$cat_var" ]; then
-				cat_title=`sed 1q "$NB_DATA_DIR/$cat_db"`
-				[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
-				oldcat_title="$cat_title,"
-			fi
+		rss2_catids=(`sed -e '/'$entry'[\>]/!d; /[\>\,]/ s// /g' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
+		for rss2_catnum in ${rss2_catids[@]}; do
+			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$rss2_catnum.$NB_DBTYPE"`
+			[ "$cat_title" != "$oldcat_title" ] && cat_title="$oldcat_title $cat_title"
+			oldcat_title="$cat_title,"
 		done
 		if [ ! -z "$cat_title" ]; then
 			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
 			NB_RSS2EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
-		#NB_RSS2EntryExcerpt=`echo "$NB_EntryBody" |sed -n '1,/^$/p' |esc_chars`
+		if [ "$ENTRY_EXCERPTS" = 1 ]; then
+			#NB_RSS2EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
+			NB_RSS2EntryExcerpt="$NB_EntryExcerpt"
+		else
+			#NB_RSS2EntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
+			NB_RSS2EntryExcerpt="$NB_EntryBody"
+		fi
+		# for escaped text/html only
 		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
-		NB_RSS2EntryExcerpt="$NB_EntryBody"
 		cat >> "$SCRATCH_FILE".rss2feed <<-EOF
 			<item>
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
