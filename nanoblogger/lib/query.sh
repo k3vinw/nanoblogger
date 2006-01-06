@@ -15,15 +15,14 @@ db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_filter:=query}
 # adjust offset by 1 for bash arrays (1 = 0)
 ((db_offset--))
-cd "$NB_DATA_DIR"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 	db_catquery=
-	db_categories=(`for cat_db in cat_*.$NB_DBTYPE; do echo "$cat_db"; done`)
+	db_categories=(`for cat_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo "${cat_db//*\/}"; done`)
 else
 	db_categories=($db_catquery)
 fi
-[ "${db_categories[*]}" = "cat_*.$NB_DBTYPE" ] && db_categories=
+[ "${db_categories[*]}" = "$NB_DATA_DIR/cat_*.$NB_DBTYPE" ] && db_categories=
 # filter_ filters
 filter_query(){ grep "$db_query." |cut -d">" -f 1 |sort $SORT_ARGS; } # allow for empty $db_query
 filter_raw(){ grep "$db_query." |sort $SORT_ARGS; }
@@ -36,10 +35,11 @@ update_db(){
 	: ${DB_MM:=[0-9][0-9]}
 	: ${DB_DD:=[0-9][0-9]}
 	DB_DATE="${DB_YYYY}*${DB_MM}"
-	for entry in ${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
+	for db_item in "$NB_DATA_DIR"/${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
+		entry=${db_item//*\/}
 		# index related categories by id
-		for cat_db in ${db_categories[*]}; do
-			cat_var=`grep "$entry" "$cat_db"`
+		for cat_db in ${db_categories[@]}; do
+			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
 			if [ ! -z "$cat_var" ]; then
 				cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
 				[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
@@ -48,26 +48,26 @@ update_db(){
 		done
 		cat_idnum=`echo $cat_idnum |sed -e '/\,[ ]$/ s///g'`
 		[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
-		[ -f "$entry" ] &&
+		[ -f "$NB_DATA_DIR/$entry" ] &&
 			echo "$entry$cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
 	done |sort $SORT_ARGS > "$SCRATCH_FILE.master.$NB_DBTYPE"
-	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "master.$NB_DBTYPE"
+	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
 # list all entries
 list_db(){
 # force update or gracefully recover master db reference file
-if [ ! -f "master.$NB_DBTYPE" ] || [ "$db_query" = update ]; then
+if [ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ] || [ "$db_query" = update ]; then
 	db_query=; update_db
 fi
 # list entries from master.db
 if [ -z "$db_catquery" ]; then
-	grep "[\.]$NB_DATATYPE" "master.$NB_DBTYPE"
+	grep "[\.]$NB_DATATYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 else
 	# or list entries from cat_n.db
 	for cat_db in ${db_categories[*]}; do
-		[ -f "$cat_db" ] &&
-			grep "[\.]$NB_DATATYPE" "$cat_db"
+		[ -f "$NB_DATA_DIR/$cat_db" ] &&
+			grep "[\.]$NB_DATATYPE" "$NB_DATA_DIR/$cat_db"
 	done
 fi
 }
@@ -87,7 +87,7 @@ if [ "$db_query" = all ]; then
 elif [ "$db_query" = master ]; then
 	# create master reference db
 	db_query=; update_db
-	MASTER_DB_RESULTS=($(< "master.$NB_DBTYPE"))
+	MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"))
 elif [ "$db_query" = years ]; then
 	db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`)
 elif [ "$db_query" = months ]; then
@@ -97,7 +97,6 @@ elif [ "$db_query" = max ]; then
 else
 	query_data
 fi
-cd "$CURR_PATH"
 db_query=; db_filter=
 }
 

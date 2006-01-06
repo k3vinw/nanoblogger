@@ -199,7 +199,7 @@ fi
 set_catlink(){
 catlink_var="$1"
 # default
-category_dir=`echo $catlink_var |cut -d"." -f 1`
+category_dir=${catlink_var%%\.*}
 category_file="$category_dir/$NB_INDEXFILE"
 category_link="$category_dir/$NB_INDEX"
 
@@ -258,7 +258,7 @@ link_type="$2"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 	# default
 	entrylink_mod=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
-	entry_dir=`echo "$entrylink_mod" |cut -d "." -f 1 |sed -e '/\T/ s//\/T/g'`
+	entry_dir=`echo "${entrylink_mod%%\.*}" |sed -e '/\T/ s//\/T/g'`
 	permalink_file="$entry_dir/$NB_INDEXFILE"
 	NB_EntryPermalink="$entry_dir/$NB_INDEX"
 

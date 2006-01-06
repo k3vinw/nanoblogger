@@ -24,9 +24,6 @@ NB_TEMP_DIR=/tmp
 # prompt to use when asking something.
 NB_PROMPT=": "
 
-# set current path
-CURR_PATH="$PWD"
-
 # default verbosity, 0 = silent
 VERBOSE=1
 
@@ -346,14 +343,13 @@ elif [ "$cache_update" = expired ]; then
 		cache_def="*"
 	[ -z "$CACHEUPDATE_LIST" ] &&
 		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES"
-	cd "$BLOG_DIR/$CACHE_DIR"
-	for cache_item in *.$cache_def; do
+	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
+		cache_item=${cache_item//*\/}
 		cache_regex=`echo "$cache_item" |sed -e '/[\.]'$cache_def'[^. ]*$/ s///g'`
 		cache_match=`for db_item in ${DB_RESULTS[@]}; do echo $db_item; done |grep -c "$cache_regex"`
 		[ "$cache_match" != 1 ] &&
 			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
 	done
-	cd "$CURR_PATH"
 else
 	[ -z "$cache_def" ] &&
 		cache_def="*"
@@ -1017,6 +1013,7 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
+# run add_weblog after the flag bit gets set
 [ "$ADD_WEBLOG" = 1 ] &&
 	add_weblog
 
