@@ -1,5 +1,5 @@
 # Entry Modify plugin that converts mood variables
-# to emoticons, controlled by moods.conf file
+# to emoticons - controlled by moods.conf file
 
 : ${MOODS_DIR:=$BLOG_DIR/moods}
 MOODS_URL="${BASE_URL}moods"

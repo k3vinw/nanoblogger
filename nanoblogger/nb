@@ -344,7 +344,7 @@ elif [ "$cache_update" = expired ]; then
 	[ -z "$CACHEUPDATE_LIST" ] &&
 		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES"
 	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
-		cache_item=${cache_item//*\/}
+		cache_item=${cache_item##*\/}
 		cache_regex=`echo "$cache_item" |sed -e '/[\.]'$cache_def'[^. ]*$/ s///g'`
 		cache_match=`for db_item in ${DB_RESULTS[@]}; do echo $db_item; done |grep -c "$cache_regex"`
 		[ "$cache_match" != 1 ] &&
@@ -783,8 +783,8 @@ id=0
 total_items=${#EXPLODE_RESULTS[*]}
 while [ "$id" -lt "$total_items" ]; do
 	list_entryid=`expr 1 + $list_entryid`
-	entry=${EXPLODE_RESULTS[$id]//>[0-9]*}
-	entry_cat=${EXPLODE_RESULTS[$id]//*\>}
+	entry=${EXPLODE_RESULTS[$id]%%>[0-9]*}
+	entry_cat=${EXPLODE_RESULTS[$id]##*\>}
 	[ "$entry_cat" = "$entry" ] && entry_cat=
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
 	[ ! -z "$entry_cat" ] && entry_catids="- [$entry_cat]"
