@@ -76,6 +76,13 @@ esac
 nb_edit(){
 # TODO: test with external editor (outside of script's process)
 EDIT_FILE="$1"
+# set directory being written to
+EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
+# assume current directory when no directory is found
+[ ! -d "$EDIT_DIR" ] && EDIT_DIR="./"
+# test directory for write permissions
+[ ! -w "$EDIT_DIR" ] && [ -d "$EDIT_DIR" ] &&
+	die "'$EDIT_DIR' - $nowritedir"
 $EDITOR "$EDIT_FILE"
 if [ ! -f "$EDIT_FILE" ]; then
 	nb_msg "'$EDIT_FILE' - $nbedit_nofile"

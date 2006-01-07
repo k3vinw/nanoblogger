@@ -22,7 +22,7 @@ if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 else
 	db_categories=($db_catquery)
 fi
-[ "${db_categories[*]}" = "$NB_DATA_DIR/cat_*.$NB_DBTYPE" ] && db_categories=
+[ "${db_categories[*]}" = "cat_*.$NB_DBTYPE" ] && db_categories=()
 # filter_ filters
 filter_query(){ grep "$db_query." |cut -d">" -f 1 |sort $SORT_ARGS; } # allow for empty $db_query
 filter_raw(){ grep "$db_query." |sort $SORT_ARGS; }

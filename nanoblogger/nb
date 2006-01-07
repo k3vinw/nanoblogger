@@ -17,7 +17,7 @@ NB_LANG_DIR="${NB_BASE_DIR}/lang"
 # nanoblogger's module directory.
 NB_LIB_DIR="${NB_BASE_DIR}/lib"
 # the world writable temp directory
-NB_TEMP_DIR=/tmp
+NB_TEMP_DIR="/tmp"
 
 ### end hardcoded paths ###
 
@@ -52,6 +52,11 @@ load_config
 [ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "'$CACHE_DIR' - $checkconf_nocache"
 [ ! -d "$BLOG_DIR/$PARTS_DIR" ] && die "'$PARTS_DIR' - $checkconf_nocache"
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "'$NB_TEMPLATE_DIR' - $checkconf_notemplates"
+# die without write permissions
+[ ! -w "$NB_TEMP_DIR" ] &&
+	die "'$NB_TEMP_DIR' - $nowritedir"
+[ ! -w "$BLOG_DIR" ] &&
+	die "'$BLOG_DIR' - $nowritedir"
 }
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR

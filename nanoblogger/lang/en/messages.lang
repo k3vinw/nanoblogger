@@ -133,8 +133,9 @@ publish_action="publishing weblog ..."
 publish_asknow="would you like to publish the weblog now?"
 
 # misc.
-filterdate_failed="date filtering failed, using timestamp instead."
+nowritedir="no write permissions for directory! goodbye."
 samefilename="filename already exists!"
+filterdate_failed="date filtering failed, using timestamp instead."
 
 # misc. template messages
 permanentlink_title="Permanent Link"
