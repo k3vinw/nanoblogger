@@ -155,7 +155,7 @@ if [ "$ABSOLUTE_LINKS" = 1 ]; then
 else
 	BASE_URL="$node_var"
 	if [ "$base_dir" != . ]; then
-		blogdir_sedvar=`echo "$BLOG_DIR" |sed -e 's/\//\\\\\//g; /$/ s//\\\\\//'`
+		blogdir_sedvar=`echo "${BLOG_DIR//\//\\\\/}\\\\/"`
 		base_dir="$base_dir/./"
 		BASE_URL=`echo "$base_dir" |sed -e 's/'$blogdir_sedvar'//g; /^[\.]\// s///; s/[^ \/]*./..\//g; s/^[\.][\.]\///g'`
 	fi

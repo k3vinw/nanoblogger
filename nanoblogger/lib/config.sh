@@ -36,7 +36,7 @@ export BLOG_DIR
 # load weblog config file
 [ -f "$BLOG_CONF" ] && . "$BLOG_CONF"
 # set data directory
-[ -d "$BLOG_DIR/data" ] && NB_DATA_DIR="$BLOG_DIR/data"
+[ -d "$BLOG_DIR" ] && NB_DATA_DIR="$BLOG_DIR/data"
 # allow user specified weblog data directories
 [ ! -z "$USR_DATADIR" ] && NB_DATA_DIR="$USR_DATADIR"
 # set template directory

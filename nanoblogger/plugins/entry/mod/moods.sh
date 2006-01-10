@@ -3,22 +3,23 @@
 
 : ${MOODS_DIR:=$BLOG_DIR/moods}
 MOODS_URL="${BASE_URL}moods"
+MOODS_CONF="${MOODS_DIR}/moods.conf"
 
 if [ -d "$MOODS_DIR" ]; then
 	create_moods(){
-	mood_url=`echo "$MOODS_URL/$mood_img" |sed -e '/[\/\]/ s//\\\\\//g'`
+	mood_url=`echo "${MOODS_URL//\//\\\\/}\\\\/${mood_img//\//\\\\/}"`
 	sed_sub=' <img src="'$mood_url'" alt="'$mood_var'" \/>'
 	sed_script='/[ ]'$mood_var'[ ]/ s// '$sed_sub' /g; /[ ]'$mood_var'$/ s// '$sed_sub'/g; /'$mood_var'[ ]/ s//'$sed_sub' /g'
 	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$sed_script"`
 	}
 
 	load_moods(){
-	if [ -f "$MOODS_DIR/moods.conf" ]; then
+	if [ -f "$MOODS_CONF" ]; then
 		if [ -z "$mood_lines" ]; then
-			mood_lines=(`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /[\#\]/d' |grep -n "" |cut -c1-2 |sed -e '/[\:\]/ s///g'`)
+			mood_lines=(`cat "$MOODS_CONF" |sed -e '/^$/d; /[\#\]/d; /[^ ].*/ s//dummy/g'`)
 		fi
 		if [ -z "$mood_list" ]; then
-			mood_list=(`cat "$MOODS_DIR/moods.conf" |sed -e '/^$/d; /^[\#\]/d'`)
+			mood_list=(`cat "$MOODS_CONF" |sed -e '/^$/d; /^[\#\]/d'`)
 		fi
 		moodoffset=0; moodlimit=3
 		for mood in ${mood_lines[@]}; do
