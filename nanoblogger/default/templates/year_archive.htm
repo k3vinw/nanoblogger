@@ -24,15 +24,15 @@
 		<div id="wrap">
 			<a id="top"></a>
 			<h2>$NB_MetaTitle</h2>
-			<div class="archives">
-				<div id="menu">
-					<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
-					<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
-					<br />
+			<div id="menu">
+				<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+				<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+				<br />
 $([ ! -z "$prev_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveYearLink'">'$NB_PrevPage'</a>')
-					$yearn
+				$yearn
 $([ ! -z "$next_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveYearLink'">'$NB_NextPage'</a>')
-				</div>
+			</div>
+			<div class="archives">
 				$NB_MetaBody
 			</div>
 		</div>

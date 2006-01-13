@@ -28,17 +28,17 @@ $NB_RSSAltLink
 	<div id="widecolumn">
 		<div id="wrap">
 			<a id="top"></a>
-			<div class="archives">
-				<div id="menu">
-					<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
-					<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
-					<a href="${BASE_URL}$ARCHIVES_DIR/$year/$NB_INDEX">$year</a> &#62;
-					<a href="${BASE_URL}$ARCHIVES_DIR/$year/$month/$NB_INDEX">$month</a> &#62;
-					<br />
+			<div id="menu">
+				<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
+				<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+				<a href="${BASE_URL}$ARCHIVES_DIR/$year/$NB_INDEX">$year</a> &#62;
+				<a href="${BASE_URL}$ARCHIVES_DIR/$year/$month/$NB_INDEX">$month</a> &#62;
+				<br />
 $([ ! -z "$prev_entry" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevEntryPermalink'">'$NB_PrevPage'</a>')
-					$day $entry_time
+				$day $entry_time
 $([ ! -z "$next_entry" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextEntryPermalink'">'$NB_NextPage'</a>')
-				</div>
+			</div>
+			<div class="archives">
 				$NB_MetaBody
 			</div>
 		</div>
