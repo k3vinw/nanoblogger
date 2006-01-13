@@ -47,8 +47,8 @@ h4, h5, h6 {
 
 blockquote {
 	background-color: #EEE;
-	padding:2mm;
-	border-left:5px solid #BBB;
+	padding: 2mm;
+	border-left: 5px solid #BBB;
 	}
 
 img {
@@ -58,7 +58,7 @@ img {
 pre {
 	background: #EEE;
 	padding: 2mm;
-	border:1px solid #999;
+	border: 1px solid #999;
 	}
 
 #header {
@@ -118,10 +118,10 @@ pre {
 
 #links {
 	margin: 0;
-	padding-top:20px;
-	padding-right:21px;
-	padding-left:15px;
-	padding-bottom:20px;
+	padding-top: 20px;
+	padding-right: 21px;
+	padding-left: 15px;
+	padding-bottom: 20px;
 	border-left: 1px dotted #999;
 	border-bottom: 1px dotted #999;
 	width: 20%;
@@ -147,17 +147,17 @@ pre {
 .intro a {
 	font-weight: normal;
 	text-decoration: underline;
-	color:#333;
+	color: #333;
 	}
 
 .blogbody {
-	width:84%;
 	padding: 0px;
 	}
 
 .blog, .archives, .pages {
 	color: #333;
 	padding: 10px;
+	width: 84%;
 	font-weight: normal;
 	line-height: 1.2em;
 	}
@@ -192,7 +192,7 @@ pre {
 
 .posted	{
 	color: #000000; 
-	margin-bottom:25px;
+	margin-bottom: 25px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
@@ -385,11 +385,11 @@ img.right {
 
 #banner-commentspop {
 	color: #FFF;
-	padding:5px 5px 15px 15px;
-	font-size:large;
-	font-weight:bold;
-	border-left:1px solid #FFF;
-	border-right:1px solid #FFF;
-	border-top:1px solid #FFF;
+	padding: 5px 5px 15px 15px;
+	font-size: large;
+	font-weight: bold;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #FFF;
+	border-top: 1px solid #FFF;
 	}
 

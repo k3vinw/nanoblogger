@@ -173,11 +173,11 @@ html>body #container {
 .intro a {
 	font-weight: normal;
 	text-decoration: underline;
-	color:#333;
+	color: #333;
 	}
 
 .blogbody {
-	padding: 15px;
+	padding: 0px;
 	}
 
 .blog, .archives, .pages {

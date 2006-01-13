@@ -46,9 +46,9 @@ h4, h5, h6 {
 	}
 
 blockquote {
-	background-color: #EEE;
-	padding:2mm;
-	border-left:5px solid #BBB;
+	background: #EEE;
+	padding: 2mm;
+	border-left: 5px solid #BBB;
 	}
 
 img {
@@ -58,11 +58,13 @@ img {
 pre {
 	background: #EEE;
 	padding: 2mm;
-	border:1px solid #999;
+	border: 1px solid #999;
 	}
 
 #header {
 	font-family: palatino,  georgia, verdana, arial, serif;
+	background: #FFF;
+	height: 58px;
 	padding: 15px;
 	text-align: left;
 	font-size: large;
@@ -98,15 +100,14 @@ pre {
 
 #container, .container {
 	background: #FFF;
-	margin: 0 auto;
 	padding: 0px;
+	margin: 0;
 	}
 
 #content, .content {
-	padding: 10px;
-	float: right;
-	width: 72%;
 	background: #FFF;
+	clear: right;
+	padding: 0px 50px 0px 250px;
 	/* border: 1px solid red; */
 	}
 
@@ -116,22 +117,19 @@ pre {
 	}
 
 #links {
-	margin: 0;
-	padding-top:20px;
-	padding-right:15px;
-	padding-left:21px;
-	padding-bottom:20px;
+	margin: 90px 720px 0 0;
+	top: 0px; left: 0px;
+	position: absolute;
+	padding: 15px;
+	width: 200px;
 	border-right: 1px dotted #999;
-	border-bottom: 1px dotted #999;
-	width: 20%;
-	float: left;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	}
 
 #wrap {
-	margin-left: 0px;
 	margin-top: 0px;
+	margin-left: 0px;
 	}
 
 .intro {
@@ -146,11 +144,10 @@ pre {
 .intro a {
 	font-weight: normal;
 	text-decoration: underline;
-	color:#333;
+	color: #333;
 	}
 
 .blogbody {
-	width:84%;
 	padding: 0px;
 	}
 
@@ -158,7 +155,7 @@ pre {
 	color: #333;
 	padding: 10px;
 	font-weight: normal;
-	line-height: 1.2em;
+	line-height: 1.7em;
 	}
 
 .blogbody a,
@@ -193,7 +190,7 @@ pre {
 
 .posted	{
 	color: #000000; 
-	margin-bottom:25px;
+	margin-bottom: 25px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
@@ -202,7 +199,7 @@ pre {
 	color: #666;
 	padding: 2px;
 	text-align: left;
-	font-family: verdana, arial, serif;
+	font-family: palatino,  georgia, verdana, arial, serif;
 	font-weight: normal;
 	}
 
@@ -270,7 +267,8 @@ pre {
 	}
 
 #footer {
-	color: #FFF;
+	background: #FFF;
+	color: #666;
         text-align: center;
 	margin: 0 auto;
 	padding: 10px;
@@ -281,7 +279,7 @@ pre {
 
 /* --- tools --- */
 
-.clear {clear: both;}
+.clear { clear: both; }
 .right { float: right; margin: 0 0 10px 10px; }
 .left { float: left; margin: 0 10px 10px 0; }
 
@@ -387,11 +385,11 @@ img.right {
 
 #banner-commentspop {
 	color: #FFF;
-	padding:5px 5px 15px 15px;
-	font-size:large;
-	font-weight:bold;
-	border-left:1px solid #FFF;
-	border-right:1px solid #FFF;
-	border-top:1px solid #FFF;
+	padding: 5px 5px 15px 15px;
+	font-size: large;
+	font-weight: bold;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #FFF;
+	border-top: 1px solid #FFF;
 	}
 
