@@ -1,2 +1,3 @@
-* fix IE layout issues (the gap between columns)
+* fix and test css hacks for ie 5, opera
+* fix css indentatations for ul, ol, pre, blockquote
 * improve language support

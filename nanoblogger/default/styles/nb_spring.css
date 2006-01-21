@@ -1,16 +1,26 @@
 /*
 NanoBlogger Spring
- 2 column layout
+ box model hack with 2 column layout
 */
 
+/* set background for IE browsers */
+html { background-color: #CCC; }
+
 body {
-	background: #FFF;
+	background-color: #CCC;
 	color: #000;
-	margin: 0;
+	height: 100%;
+	width: 840px;
+	margin: 0 auto;
 	padding: 0;
+	text-align: center;
 	font-family: verdana, arial, sans-serif;
 	font-size: x-small; /* for IE 5.5 */
-	font-size: small; /* for compliant browsers */
+	/* Tantek's box model hack to fix font keywords */
+	voice-family: "\"}\""; 
+	/* trick IE into thinking this rule is over */
+	voice-family: inherit;
+	f\ont-size: small; /* for compliant browsers */
 	}
 
 a 		{ color: #57933a; text-decoration: none; }
@@ -20,28 +30,33 @@ a:active	{ color: #7fd754; text-decoration: underline; }
 a:hover		{ color: #ee9d00; text-decoration: underline; }
 
 h1 {
-	margin: 0;
-	padding: 0;
+	margin-top: 25px;
+	margin-bottom: -0.25em;
+	padding-top: 10px;
 	font-size: large; /* for IE 5.5 */
-	font-size: x-large; /* for compliant browsers */
+	f\ont-size: x-large; /* for compliant browsers */
 	}
 
 h2 {
 	color: #666;
+	margin-bottom: 1.5em;
+	padding: 0;
 	text-align: center;
-	margin-bottom: 15px;
 	font-size: medium;
 	font-weight: bold;
 	}
 
 h3 {
-	color: #003366;
-	margin: 0;
+	margin-top: 1.5em;
+	margin-bottom: -0.75em;
 	padding: 0;
+	color: #003366;
 	font-size: small;
 	}
 
 h4, h5, h6 {
+	margin-top: 1.5em;
+	margin-bottom: -0.75em;
 	font-size: x-small;
 	}
 
@@ -51,25 +66,24 @@ blockquote {
 	border-left: 5px solid #BBB;
 	}
 
-img {
-	border: 0;
-	}
+img { border: 0; }
 
 pre {
-	background: #EEE;
+	background-color: #EEE;
 	padding: 2mm;
 	border: 1px solid #999;
 	}
 
 #header {
 	/* font-family: verdana, arial, sans-serif; */
-	background-color: #57933a;
+	background-color: #FFF;
 	padding: 15px;
+	margin: 0px;
 	text-align: left;
 	font-size: large;
 	font-weight: normal;
 	line-height: 1.2em;
-	border-top: 1px dotted #999;
+	border-top: 1px solid #999;
 	border-bottom: 1px dotted #999;
 	}
 
@@ -88,7 +102,7 @@ pre {
 	}
 
 .description {
-	color: #e7f1ff;
+	color: #57933a;
 	font-family: verdana, arial, serif;
 	font-size: small;
 	font-weight: bold;
@@ -98,36 +112,43 @@ pre {
 	}
 
 #container, .container {
-	background: #FFF;
+	width: 840px;
+	background-color: #FFF;
 	margin: 0 auto;
+	min-height: 100%;
 	padding: 0px;
+	/* recover from center-alignment IE hack */
+	text-align: left;
+	w\idth: 800px;
 	}
 
 #content, .content {
-	padding: 10px;
 	float: left;
-	width: 72%;
-	background: #FFF;
+	padding: 10px;
+	width: 580px;
+	background-color: #FFF;
+	w\idth: 550px;
 	/* border: 1px solid red; */
 	}
 
-#widecolumn {
-	background: #FFF;
+/* #widecolumn deprecated
+only here for backwards compat. */
+#altcontent, #widecolumn {
+	background-color: #FFF;
 	padding: 10px;
 	}
 
 #links {
-	margin: 0;
-	padding-top: 20px;
-	padding-right: 21px;
-	padding-left: 15px;
-	padding-bottom: 20px;
-	border-left: 1px dotted #999;
-	border-bottom: 1px dotted #999;
-	width: 20%;
 	float: right;
+	background-color: #FFF;
+	margin: 0 auto;
+	padding: 15px;
+	height: 100%;
+	width: 200px;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
+	w\idth: 175px;
+	border-left: 1px dotted #999;
 	}
 
 #wrap {
@@ -137,7 +158,7 @@ pre {
 
 .intro {
 	border-bottom: 1px solid #57933a;
-	background: #FFF;
+	background-color: #FFF;
 	color: #333;
 	font-weight: normal;
 	padding: 10px;
@@ -156,8 +177,7 @@ pre {
 
 .blog, .archives, .pages {
 	color: #333;
-	padding: 10px;
-	width: 84%;
+	padding: 10px 10px 10px 40px;
 	font-weight: normal;
 	line-height: 1.2em;
 	}
@@ -230,6 +250,7 @@ pre {
 .side {
 	padding: 2px;
 	line-height: 1.7em;
+	text-align: right;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	}
@@ -245,7 +266,7 @@ pre {
 	}
 
 .syndicate {
-	background: #EEE;
+	background-color: #EEE;
 	padding: 2px;
 	margin-top: 10px;
 	text-align: center;
@@ -254,12 +275,17 @@ pre {
 	}
 
 #metainfo {
+	clear: both;
+	width: 840px;
+	margin: 0 auto;
+	background-color: #FFF;
 	color: #666;
         text-align: center;
-	margin: auto;
 	padding: 10px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
+	width: 800px;
+	border-top: 1px dotted #999;
 	}
 
 #metainfo a, #metainfo a span {
@@ -267,18 +293,48 @@ pre {
 	}
 
 #footer {
+	width: 840px;
+	background-color: #FFF;
 	color: #FFF;
         text-align: center;
-	margin: 0 auto;
+	margin: auto;
 	padding: 10px;
+	background-color: #FFF;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
         font-weight: normal;
+	width: 820px;
+	border-bottom: 1px solid #999;
+	}
+
+/* the "be nice to Opera 5 rule" */
+html>body #metainfo, #footer {
+	width: 780px;
+	}
+
+/* --- footerStickAlt --- */
+/*
+ http://www.themaninblue.com/writing/perspective/2005/08/29/
+*/
+
+/* the "be nice to Opera 5 rule" */
+html>body #container, .container {
+	width: 800px;
+	}
+
+/* holly hacks for IE */
+* html #container, .container {
+	height: 100%;
+	}
+
+* {
+	margin: 0;
+	padding: 0;
 	}
 
 /* --- tools --- */
 
-.clear {clear: both;}
+.clear { clear: both; }
 .right { float: right; margin: 0 0 10px 10px; }
 .left { float: left; margin: 0 10px 10px 0; }
 
@@ -316,7 +372,9 @@ img.right {
 
 /* "auto-clearing" IE hack and non-javacsript IE-mac float fix */
 .clearfix { display: inline-table; }
+
 /* hides float from IE-mac \*/
+html, body { height: 100%; }
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
 /* end hide from IE-mac */
@@ -328,7 +386,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 0.656em sans-serif; /* IE5 */
+	font: 1em verdana, arial, sans-serif; /* IE5 */
 	}
 
 /* --- extras --- */

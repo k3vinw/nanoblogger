@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2005 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-01-04T22:46:22-05:00
+# Last modified: 2006-01-19T04:33:40-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC4"
@@ -829,7 +829,7 @@ if [ ! -d "$BLOG_DIR" ]; then
 		[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
 	done
 	# ... but prompt for configuration.
-	nb_msg "$addweblog_askconf [Y/n]"
+	echo "$addweblog_askconf [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 	[Yy]|"")
@@ -881,12 +881,12 @@ fi
 [ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
 [ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
 if [ -z "$NB_EntryAuthor" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-	nb_msg "$addweblog_author [$BLOG_AUTHOR]"
+	echo "$addweblog_author [$BLOG_AUTHOR]"
 	read -p "$NB_PROMPT" NB_EntryAuthor
 fi
 [ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
 if [ -z "$NB_EntryTitle" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-	nb_msg "$addweblog_title"
+	echo "$addweblog_title"
 	read -p "$NB_PROMPT" NB_EntryTitle
 fi
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
@@ -911,7 +911,7 @@ fi
 # prompt for description
 if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
 	[ "$BLOG_INTERACTIVE" = 1 ]; then
-		nb_msg "$addweblog_desc"
+		echo "$addweblog_desc"
 		read -p "$NB_PROMPT" NB_EntryDescription
 fi
 # set a default entry format

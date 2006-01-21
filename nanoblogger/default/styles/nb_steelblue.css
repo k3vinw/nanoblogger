@@ -3,12 +3,14 @@ NanoBlogger SteelBlue
  box model hack with 2 column layout
 */
 
-html { background: #999; }
+html { background-color: #999; }
 
 body {
-	background: #999;
+	background-color: #999;
 	color: #000;
-	margin: 0;
+	height: 100%;
+	width: 840px;
+	margin: 0 auto;
 	padding: 0;
 	text-align: center;
 	font-family: verdana, arial, helvetica, sans-serif;
@@ -17,36 +19,41 @@ body {
 	voice-family: "\"}\""; 
 	/* trick IE into thinking this rule is over */
 	voice-family: inherit;
-	font-size: small; /* for compliant browsers */
+	f\ont-size: small; /* for compliant browsers */
 	}
 
 a 		{ color: #4682B4; text-decoration: none; }
 a:link		{ color: #4682B4; text-decoration: underline; }
 a:visited	{ color: #4682B4; text-decoration: underline; }
-a:active	{ color: #4682B4; text-decoration: none; background: #BCD2EE; }
-a:hover		{ color: #4682B4; text-decoration: underline; background: #BCD2EE; }
+a:active	{ color: #4682B4; text-decoration: none; background-color: #BCD2EE; }
+a:hover		{ color: #4682B4; text-decoration: underline; background-color: #BCD2EE; }
 
 h1 {
-	margin: 0;
-	padding: 0;
+	margin-top: 25px;
+	margin-bottom: -0.25em;
+	padding-top: 10px;
 	font-size: large;
 	}
 
 h2 {
 	color: #666;
+	margin-bottom: 1.5em;
+	padding: 0;
 	text-align: center;
-	margin-bottom: 15px;
 	font-size: medium;
 	font-weight: bold;
 	}
 
 h3 {
-	margin: 0;
+	margin-top: 1.5em;
+	margin-bottom: -0.75em;
 	padding: 0;
 	font-size: small;
 	}
 
 h4, h5, h6 {
+	margin-top: 1.5em;
+	margin-bottom: -0.75em;
 	font-size: x-small;
 	}
 
@@ -71,7 +78,7 @@ img {
 	}
 
 pre {
-	background: #EEE;
+	background-color: #EEE;
 	padding: 2mm;
 	border: 1px solid #999;
 	}
@@ -114,10 +121,10 @@ pre {
 
 #container, .container {
 	width: 840px;
-	background: #FFF;
-	margin: 0 auto;
+	background-color: #FFF;
 	/* detach box model from top of page */
-	margin-top: 20px;
+	margin: 20px auto;
+	min-height: 100%;
 	padding: 10px;
 	/* recover from center-alignment IE hack */
 	text-align: left;
@@ -127,31 +134,28 @@ pre {
 	border-bottom: 5px solid #555;
 	}
 
-/* the "be nice to Opera 5 rule" */
-html>body #container {
-	width: 800px;
-	}
-
 #content, .content {
+	float: right;
 	padding: 10px;
 	width: 580px;
-	float: right;
-	background: #FFF;
-	/* border: 1px solid red; */
+	background-color: #FFF;
 	w\idth: 550px;
+	/* border: 1px solid red; */
 	}
 
-#widecolumn {
-	background: #FFF;
+/* #widecolumn deprecated
+only here for backwards compat. */
+#altcontent, #widecolumn {
+	background-color: #FFF;
 	padding: 10px;
 	}
 
 #links {
-	background: #DDD;
-	margin: 20px 0;
+	float: left;
+	background-color: #DDD;
+	margin: 0 auto;
 	padding: 2px;
 	width: 196px;
-	float: left;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	}
@@ -163,7 +167,7 @@ html>body #container {
 
 .intro {
 	border-bottom: 1px solid #4682B4;
-	background: #FFF;
+	background-color: #FFF;
 	color: #333;
 	font-weight: normal;
 	padding: 10px;
@@ -273,7 +277,7 @@ html>body #container {
 	}
 
 .syndicate {
-	background: #EEE;
+	background-color: #EEE;
 	padding: 2px;
 	margin-top: 10px;
 	text-align: center;
@@ -284,14 +288,14 @@ html>body #container {
 #metainfo {
 	clear: both;
 	width: 840px;
-	margin: auto;
-	background: #999;
-	padding: 10px;
+	margin: 0 auto;
+	background-color: #999;
+	color: #CCC;
 	text-align: left;
+	padding: 10px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	width: 800px;
-	color: #CCC;
 	}
 
 #metainfo a, #metainfo a span {
@@ -299,11 +303,11 @@ html>body #container {
 	}
 
 #footer {
-	color: #FFF;
 	width: 840px;
-	background: #999;
+	background-color: #999;
+	color: #FFF;
         text-align: center;
-	margin: 0 auto;
+	margin: auto;
 	padding: 10px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
@@ -312,13 +316,28 @@ html>body #container {
 	}
 
 /* the "be nice to Opera 5 rule" */
-html>body #footer {
-	width: 800px;
+html>body #footer, #metainfo {
+	min-width: 805px;
 	} 
+
+/* --- footerStickAlt --- */
+/*
+ http://www.themaninblue.com/writing/perspective/2005/08/29/
+*/
+
+/* the "be nice to Opera 5 rule" */
+html>body #container, .container {
+	width: 800px;
+	}
+
+/* holly hacks for IE */
+* html #container, .container {
+	height: 100%;
+	}
 
 /* --- tools --- */
 
-.clear {clear: both;}
+.clear { clear: both; }
 .right { float: right; margin: 0 0 10px 10px; }
 .left { float: left; margin: 0 10px 10px 0; }
 
@@ -355,7 +374,9 @@ img.right {
 	}
 
 /* "auto-clearing" IE hack and non-javacsript IE-mac float fix */
+html, body { height: 100%; }
 .clearfix { display: inline-table; }
+
 /* hides float from IE-mac \*/
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
@@ -368,7 +389,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 0.656em sans-serif; /* IE5 */
+	font: 1em verdana, arial, helvetica, sans-serif; /* IE5 */
 	}
 
 /* --- extras --- */

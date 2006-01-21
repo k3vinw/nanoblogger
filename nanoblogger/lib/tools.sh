@@ -64,7 +64,7 @@ echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
 
 # tool to require confirmation
 confirm_action(){
-nb_msg "$confirmaction_ask [y/N]"
+echo "$confirmaction_ask [y/N]"
 read -p "$NB_PROMPT" confirm
 case $confirm in
 	[Yy]);;
@@ -565,7 +565,7 @@ nb_draft(){
 EDITDRAFT_FILE="$1"
 [ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
 if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
-	nb_msg "'$EDITDRAFT_FILE' - $nbdraft_asknew [Y/n]"
+	echo "'$EDITDRAFT_FILE' - $nbdraft_asknew [Y/n]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy]|"")
@@ -586,7 +586,7 @@ fi
 preview_weblog(){
 [ -z "$BLOG_PREVIEW_CMD" ] && die "$preview_nocmd"
 if [ "$BLOG_INTERACTIVE" = 1 ]; then
-	nb_msg "$preview_asknow [y/N]"
+	echo "$preview_asknow [y/N]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy])
@@ -604,7 +604,7 @@ fi
 publish_weblog(){
 [ -z "$BLOG_PUBLISH_CMD" ] && die "$publish_nocmd"
 if [ "$BLOG_INTERACTIVE" = 1 ]; then
-	nb_msg "$publish_asknow [y/N]"
+	echo "$publish_asknow [y/N]"
 	read -p "$NB_PROMPT" choice
 	case $choice in
 		[Yy])
