@@ -930,16 +930,18 @@ build_weblog
 show_help(){
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
-sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g" <<-EOF
+# transform keywords to variables and delete all hash-marked lines for display
+sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /^[\#]/d" <<-EOF
 	$NB_ShowHelp
 EOF
 }
 
 # load global config
 load_globals
-# load language definitions
-. ${NB_LANG_DIR}/$NB_LANG/messages.lang
-. ${NB_LANG_DIR}/$NB_LANG/plugins.lang
+# load all language definitions
+for lang_def in ${NB_LANG_DIR}/${NB_LANG}/*.lang; do
+	. "$lang_def"
+done
 
 argument=$@
 [ $# -lt 1 ] && show_help

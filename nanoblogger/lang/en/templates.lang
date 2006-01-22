@@ -1,0 +1,15 @@
+# NanoBlogger English language definitions
+# Templates
+# lang/en/templates.lang
+
+# weblog entry messages
+permanentlink_title="Permanent Link"
+categorylinks_title="Categories"
+commentslink_title="Comments"
+
+# weblog status messages
+ws_total_categories="Total categories"
+ws_total_entries="Total entries"
+ws_last_entry="Last entry"
+ws_last_updated="Last updated"
+
