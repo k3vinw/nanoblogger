@@ -308,6 +308,11 @@ only here for backwards compat. */
 	}
 
 /* the "be nice to Opera 5 rule" */
+html>body #container {
+	width: 800px;
+	}
+
+/* the "be nice to Opera 5 rule" */
 html>body #metainfo, #footer {
 	width: 780px;
 	}
@@ -317,14 +322,14 @@ html>body #metainfo, #footer {
  http://www.themaninblue.com/writing/perspective/2005/08/29/
 */
 
-/* the "be nice to Opera 5 rule" */
-html>body #container {
-	width: 800px;
-	}
+html, body { height: 100%; }
 
 /* holly hacks for IE */
 * html #container, .container {
-	height: 100%;
+	min-height: 100%;
+	}
+* html #content, #altcontent, #widecolumn {
+	min-height: 100%;
 	}
 
 /* --- tools --- */
@@ -368,7 +373,6 @@ img.right {
 /* "auto-clearing" IE hack and non-javacsript IE-mac float fix */
 .clearfix { display: inline-table; }
 /* hides float from IE-mac \*/
-html, body { height: 100%; }
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
 /* end hide from IE-mac */

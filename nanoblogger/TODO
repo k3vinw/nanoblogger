@@ -1,3 +1,2 @@
-* fix and test css hacks for ie 5, opera
-* fix css indentatations for ul, ol, pre, blockquote
+* fix height in IE (stick footer to bottom)
 * improve language support
