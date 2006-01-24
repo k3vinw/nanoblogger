@@ -3,10 +3,15 @@
 # lang/en/templates.lang
 
 # weblog entry links and messages
-permanentlink_title="Permanent Link"
-categorylinks_title="Categories"
-commentslink_title="Comments"
+template_permlink="Permanent Link"
+template_catlinks="Categories:"
+template_cmtlink="Comments"
 template_postedby="Posted by"
+
+# only here for compat. with early 3.3 rc's
+permanentlink_title="$template_permlink"
+categorylinks_title="$template_catlinks"
+commentslink_title="$template_cmtlink"
 
 # weblog main messages
 template_category="Categories"
@@ -28,8 +33,8 @@ template_browsedate="Browse by date"
 template_browseentry="Browse by entry"
 
 # weblog status messages
-ws_total_categories="Total categories"
-ws_total_entries="Total entries"
-ws_last_entry="Last entry"
-ws_last_updated="Last updated"
+template_totalcats="Total categories:"
+template_totalentries="Total entries:"
+template_lastentry="Last entry:"
+template_lastupdated="Last updated:"
 
