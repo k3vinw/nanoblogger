@@ -52,7 +52,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	for entry in ${ARCHENTRY_LIST[*]}; do
 		load_entry "$NB_DATA_DIR/$entry" NOBODY
 		NB_ArchiveEntryTitle="$NB_EntryTitle"
-		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle=Untitled
+		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
@@ -93,13 +93,13 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$yearn/archive_links.$NB_FILETYPE"`
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/"$yearn"/archive_links.$NB_FILETYPE <<-EOF
 		<a id="date"></a>
-		<b>Browse by date</b>
+		<strong>$template_browsedate</strong>
 		<div>
 			$NB_ArchiveMonthLinks
 		</div>
 		<br />
 		<a id="entry"></a>
-		<b>Browse by entry</b>
+		<strong>$template_browseentry</strong>
 		<div>
 			$NB_ArchiveEntryLinks
 		</div>
@@ -109,7 +109,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$yearn/$NB_INDEXFILE"
 	# set title for makepage template
-	MKPAGE_TITLE="$yearn Archives"
+	MKPAGE_TITLE="$yearn $template_archives"
 	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	make_page "$BLOG_DIR/$PARTS_DIR/$yearn/archive_links.$NB_FILETYPE" "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" "$MKPAGE_OUTFILE"
 fi

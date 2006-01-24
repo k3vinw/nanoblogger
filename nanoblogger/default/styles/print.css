@@ -10,13 +10,16 @@ body {
    background: white;
    font-size: 12pt;
    }
+.metainfo {
+   display: none;
+   }
 #menu {
    display: none;
    }
 .menu {
    display: none;
    }
-#links, #metainfo, #footer {
+#links, #footer {
    display: none;
    }
 #wrapper, #content, #container {

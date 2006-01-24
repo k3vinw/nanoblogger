@@ -32,7 +32,7 @@ for entry in ${DB_RESULTS[*]}; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"
 	link_title="$METADATA"
 	NB_EntryID=`set_entryid $entry`
-	[ -z "$link_title" ] && link_title="Untitled"
+	[ -z "$link_title" ] && link_title="$notitle"
 	set_entrylink "$entry"
 	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$link_title'</a><br />'
 done

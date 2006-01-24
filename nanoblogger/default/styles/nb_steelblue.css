@@ -285,24 +285,21 @@ only here for backwards compat. */
 	f\ont-size: small; /* feed to compliant browsers */
 	}
 
-#metainfo {
-	clear: both;
-	width: 840px;
-	margin: 0 auto;
+.metainfo {
 	background-color: #999;
 	color: #CCC;
 	text-align: left;
 	padding: 10px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
-	width: 800px;
 	}
 
-#metainfo a, #metainfo a span {
+.metainfo a, .metainfo a span {
 	font-weight: bold;
 	}
 
 #footer {
+	clear: both;
 	width: 840px;
 	background-color: #999;
 	color: #FFF;
@@ -321,7 +318,7 @@ html>body #container, .container {
 	}
 
 /* the "be nice to Opera 5 rule" */
-html>body #footer, #metainfo {
+html>body #footer {
 	min-width: 805px;
 	} 
 

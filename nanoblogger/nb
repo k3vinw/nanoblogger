@@ -858,7 +858,7 @@ if [ ! -z "$cat_num" ]; then
 				else
 					echo "$addweblog_titlecat [$addweblog_untitled]"
 					read -p "$NB_PROMPT" cat_title
-					[ -z "$cat_title" ] && cat_title=Untitled
+					[ -z "$cat_title" ] && cat_title="$notitle"
 				fi
 				echo "$cat_title" > "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE
 				cat_num="$id"; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"

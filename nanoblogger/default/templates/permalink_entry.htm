@@ -8,7 +8,7 @@
 </div>
 
 <div class="posted">
-	<br />Posted by $NB_EntryAuthor
+	<br />$template_postedby $NB_EntryAuthor
 $([ "$PERMALINKS" = "1" ] && echo '| <a class="link" href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$permanentlink_title'</a>')
 $(if [ ! -z "$NB_EntryCategories" ]; then echo "| $categorylinks_title: $NB_EntryCategories" |sed -e '{$ s/\,$//; }'; fi)
 <!-- <br /><a href="${BASE_URL}$BLOG_URL_ACTION$ARCHIVES_DIR/$permalink_file#comments">$commentslink_title</a> -->

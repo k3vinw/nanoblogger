@@ -116,7 +116,7 @@ pre {
 	background-color: #FFF;
 	margin: 0 auto;
 	min-height: 100%;
-	padding: 0px;
+	padding: 0 0 10px 0;
 	/* recover from center-alignment IE hack */
 	text-align: left;
 	w\idth: 800px;
@@ -274,25 +274,21 @@ only here for backwards compat. */
 	f\ont-size: small; /* feed to compliant browsers */
 	}
 
-#metainfo {
-	clear: both;
-	width: 840px;
-	margin: 0 auto;
+.metainfo {
 	background-color: #FFF;
 	color: #666;
         text-align: center;
 	padding: 10px;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
-	width: 800px;
-	border-top: 1px dotted #999;
 	}
 
-#metainfo a, #metainfo a span {
+.metainfo a, .metainfo a span {
 	font-weight: bold;
 	}
 
 #footer {
+	clear: both;
 	width: 840px;
 	background-color: #FFF;
 	color: #FFF;
@@ -304,6 +300,7 @@ only here for backwards compat. */
 	f\ont-size: x-small; /* feed to compliant browsers */
         font-weight: normal;
 	width: 820px;
+	border-top: 1px dotted #999;
 	border-bottom: 1px solid #999;
 	}
 
@@ -313,7 +310,7 @@ html>body #container, .container {
 	}
 
 /* the "be nice to Opera 5 rule" */
-html>body #metainfo, #footer {
+html>body #footer {
 	width: 780px;
 	}
 

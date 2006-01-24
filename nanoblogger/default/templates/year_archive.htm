@@ -25,8 +25,8 @@
 			<a id="top"></a>
 			<h2>$NB_MetaTitle</h2>
 			<div id="menu">
-				<a href="${BASE_URL}$NB_INDEX">Main</a> &#62;
-				<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">Archives</a> &#62;
+				<a href="${BASE_URL}$NB_INDEX">$template_main</a> &#62;
+				<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">$template_archives</a> &#62;
 				<br />
 $([ ! -z "$prev_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveYearLink'">'$NB_PrevPage'</a>')
 				$yearn
@@ -38,9 +38,7 @@ $([ ! -z "$next_year" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveYearLi
 		</div>
 	</div>
 </div>
-<div id="metainfo" style="clear:both;">
-</div>
-<div id="footer">
+<div id="footer" style="clear:both;">
 	<div class="menu">
 		<a href="#top">$NB_TopPage</a><br />
 	</div>

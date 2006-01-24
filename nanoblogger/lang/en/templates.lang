@@ -2,10 +2,30 @@
 # Templates
 # lang/en/templates.lang
 
-# weblog entry messages
+# weblog entry links and messages
 permanentlink_title="Permanent Link"
 categorylinks_title="Categories"
 commentslink_title="Comments"
+template_postedby="Posted by"
+
+# weblog main messages
+template_category="Categories"
+template_contact="Contact"
+template_links="Links"
+template_rentries="Recent Entries"
+template_syndicate="Syndicate this site:"
+template_status="Weblog Status"
+template_powered="powered by &#36;EDITOR, bash, cat, grep, sed, and"
+
+# misc. weblog links
+template_archives="Archives"
+template_main="Main"
+
+# dynamic template messages
+template_articles="Articles"
+template_browsecat="Browse by category"
+template_browsedate="Browse by date"
+template_browseentry="Browse by entry"
 
 # weblog status messages
 ws_total_categories="Total categories"

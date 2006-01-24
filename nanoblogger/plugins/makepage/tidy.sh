@@ -71,7 +71,7 @@ if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
 	fi
 	echo '<a href="http://validator.w3.org/check/referer"><img' > "$TIDY_PLUGIN_OUTFILE"
 	echo 'src="http://www.w3.org/Icons/valid-xhtml11"' >> "$TIDY_PLUGIN_OUTFILE"
-	echo 'alt="Valid XHTML 1.1!" /></a>' >> "$TIDY_PLUGIN_OUTFILE"
+	echo 'alt="Valid XHTML!" /></a>' >> "$TIDY_PLUGIN_OUTFILE"
 	NB_Tidy=$(< "$TIDY_PLUGIN_OUTFILE")
 fi
 

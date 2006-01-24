@@ -65,7 +65,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 		NB_BrowseCatLinks=$(
 		cat <<-EOF
 			<a id="category"></a>
-			<b>Browse by category</b>
+			<strong>$template_browsecat</strong>
 			<div>
 				$NB_ArchiveCategoryLinks
 			</div>
@@ -77,7 +77,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.$NB_FILETYPE <<-EOF
 		$NB_BrowseCatLinks
 		<a id="date"></a>
-		<b>Browse by date</b>
+		<strong>$template_browsedate</strong>
 		<div>
 			$NB_ArchiveYearLinks
 		</div>
@@ -87,7 +87,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" 
 	# build master archive index
 	MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$NB_INDEXFILE"
 	# set title for makepage template
-	MKPAGE_TITLE=Archives
+	MKPAGE_TITLE="$template_archives"
 	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
