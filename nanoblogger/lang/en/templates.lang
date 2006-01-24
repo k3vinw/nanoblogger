@@ -14,8 +14,10 @@ categorylinks_title="$template_catlinks"
 commentslink_title="$template_cmtlink"
 
 # weblog main messages
+template_archiveindex="Archive Index"
 template_category="Categories"
 template_contact="Contact"
+template_fortune="Fortune"
 template_links="Links"
 template_rentries="Recent Entries"
 template_syndicate="Syndicate this site:"
