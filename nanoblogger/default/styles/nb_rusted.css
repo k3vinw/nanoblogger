@@ -1,26 +1,26 @@
 /*
-NanoBlogger Rusted
+
+ NanoBlogger Rusted
  box model hack with 2 column layout
+
+ see suggestions for proper display on ie 5 mac here:
+ http://www.alistapart.com/articles/footers/
+
 */
 
-/* set background for IE browsers */
-html { background-color: #CCC; }
+html, body  {
+	background-color: #CCC;
+	/* footerStickAlt
+	   http://www.themaninblue.com/writing/perspective/2005/08/29/
+	*/
+	height: 100%;
+	}
 
 body {
-	background-color: #CCC;
-	color: #000;
-	height: 100%;
-	width: 840px;
 	margin: 0 auto;
 	padding: 0;
 	text-align: center;
-	font-family: verdana, arial, sans-serif;
-	font-size: x-small; /* for IE 5.5 */
-	/* Tantek's box model hack to fix font keywords */
-	voice-family: "\"}\""; 
-	/* trick IE into thinking this rule is over */
-	voice-family: inherit;
-	f\ont-size: small; /* for compliant browsers */
+	font: 12px/1.5 verdana, arial, helvetica, sans-serif;
 	}
 
 a 		{ color: #921d00; text-decoration: none; }
@@ -42,6 +42,7 @@ h2 {
 	margin-bottom: 1.5em;
 	padding: 0;
 	text-align: center;
+	font-family: vedana, arial, helvetica, sans-serif;
 	font-size: medium;
 	font-weight: bold;
 	}
@@ -75,21 +76,18 @@ pre {
 	}
 
 #header {
-	/* font-family: verdana, arial, sans-serif; */
 	background-color: #FFF;
-	padding: 15px;
 	margin: 0px;
-	text-align: left;
-	font-size: large;
-	font-weight: normal;
-	line-height: 1.2em;
+	padding: 15px;
 	border-top: 1px solid #999;
-	border-bottom: 1px dotted #999;
+	border-bottom: 1px solid #999;
 	}
 
 #header h1 {
 	margin: 0;
 	padding: 0 0 0 10px;
+	font-size: large; /* for IE 5.5 */
+	f\ont-size: x-large; /* for compliant browsers */
 	}
 
 #header a,
@@ -103,31 +101,42 @@ pre {
 
 .description {
 	color: #921d00;
-	font-family: verdana, arial, serif;
 	font-size: small;
 	font-weight: bold;
 	text-transform: lowercase;
 	margin: 0;
 	padding: 0 0 0 10px;
+	font-size: x-small; /* for IE 5.5 */
+	f\ont-size: small; /* for compliant browsers */
 	}
 
-#container, .container {
-	width: 840px;
+#container {
+	position: relative;
 	background-color: #FFF;
 	margin: 0 auto;
-	min-height: 100%;
-	padding: 0 0 10px 0;
+	/* set special width for IE */
+	width: 860px;
+	min-height: 90%;
+	height: 90%;
 	/* recover from center-alignment IE hack */
 	text-align: left;
-	w\idth: 800px;
-	}
+	/* box model parse hack
+	hides next rule from IE */
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 840px;
+}
 
-#content, .content {
+html>body #container {
+	height: auto;
+	width: 840px;
+}
+
+#content {
 	float: left;
-	padding: 10px;
-	width: 580px;
+	width: 65%;
+	padding: 10px 10px 10px 40px;
 	background-color: #FFF;
-	w\idth: 550px;
 	/* border: 1px solid red; */
 	}
 
@@ -135,29 +144,54 @@ pre {
 only here for backwards compat. */
 #altcontent, #widecolumn {
 	background-color: #FFF;
-	padding: 10px;
+	padding: 10px 40px 10px 40px;
 	}
 
 #links {
 	float: right;
 	background-color: #FFF;
-	margin: 0 auto;
-	padding: 15px;
-	width: 200px;
-	font-size: x-small; /* for IE 5.5 */
-	f\ont-size: small; /* feed to compliant browsers */
-	w\idth: 175px;
+	width: 25%;
+	padding: 10px;
 	border-left: 1px dotted #999;
-	/* border: 1px solid red; */
 	}
 
 #wrap {
-	margin-left: 0px;
 	margin-top: 0px;
+	margin-left: 0px;
+	}
+
+#menu, .menu {
+	text-align: center;
+	margin-bottom: 15px;
+	}
+
+#footer {
+	clear: both;
+	position: relative;
+	background-color: #FFF;
+	bottom: 0;
+	min-height: 10%;
+	height: 10%;
+	width: 860px;
+	margin: auto;
+	padding: 10px;
+        text-align: center;
+	border-top: 1px solid #999;
+	border-bottom: 1px solid #999;
+	/* box model parse hack
+	hides next rule from IE */
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 840px;
+	}
+
+html>body #footer {
+	height: auto;
+	width: 820px;
 	}
 
 .intro {
-	border-bottom: 1px solid #921d00;
+	border-bottom: 1px solid #999999;
 	background-color: #FFF;
 	color: #333;
 	font-weight: normal;
@@ -171,15 +205,15 @@ only here for backwards compat. */
 	color: #333;
 	}
 
-.blogbody {
-	padding: 0px;
-	}
-
 .blog, .archives, .pages {
 	color: #333;
-	padding: 10px 10px 10px 40px;
+	padding: 0px;
 	font-weight: normal;
 	line-height: 1.2em;
+	}
+
+.blogbody {
+	padding: 0px;
 	}
 
 .blogbody a,
@@ -192,21 +226,21 @@ only here for backwards compat. */
 	}
 
 .title	{
-	text-transform: uppercase;
+	text-transform: none;
 	color: #921d00;
 	margin-bottom: 15px;
-	}
-
-#menu, .menu {
-	text-align: center;
-	margin-bottom: 15px;
+	font-size: x-small; /* for IE 5.5 */
+	f\ont-size: small; /* for compliant browsers */
 	}
 
 .date	{
 	color: #666; 
 	margin-bottom: 10px;
 	text-align: left;
+	line-height: 1.7em;
 	font-weight: bold;
+	font-size: small; /* for IE 5.5 */
+	f\ont-size: medium; /* for compliant browsers */
 	border-bottom: 1px solid #999;
 	}
 
@@ -218,9 +252,11 @@ only here for backwards compat. */
 	}
 
 .calendar {
+	float: right;
 	color: #921d00;
 	padding: 2px;
-	text-align: left;
+	text-align: right;
+	font-family: verdana, arial, helvetica, sans-serif;
 	font-weight: normal;
 	}
 
@@ -284,49 +320,8 @@ only here for backwards compat. */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
 
-.metainfo a, .metainfo a span {
+.metainfo a {
 	font-weight: bold;
-	}
-
-#footer {
-	clear: both;
-	width: 840px;
-	background-color: #FFF;
-	color: #FFF;
-        text-align: center;
-	margin: auto;
-	padding: 10px;
-	font-size: xx-small; /* for IE 5.5 */
-	f\ont-size: x-small; /* feed to compliant browsers */
-        font-weight: normal;
-	width: 800px;
-	border-top: 1px dotted #999;
-	border-bottom: 1px solid #999;
-	}
-
-/* the "be nice to Opera 5 rule" */
-html>body #container {
-	width: 800px;
-	}
-
-/* the "be nice to Opera 5 rule" */
-html>body #footer {
-	width: 780px;
-	}
-
-/* --- footerStickAlt --- */
-/*
- http://www.themaninblue.com/writing/perspective/2005/08/29/
-*/
-
-html, body { height: 100%; }
-
-/* holly hacks for IE */
-* html #container, .container {
-	min-height: 100%;
-	}
-* html #content, #altcontent, #widecolumn {
-	min-height: 100%;
 	}
 
 /* --- tools --- */
@@ -369,6 +364,7 @@ img.right {
 
 /* "auto-clearing" IE hack and non-javacsript IE-mac float fix */
 .clearfix { display: inline-table; }
+
 /* hides float from IE-mac \*/
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
@@ -381,7 +377,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 1em verdana, arial, sans-serif; /* IE5 */
+	font: 1em verdana, arial, helvetica, serif; /* IE5 */
 	}
 
 /* --- extras --- */
@@ -435,7 +431,7 @@ img.right {
 	border-bottom: 1px solid #999;
 	}
 
-#banner-commentspop {
+#header-commentspop {
 	color: #FFF;
 	padding: 5px 5px 15px 15px;
 	font-size: large;
