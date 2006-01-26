@@ -258,10 +258,10 @@ html>body #footer {
 	}
 
 .calendar {
-	float: left;
 	color: #4682B4;
 	padding: 2px;
 	text-align: left;
+	letter-spacing: 0.2em;
 	font-family: verdana, arial, sans-serif;
 	font-weight: normal;
 	}

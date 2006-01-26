@@ -252,10 +252,10 @@ html>body #footer {
 	}
 
 .calendar {
-	float: right;
 	color: #57933a;
 	padding: 2px;
 	text-align: right;
+	letter-spacing: 0.2em;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-weight: normal;
 	}
@@ -273,7 +273,7 @@ html>body #footer {
 	padding: 2px;
 	text-align: center;
 	font-weight: bold;
-	letter-spacing: .3em;
+	letter-spacing: 0.3em;
 	text-transform: uppercase;
 	border-bottom: 1px solid #999;
 	}

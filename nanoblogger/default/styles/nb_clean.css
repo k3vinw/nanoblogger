@@ -256,10 +256,10 @@ html>body #footer {
 	}
 
 .calendar {
-	float: left;
 	color: #666;
 	padding: 2px;
 	text-align: right;
+	letter-spacing: 0.2em;
 	font-family: palatino, georgia, times new roman, serif;
 	font-weight: normal;
 	}
