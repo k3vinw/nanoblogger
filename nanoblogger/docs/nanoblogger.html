@@ -205,7 +205,7 @@ li {
   </div>
 
   <div id="intro">
-    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common unix tools, such as cat, grep and sed to create static HTML content. It's free to use and modify under the GNU General Public License.
+    <h2><a id="s.1" name="s.1">1. Introduction</a></h2>NanoBlogger is a small weblog engine written in Bash for the command line. It uses common UNIX tools, such as cat, grep and sed to create static HTML content. It's free to use and modify under the GNU General Public License.
   </div>
 
   <div id="synopsis">
@@ -221,7 +221,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
     <ul>
       <li>intuitive command line interface</li>
 
-      <li>highly configurable and scriptable :)</li>
+      <li>highly configurable and script-able :)</li>
 
       <li>easy drafting, editing and management of entries</li>
 
@@ -280,7 +280,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
     <p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any differences between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
 
-    <p>Three basic steps to upgrading:</p>
+    <p>Three basic steps to upgrading (from the shell prompt):</p>
     <pre>
 1. create a new weblog directory using nanoblogger (skip the configuration):
         nb [-b blog_dir] -a
@@ -303,18 +303,14 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
     <p><b>Creating a New Weblog</b></p>
 
-    <p>To create a new weblog:</p>
+    <p>To create a new weblog from your shell prompt:</p>
     <pre>
 cd [nb_dir]
 ./nb --blogdir [myblog_dir] --add
         
 </pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
 
-    <p>For easier invocation, add nb to your $PATH in Bash:</p>
-    <pre>
-export PATH="$PATH:[nanoblogger_dir]"
-        
-</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to.
+    <p>For faster and easier invocation try adding nb to your shell's path or aliases (see shell's manual).</p>
 
     <p>To set a default weblog directory:</p>
     <pre>
@@ -342,7 +338,7 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
-    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, usefull for specifying time in UTC. Please note that these settings have no effect on previous entries. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, useful for specifying time in UTC. Please note that these settings have no effect on previous entries. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
 
     <p>Examples:</p>
     <pre>
@@ -447,15 +443,16 @@ NB_INDEX="index.html"
 
     <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the building of entry archives and reconfigures the links of the entries to point to their own archive page. Note that this will increase the rebuild time since more pages will have to be generated.</p>
 
-    <p><b>Special Category Archiving Features</b></p>
+    <p><b>Special Category Archiving Preferences</b></p>
 
-    <p><em>CATARCH_DATATYPE</em> determines the set of data to load for the category archives. There's two types of data that can be specified, "ALL" and "NOBODY".</p>
+    <p><em>CATARCH_DATATYPE</em> determines the set of data to load for the category archives. There's two types of data that can be specified, "ALL" or "NOBODY".</p>
     <pre>
 ALL = full entry metadata (slow and bigger cache)
 NOBODY = all except entry's BODY metadata (faster and smaller cache)
-edit the category_entry.htm template accordingly
     
 </pre>
+
+    <p><span class="warning">IMPORTANT</span>: Please edit <a href="#s.8">category_entry.htm</a> accordingly.</p>
 
     <p><b>Setting Actions for Previewing and Publishing</b></p>
 
@@ -688,7 +685,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">`</td>
 
-          <td align="left">backquote</td>
+          <td align="left">back quote</td>
 
           <td align="left">form of command substitution, prepend backslash to escape, e.g. "\`"</td>
         </tr>
@@ -959,48 +956,52 @@ nb [-b blog_dir] -c 1 -d cat
   <div id="about.plugins">
     <h2><a id="s.9" name="s.9">9. About Plugins</a></h2>
 
-    <h3>Directory of Plugins</h3>
+    <h3>Plugins Framework</h3>
 
     <div>
       <p><b>Regular Plugins: plugins</b></p>
 
-      <p>Plugins that are always initialized.</p>
+      <p>Regular plugins are initialized unconditionally.</p>
 
       <p><b>Archive Plugins: plugins/archive</b></p>
 
-      <p>Plugins that are initialized when the archives are built.</p>
+      <p>Archive plugins are initialized when the archives are updated.</p>
 
       <p><b>Monthly Plugins: plugins/archive/month</b></p>
 
-      <p>Plugins that are initialized for each month.</p>
+      <p>Monthly plugins are initialized for each monthly archive that is updated.</p>
 
       <p><b>Yearly Plugins: plugins/archive/year</b></p>
 
-      <p>Plugins that are intialized for each year.</p>
+      <p>Yearly plugins are initialized for each yearly archive that is updated.</p>
 
       <p><b>Entry Plugins: plugins/entry</b></p>
 
-      <p>Plugins that are initialized for each entry.</p>
+      <p>Entry plugins are initialized unconditionally for each entry that is updated.</p>
 
       <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
 
-      <p>Plugins that are initialized for each modified entry.</p>
+      <p>Entry Modify plugins are initialized for each entry that is modified.</p>
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
-      <p>Plugins that are intitialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a seperator.</p>
+      <p>Entry Formatting plugins are initialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator.</p>
 
       <p><b>Page Plugins: plugins/page</b></p>
 
-      <p>Plugins that are initialized before each page.</p>
+      <p>Page plugins are initialized unconditionally before each page that is updated.</p>
 
       <p><b>Page Formatting Plugins: plugins/page/format</b></p>
 
-      <p>Plugins that are initialized for each page based on the FORMAT metadata field. More than one format may be specified using space or commas as a seperator.</p>
+      <p>Page Formatting plugins are initialized for each page that is updated based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator.</p>
 
       <p><b>Make Page Plugins: plugins/makepage</b></p>
 
-      <p>Plugins that are initialized after each page generated.</p>
+      <p>Make Page plugins are initialized after each page that is updated.</p>
+
+      <p><b>Post Plugins: plugins/post</b></p>
+
+      <p>Post plugins are initialized unconditionally for post-weblog related tasks.</p><em>Plugins that are initialized unconditionally may operate independently on their own conditions.</em>
     </div>
 
     <div class="tables">
@@ -1117,6 +1118,18 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">$NB_EntryCategories</td>
 
           <td align="left">none</td>
+        </tr>
+
+        <tr>
+          <td align="left">entry/excerpt.sh*</td>
+
+          <td align="left">creates an excerpt from entry's text</td>
+
+          <td align="left">none</td>
+
+          <td align="left">$NB_EntryExcerpt</td>
+
+          <td align="left">ends after first detected double line break (blank line)</td>
         </tr>
 
         <tr>
@@ -1584,7 +1597,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">loop_archive</td>
 
-          <td align="left">loops through archives and executes intructions by years or months</td>
+          <td align="left">loops through archives and executes instructions by years or months</td>
 
           <td align="left">looparch_list=$1, looparch_type=$2, looparch_exec=$3</td>
 
@@ -1742,7 +1755,7 @@ nb [-b blogdir] --file somefile.txt --add
 </pre>or export the metafile as a new weblog page:
     <pre>
 nb [-b blogdir] --makepage somefile.txt somefile.html
-</pre>Unfortunately not all editors support running external commands from their editing sessions.
+</pre><em>Please note that the editor must support some kind of sub-shell in order to accomplish this or just try suspending your editor from the current shell (assuming there is one).</em>
 
     <p><b>Writing Metatags on the Fly</b></p>
 
