@@ -52,7 +52,7 @@ update_db(){
 			echo "$entry$cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
 	done |sort $SORT_ARGS > "$SCRATCH_FILE.master.$NB_DBTYPE"
-	mv "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
+	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
 # list all entries
 list_db(){
