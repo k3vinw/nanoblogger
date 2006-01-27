@@ -157,7 +157,7 @@ li {
       <tr>
         <td>8.</td>
 
-        <td><a href="#s.8">Templates and Placeholders</a></td>
+        <td><a href="#s.8">Templates</a></td>
       </tr>
 
       <tr>
@@ -263,7 +263,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>multi-language support</li>
 
-      <li>multi-platform portability (just bash and the required commands)</li>
+      <li>multi-platform portability (just Bash and the required commands)</li>
     </ul>
   </div>
 
@@ -295,7 +295,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
     <h2><a id="s.4" name="s.4">4. Requirements</a></h2>Programs:
 
-    <p>bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
+    <p>Bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
 
     <p>* = GNU version recommended, but not required</p>
 
@@ -310,7 +310,7 @@ cd [nb_dir]
         
 </pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
 
-    <p>For faster and easier invocation try adding nb to your shell's path or aliases (see shell's manual).</p>
+    <p>For faster and easier invocation try adding "nb" to your shell's path or aliases (see shell's manual).</p>
 
     <p>To set a default weblog directory:</p>
     <pre>
@@ -330,11 +330,11 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Browser</b></p>
 
-    <p>The browser defaults to the <em>BROWSER</em> variable in your bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your bash environment. In Mac OS X, you would set this to "open".</p>
+    <p>The browser defaults to the <em>BROWSER</em> variable in your Bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your Bash environment. In Mac OS X, you would set this to "open".</p>
 
     <p><b>Setting the Editor</b></p>
 
-    <p>The editor defaults to the <em>EDITOR</em> variable in your bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your bash environment.</p>
+    <p>The editor defaults to the <em>EDITOR</em> variable in your Bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your Bash environment.</p>
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
@@ -367,7 +367,7 @@ BLOG_CHARSET="iso-8859-1"
 
 </pre>
 
-    <p><span class="warning">WARNING</span>: If you have the tidy plugin enabled, this setting will be overridden by tidy. Please, refer to tidy's documentation for setting the character encoding.</p>
+    <p><span class="warning">WARNING</span>: If you have the Tidy plugin enabled, this setting will be overridden by Tidy. Please, refer to Tidy's documentation for setting the character encoding.</p>
 
     <p><b>Setting the Mime Type</b></p>
 
@@ -654,7 +654,7 @@ nb [-b blog_dir] -c 1 -d cat
   </div>
 
   <div id="templates">
-    <h2><a id="s.8" name="s.8">8. Templates and Placeholders</a></h2>Templates are located in the weblog's sub-directory, templates.
+    <h2><a id="s.8" name="s.8">8. Templates</a></h2>Templates are located in the weblog's sub-directory, templates.
 
     <div class="tables">
       <p><b>Special Template Characters</b></p>
@@ -793,164 +793,6 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
       </table>
     </div>
-
-    <div class="tables">
-      <p><b>Placeholders for Entries</b></p>
-
-      <table border="0" cellspacing="4" cellpadding="2" summary="entry placeholders">
-        <caption>
-          The entry template includes the following placeholders:
-        </caption>
-
-        <tr>
-          <th align="left">placeholders</th>
-
-          <th align="left">description</th>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryAuthor</td>
-
-          <td align="left">author of entry</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryCategories*</td>
-
-          <td align="left">entry's category links</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryBody</td>
-
-          <td>entry's content</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryDate</td>
-
-          <td align="left">entry's posted time</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryDescription</td>
-
-          <td align="left">entry's description</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryID</td>
-
-          <td align="left">entry's id</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryPermalink</td>
-
-          <td align="left">entry's permanent link</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_EntryTitle</td>
-
-          <td align="left">entry's title</td>
-        </tr>
-      </table>* = requires plugin
-    </div>
-
-    <div class="tables">
-      <p><b>Placeholders for Main Index</b></p>
-
-      <table border="0" cellspacing="4" cellpadding="2" summary="main placeholders">
-        <caption>
-          The main template includes the following placeholders:
-        </caption>
-
-        <tr>
-          <th align="left">placeholders</th>
-
-          <th align="left">description</th>
-        </tr>
-
-        <tr>
-          <td align="left">${BASE_URL}</td>
-
-          <td align="left">relative or absolute link to the weblog's base URL</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_MIMETYPE</td>
-
-          <td align="left">weblog's mime type</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_CHARSET</td>
-
-          <td align="left">weblog's character set</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_INDEX</td>
-
-          <td align="left">weblog's link to directory's index</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_CONTACT</td>
-
-          <td align="left">weblog's contact info</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_DESCRIPTION</td>
-
-          <td align="left">weblog's description</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_TITLE</td>
-
-          <td align="left">weblog's title</td>
-        </tr>
-
-        <tr>
-          <td align="left">$BLOG_URL</td>
-
-          <td align="left">weblog's URL</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_ArticleLinks</td>
-
-          <td align="left">links to articles</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_MonthLinks*</td>
-
-          <td align="left">links to the monthly archives</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_CategoryLinks*</td>
-
-          <td align="left">links to categories</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_MainLinks*</td>
-
-          <td align="left">user defined links</td>
-        </tr>
-
-        <tr>
-          <td align="left">$NB_MetaBody</td>
-
-          <td align="left">weblog's main content</td>
-        </tr>
-      </table>* = requires plugin
-    </div>
   </div>
 
   <div id="about.plugins">
@@ -1001,7 +843,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Post Plugins: plugins/post</b></p>
 
-      <p>Post plugins are initialized unconditionally for post-weblog related tasks.</p><em>Plugins that are initialized unconditionally may operate independently on their own conditions.</em>
+      <p>Post plugins are initialized unconditionally for post-weblog related tasks.</p><em>Most plugins will operate on their own conditions once they've been initialized.</em>
     </div>
 
     <div class="tables">
@@ -1135,7 +977,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">entry/format/autobr.sh</td>
 
-          <td align="left">converts blank lines to html paragraph breaks</td>
+          <td align="left">converts blank lines to HTML paragraph breaks</td>
 
           <td align="left">none</td>
 
@@ -1243,7 +1085,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">page/format/autobr.sh</td>
 
-          <td align="left">converts blank lines to html paragraph breaks</td>
+          <td align="left">converts blank lines to HTML paragraph breaks</td>
 
           <td align="left">none</td>
 
@@ -1654,7 +1496,7 @@ nb [-b blog_dir] -c 1 -d cat
 
     <p><b>Publishing Remotely</b></p>
 
-    <p>FTP, SSH (scp, sftp, etc.), rsync or WebDAV, are all methods that can be used to publish the weblog.</p>
+    <p>FTP, SSH (scp, sftp, etc.), RSYNC or WebDAV, are all methods that can be used to publish the weblog.</p>
 
     <p><b>example</b>: automating publishing with ftp and .netrc.</p>blog.conf:
     <pre>
@@ -1683,7 +1525,7 @@ mput *
   <div id="comments">
     <h2><a id="s.12" name="s.12">12. Adding Support for Comments</a></h2>
 
-    <p>To add support for comments, you can use a php script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
+    <p>To add support for comments, you can use a PHP script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
 
     <p>Integrating a comment system with your weblog requires editing the appropriate templates. Please see examples in blog.conf and templates.</p>
   </div>
@@ -1795,7 +1637,7 @@ $(&lt; "$BLOG_DIR/intro.txt")
 
     <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
 
-    <p>Other clever uses include combining NanoBlogger's static output with some PHP or perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+    <p>Other clever uses include combining NanoBlogger's static output with some PHP or Perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
 
     <p><b>Embedding Variables in the Templates</b></p>
 
@@ -1814,14 +1656,14 @@ php?&gt;
   <div id="credits">
     <h2><a id="s.15" name="s.15">15. Credits</a></h2>
 
-    <p>Thanks to Adrien "ze" Urban, Paul Drain &lt;pd_at_cipherfunk.org&gt;, Pavel Janik &lt;Pavel_at_Janik.cz&gt;, and O.R.Senthil Kumaran &lt;orsenthil_at_users.sourceforge.net&gt; for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.</p>
+    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.</p>
 
     <p><a href="http://nanoblogger.sf.net/downloads/">1. http://nanoblogger.sf.net/downloads/</a><br />
     <a href="http://nhw.pl/blg/articles/nbcom/">2. http://nhw.pl/blg/articles/nbcom/</a><br />
     <a href="http://freshmeat.net/projects/microblogger">3. http://freshmeat.net/projects/microblogger</a><br /></p>
 
     <div class="copyright">
-      <span>Copyright © 2003-2005 Kevin Wood. All Rights Reserved.</span>
+      <span>Copyright © 2003-2006 Kevin Wood. All Rights Reserved.</span>
     </div>
   </div>
 </body>

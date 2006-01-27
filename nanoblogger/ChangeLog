@@ -1,3 +1,14 @@
+2006-01-26 23:15  n1xt3r
+
+	* docs/nanoblogger.html: Rewrote "About Plugins" and updated
+	  others.
+
+2006-01-26 20:22  n1xt3r
+
+	* ChangeLog, TODO, nb, default/styles/nb_rusted.css,
+	  default/styles/nb_spring.css, default/styles/nb_steelblue.css:
+	  Version Changed to 3.3 RC4
+
 2006-01-26 18:52  n1xt3r
 
 	* default/styles/: nb_clean.css, nb_default.css, nb_rusted.css,
