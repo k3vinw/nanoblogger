@@ -1,80 +1,252 @@
-2005-11-28 15:49  n1xt3r
+2006-01-26 18:52  n1xt3r
 
-	* nb, lang/en/help.txt, lib/config.sh: Updating defaults to maximum
-	  number of entries (max).
+	* default/styles/: nb_clean.css, nb_default.css, nb_rusted.css,
+	  nb_spring.css, nb_steelblue.css: Fix footer width for multiple
+	  browsers.
 
-2005-11-28 13:04  n1xt3r
+2006-01-26 17:25  n1xt3r
 
-	* nb, welcome-to-nb.txt, default/blog.conf, docs/nanoblogger.html,
-	  lang/en/help.txt, lib/config.sh: Settings to control maximum
-	  number or entries stored in cache.
+	* default/styles/: nb_clean.css, nb_default.css, nb_rusted.css,
+	  nb_spring.css, nb_steelblue.css: - Fix logic issues in CSS code.
+	  - Improve display of layout for multiple browsers.
 
-2005-11-28 01:44  n1xt3r
+2006-01-24 17:36  n1xt3r
 
-	* ChangeLog, nb, default/blog.conf,
-	  default/templates/year_archive.htm, docs/nanoblogger.html:
-	  Automatic or manual control of cache to save disk space.
+	* TODO, default/templates/main_index.htm, lang/de/templates.lang,
+	  lang/en/templates.lang: Templates language definition for
+	  "Archive index".
 
-2005-11-28 01:17  n1xt3r
+2006-01-24 15:11  n1xt3r
 
-	* nb, welcome-to-nb.txt, docs/nanoblogger.html, lang/en/help.txt,
-	  lang/en/messages.lang, lib/config.sh, lib/query.sh, lib/tools.sh:
-	  - Automatically expire older cache data to save disk space.  -
-	  Remove "current" from listing and updating command line options.
+	* default/templates/entry.htm,
+	  default/templates/permalink_entry.htm,
+	  default/templates/weblog_status.htm, lang/de/templates.lang,
+	  lang/en/templates.lang: Uniformed template's language definition
+	  variables.
 
-2005-11-26 23:12  n1xt3r
+2006-01-24 13:52  n1xt3r
 
-	* nb, lang/en/help.txt, lang/en/messages.lang, lib/tools.sh:
-	  Ability to control cache from command line.
-
-2005-11-25 23:25  n1xt3r
-
-	* ChangeLog, TODO, nb, default/blog.conf,
-	  default/templates/main_index.htm, docs/nanoblogger.html,
-	  lib/tools.sh, plugins/weblog_links.sh, plugins/weblog_status.sh,
+	* nb, default/styles/nb_clean.css, default/styles/nb_default.css,
+	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
+	  default/styles/nb_steelblue.css, default/styles/print.css,
+	  default/templates/category_archive.htm,
+	  default/templates/entry.htm, default/templates/main_index.htm,
+	  default/templates/main_links.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm,
+	  default/templates/permalink_entry.htm,
+	  default/templates/year_archive.htm, lang/de/messages.lang,
+	  lang/de/templates.lang, lang/en/messages.lang,
+	  lang/en/templates.lang, plugins/recent_entries.sh,
+	  plugins/zyx_articles_meta.sh, plugins/zyx_articles_text.off,
 	  plugins/archive/master_fullindex.off,
 	  plugins/archive/master_index.sh,
-	  plugins/archive/year/year_index.sh: - New master archive index
-	  branches out to yearly archive indexes.  - Fix broken cache
-	  routines.
+	  plugins/archive/year/year_index.sh,
+	  plugins/entry/mod/base_url.sh, plugins/makepage/tidy.sh: -
+	  Improved footer structure in templates (XHTML).  - More language
+	  definitions for templates and messages.
 
-2005-11-24 00:31  n1xt3r
+2006-01-22 18:47  n1xt3r
 
-	* ChangeLog, nb, nb.conf, plugins/archive/master_fullindex.off,
+	* nb, default/templates/category_archive.htm,
+	  default/templates/weblog_status.htm, lang/de/messages.lang,
+	  lang/de/templates.lang, lang/en/messages.lang,
+	  lang/en/templates.lang: - Initial support of language definitions
+	  for templates.  - Loads all language definition files found under
+	  $NB_LANG_DIR.  - Minor enhancement to category archive's
+	  navigational menu of template.
+
+2006-01-22 01:33  n1xt3r
+
+	* TODO, default/styles/nb_clean.css, default/styles/nb_default.css,
+	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
+	  default/styles/nb_steelblue.css: Improved CSS hacks for proper
+	  display in opera and ie mac browsers.
+
+2006-01-21 17:54  n1xt3r
+
+	* TODO, nb, default/styles/nb_clean.css,
+	  default/styles/nb_default.css, default/styles/nb_rusted.css,
+	  default/styles/nb_spring.css, default/styles/nb_steelblue.css,
+	  default/templates/category_archive.htm,
+	  default/templates/makepage.htm, default/templates/permalink.htm,
+	  default/templates/year_archive.htm, lib/tools.sh: - Incorporated
+	  "box model" and various IE css hacks into all style sheets.  -
+	  Fix some prompts from disappearing when verbose mode is set to
+	  "0".
+
+2006-01-13 16:16  n1xt3r
+
+	* default/templates/: makepage.htm, month_archive.htm,
+	  permalink.htm, year_archive.htm: Fix inconsistency of menu
+	  positioning in templates.
+
+2006-01-13 00:24  n1xt3r
+
+	* TODO, default/styles/nb_clean.css, default/styles/nb_default.css,
+	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
+	  default/styles/nb_steelblue.css: Fix numerous CSS layout issues
+	  including those effecting IE browser.
+
+2006-01-10 01:37  n1xt3r
+
+	* default/styles/nb_clean.css, default/styles/nb_default.css,
+	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
+	  default/styles/nb_steelblue.css,
+	  default/templates/category_archive.htm, lib/config.sh,
+	  lib/tools.sh, plugins/01_mymood.off, plugins/entry/mod/moods.sh,
+	  plugins/page/format/moods.sh: - Fix h2 title position for
+	  category archives.  - All CSS files are consistent with classes
+	  defined in templates.
+
+2006-01-07 01:35  n1xt3r
+
+	* nb, lang/en/messages.lang, lib/query.sh, lib/tools.sh: - Check
+	  write permissions for editing files and key directories.
+
+2006-01-06 19:51  n1xt3r
+
+	* nb, plugins/01_mymood.off, plugins/entry/mod/moods.sh,
+	  plugins/page/format/moods.sh: - More precise paramter expansions
+	  pattern matching.  - Enhanced page moods plugin with array and
+	  parameter expansions.
+
+2006-01-06 00:02  n1xt3r
+
+	* nb, lib/query.sh, lib/tools.sh, plugins/calendar.sh,
+	  plugins/archive/month/month_calendar.sh: Eliminated a few
+	  external commands with bash pattern removal techniques.
+
+2006-01-05 22:41  n1xt3r
+
+	* lib/tools.sh, plugins/atom.sh, plugins/rss.sh, plugins/rss2.sh,
+	  plugins/entry/z0_excerpt.off: - Entry Excerpt plugin for
+	  shortening text of entries.  - Improved mechanisms for acquiring
+	  entry's categories in atom/rss plugins.
+
+2006-01-05 02:53  n1xt3r
+
+	* nb, lib/query.sh, lib/tools.sh, plugins/zyx_articles_meta.sh,
+	  plugins/entry/category_links.sh: Fix ugly but harmless file
+	  location issues.
+
+2006-01-04 19:36  n1xt3r
+
+	* plugins/: 01_mymood.off, entry/mod/moods.sh: Enhanced speed of
+	  mood plugins using bash arrays.
+
+2006-01-04 17:33  n1xt3r
+
+	* nb, default/styles/nb_steelblue.css, lib/query.sh, lib/tools.sh,
+	  plugins/01_mymood.off, plugins/atom.sh, plugins/calendar.sh,
+	  plugins/recent_entries.sh, plugins/rss.sh, plugins/rss2.sh,
+	  plugins/weblog_links.sh, plugins/weblog_status.sh,
+	  plugins/zyx_articles_meta.sh, plugins/zyx_articles_text.off,
+	  plugins/archive/master_fullindex.off,
 	  plugins/archive/master_index.sh,
-	  plugins/archive/year/year_index.sh: - New plugins and templates
-	  for yearly archives.	- Modularized archive indexing between two
-	  plugins.
+	  plugins/archive/month/month_calendar.sh,
+	  plugins/archive/year/year_index.sh,
+	  plugins/entry/category_links.sh: Enhanced and more efficient
+	  database acquisition using shell arrays.
 
-2005-11-23 12:59  n1xt3r
+2006-01-02 15:08  n1xt3r
 
-	* docs/nanoblogger.html, plugins/page/feed_links.sh: - Update atom
-	  format supported in user manual.  - Add title to atom based
-	  category feeds.
+	* nb, lib/tools.sh: Fix multiple issues with finding and updating
+	  the proper categories.
 
-2005-11-23 12:48  n1xt3r
+2006-01-01 13:12  n1xt3r
 
-	* plugins/atom.sh: Fix Atom feed's URI in id changed to valid
-	  canonical form.
+	* TODO, nb, default/blog.conf, default/styles/nb_steelblue.css,
+	  docs/nanoblogger.html, lib/config.sh, lib/query.sh, lib/tools.sh,
+	  plugins/entry/category_links.sh: - Update only specified
+	  categories (e.g. -c 1,2,3 -u all).  - Toggle display of category
+	  links.  - Configurable category archive data allows for more
+	  efficiency, speed.
 
-2005-11-23 12:20  n1xt3r
+2005-12-31 01:12  n1xt3r
 
-	* plugins/atom.sh: Relocated Atom 1.0 feed to root of $BLOG_DIR.
+	* lib/query.sh: Fix reverse chronological order of master.db from
+	  previous commits.
 
-2005-11-23 12:10  n1xt3r
+2005-12-31 00:08  n1xt3r
 
-	* ChangeLog, TODO, nb, default/blog.conf,
-	  default/templates/category_archive.htm, docs/nanoblogger.html,
-	  lang/en/messages.lang, plugins/atom.sh, plugins/rss.sh,
-	  plugins/rss2.sh, plugins/page/feed_links.sh: Atom 1.0 feed and
-	  optional category feeds.
+	* lib/tools.sh: Fix rogue lookup_entryid usage from last commit.
 
-2005-11-20 00:31  n1xt3r
+2005-12-31 00:03  n1xt3r
 
-	* nb: Fix bug which caused show help not to display correctly.
+	* nb, docs/nanoblogger.html, lib/query.sh, lib/tools.sh,
+	  plugins/weblog_status.sh: Removed unnecessary overhead from
+	  database queries.
 
-2005-11-19 20:40  n1xt3r
+2005-12-30 03:14  n1xt3r
 
-	* lib/tools.sh, ChangeLog, nb: Fix bug which caused data not to
-	  read/write correctly on particular systems (e.g. busybox).
+	* nb, plugins/entry/category_links.sh: Fix updating partial
+	  category archive based on relative entry matches.
+
+2005-12-30 02:37  n1xt3r
+
+	* nb, default/blog.conf, docs/nanoblogger.html,
+	  lang/en/messages.lang, lib/query.sh, lib/tools.sh,
+	  plugins/entry/category_links.sh: - Stored entry and category
+	  metadata to master database file.  - More efficient category
+	  metadata retrieval on per-entry basis.  - Fix entry update upon
+	  deletion from category.
+
+2005-12-24 22:41  n1xt3r
+
+	* nb, default/blog.conf, default/scripts/global.js,
+	  default/styles/nb_steelblue.css,
+	  default/templates/category_archive.htm,
+	  default/templates/main_index.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm,
+	  default/templates/year_archive.htm, docs/nanoblogger.html,
+	  plugins/weblog_links.sh: New options to include full archive
+	  links.
+
+2005-12-20 16:51  n1xt3r
+
+	* TODO, nb, default/scripts/global.js,
+	  default/styles/nb_steelblue.css, default/styles/print.css,
+	  default/templates/category_archive.htm,
+	  default/templates/main_index.htm,
+	  default/templates/main_links.htm, default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm,
+	  default/templates/year_archive.htm, docs/nanoblogger.html,
+	  lang/de/help.txt, lib/tools.sh, plugins/post/rsync_weblog.off: -
+	  Implemented post plugins that are always last to be initialized.
+	  - New style sheet that uses box model hack.  - Templates
+	  structure refined for use with new style sheets.
+
+2005-12-15 00:58  n1xt3r
+
+	* lang/de/: help.txt, messages.lang, plugins.lang: Added German
+	  (de) translations.
+
+2005-12-15 00:47  n1xt3r
+
+	* TODO, nb, docs/nanoblogger.html, lib/tools.sh, plugins/atom.sh,
+	  plugins/rss.sh, plugins/rss2.sh, plugins/weblog_links.sh,
+	  plugins/archive/master_fullindex.off,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/year/year_index.sh: - Renamed read_entry function
+	  to load_entry and improved it's versatility.	- New plugin api
+	  information with minor clarifications for user manual.
+
+2005-12-13 17:12  n1xt3r
+
+	* TODO, nb, nb.conf, default/templates/category_archive.htm,
+	  default/templates/category_entry.htm,
+	  default/templates/makepage.htm,
+	  default/templates/month_archive.htm,
+	  default/templates/permalink.htm,
+	  default/templates/year_archive.htm, docs/nanoblogger.html,
+	  lang/en/help.txt, lib/config.sh, lib/query.sh, lib/tools.sh,
+	  plugins/weblog_links.sh, plugins/archive/year/year_index.sh: -
+	  New internal queries (master, years, months) that reduce
+	  redundancy.  - Per-archive entry templates to override default
+	  entry template.  - Better title placement in default templates.
+	  - New navigational links provided for templates.  - Interactive
+	  mode toggable from command line.
 

@@ -229,8 +229,8 @@ html>body #footer {
 	text-transform: none;
 	color: #57933a;
 	margin-bottom: 15px;
-	font-size: x-small; /* for IE 5.5 */
-	f\ont-size: small; /* for compliant browsers */
+	font-size: small; /* for IE 5.5 */
+	f\ont-size: medium; /* for compliant browsers */
 	}
 
 .date	{
@@ -239,8 +239,8 @@ html>body #footer {
 	text-align: left;
 	line-height: 1.7em;
 	font-weight: bold;
-	font-size: small; /* for IE 5.5 */
-	f\ont-size: medium; /* for compliant browsers */
+	font-size: x-small; /* for IE 5.5 */
+	f\ont-size: small; /* for compliant browsers */
 	border-bottom: 1px solid #999;
 	}
 

@@ -177,7 +177,7 @@ only here for backwards compat. */
 	bottom: 0;
 	min-height: 10%;
 	height: 10%;
-	width: 860px;
+	width: 880px;
 	margin: auto;
 	padding: 10px;
         text-align: center;
@@ -187,12 +187,12 @@ only here for backwards compat. */
 	hides next rule from IE */
 	voice-family: "\"}\"";
 	voice-family: inherit;
-	width: 840px;
+	width: 860px;
 	}
 
 html>body #footer {
 	height: auto;
-	width: 820px;
+	width: 840px;
 	}
 
 .intro {
