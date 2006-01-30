@@ -289,7 +289,7 @@ html>body #footer {
 	line-height: 1.7em;
 	text-align: right;
 	font-size: xx-small; /* for IE 5.5 */
-	f\ont-size: small; /* feed to compliant browsers */
+	f\ont-size: x-small; /* feed to compliant browsers */
 	}
 
 .sidetitle {
@@ -298,8 +298,10 @@ html>body #footer {
 	margin-top: 10px;
 	text-align: center;
 	text-transform: lowercase;
-	letter-spacing: .1em;
+	letter-spacing: 0.1em;
 	border-bottom: 1px dotted #999;
+	font-size: x-small; /* for IE 5.5 */
+	f\ont-size: small; /* feed to compliant browsers */
 	}
 
 .syndicate {
@@ -307,8 +309,8 @@ html>body #footer {
 	padding: 2px;
 	margin-top: 10px;
 	text-align: center;
-	font-size: x-small; /* for IE 5.5 */
-	f\ont-size: small; /* feed to compliant browsers */
+	font-size: xx-small; /* for IE 5.5 */
+	f\ont-size: x-small; /* feed to compliant browsers */
 	}
 
 .metainfo {
