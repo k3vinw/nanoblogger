@@ -7,11 +7,13 @@ db_catquery="$2"
 db_setlimit="$3"
 db_limit="$4"
 db_offset="$5"
+db_order="$6"
 # sanitize db_limit and db_offset
 db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
 db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
+: ${db_order:=$SORT_ARGS}
 : ${db_filter:=query}
 # adjust offset by 1 for bash arrays (1 = 0)
 ((db_offset--))
@@ -24,8 +26,8 @@ else
 fi
 [ "${db_categories[*]}" = "cat_*.$NB_DBTYPE" ] && db_categories=()
 # filter_ filters
-filter_query(){ grep "$db_query." |cut -d">" -f 1 |sort $SORT_ARGS; } # allow for empty $db_query
-filter_raw(){ grep "$db_query." |sort $SORT_ARGS; }
+filter_query(){ grep "$db_query." |cut -d">" -f 1 |sort $db_order; } # allow for empty $db_query
+filter_raw(){ grep "$db_query." |sort $db_order; }
 # update master db
 update_db(){
 	DB_YYYY=`echo "$db_query" |cut -c1-4`
@@ -51,7 +53,7 @@ update_db(){
 		[ -f "$NB_DATA_DIR/$entry" ] &&
 			echo "$entry$cat_ids"
 		oldcat_idnum=; cat_idnum=; cat_ids=
-	done |sort $SORT_ARGS > "$SCRATCH_FILE.master.$NB_DBTYPE"
+	done |sort $db_order > "$SCRATCH_FILE.master.$NB_DBTYPE"
 	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
 # list all entries
@@ -97,12 +99,12 @@ elif [ "$db_query" = max ]; then
 else
 	query_data
 fi
-db_query=; db_filter=
+db_query=; db_filter=; db_order=;
 }
 
 # search, filter, and create raw db references
 raw_db(){
 db_filter=raw
-query_db "$1" "$2" "$3" "$4" "$5"
+query_db "$1" "$2" "$3" "$4" "$5" "$6"
 }
 

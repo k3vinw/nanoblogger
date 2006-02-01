@@ -126,8 +126,14 @@ x_id="$BLOG_ENTRYID_TAG"
 : ${BLOG_CACHEMNG:=1}
 # default for maximum entries to save in cache
 : ${MAX_CACHE_ENTRIES:=$MAX_ENTRIES}
-# default sort arguments (-u is required)
-: ${SORT_ARGS:=-ru}
+# default chronological order for archives
+: ${CHRON_ORDER:=1}
+# determine sort order (-u required)
+if [ "$CHRON_ORDER" = 1 ]; then
+	SORT_ARGS="-ru"
+else
+	SORT_ARGS="-u"
+fi
 # override configuration's interactive mode
 [ ! -z "$USR_INTERACTIVE" ] &&
 	BLOG_INTERACTIVE="$USR_INTERACTIVE"
@@ -140,7 +146,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
 	QUERY_MODE=; MAX_ENTRIES=; METADATA_MARKER=; METADATA_CLOSETAG=; \
 	PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; MAX_CACHE_ENTRIES=; \
-	SORT_ARGS=; }
+	SORT_ARGS=; CHRON_ORDER=; }
 
 # edit $BLOG_CONF
 config_weblog(){

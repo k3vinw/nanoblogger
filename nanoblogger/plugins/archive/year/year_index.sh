@@ -22,8 +22,14 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	if [ ! -z "$year_id" ] && [ $year_id -ge 0 ]; then
 		# adjust for bash array - 1 = 0
 		((year_id--))
-		prev_yearid=`expr $year_id + 1`
-		next_yearid=`expr $year_id - 1`
+		# determine direction based on chronological date order
+		if [ "$CHRON_ORDER" = 1 ]; then
+			prev_yearid=`expr $year_id + 1`
+			next_yearid=`expr $year_id - 1`
+		else
+			prev_yearid=`expr $year_id - 1`
+			next_yearid=`expr $year_id + 1`
+		fi	
 		prev_year=; NB_PrevArchiveYearLink=
 		[ $prev_yearid -ge 0 ] &&
 			prev_year=${YEAR_DB_RESULTS[$prev_yearid]}

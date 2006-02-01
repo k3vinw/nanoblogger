@@ -187,9 +187,14 @@ BAENTRY_IDLIST=($2)
 entryid_var=`lookup_entryid "$1" "${BAENTRY_IDLIST[*]}"`
 # adjust offset by 1 for bash arrays (1 = 0)
 ((entryid_var--))
-# assumes chronological date order
-before_entryid=`expr $entryid_var + 1`
-after_entryid=`expr $entryid_var - 1`
+# determine direction based on chronological date order
+if [ "$CHRON_ORDER" = 1 ]; then
+	before_entryid=`expr $entryid_var + 1`
+	after_entryid=`expr $entryid_var - 1`
+else
+	before_entryid=`expr $entryid_var - 1`
+	after_entryid=`expr $entryid_var + 1`
+fi	
 if [ "$before_entryid" -ge 0 ]; then
 	before_entry=${BAENTRY_IDLIST[$before_entryid]%%\>[0-9]*}
 else
@@ -231,9 +236,14 @@ month_id=
 [ ! -z "$monthnavlinks_var" ] &&
 	month_id=`lookup_monthid "$monthnavlinks_var" "${MONTH_DB_RESULTS[*]}"`
 if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
-	# assumes reverse chronological date order
-	prev_monthid=`expr $month_id + 1`
-	next_monthid=`expr $month_id - 1`
+	# determine direction based on chronological date order
+	if [ "$CHRON_ORDER" = 1 ]; then
+		prev_monthid=`expr $month_id + 1`
+		next_monthid=`expr $month_id - 1`
+	else
+		prev_monthid=`expr $month_id - 1`
+		next_monthid=`expr $month_id + 1`
+	fi
 	prev_month=; NB_PrevArchiveMonthLink=
 	[ $prev_monthid -gt 0 ] &&
 		prev_month=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS |sed ''$prev_monthid'!d'`

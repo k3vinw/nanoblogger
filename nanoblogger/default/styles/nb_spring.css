@@ -257,6 +257,8 @@ html>body #footer {
 	text-align: right;
 	letter-spacing: 0.2em;
 	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: x-small; /* for IE 5.5 */
+	f\ont-size: small; /* feed to compliant browsers */
 	font-weight: normal;
 	}
 
