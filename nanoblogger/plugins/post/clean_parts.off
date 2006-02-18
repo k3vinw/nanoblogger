@@ -1,0 +1,3 @@
+# plugin to cleanup parts directory
+[ -d "$BLOG_DIR/$PARTS_DIR" ] &&
+	rm -fr "$BLOG_DIR/$PARTS_DIR"/*

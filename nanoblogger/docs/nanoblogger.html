@@ -283,13 +283,13 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
     <p>Three basic steps to upgrading (from the shell prompt):</p>
     <pre>
 1. create a new weblog directory using nanoblogger (skip the configuration):
-        nb [-b blog_dir] -a
+        nb -b [new_blog_dir] -a
 
 2. copy the old data directory over to the new weblog directory:
-        cp -r [old_blog_dir]/data [newblog_dir]
+        cp -r [old_blog_dir]/data [new_blog_dir]
 
 3. edit the new blog.conf to your likings and rebuild the weblog:
-        nb [-b blog_dir] --configure -u all
+        nb -b [new_blog_dir] --configure -u all
         
 </pre>
 
