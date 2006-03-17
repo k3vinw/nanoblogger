@@ -32,9 +32,7 @@ if [ "$exitcode" = 1 ]; then
 	nb_msg "tidy issued warning messages"
 elif [ "$exitcode" = 2 ]; then
 	nb_msg "tidy issued error messages"
-elif [ "$exitcode" = 0 ]; then
-	nb_msg "tidy detected no errors"
-else
+elif [ "$exitcode" != 0 ]; then
 	nb_msg "tidy exited with code: $exitcode"
 fi
 [ ! -N "$MKPAGE_OUTFILE" ] &&
@@ -50,20 +48,20 @@ if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
 	SED_VAR=`echo "$BLOG_DIR" |sed -e '/[\/\]/ s//\\\\\//g'`
 	SUFFIX_VAR=`echo "$MKPAGE_OUTFILE" |sed -e '/'$SED_VAR'/ s///g' |cut -d"." -f 2`
 	if [ "$SUFFIX_VAR" = "$NB_FILETYPE" ]; then
-		nb_msg "validating $MKPAGE_OUTFILE ..."
+		nb_msg "tidy formatting $MKPAGE_OUTFILE ..."
 		cat >> "$TIDY_LOGFILE" <<-EOF
 		
-			validating $MKPAGE_OUTFILE:
+			tidy formatting $MKPAGE_OUTFILE:
 
 		EOF
 		$TIDY_CMD $TIDY_HTML_ARGS -m $MKPAGE_OUTFILE >> "$TIDY_LOGFILE" 2>&1
 		tidy_info
 	fi
 	if [ "$SUFFIX_VAR" = "$NB_SYND_FILETYPE" ]; then
-		nb_msg "validating $MKPAGE_OUTFILE ..."
+		nb_msg "tidy formatting $MKPAGE_OUTFILE ..."
 		cat >> "$TIDY_LOGFILE" <<-EOF
 
-			validating $MKPAGE_OUTFILE:
+			tidy formatting $MKPAGE_OUTFILE:
 
 		EOF
 		$TIDY_CMD $TIDY_XML_ARGS -m "$MKPAGE_OUTFILE" >> "$TIDY_LOGFILE" 2>&1

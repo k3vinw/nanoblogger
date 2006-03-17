@@ -17,19 +17,20 @@
 PLUGIN_OUTFILE1="$BLOG_DIR/$PARTS_DIR/recent_entries.$NB_FILETYPE"
 PLUGIN_OUTFILE2="$BLOG_DIR/$PARTS_DIR/older_entries.$NB_FILETYPE"
 
-# flip order for recent and old list for logical reasons
-[ "$CHRON_ORDER" != 1 ] && re_order="-ru"
+# always sort in reverse chronological order so recent entries
+# stay near the top of the list
+[ "$CHRON_ORDER" != 1 ] && flip_order="-ru"
 
 nb_msg "$plugins_action recent entries links ..."
 set_baseurl "./"
 
 get_entries(){
 LIST_MODE="$1"
-[ "$LIST_MODE" = "new" ] && query_db max nocat limit "$LIST_N" "" "$re_order"
+[ "$LIST_MODE" = "new" ] && query_db max nocat limit "$LIST_N" "" "$flip_order"
 if [ "$LIST_MODE" = "old" ]; then
 	XLIST_OFFSET="$LIST_N"
 	XLIST_N=`expr $LIST_N + $LIST_N`
-	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET" "$re_order"
+	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET" "$flip_order"
 fi
 for entry in ${DB_RESULTS[*]}; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"

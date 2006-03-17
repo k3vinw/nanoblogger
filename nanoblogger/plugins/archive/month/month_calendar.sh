@@ -30,13 +30,13 @@ echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with l
 echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 echo '<tr>' >> "$PLUGIN_OUTFILE"
 for wd in ${WEEK_DAYS[@]}; do
-	echo '<th style="text-align:center;"><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
+	echo '<th><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"
 done
 echo '</tr>' >> "$PLUGIN_OUTFILE"
 for line in ${NUM_DAY_LINES[@]}; do
 	DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
-	echo "$DN_LINES" | sed -e '/  $/ Q; /  [ \t]/ s//<td style="text-align: center;"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+	echo "$DN_LINES" | sed -e '/  $/ Q; /  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 	for dn in $DN_LINES; do
 		set_link=0
 		CALENTRY_LIST=(`for day in ${MONTH_LIST[@]}; do echo $day; done |grep $dn`)
@@ -49,14 +49,14 @@ for line in ${NUM_DAY_LINES[@]}; do
 				NB_EntryID=`set_entryid $entry`
 				set_entrylink "$entry" altlink
 				dn='<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$dn'</a>'
-				echo '<td style="text-align:center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+				echo '<td><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 			fi
 		done
 		if [ "$set_link" != 1 ] ; then
-			echo '<td style="text-align:center"><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
+			echo '<td><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 		fi
 	done
-	echo "$DN_LINES" | sed -e '/^  / Q; /  [ \t]/ s//<td style="text-align: center;"><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+	echo "$DN_LINES" | sed -e '/^  / Q; /  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
 	echo '</tr>' >> "$PLUGIN_OUTFILE"
 done
 echo '</table>' >> "$PLUGIN_OUTFILE"
