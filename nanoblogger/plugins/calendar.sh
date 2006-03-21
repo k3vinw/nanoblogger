@@ -24,8 +24,14 @@ query_db "$curr_month"
 set_baseurl "./"
 MONTH_LIST=(${DB_RESULTS[*]})
 
-echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with links to days with entries">' > "$PLUGIN_OUTFILE"
-echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
+echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar">' > "$PLUGIN_OUTFILE"
+# create link to month's archive
+set_monthlink ${curr_month//\./-}
+if [ "${#DB_RESULTS[*]}" -gt 0 ]; then
+	echo '<caption class="calendarhead"><a href="'${BASE_URL}$ARCHIVES_DIR/$NB_ArchiveMonthLink'">'$CAL_HEAD'</a></caption>' >> "$PLUGIN_OUTFILE"
+else
+	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
+fi
 echo '<tr>' >> "$PLUGIN_OUTFILE"
 for wd in ${WEEK_DAYS[@]}; do
 	echo '<th><span class="calendarday">'$wd'</span></th>' >> "$PLUGIN_OUTFILE"

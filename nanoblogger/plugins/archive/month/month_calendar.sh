@@ -26,7 +26,7 @@ NUM_DAY_LINES=(`echo "$DAYS" |grep -n "[0-9]" |cut -d":" -f 1`)
 query_db "$cal_year.$cal_month"
 MONTH_LIST=(${DB_RESULTS[*]})
 
-echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar with links to days with entries">' > "$PLUGIN_OUTFILE"
+echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar">' > "$PLUGIN_OUTFILE"
 echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$PLUGIN_OUTFILE"
 echo '<tr>' >> "$PLUGIN_OUTFILE"
 for wd in ${WEEK_DAYS[@]}; do

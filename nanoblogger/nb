@@ -607,7 +607,10 @@ for entry_id in $NUMVAR; do
 		[ ! -z "$next_entry" ] &&
 			echo "$next_entry" >> "$SCRATCH_FILE"
 	fi
-	if [ -N "$NB_DATA_DIR/$Edit_EntryFile" ]; then
+	# find cached version for 'newer than' comparison
+	nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
+	nt_cachefile=${nt_cachefile//[ ]*}
+	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 		# remove old cache data
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
