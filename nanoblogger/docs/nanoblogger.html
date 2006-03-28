@@ -831,7 +831,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
-      <p>Entry Formatting plugins are initialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator.</p>
+      <p>Entry Formatting plugins are initialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
 
       <p><b>Page Plugins: plugins/page</b></p>
 
@@ -839,7 +839,7 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p><b>Page Formatting Plugins: plugins/page/format</b></p>
 
-      <p>Page Formatting plugins are initialized for each page that is updated based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator.</p>
+      <p>Page Formatting plugins are initialized for each page that is updated based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
 
       <p><b>Make Page Plugins: plugins/makepage</b></p>
 
@@ -1551,7 +1551,7 @@ YYYY-MM-DDTHH_MM_SS.txt
         
 </pre>
 
-    <p>The format of an entry is made up of metadata. Each piece of metadata is of the format KEY: VALUE, then a carriage return that separates one piece from the next. The order of the metadata is not important.</p>Example of an entry's format:
+    <p>The format of an entry is made up of metadata tags. Most of the metadata tags are of the format TAG: VALUE, then a carriage return that separates one tag from the next. The order of the metadata tags are insignificant. The <em>BODY</em> tag is special and needs to be terminated by the <em>END-----</em> tag. By default the content of the BODY tag must contain valid HTML with all entities properly escaped.</p>Example of an entry's format:
     <pre>
 TITLE: A New Entry
 AUTHOR: foo
@@ -1560,7 +1560,7 @@ DESC: keywords or a short, one line summary
 FORMAT: raw
 -----
 BODY:
-This is my new entry ...
+&lt;p&gt;This is my new entry ...&lt;/p&gt;
 END-----
         
 </pre>
