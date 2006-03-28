@@ -20,7 +20,7 @@ body {
 	margin: 20px auto;
 	padding: 0;
 	text-align: center;
-	font: 12px/1.5 verdana, arial, helvetica, sans-serif;
+	font: 12px/1.5 Verdana, Arial, Helvetica, sans-serif;
 	}
 
 a 		{ color: #4682B4; text-decoration: none; }
@@ -137,9 +137,9 @@ html>body #container {
 }
 
 #content {
-	float: right;
+	float: left;
 	width: 65%;
-	padding: 10px 40px 10px 10px;
+	padding: 10px 10px 10px 40px;
 	background-color: #FFF;
 	/* border: 1px solid red; */
 	}
@@ -152,11 +152,11 @@ only here for backwards compat. */
 	}
 
 #links {
-	float: left;
+	float: right;
 	background-color: #DDD;
 	width: 25%;
 	padding: 10px;
-	border-right: 1px dotted #999;
+	border-left: 1px dotted #999;
 	}
 
 #wrap {
@@ -304,7 +304,7 @@ html>body #footer {
 	color: #333;
 	padding: 2px;
 	line-height: 1.7em;
-	text-align: left;
+	text-align: right;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
@@ -396,7 +396,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 1em verdana, arial, helvetica, sans-serif; /* IE5 */
+	font: 1em Verdana, Arial, Helvetica, sans-serif; /* IE5 */
 	}
 
 /* --- extras --- */

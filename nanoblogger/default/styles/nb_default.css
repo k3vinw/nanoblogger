@@ -20,7 +20,7 @@ body {
 	margin: 0 auto;
 	padding: 0;
 	text-align: center;
-	font: 12px/1.5 verdana, arial, helvetica, sans-serif;
+	font: 12px/1.5 Verdana, Arial, Helvetica, sans-serif;
 	}
 
 a 		{ color: #003366; text-decoration: none; }
@@ -42,7 +42,7 @@ h2 {
 	margin-bottom: 1.5em;
 	padding: 0;
 	text-align: center;
-	font-family: vedana, arial, helvetica, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: large;
 	font-weight: bold;
 	}
@@ -232,7 +232,7 @@ html>body #footer {
 	text-transform: none;
 	color: #003366;
 	margin-bottom: 15px;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: small; /* for IE 5.5 */
 	f\ont-size: medium; /* for compliant browsers */
 	}
@@ -242,7 +242,7 @@ html>body #footer {
 	margin-bottom: 10px;
 	text-align: left;
 	line-height: 1.7em;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-weight: bold;
 	font-size: small; /* for IE 5.5 */
 	f\ont-size: large; /* for compliant browsers */
@@ -261,7 +261,7 @@ html>body #footer {
 	padding: 2px;
 	text-align: right;
 	letter-spacing: 0.2em;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	font-weight: normal;
@@ -395,7 +395,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 1em palatino, georgia, times new roman, serif; /* IE5 */
+	font: 1em "Times New Roman", Times, serif; /* IE5 */
 	}
 
 /* --- extras --- */

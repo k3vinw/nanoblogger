@@ -20,7 +20,7 @@ body {
 	margin: 0 auto;
 	padding: 0;
 	text-align: center;
-	font: 12px/1.5 palatino,  georgia, verdana, arial, serif;
+	font: 12px/1.5 "Times New Roman", Times, serif;
 	}
 
 a 		{ color: #003366; text-decoration: none; }
@@ -42,7 +42,7 @@ h2 {
 	margin-bottom: 1.5em;
 	padding: 0;
 	text-align: center;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: large;
 	font-weight: bold;
 	}
@@ -80,7 +80,7 @@ pre {
 	color: #333;
 	margin: 0px;
 	padding: 15px;
-	font-family: palatino,  georgia, verdana, arial, serif;
+	font-family: "Times New Roman", Times, serif;
 	border-top: 1px solid #999;
 	border-bottom: 1px dotted #999;
 	}
@@ -135,9 +135,9 @@ html>body #container {
 }
 
 #content {
-	float: right;
+	float: left;
 	width: 65%;
-	padding: 10px 40px 10px 10px;
+	padding: 10px 10px 10px 40px;
 	background-color: #FFF;
 	/* border: 1px solid red; */
 	}
@@ -150,11 +150,11 @@ only here for backwards compat. */
 	}
 
 #links {
-	float: left;
+	float: right;
 	background-color: #FFF;
 	width: 25%;
 	padding: 10px;
-	border-right: 1px dotted #999;
+	border-left: 1px dotted #999;
 	}
 
 #wrap {
@@ -231,7 +231,7 @@ html>body #footer {
 	text-transform: none;
 	color: #666;
 	margin-bottom: 15px;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: small; /* for IE 5.5 */
 	f\ont-size: medium; /* for compliant browsers */
 	}
@@ -241,7 +241,7 @@ html>body #footer {
 	margin-bottom: 10px;
 	text-align: left;
 	line-height: 1.7em;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-weight: bold;
 	font-size: small; /* for IE 5.5 */
 	f\ont-size: large; /* for compliant browsers */
@@ -260,7 +260,7 @@ html>body #footer {
 	padding: 2px;
 	text-align: right;
 	letter-spacing: 0.2em;
-	font-family: palatino, georgia, times new roman, serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	font-weight: normal;
@@ -302,7 +302,7 @@ html>body #footer {
 	color: #333;
 	padding: 2px;
 	line-height: 1.7em;
-	text-align: left;
+	text-align: right;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
@@ -394,7 +394,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 1em palatino, georgia, times new roman, serif; /* IE5 */
+	font: 1em "Times New Roman", Times, serif; /* IE5 */
 	}
 
 /* --- extras --- */
