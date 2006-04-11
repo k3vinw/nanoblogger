@@ -243,7 +243,7 @@ html>body #footer {
 	margin-bottom: 10px;
 	text-align: left;
 	line-height: 1.7em;
-	font-family: verdana, arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* for compliant browsers */
@@ -260,9 +260,8 @@ html>body #footer {
 .calendar {
 	color: #4682B4;
 	padding: 2px;
-	text-align: left;
-	letter-spacing: 0.2em;
-	font-family: verdana, arial, sans-serif;
+	text-align: center;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
 	font-weight: normal;
@@ -281,7 +280,7 @@ html>body #footer {
 	padding: 2px;
 	text-align: center;
 	font-weight: bold;
-	letter-spacing: 0.3em;
+	letter-spacing: 0.2em;
 	text-transform: uppercase;
 	border-bottom: 1px solid #999;
 	}
@@ -396,7 +395,7 @@ img.right {
 
 /* IE hack to fix font size in tables */
 * html table {
-	font: 1em Verdana, Arial, Helvetica, sans-serif; /* IE5 */
+	font: 1em "Times New Roman", Times, serif; /* IE5 */
 	}
 
 /* --- extras --- */

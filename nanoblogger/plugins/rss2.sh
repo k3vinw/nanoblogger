@@ -67,7 +67,7 @@ make_rssfeed(){
 # generate feed entries
 build_rssfeed(){
 	db_catquery="$1"
-	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
+	query_db all "$db_catquery" limit "$LIMIT_ITEMS"
 	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".rss2feed
 	for entry in ${ARCHIVE_LIST[@]}; do

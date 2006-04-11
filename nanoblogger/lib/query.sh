@@ -76,7 +76,8 @@ fi
 query_data(){
 if [ "$db_setlimit" = limit ]; then
 	DB_RESULTS=(`list_db |filter_$db_filter`)
-	[ "$db_limit" = 0 ] && db_limit=${#DB_RESULTS[*]}
+	[ "$db_limit" = 0 ] || [ "$db_limit" = -1 ] &&
+		db_limit=${#DB_RESULTS[*]}
 	DB_RESULTS=(`for db_item in ${DB_RESULTS[@]:$db_offset:$db_limit}; do
 			echo $db_item
 		done`)

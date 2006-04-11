@@ -258,8 +258,7 @@ html>body #footer {
 .calendar {
 	color: #666;
 	padding: 2px;
-	text-align: right;
-	letter-spacing: 0.2em;
+	text-align: center;
 	font-family: "Times New Roman", Times, serif;
 	font-size: x-small; /* for IE 5.5 */
 	f\ont-size: small; /* feed to compliant browsers */
@@ -279,7 +278,7 @@ html>body #footer {
 	padding: 2px;
 	text-align: center;
 	font-weight: bold;
-	letter-spacing: 0.3em;
+	letter-spacing: 0.2em;
 	text-transform: uppercase;
 	border-bottom: 1px solid #999;
 	}

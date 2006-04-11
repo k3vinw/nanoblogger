@@ -70,7 +70,7 @@ nb_msg "$MKPAGE_OUTFILE"
 # generate feed entries
 build_atomfeed(){
 	db_catquery="$1"
-	query_db max "$db_catquery" limit "$LIMIT_ITEMS"
+	query_db all "$db_catquery" limit "$LIMIT_ITEMS"
 	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".atomfeed
 	for entry in ${ARCHIVE_LIST[@]}; do
