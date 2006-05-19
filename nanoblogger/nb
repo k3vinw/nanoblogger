@@ -969,35 +969,30 @@ while [ $# -gt 0 ]; do
 		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg; cat_num="$2"; shift;;
 		--cfgfile)		check_arg; USR_BLOGCONF="$2"; shift;;
-		--configure)		check_config; config_weblog;;
+		--configure)		CONFIG_WEBLOG=1;;
 		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
 		-d|--delete)		check_arg; delete_num="$2"; shift
-					check_config; delete_weblog;;
+					DELETE_WEBLOG=1;;
 		-D|--desc)		DESC_PROMPT=1; USR_DESC="$2"; shift;;
 		-e|--edit)		check_arg; edit_num="$2"; shift
-					check_config; edit_weblog;;
+					EDIT_WEBLOG=1;;
 		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
-					check_config; nb_draft;;
+					DRAFT_WEBLOG=1;;
 		-f|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-i|--interactive) 	check_arg; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		check_arg; USR_QUERY="$2"; shift
-					check_config; list_weblog;;
+					LIST_WEBLOG=1;;
 		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
 		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
 		-m|--move)		check_arg; move_num="$2"; shift
-					check_config; move_entry;;
+					MOVE_WEBLOG=1;;
 		-M|--makepage)		check_arg; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
-					check_config; weblog_page "$USR_MKPSRCFILE" "$USR_TEMPLATE" \
-						"$USR_MKPOUTFILE";;
+					MAKEPAGE_WEBLOG=1;;
 		--makefile) 		check_arg; USR_MKFFILE="$2"; shift
-					check_config
-					# don't overwrite existing files
-					[ -f "$USR_MKFFILE" ] &&
-						die "'$USR_MKFFILE' - $samefilename"
-					make_file "$USR_MKFFILE" "$USR_TEMPLATE";;
-		-p|--preview)		check_config; preview_weblog;;
-		-P|--publish)		check_config; publish_weblog;;
+					MAKEFILE_WEBLOG=1;;
+		-p|--preview)		PREVIEW_WEBLOG=1;;
+		-P|--publish)		PUBLISH_WEBLOG=1;;
 		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
 		--template-dir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
@@ -1005,11 +1000,9 @@ while [ $# -gt 0 ]; do
 		--tag-text) 		check_arg; USR_TAGTEXT="$2"; shift;;
 		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
 		-u|--update)		USR_QUERY="$2"; shift
-					check_config; build_weblog;;
+					UPDATE_WEBLOG=1;;
 		-U|--update-cache) 	check_arg; USR_CACHEQUERY="$2"; shift
-					check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-					[ -z "$USR_CACHEQUERY" ] && USR_CACHEQUERY=expired
-					update_cache "$USR_CACHEQUERY" "*";;
+					UPDATECACHE_WEBLOG=1;;
 		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
@@ -1023,13 +1016,53 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-# run add_weblog after the flag bit gets set
-[ "$ADD_WEBLOG" = 1 ] &&
+# post-processing for all command line args
+if [ "$ADD_WEBLOG" = 1 ]; then
 	add_weblog
+fi
+if [ "$CONFIG_WEBLOG" = 1 ]; then
+	check_config; config_weblog
+fi
+if [ "$DELETE_WEBLOG" = 1 ]; then
+	check_config; delete_weblog
+fi
+if [ "$DRAFT_WEBLOG" = 1 ]; then
+	check_config; nb_draft
+fi
+if [ "$EDIT_WEBLOG" = 1 ]; then
+	check_config; edit_weblog
+fi
+if [ "$LIST_WEBLOG" = 1 ]; then
+	check_config; list_weblog
+fi
+if [ "$MAKEPAGE_WEBLOG" = 1 ]; then
+	check_config; weblog_page "$USR_MKPSRCFILE" "$USR_TEMPLATE" \
+		"$USR_MKPOUTFILE"
+fi
+if [ "$MAKEFILE_WEBLOG" = 1 ]; then
+	check_config
+	# don't overwrite existing files
+	[ -f "$USR_MKFFILE" ] &&
+		die "'$USR_MKFFILE' - $samefilename"
+	make_file "$USR_MKFFILE" "$USR_TEMPLATE"
+fi
+if [ "$MOVE_WEBLOG" = 1 ]; then
+	check_config; move_entry
+fi
+if [ "$UPDATE_WEBLOG" = 1 ]; then
+	check_config; build_weblog
+fi
+if [ "$UPDATECACHE_WEBLOG" = 1 ]; then
+	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+	[ -z "$USR_CACHEQUERY" ] && USR_CACHEQUERY=expired
+	update_cache "$USR_CACHEQUERY" "*"
+fi
+if [ "$PREVIEW_WEBLOG" = 1 ]; then
+	check_config; preview_weblog
+fi
+if [ "$PUBLISH_WEBLOG" = 1 ]; then
+	check_config; publish_weblog
+fi
 
 exit 0
-
-#
-# End of script
-#
 

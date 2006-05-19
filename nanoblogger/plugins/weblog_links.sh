@@ -38,7 +38,7 @@
 : ${ALL_YEARLINKS:=0}
 
 # validate MAX_MONTHLINKS (must be greater than 0)
-MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c [0-9]`
+MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c "[0-9]"`
 [ "$MONTHLINKS_NUMVAR" = 0 ] &&
 	die "MAX_MONTHLINKS != > 0"
 # unlimited links
@@ -48,7 +48,7 @@ if [ "$MAX_MONTHLINKS" = -1 ]; then
 fi
 
 # validate MAX_YEARLINKS (must be greater than 0)
-YEARLINKS_NUMVAR=`echo "$MAX_YEARLINKS" |grep -c [0-9]`
+YEARLINKS_NUMVAR=`echo "$MAX_YEARLINKS" |grep -c "[0-9]"`
 [ "$YEARLINKS_NUMVAR" = 0 ] &&
 	die "MAX_YEARLINKS != > 0"
 # unlimited links
