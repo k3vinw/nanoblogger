@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-01-31T17:20:19-05:00
+# Last modified: 2006-05-31T23:51:27-04:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -63,12 +63,12 @@ load_config
 load_plugins(){
 PLUGIN_DIR="$1"
 PLUGIN_LIST=( ${@:1} )
-add_plugin_script(){
+	add_plugin_script(){
 	plugin_file="$1"
 	if [ -f "$plugin_file" ] ; then
 		plugin_scripts=( ${plugin_scripts[@]} "$plugin_file" )
 	fi
-}
+	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
 # stop short when plugins directory doesn't exist
@@ -217,11 +217,11 @@ fi
 		PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
 	}
 	page_bynumber(){
-		set_baseurl "" "${page_dir}${page_filedir}$page_file"
-		make_archive "$page_query" "$page_catquery" "$page_entrytemplate" \
-			"$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" limit "$end" "$begin"
-		make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" \
-			"$NB_TEMPLATE_DIR/$page_template" "${page_dir}${page_filedir}$arch_file"
+	set_baseurl "" "${page_dir}${page_filedir}$page_file"
+	make_archive "$page_query" "$page_catquery" "$page_entrytemplate" \
+		"$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" limit "$end" "$begin"
+	make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" \
+		"$NB_TEMPLATE_DIR/$page_template" "${page_dir}${page_filedir}$arch_file"
 	}
 query_db "$page_query" "$page_catquery"
 total_items=${#DB_RESULTS[*]}
@@ -946,75 +946,66 @@ for lang_def in ${NB_LANG_DIR}/${NB_LANG}/*.lang; do
 	. "$lang_def"
 done
 
-argument=$@
 [ $# -lt 1 ] && show_help
 check_arg(){
-if [ -z "$argument" ]; then
+if [ -z "$1" ]; then
 	echo "$bad_argument $checkarg_badarg"
 	echo "$checkarg_help"
 	exit 1
 fi
 }
 sanity_check(){
-invalid_opt=`echo "$argument" |grep '^[--]$*'`
+invalid_opt=`echo "$@" |grep '^[--]$*'`
 [ ! -z "$invalid_opt" ] && argument=
 }
 while [ $# -gt 0 ]; do
-	[ $# -gt 1 ] && argument=$2
 	bad_argument=$1
 	case "$1" in
 		-a|--add)		ADD_WEBLOG=1;;
-		-b|--blogdir)		check_arg; USR_BLOGDIR="$2"; shift;;
+		-b|--blogdir)		check_arg "$2"; USR_BLOGDIR="$2"; shift;;
 		# -B and --body options deprecated in favor of -T and --text
-		-B|--body)		check_arg; USR_TEXT="$2"; shift;;
-		-c|--category)		check_arg; cat_num="$2"; shift;;
-		--cfgfile)		check_arg; USR_BLOGCONF="$2"; shift;;
+		-B|--body)		check_arg "$2"; USR_TEXT="$2"; shift;;
+		-c|--category)		check_arg "$2"; cat_num="$2"; shift;;
+		--cfgfile)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
 		--configure)		CONFIG_WEBLOG=1;;
-		--datadir)		check_arg; USR_DATADIR="$2"; shift;;
-		-d|--delete)		check_arg; delete_num="$2"; shift
-					DELETE_WEBLOG=1;;
+		--datadir)		check_arg "$2"; USR_DATADIR="$2"; shift;;
+		-d|--delete)		check_arg "$2"; delete_num="$2"; shift; DELETE_WEBLOG=1;;
 		-D|--desc)		DESC_PROMPT=1; USR_DESC="$2"; shift;;
-		-e|--edit)		check_arg; edit_num="$2"; shift
-					EDIT_WEBLOG=1;;
-		-E|--draft) 		check_arg; USR_DRAFTFILE="$2"; shift
-					DRAFT_WEBLOG=1;;
-		-f|--file) 		check_arg; USR_ADDFILE="$2"; shift;;
+		-e|--edit)		check_arg "$2"; edit_num="$2"; shift; EDIT_WEBLOG=1;;
+		-E|--draft) 		check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
+		-f|--file) 		check_arg "$2"; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
-		-i|--interactive) 	check_arg; USR_INTERACTIVE="$2"; shift;;
-		-l|--list)		check_arg; USR_QUERY="$2"; shift
-					LIST_WEBLOG=1;;
-		-n|--author)		check_arg; USR_AUTHOR="$2"; shift;;
-		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html";;
-		-m|--move)		check_arg; move_num="$2"; shift
-					MOVE_WEBLOG=1;;
-		-M|--makepage)		check_arg; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
+		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
+		-l|--list)		USR_QUERY="$2"; shift; LIST_WEBLOG=1;;
+		-n|--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
+		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html"
+					exit 0;;
+		-m|--move)		check_arg "$2"; move_num="$2"; shift; MOVE_WEBLOG=1;;
+		-M|--makepage)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
-		--makefile) 		check_arg; USR_MKFFILE="$2"; shift
-					MAKEFILE_WEBLOG=1;;
+		--makefile) 		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
 		-p|--preview)		PREVIEW_WEBLOG=1;;
 		-P|--publish)		PUBLISH_WEBLOG=1;;
-		--template)		check_arg; USR_TEMPLATE="$2"; shift;;
-		--template-dir)		check_arg; USR_TEMPLATE_DIR="$2"; shift;;
-		-t|--title)		check_arg; USR_TITLE="$2"; shift;;
-		--tag) 			check_arg; USR_METATAG="$2"; shift;;
-		--tag-text) 		check_arg; USR_TAGTEXT="$2"; shift;;
-		-T|--text) 		check_arg; USR_TEXT="$2"; shift;;
-		-u|--update)		USR_QUERY="$2"; shift
-					UPDATE_WEBLOG=1;;
-		-U|--update-cache) 	check_arg; USR_CACHEQUERY="$2"; shift
-					UPDATECACHE_WEBLOG=1;;
-		-v|--verbose)		check_arg; VERBOSE="$2"; shift;;
+		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;
+		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;
+		-t|--title)		check_arg "$2"; USR_TITLE="$2"; shift;;
+		--tag) 			check_arg "$2"; USR_METATAG="$2"; shift;;
+		--tag-text) 		check_arg "$2"; USR_TAGTEXT="$2"; shift;;
+		-T|--text) 		check_arg "$2"; USR_TEXT="$2"; shift;;
+		-u|--update)		USR_QUERY="$2"; shift; UPDATE_WEBLOG=1;;
+		-U|--update-cache) 	USR_CACHEQUERY="$2"; shift; UPDATECACHE_WEBLOG=1;;
+		-v|--verbose)		check_arg "$2"; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
 		*)
 					sanity_check
-					echo "$main_badopts $@"
-					echo "$main_panic"
+					echo "$main_badopts $bad_argument"; echo "$main_panic"
 					exit 1
 					;;
 	esac
 	shift
 done
+
 
 # post-processing for all command line args
 if [ "$ADD_WEBLOG" = 1 ]; then

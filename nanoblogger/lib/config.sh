@@ -27,7 +27,9 @@ load_globals
 # allow user specified weblog directories 
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # auto-detect blog.conf from our CWD
-[ -f "$PWD/blog.conf" ] && BLOG_DIR="$PWD"
+[ -z "$USR_BLOGDIR" ] && [ -f "$PWD/blog.conf" ] &&
+	BLOG_DIR="$PWD"
+BLOG_DIR="${BLOG_DIR%%\/}" # remove trailing "/"
 # export BLOG_DIR for the benefit of other components
 export BLOG_DIR
 : ${BLOG_CONF:="$BLOG_DIR/blog.conf"}

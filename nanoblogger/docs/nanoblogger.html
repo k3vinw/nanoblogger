@@ -187,7 +187,7 @@ li {
       <tr>
         <td>13.</td>
 
-        <td><a href="#s.13">Importing Entries The Hard Way</a></td>
+        <td><a href="#s.13">Importing Entries</a></td>
       </tr>
 
       <tr>
@@ -278,7 +278,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
     <p><b>Upgrading</b></p>
 
-    <p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any differences between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
+    <p><span class="warning">IMPORTANT:</span> Please refer to this documentation and any related changelogs to see what has changed. Any difference between your setup will have to be resolved manually. Simply copying your old templates and configuration will only cause problems. The simplest way to upgrade is described below.</p>
 
     <p>Three basic steps to upgrading (from the shell prompt):</p>
     <pre>
@@ -295,7 +295,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
     <h2><a id="s.4" name="s.4">4. Requirements</a></h2>Programs:
 
-    <p>Bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch, trap</p>
+    <p>Bash (at least v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch</p>
 
     <p>* = GNU version recommended, but not required</p>
 
@@ -1535,9 +1535,9 @@ mput *
   </div>
 
   <div id="entries.import">
-    <h2><a id="s.13" name="s.13">13. Importing Entries The Hard Way</a></h2>
+    <h2><a id="s.13" name="s.13">13. Importing Entries</a></h2>
 
-    <p>To import entries the hard way, data first must be converted to the NanoBlogger format.</p>
+    <p>In order to import entries, data must first be converted to the NanoBlogger format.</p>
 
     <p><b>The Format of an Entry</b></p>
 
@@ -1592,7 +1592,7 @@ nb [-b blog_dir] -u all
   <div id="tips">
     <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
 
-    <p><b>Useful Commands For Editing Sessions</b></p>Create a new metafile:
+    <p><b>Useful Editor's Commands</b></p>Create a new metafile:
     <pre>
 nb [-b blogdir] --makefile somefile.txt
 </pre>Import the metafile as a new weblog entry:
@@ -1601,7 +1601,7 @@ nb [-b blogdir] --file somefile.txt --add
 </pre>or export the metafile as a new weblog page:
     <pre>
 nb [-b blogdir] --makepage somefile.txt somefile.html
-</pre><em>Please note that the editor must support some kind of sub-shell in order to accomplish this or just try suspending your editor from the current shell (assuming there is one).</em>
+</pre><em>Please note that these tasks are easier when the editor supports a sub-shell or when you can suspend your editor from the active shell (assuming there is one).</em>
 
     <p><b>Writing Metatags on the Fly</b></p>
 
@@ -1637,13 +1637,13 @@ $(&lt; "$BLOG_DIR/intro.txt")
         
 </pre>
 
-    <p><b>Integrating Parts of Your Weblog Into a Site</b></p>
+    <p><b>Integrating Parts of Your Weblog Into an Existing Web Site</b></p>
 
-    <p>Many parts of the weblog get stored in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes. This is where the "parts/index.html" file comes in. It contains all the current entries, so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page. So, now you can have a simple weblog-like page, that's updated whenever index.html changes.</p>
+    <p>Many parts of the weblog are stored and built in the <em>parts</em> directory. Say you already have a web site full of your own custom server-side scripts/includes, but you'd like to add a news section. This is where the "parts/index.html" file comes in. It contains all the most recent entries, so adding a news/diary/blog section is just a matter of adding the code to include "parts/index.html" into the page.</p>
 
-    <p>Other clever uses include combining NanoBlogger's static output with some PHP or Perl. For example, suppose you like to have all those nifty links, such as recent entries and archives, using PHP. Set your <em>NB_FILETYPE</em> to PHP and modify the appropriate templates to include the PHP code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
+    <p>Other clever uses include combining NanoBlogger's static output with some PHP or Perl. For example, suppose you like to have some of the side links, such as recent entries. Using PHP, set your <em>NB_FILETYPE</em> to "php" and modify the appropriate templates to include the PHP code that extracts the data from the parts directory. One of the main advantages to this is not having to rebuild the entire weblog's archives, just to keep the links current.</p>
 
-    <p><b>Embedding Variables in the Templates</b></p>
+    <p><b>Embedding Other Variables in the Templates</b></p>
 
     <p>Any characters that are similar to the shell's variable or command substitution characters, will have to be escaped before they will work from the templates.</p>
 
