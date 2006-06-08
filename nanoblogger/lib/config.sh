@@ -119,6 +119,12 @@ x_id="$BLOG_ENTRYID_TAG"
 : ${MAX_CATPAGE_ENTRIES:=$MAX_PAGE_ENTRIES}
 # defaults for index file name
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
+# check if we need to append directory index file to links
+if [ "$SHOW_INDEXFILE" = 1 ]; then
+	: ${NB_INDEX=$NB_INDEXFILE}
+else
+	NB_INDEX=""
+fi
 # default for page navigation symbols (HTML entities)
 : ${NB_NextPage:=&#91;&#62;&#62;&#93;} # [>>]
 : ${NB_PrevPage:=&#91;&#60;&#60;&#93;} # [<<]
