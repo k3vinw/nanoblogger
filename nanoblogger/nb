@@ -315,6 +315,7 @@ if [ ! -z "${CAT_LIST[*]}" ]; then
 			set_catlink "$cat_arch"
 			[ ! -z "$CATARCH_DATATYPE" ] &&
 				ARCH_DATATYPE="$CATARCH_DATATYPE"
+			load_plugins archive/category
 			paginate all "$cat_arch" "$MAX_CATPAGE_ENTRIES" "$CATEGORY_TEMPLATE" \
 				"$CATENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$category_file"
 		fi
@@ -593,7 +594,7 @@ for entry_id in $NUMVAR; do
 	chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
 	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
 		Edit_EntryFile="$New_EntryDateFile"
-	# add changed entries to update list
+	# add date modified entries to update list
 	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 		# update previous and next entries of modified entry
@@ -607,12 +608,12 @@ for entry_id in $NUMVAR; do
 		[ ! -z "$next_entry" ] &&
 			echo "$next_entry" >> "$SCRATCH_FILE"
 	fi
-	# find cached version for 'newer than' comparison
+	# use cached version for 'newer than' comparison
 	nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
 	nt_cachefile=${nt_cachefile//[ ]*}
 	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
-		# remove old cache data
+		# remove old cache data for clean build
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
 	fi
 done

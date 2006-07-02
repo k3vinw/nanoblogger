@@ -1,7 +1,7 @@
 # Module for configuration file management
 
 ### WARNING ###
-# config variables must always load
+# config variables that must always load
 
 # automatically set time zone using GNU specific, 'date +%z'
 tzd_mm=`date +%z |cut -c4-5`
@@ -81,6 +81,14 @@ x_id="$BLOG_ENTRYID_TAG"
 [ ! -z "$USR_AUTHOR" ] && BLOG_AUTHOR="$USR_AUTHOR"
 # default to lynx for browser
 : ${BROWSER:=lynx}
+# smart defaults for date locale
+if [ -n "$LC_ALL" ]; then
+	: ${DATE_LOCALE:=$LC_ALL}
+elif [ -n "$LC_TIME" ]; then
+	: ${DATE_LOCALE:=$LC_TIME}
+else
+	: ${DATE_LOCALE:=$LANG}
+fi
 # default date command
 : ${DATE_CMD:=date}
 # default to vi for editor
@@ -154,7 +162,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
 	QUERY_MODE=; MAX_ENTRIES=; METADATA_MARKER=; METADATA_CLOSETAG=; \
 	PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; MAX_CACHE_ENTRIES=; \
-	SORT_ARGS=; CHRON_ORDER=; }
+	SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; }
 
 # edit $BLOG_CONF
 config_weblog(){
