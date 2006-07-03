@@ -1,0 +1,105 @@
+NanoBlogger is a small weblog engine written in Bash for the command
+line. It uses common UNIX tools such as cat, grep, and sed to create
+static HTML content. Copyright (C) 2004 Kevin Wood
+
+Installing NanoBlogger
+----------------------
+1. download gzipped tarball from:
+   http://nanoblogger.sourceforge.net/downloads/
+2. tar xzvf nanoblogger-xx.tar.gz to [install-dir] (e.g.
+   install-dir = $HOME)
+
+Generic Upgrade Instructions
+----------------------------
+
+These are generic upgrade instructions that should work 99.9% of the
+time. You may wish to choose this route if all you care about is the
+content and not the looks of your weblog. It's also the fastest and most
+painless way to upgrade.
+
+1. create a new weblog directory using nanoblogger (skip the
+   configuration):
+	nb -b [new-blog-dir] -a
+
+2. copy the old data directory over to the new weblog directory:
+	cp -r [old-blog-dir]/data [new-blog-dir]
+
+3. edit the new blog.conf to your likings and rebuild
+   the weblog:
+	nb -b [new-blog-dir] --configure -u all
+
+Upgrading to 3.3 (from at least 3.1)
+------------------------------------
+
+Typically there shouldn't be much involved in an upgrade, but not only
+did 3.3 include a complete rewrite of the templates, it also introduces
+some major feature enhancements. Some of the changes include new
+configuration variables, new template variables, and alterations to the
+format of an entry. Basically all the changes that one arguably
+shouldn't make between releases has been done.
+
+The following notes were created from the process of converting a weblog
+from version 3.1 to 3.3.
+
+1. Templates and Style sheets:
+1.1 rename "templates" and "styles" directories from your weblog's
+    directory (e.g. mv templates old.templates).
+1.2. copy new "templates" and "styles" directories into your weblog's
+     directory (e.g. cp -r [nb-basedir]/default/templates [weblog-dir]).
+1.3. optionally transition the old templates, paying close attention to
+     changes in the template's variables.
+
+NOTE: many of the template variables were reduced to a shorter naming
+convention, so for example "$NB_Recent_Entries" was reduced to
+"$NB_RecentEntries". You can see a list of template variables in
+nanoblogger.html.
+
+2. Data (entries):
+You have two options
+	2.1. keep using the old format
+	     METADATA_CLOSETAG must be set to "-----" in your blog.conf.
+	2.2. modify entries to use new format
+	     METADATA_CLOSETAG should be set to "END-----" in your
+	     blog.conf.
+
+If you choose to modify all your entries to the new format remember to
+backup your weblog first. Once you're sure you have a backup stored
+safely away we can begin the process of converting the entries.
+
+Here's a quick example script that may be used from the bash prompt:
+cd [weblog-dir]/data
+old_suffix=htm
+for entry in *.$old_suffix; do
+	sed -e '5!{ /^[\-][\-][\-][\-][\-]/ s//END-----/; }' $entry > \
+		$entry.new
+	# help to change from .$old_suffix to .txt
+	# entry_base=`basename $entry .$old_suffix`
+	# mv $entry.new $entry_base.txt
+ 	# else just use this
+	mv $entry.new $entry
+done
+
+NOTE: "5!" tells sed to ignore the fifth line where the first seperator
+occurs. This only works for old entries, in other words don't add
+new entries with 3.3 until you've finished this step!
+
+3. Configuration files:
+3.1. backup old blog.conf (e.g. cp blog.conf old.blog.conf)
+3.2. compare differences between default/blog.conf and weblog's blog.conf
+3.3. adjust/add/remove config variable settings as needed.
+3.4. save new blog.conf and update weblog (e.g. nb -u all)
+
+4. Articles (plugin):
+You have two options
+	4.1. use the articles_text.sh plugin
+	4.2. use the articles_meta.sh plugin and modify all your article
+	     files to use the new format.
+
+Final Notes
+-----------
+
+For more in depth documentation please see nanoblogger.html which
+should've been included with your copy of NanoBlogger.
+
+SF.net Project Page: http://nanoblogger.sourceforge.net
+Yahoo! Mailing List: http://groups.yahoo.com/group/nanoblogger
