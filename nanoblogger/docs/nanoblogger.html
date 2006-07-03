@@ -105,7 +105,7 @@ li {
 
     <h2>by <a href="mailto:n1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood)</h2>
 
-    <p><em>The official guide of the NanoBlogger weblog engine.</em></p>
+    <p><em>The official guide to the NanoBlogger weblog engine.</em></p>
   </div>
 
   <div id="toc">
@@ -445,9 +445,9 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Plugin Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em> specifies the directory where the regular plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
+    <p><em>PLUGINS_DIR</em> specifies the directory where the main plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR to a non-default location, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location first.</p>
 
-    <p><em>USERPLUGINS_DIR</em> specifies the directory where user plugins are located. The user plugins directory allows you to run your own plugins on top of the regular plugins. It's strongly recommended that you duplicate the directory tree from the regular plugins directory, then place your plugins accordingly throughout the tree. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
+    <p><em>USR_PLUGINS_DIR</em> specifies the directory where user plugins are located. The user plugins directory allows you to run your own plugins on top of the main plugins. It's strongly recommended that you duplicate the directory tree from the main plugins directory, then place your plugins accordingly throughout the tree. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
@@ -777,6 +777,10 @@ nb [-b blog_dir] -c 1 -d cat
       <p><b>Archive Plugins: plugins/archive</b></p>
 
       <p>Archive plugins are initialized when the archives are updated.</p>
+
+      <p><b>Category Plugins: plugins/archive/category</b></p>
+
+      <p>Category plugins are initialized for each category archive that is updated.</p>
 
       <p><b>Monthly Plugins: plugins/archive/month</b></p>
 
@@ -1581,6 +1585,20 @@ nb [-b blogdir] --tag FORMAT --tag-text "markdown" --makepage somefile.txt somef
     <p>By default you have to specify the weblog directory, but by setting BLOG_DIR, you won't have to. Edit <em>nb.conf</em> or <em>$HOME/.nb.conf</em>:</p>
     <pre>
 BLOG_DIR="/path/to/weblog"
+    
+</pre>
+
+    <p><b>Disable Main Plugins</b></p>
+
+    <p>Create a subdirectory called "no-plugins". This directory should remain empty and be set as read-only. Set PLUGINS_DIR to "[weblog_dir]/no-plugins".</p>
+    <pre>
+mkdir [weblog_dir]/no-plugins
+chmod 555 [weblog_dir]/no-plugins
+    
+</pre>edit blog.conf
+    <pre>
+# must be full path (can't use $BLOG_DIR)
+PLUGINS_DIR="[weblog_dir]/no-plugins"
     
 </pre>
 
