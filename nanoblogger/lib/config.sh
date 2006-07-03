@@ -47,6 +47,8 @@ export BLOG_DIR
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
 # where plugins are located and run by default
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
+# default for user plugins
+: ${USERPLUGINS_DIR:=$BLOG_DIR/plugins}
 
 ### WARNING ###
 # changing the following requires manually modifying

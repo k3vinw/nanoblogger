@@ -71,30 +71,32 @@ PLUGIN_LIST=( ${@:1} )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-# stop short when plugins directory doesn't exist
-plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
-[ ! -d "$plugin_path" ] && return
-# initialise the array of plugins
-plugin_scripts=()
-# were plugin names specified?
-PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
-if [ "$PLUGINLIST_VAR" != 0 ] ; then
-	# yes, so we add them in order specified (removing any commas)
-	for plugin in `echo ${PLUGIN_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
-		nb_plugin="$plugin_path/${plugin}.sh"
-		add_plugin_script "$nb_plugin"
- 	done
-else
-	# no specified plugins, so get them all
-	for nb_plugin in "$plugin_path"/*.sh ; do
-		add_plugin_script "$nb_plugin"
+for plugin_path in $PLUGINS_DIR${PLUGIN_DIR} $USERPLUGINS_DIR${PLUGIN_DIR}; do
+	#plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
+	# stop short when plugins directory doesn't exist
+	[ ! -d "$plugin_path" ] && return
+	# initialise the array of plugins
+	plugin_scripts=()
+	# were plugin names specified?
+	PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
+	if [ "$PLUGINLIST_VAR" != 0 ] ; then
+		# yes, so we add them in order specified (removing any commas)
+		for plugin in `echo ${PLUGIN_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
+			nb_plugin="$plugin_path/${plugin}.sh"
+			add_plugin_script "$nb_plugin"
+		done
+	else
+		# no specified plugins, so get them all
+		for nb_plugin in "$plugin_path"/*.sh ; do
+			add_plugin_script "$nb_plugin"
+		done
+	fi
+	# load the plugins in alpha-numeric order (0-9, A-z)
+	# ... except where specified elsewise
+	for nb_plugin in ${plugin_scripts[@]} ; do
+		#nb_msg "loading `basename $nb_plugin` ..."
+		. "$nb_plugin"
 	done
-fi
-# load the plugins in alpha-numeric order (0-9, A-z)
-# ... except where specified elsewise
-for nb_plugin in ${plugin_scripts[@]} ; do
-	#nb_msg "loading `basename $nb_plugin` ..."
-	. "$nb_plugin"
 done
 }
 

@@ -445,7 +445,9 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Plugin Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em> specifies the directory where plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
+    <p><em>PLUGINS_DIR</em> specifies the directory where the regular plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location.</p>
+
+    <p><em>USERPLUGINS_DIR</em> specifies the directory where user plugins are located. The user plugins directory allows you to run your own plugins on top of the regular plugins. It's strongly recommended that you duplicate the directory tree from the regular plugins directory, then place your plugins accordingly throughout the tree. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
@@ -1492,7 +1494,7 @@ mput *
   <div id="comments">
     <h2><a id="s.11" name="s.11">11. Adding Support for Comments</a></h2>
 
-    <p>To add support for comments, you can use a PHP script called NanoBlogger Comments [2]. It's simple, features support for accounts, and is easy to install.</p>
+    <p>To add support for comments, you can use a PHP script called NanoBlogger Comments [1]. It's simple, features support for accounts, and is easy to install.</p>
 
     <p>Integrating a comment system with your weblog requires editing the appropriate templates. Please see examples in blog.conf and templates.</p>
   </div>
@@ -1623,7 +1625,7 @@ php?&gt;
   <div id="credits">
     <h2><a id="s.14" name="s.14">14. Credits</a></h2>
 
-    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [3], for the inspiration of this project.</p>
+    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [2], for the inspiration of this project.</p>
 
     <p><a href="http://nhw.pl/blg/articles/nbcom/">1. http://nhw.pl/blg/articles/nbcom/</a><br />
     <a href="http://freshmeat.net/projects/microblogger">2. http://freshmeat.net/projects/microblogger</a><br /></p>
