@@ -131,7 +131,7 @@ fi
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
 # check if we need to append directory index file to links
 if [ "$SHOW_INDEXFILE" = 1 ]; then
-	: ${NB_INDEX=$NB_INDEXFILE}
+	NB_INDEX=$NB_INDEXFILE
 else
 	NB_INDEX=""
 fi
