@@ -104,8 +104,8 @@ You have two options
      file.metadata for general reference.
 
 5. Plugins:
-If you have created your own plugins, then you'll have to take into
-account any changes in variables that your plugins may depend on.
+If you created your own plugins, then you'll have to take into account
+any changes to variables that your plugins may depend on.
 
 Final Notes
 -----------
