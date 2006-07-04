@@ -1,3 +1,30 @@
+2006-07-03 21:35  n1xt3r
+
+	* default/plugins/: test.off, test.sh: Disabled test plugin for
+	  users plugins.
+
+2006-07-03 21:30  n1xt3r
+
+	* default/plugins/test.sh: Added sample test.sh plugin for users
+	  plugin.
+
+2006-07-03 21:24  n1xt3r
+
+	* default/plugins/dummy: [no log message]
+
+2006-07-03 21:24  n1xt3r
+
+	* default/plugins/dummy: Updating default weblog's directory tree.
+
+2006-07-03 19:31  n1xt3r
+
+	* docs/nanoblogger.html, lib/config.sh: - Fix SHOW_INDEXFILE.  -
+	  Corrected some minor info in user manual.
+
+2006-07-03 18:38  n1xt3r
+
+	* ChangeLog: - Update Changelog.  - Version change to 3.3 RC5.
+
 2006-07-03 18:09  n1xt3r
 
 	* README, nb, default/blog.conf, docs/nanoblogger.html,

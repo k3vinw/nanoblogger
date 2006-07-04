@@ -40,7 +40,12 @@ echo '</tr>' >> "$PLUGIN_OUTFILE"
 for line in ${NUM_DAY_LINES[@]}; do
 	DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
-	echo "$DN_LINES" | sed -e '/ $/ Q; /  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+	DNLINES_ENDSPACE=`echo "$DN_LINES" |grep -c '/  $/'`
+	if [ "$DNLINES_ENDSPACE" -lt 1 ]; then
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+	else
+		echo "$DN_LINES" >> "$PLUGIN_OUTFILE"
+	fi
 	for dn in $DN_LINES; do
 		set_link=0
 		CALENTRY_LIST=(`for day in ${MONTH_LIST[@]}; do echo $day; done |grep $dn`)
@@ -62,7 +67,12 @@ for line in ${NUM_DAY_LINES[@]}; do
 			echo '<td><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 		fi
 	done
-	echo "$DN_LINES" | sed -e '/^  / Q; /  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g' >> "$PLUGIN_OUTFILE"
+	DNLINES_BEGINSPACE=`echo "$DN_LINES" |grep -c '/^  /'`
+	if [ "$DNLINES_BEGINSPACE" -lt 1 ]; then
+		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g; /^  / s///g' >> "$PLUGIN_OUTFILE"
+	else
+		echo "$DN_LINES" >> "$PLUGIN_OUTFILE"
+	fi
 	echo '</tr>' >> "$PLUGIN_OUTFILE"
 done
 echo '</table>' >> "$PLUGIN_OUTFILE"
