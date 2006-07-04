@@ -1588,16 +1588,11 @@ BLOG_DIR="/path/to/weblog"
     
 </pre>
 
-    <p><b>Disable Main Plugins</b></p>
+    <p><b>Running User Plugins Exclusively</b></p>
 
-    <p>Create a subdirectory called "no-plugins". This directory should remain empty and be set as read-only. Set PLUGINS_DIR to "[weblog_dir]/no-plugins".</p>
+    <p>Set <em>PLUGINS_DIR</em> to "[weblog_dir]/no-plugins-live-here" or any other non-existant directory to stop main plugins from loading. Now plugins should only load from <em>$USR_PLUGINSDIR</em>, assuming it exists.</p>edit blog.conf
     <pre>
-mkdir [weblog_dir]/no-plugins
-chmod 555 [weblog_dir]/no-plugins
-    
-</pre>edit blog.conf
-    <pre>
-PLUGINS_DIR="$BLOG_DIR/no-plugins"
+PLUGINS_DIR="$BLOG_DIR/no-plugins-live-here"
     
 </pre>
 

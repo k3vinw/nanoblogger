@@ -1,3 +1,15 @@
+2006-07-04 02:07  n1xt3r
+
+	* README, nb, lib/tools.sh, plugins/calendar.sh,
+	  plugins/archive/month/month_calendar.sh: Fix: race condition when
+	  loading user plugins.
+
+2006-07-03 23:43  n1xt3r
+
+	* ChangeLog, plugins/calendar.sh,
+	  plugins/archive/month/month_calendar.sh: Fix: replaced
+	  non-portable sed commands in calendar plugins.
+
 2006-07-03 21:35  n1xt3r
 
 	* default/plugins/: test.off, test.sh: Disabled test plugin for

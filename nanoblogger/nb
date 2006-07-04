@@ -71,8 +71,15 @@ PLUGIN_LIST=( ${@:1} )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-#plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
-for plugin_path in $PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}; do
+# determine the plugins directory list
+if [ -d "$USR_PLUGINSDIR" ] && [ -d "$PLUGINS_DIR" ] && [ "$PLUGINS_DIR" != "$USR_PLUGINSDIR" ]; then
+	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
+elif [ -d "$USR_PLUGINSDIR" ]; then
+	PLUGINSDIR_LIST="$USR_PLUGINSDIR${PLUGIN_DIR}"
+else
+	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR}"
+fi
+for plugin_path in $PLUGINSDIR_LIST; do
 	# stop short when plugins directory doesn't exist
 	[ ! -d "$plugin_path" ] && return
 	# initialise the array of plugins

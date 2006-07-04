@@ -45,9 +45,9 @@ export BLOG_DIR
 : ${NB_TEMPLATE_DIR:=$BLOG_DIR/templates}
 # allow user specified template directories
 [ ! -z "$USR_TEMPLATE_DIR" ] && NB_TEMPLATE_DIR="$USR_TEMPLATE_DIR"
-# where plugins are located and run by default
+# where main plugins are located and run by default
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
-# default for user plugins
+# default location for user plugins
 : ${USR_PLUGINSDIR:=$BLOG_DIR/plugins}
 
 ### WARNING ###
@@ -164,7 +164,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
 	QUERY_MODE=; MAX_ENTRIES=; METADATA_MARKER=; METADATA_CLOSETAG=; \
 	PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; MAX_CACHE_ENTRIES=; \
-	SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; }
+	SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; USR_PLUGINSDIR=; }
 
 # edit $BLOG_CONF
 config_weblog(){
