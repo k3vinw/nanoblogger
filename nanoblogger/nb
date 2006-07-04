@@ -60,6 +60,7 @@ load_config
 }
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR
+plugins_match=()
 load_plugins(){
 PLUGIN_DIR="$1"
 PLUGIN_LIST=( ${@:1} )
@@ -105,11 +106,20 @@ done
 for nb_plugin in ${plugin_scripts[@]} ; do
 	#nb_msg "loading `basename $nb_plugin` ..."
 	nb_plugin_basename="${nb_plugin##*\/plugins\/}"
+	PLUGINTYPE_FORMAT=`echo "$nb_plugin_basename" |grep -c format`
+	PLUGINSMATCH_VAR=`for plugin_match in ${plugins_match[@]}; do echo $plugin_match; done |grep -c "$nb_plugin_basename"`
 	# user plugins take precedence when two identical plugins exist
-	if [ -f "$PLUGINS_DIR/$nb_plugin_basename" ] && [ -f "$USR_PLUGINSDIR/$nb_plugin_basename" ]; then
-		. "$USR_PLUGINSDIR/$nb_plugin_basename"
-	else
-		. "$nb_plugin"
+	if [ -f "$PLUGINS_DIR/$nb_plugin_basename" ] && [ -f "$USR_PLUGINSDIR/$nb_plugin_basename" ] &&
+		[ "$PLUGINSMATCH_VAR" -lt 1 ]; then
+		[ "$PLUGINTYPE_FORMAT" != 1 ] &&
+			. "$USR_PLUGINSDIR/$nb_plugin_basename"
+		plugins_match=( ${plugins_match[@]} "$nb_plugin_basename" )
+	elif [ "$PLUGINSMATCH_VAR" -le 1 ] && [ "$PLUGINTYPE_FORMAT" = 1 ]; then
+		[ -f "$USR_PLUGINSDIR/$nb_plugin_basename" ] &&
+			. "$USR_PLUGINSDIR/$nb_plugin_basename"
+	elif [ "$PLUGINSMATCH_VAR" -lt 1 ]; then
+		[ -f "$nb_plugin" ] &&
+			. "$nb_plugin"
 	fi
 done
 }
