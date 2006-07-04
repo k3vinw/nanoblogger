@@ -79,11 +79,12 @@ elif [ -d "$USR_PLUGINSDIR" ]; then
 else
 	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR}"
 fi
+PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
+# initialise the array of plugins
+plugin_scripts=()
 for plugin_path in $PLUGINSDIR_LIST; do
 	# stop short when plugins directory doesn't exist
 	[ ! -d "$plugin_path" ] && return
-	# initialise the array of plugins
-	plugin_scripts=()
 	# were plugin names specified?
 	PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
 	if [ "$PLUGINLIST_VAR" != 0 ] ; then
@@ -98,12 +99,18 @@ for plugin_path in $PLUGINSDIR_LIST; do
 			add_plugin_script "$nb_plugin"
 		done
 	fi
-	# load the plugins in alpha-numeric order (0-9, A-z)
-	# ... except where specified elsewise
-	for nb_plugin in ${plugin_scripts[@]} ; do
-		#nb_msg "loading `basename $nb_plugin` ..."
+done
+# load the plugins in alpha-numeric order (0-9, A-z)
+# ... except where specified elsewise
+for nb_plugin in ${plugin_scripts[@]} ; do
+	#nb_msg "loading `basename $nb_plugin` ..."
+	nb_plugin_basename="${nb_plugin##*\/plugins\/}"
+	# user plugins take precedence when two identical plugins exist
+	if [ -f "$PLUGINS_DIR/$nb_plugin_basename" ] && [ -f "$USR_PLUGINSDIR/$nb_plugin_basename" ]; then
+		. "$USR_PLUGINSDIR/$nb_plugin_basename"
+	else
 		. "$nb_plugin"
-	done
+	fi
 done
 }
 

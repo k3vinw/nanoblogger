@@ -1,3 +1,8 @@
+2006-07-04 03:28  n1xt3r
+
+	* ChangeLog, nb, docs/nanoblogger.html, lib/config.sh: Fix:
+	  resolved issues with non-existant plugin directories.
+
 2006-07-04 02:07  n1xt3r
 
 	* README, nb, lib/tools.sh, plugins/calendar.sh,
