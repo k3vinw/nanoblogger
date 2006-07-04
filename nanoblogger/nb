@@ -71,8 +71,8 @@ PLUGIN_LIST=( ${@:1} )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
+#plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
 for plugin_path in $PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}; do
-	#plugin_path="$PLUGINS_DIR${PLUGIN_DIR}"
 	# stop short when plugins directory doesn't exist
 	[ ! -d "$plugin_path" ] && return
 	# initialise the array of plugins
@@ -1011,11 +1011,11 @@ done
 
 
 # post-processing for all command line args
-if [ "$ADD_WEBLOG" = 1 ]; then
-	add_weblog
-fi
 if [ "$CONFIG_WEBLOG" = 1 ]; then
 	check_config; config_weblog
+fi
+if [ "$ADD_WEBLOG" = 1 ]; then
+	add_weblog
 fi
 if [ "$DELETE_WEBLOG" = 1 ]; then
 	check_config; delete_weblog

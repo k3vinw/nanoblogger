@@ -542,10 +542,7 @@ NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TEMPLATE"
 echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
-# load makepage plugins, but with reusable functionality
-for mkpage_plugin in "$PLUGINS_DIR"/makepage/*.sh; do
-	[ -f "$mkpage_plugin" ] && . "$mkpage_plugin"
-done
+load_plugins makepage
 MKPAGE_CONTENT=; MKPAGE_FORMAT=; MKPAGE_TITLE=; NB_MetaTitle=; NB_EntryTitle=
 }
 
