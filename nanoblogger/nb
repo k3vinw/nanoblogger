@@ -83,8 +83,8 @@ PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
 # initialise the array of plugins
 plugin_scripts=()
 for plugin_path in $PLUGINSDIR_LIST; do
-	# stop short when plugins directory doesn't exist
-	[ ! -d "$plugin_path" ] && return
+	# break out of loop when plugins directory doesn't exist
+	[ ! -d "$plugin_path" ] && break
 	# were plugin names specified?
 	PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
 	if [ "$PLUGINLIST_VAR" != 0 ] ; then
