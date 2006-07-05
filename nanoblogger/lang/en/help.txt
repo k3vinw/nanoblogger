@@ -39,6 +39,7 @@ Options:
  -n, --author <text>			set text of author (for '--add',
 					'--draft', '--makefile' and
  					'--makepage').
+ --plugindir <directory> 		specify weblog's plugin directory.					
  -p, --preview				run command to preview weblog.
  -P, --publish				run command to publish weblog.
  --template <file>			specify file to load as template (for

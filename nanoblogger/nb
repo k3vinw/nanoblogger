@@ -59,9 +59,9 @@ load_config
 	die "'$BLOG_DIR' - $nowritedir"
 }
 
-# load specified plugins (defaults to all) from $PLUGINS_DIR
-# intialise array to track duplicates
+# intialise array to track duplicate plugins
 plugins_match=()
+# load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
 PLUGIN_LIST=( ${@:1} )
@@ -73,6 +73,8 @@ PLUGIN_LIST=( ${@:1} )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
+# cleanup $USR_PLUGINSDIR
+USR_PLUGINSDIR=${USR_PLUGINSDIR%%\/}
 # determine the plugins directory list
 if [ -d "$USR_PLUGINSDIR" ] && [ -d "$PLUGINS_DIR" ] && [ "$PLUGINS_DIR" != "$USR_PLUGINSDIR" ]; then
 	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
@@ -81,7 +83,6 @@ elif [ -d "$USR_PLUGINSDIR" ]; then
 else
 	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR}"
 fi
-PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
 # initialise the array of plugins
 plugin_scripts=()
 for plugin_path in $PLUGINSDIR_LIST; do
@@ -106,21 +107,28 @@ done
 format_plugins=()
 # load the plugins in alpha-numeric order (0-9, A-z)
 for nb_plugin in ${plugin_scripts[@]} ; do
-	#nb_msg "loading `basename $nb_plugin` ..."
-	plugin_basename="${nb_plugin##*\/plugins\/}"
+	# find basename for plugins (absent of parent plugin directory)
+	plugin_basedir=`basename "$USR_PLUGINSDIR"`
+	usr_pluginbasevar=`echo "$nb_plugin" |grep -c "$plugin_basedir"`
+	[ "$usr_pluginbasevar" != 1 ] &&
+		plugin_basedir=`basename "$PLUGINS_DIR"`
+	plugin_basename="${nb_plugin##*\/$plugin_basedir\/}"
 	FORMAT_PLUGIN=`echo "$plugin_basename" |grep -c 'format'`
-	# load user plugin instead of main plugin when there names match
+	# let user plugins replace main plugins of same name
 	if [ -f "$PLUGINS_DIR/$plugin_basename" ] && [ -f "$USR_PLUGINSDIR/$plugin_basename" ]; then
 			[ "$FORMAT_PLUGIN" = 1 ] &&
 				format_plugins=( ${format_plugins[@]} "$plugin_basename" )
 			plugins_match=( ${plugins_match[@]} "$plugin_basename" )
 			PLUGINSMATCH_LIST=`for plugin_match in ${plugins_match[@]}; do echo $plugin_match; done`
 			PLUGINSMATCH_COUNT=`echo "$PLUGINSMATCH_LIST" |grep -c "$plugin_basename"`
-			FORMAT_PLUGINS_LIST=`for format_plugin in ${format_plugins[@]}; do echo $format_plugin; done`
-			FORMAT_PLUGINS_COUNT=`echo "$FORMAT_PLUGINS_LIST" |grep -c "$plugin_basename"`
-			[ "$PLUGINSMATCH_COUNT" -le 1 ] || [ "$FORMAT_PLUGINS_COUNT" = 1 ] &&
+			FORMATPLUGINS_LIST=`for format_plugin in ${format_plugins[@]}; do echo $format_plugin; done`
+			FORMATPLUGINS_COUNT=`echo "$FORMATPLUGINS_LIST" |grep -c "$plugin_basename"`
+			if [ "$PLUGINSMATCH_COUNT" -le 1 ] || [ "$FORMATPLUGINS_COUNT" = 1 ]; then
+				#nb_msg "loading $USR_PLUGINSDIR/$plugin_basename ..."
 				. "$USR_PLUGINSDIR/$plugin_basename"
+			fi
 	else
+		#nb_msg "loading $nb_plugin ..."
 		[ -f "$nb_plugin" ] &&
 			. "$nb_plugin"
 	fi
@@ -1014,6 +1022,7 @@ while [ $# -gt 0 ]; do
 		-M|--makepage)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		--makefile) 		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
+		--plugindir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
 		-p|--preview)		PREVIEW_WEBLOG=1;;
 		-P|--publish)		PUBLISH_WEBLOG=1;;
 		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;

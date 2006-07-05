@@ -1,3 +1,22 @@
+2006-07-05 02:04  n1xt3r
+
+	* nb, docs/nanoblogger.html: Fix: format plugins conflicted with
+	  user plugins.
+
+2006-07-04 15:39  n1xt3r
+
+	* nb: Plugins list is created and analyzed for duplicates.
+
+2006-07-04 14:16  n1xt3r
+
+	* nb: Fix: plugin loading routine could be tricked into exiting too
+	  soon.
+
+2006-07-04 13:51  n1xt3r
+
+	* ChangeLog, nb: User plugins take precedence over main plugins
+	  with identical names.
+
 2006-07-04 03:28  n1xt3r
 
 	* ChangeLog, nb, docs/nanoblogger.html, lib/config.sh: Fix:
