@@ -1,3 +1,13 @@
+2006-07-05 16:32  n1xt3r
+
+	* nb: Fix: user plugins directory incorrectly handled path
+	  specified.
+
+2006-07-05 13:32  n1xt3r
+
+	* ChangeLog, nb, lang/en/help.txt: Specify user plugins directory
+	  from command line.
+
 2006-07-05 02:04  n1xt3r
 
 	* nb, docs/nanoblogger.html: Fix: format plugins conflicted with
