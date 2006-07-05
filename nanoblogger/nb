@@ -112,10 +112,10 @@ for nb_plugin in ${plugin_scripts[@]} ; do
 	usr_pluginbasevar=`echo "$nb_plugin" |grep -c "$plugin_basedir"`
 	[ "$usr_pluginbasevar" != 1 ] &&
 		plugin_basedir=`basename "$PLUGINS_DIR"`
-	plugin_basename="${nb_plugin##*\/$plugin_basedir\/}"
+	plugin_basename="${nb_plugin##*$plugin_basedir}"
 	FORMAT_PLUGIN=`echo "$plugin_basename" |grep -c 'format'`
 	# let user plugins replace main plugins of same name
-	if [ -f "$PLUGINS_DIR/$plugin_basename" ] && [ -f "$USR_PLUGINSDIR/$plugin_basename" ]; then
+	if [ -f "${PLUGINS_DIR}$plugin_basename" ] && [ -f "${USR_PLUGINSDIR}$plugin_basename" ]; then
 			[ "$FORMAT_PLUGIN" = 1 ] &&
 				format_plugins=( ${format_plugins[@]} "$plugin_basename" )
 			plugins_match=( ${plugins_match[@]} "$plugin_basename" )
@@ -124,8 +124,8 @@ for nb_plugin in ${plugin_scripts[@]} ; do
 			FORMATPLUGINS_LIST=`for format_plugin in ${format_plugins[@]}; do echo $format_plugin; done`
 			FORMATPLUGINS_COUNT=`echo "$FORMATPLUGINS_LIST" |grep -c "$plugin_basename"`
 			if [ "$PLUGINSMATCH_COUNT" -le 1 ] || [ "$FORMATPLUGINS_COUNT" = 1 ]; then
-				#nb_msg "loading $USR_PLUGINSDIR/$plugin_basename ..."
-				. "$USR_PLUGINSDIR/$plugin_basename"
+				#nb_msg "loading ${USR_PLUGINSDIR}$plugin_basename ..."
+				. "${USR_PLUGINSDIR}$plugin_basename"
 			fi
 	else
 		#nb_msg "loading $nb_plugin ..."
