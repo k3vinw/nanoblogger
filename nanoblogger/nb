@@ -59,12 +59,10 @@ load_config
 	die "'$BLOG_DIR' - $nowritedir"
 }
 
-# intialise array to track duplicate plugins
-plugins_match=()
 # load specified plugins (defaults to all) from $PLUGINS_DIR
 load_plugins(){
 PLUGIN_DIR="$1"
-PLUGIN_LIST=( ${@:1} )
+PLUGINS_LIST=( ${@:1} )
 	add_plugin_script(){
 	plugin_file="$1"
 	if [ -f "$plugin_file" ] ; then
@@ -89,10 +87,10 @@ for plugin_path in $PLUGINSDIR_LIST; do
 	# break out of loop when plugins directory doesn't exist
 	[ ! -d "$plugin_path" ] && break
 	# were plugin names specified?
-	PLUGINLIST_VAR=`echo "${PLUGIN_LIST[*]}" |grep -c '.[ ].'`
+	PLUGINLIST_VAR=`echo "${PLUGINS_LIST[*]}" |grep -c '.[ ].'`
 	if [ "$PLUGINLIST_VAR" != 0 ] ; then
 		# yes, so we add them in order specified (removing any commas)
-		for plugin in `echo ${PLUGIN_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
+		for plugin in `echo ${PLUGINS_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
 			nb_plugin="$plugin_path/${plugin}.sh"
 			add_plugin_script "$nb_plugin"
 		done
@@ -103,34 +101,27 @@ for plugin_path in $PLUGINSDIR_LIST; do
 		done
 	fi
 done
-# intialise array to track format plugins
-format_plugins=()
-# load the plugins in alpha-numeric order (0-9, A-z)
-for nb_plugin in ${plugin_scripts[@]} ; do
-	# find basename for plugins (absent of parent plugin directory)
+# generate list of plugins by their basename and remove reoccurances
+PLUGINBASENAME_LIST=$(for nb_plugin in ${plugin_scripts[@]}; do
 	plugin_basedir=`basename "$USR_PLUGINSDIR"`
 	usr_pluginbasevar=`echo "$nb_plugin" |grep -c "$plugin_basedir"`
 	[ "$usr_pluginbasevar" != 1 ] &&
 		plugin_basedir=`basename "$PLUGINS_DIR"`
 	plugin_basename="${nb_plugin##*$plugin_basedir}"
-	FORMAT_PLUGIN=`echo "$plugin_basename" |grep -c 'format'`
-	# let user plugins replace main plugins of same name
-	if [ -f "${PLUGINS_DIR}$plugin_basename" ] && [ -f "${USR_PLUGINSDIR}$plugin_basename" ]; then
-			[ "$FORMAT_PLUGIN" = 1 ] &&
-				format_plugins=( ${format_plugins[@]} "$plugin_basename" )
-			plugins_match=( ${plugins_match[@]} "$plugin_basename" )
-			PLUGINSMATCH_LIST=`for plugin_match in ${plugins_match[@]}; do echo $plugin_match; done`
-			PLUGINSMATCH_COUNT=`echo "$PLUGINSMATCH_LIST" |grep -c "$plugin_basename"`
-			FORMATPLUGINS_LIST=`for format_plugin in ${format_plugins[@]}; do echo $format_plugin; done`
-			FORMATPLUGINS_COUNT=`echo "$FORMATPLUGINS_LIST" |grep -c "$plugin_basename"`
-			if [ "$PLUGINSMATCH_COUNT" -le 1 ] || [ "$FORMATPLUGINS_COUNT" = 1 ]; then
-				#nb_msg "loading ${USR_PLUGINSDIR}$plugin_basename ..."
-				. "${USR_PLUGINSDIR}$plugin_basename"
-			fi
+	echo "${plugin_basename##\/}"
+done |sort -u
+)
+# load user and main plugins simultaneously
+for nb_plugin in $PLUGINBASENAME_LIST; do
+	# allow user plugins of the same name to replace main plugins
+	#nb_msg "loading ...${nb_plugin} ..."
+	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
+		. "${USR_PLUGINSDIR}/$nb_plugin"
 	else
-		#nb_msg "loading $nb_plugin ..."
-		[ -f "$nb_plugin" ] &&
-			. "$nb_plugin"
+		[ -f "${PLUGINS_DIR}/$nb_plugin" ] &&
+			. "${PLUGINS_DIR}/$nb_plugin"
+		[ -f "${USR_PLUGINSDIR}/$nb_plugin" ] &&
+			. "${USR_PLUGINSDIR}/$nb_plugin"
 	fi
 done
 }
