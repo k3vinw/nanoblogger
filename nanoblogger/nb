@@ -66,12 +66,13 @@ PLUGINS_LIST=( ${@:1} )
 	add_plugin_script(){
 	plugin_file="$1"
 	if [ -f "$plugin_file" ] ; then
-		plugin_scripts=( ${plugin_scripts[@]} "$plugin_file" )
+		plugin_basefile="${PLUGIN_DIR}/${plugin_file##*\/}"
+		plugin_scripts=( ${plugin_scripts[@]} "${plugin_basefile##\/}" )
 	fi
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-# cleanup $USR_PLUGINSDIR
+# cleanup any trailing "/" in $USR_PLUGINSDIR
 USR_PLUGINSDIR=${USR_PLUGINSDIR%%\/}
 # determine the plugins directory list
 if [ -d "$USR_PLUGINSDIR" ] && [ -d "$PLUGINS_DIR" ] && [ "$PLUGINS_DIR" != "$USR_PLUGINSDIR" ]; then
@@ -101,27 +102,18 @@ for plugin_path in $PLUGINSDIR_LIST; do
 		done
 	fi
 done
-# generate list of plugins by their basename and remove reoccurances
-PLUGINBASENAME_LIST=$(for nb_plugin in ${plugin_scripts[@]}; do
-	plugin_basedir=`basename "$USR_PLUGINSDIR"`
-	usr_pluginbasevar=`echo "$nb_plugin" |grep -c "$plugin_basedir"`
-	[ "$usr_pluginbasevar" != 1 ] &&
-		plugin_basedir=`basename "$PLUGINS_DIR"`
-	plugin_basename="${nb_plugin##*$plugin_basedir}"
-	echo "${plugin_basename##\/}"
-done |sort -u
-)
+# filter out duplicates
+PLUGINBASEFILE_LIST=`for nb_plugin in ${plugin_scripts[@]}; do echo "$nb_plugin"; done |sort -u`
 # load user and main plugins simultaneously
-for nb_plugin in $PLUGINBASENAME_LIST; do
-	# allow user plugins of the same name to replace main plugins
-	#nb_msg "loading ...${nb_plugin} ..."
+for nb_plugin in $PLUGINBASEFILE_LIST; do
+	#nb_msg "loading ..$nb_plugin ..."
+	# allow user plugins to override main plugins
 	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
-	else
-		[ -f "${PLUGINS_DIR}/$nb_plugin" ] &&
-			. "${PLUGINS_DIR}/$nb_plugin"
-		[ -f "${USR_PLUGINSDIR}/$nb_plugin" ] &&
-			. "${USR_PLUGINSDIR}/$nb_plugin"
+	elif [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
+		. "${USR_PLUGINSDIR}/$nb_plugin"
+	elif [ -f "${PLUGINS_DIR}/$nb_plugin" ]; then
+		. "${PLUGINS_DIR}/$nb_plugin"
 	fi
 done
 }
