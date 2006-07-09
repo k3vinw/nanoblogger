@@ -102,7 +102,7 @@ for plugin_path in $PLUGINSDIR_LIST; do
 		done
 	fi
 done
-# filter out duplicates
+# filter out duplicates (WARNING: original order may be lost)
 PLUGINBASEFILE_LIST=`for nb_plugin in ${plugin_scripts[@]}; do echo "$nb_plugin"; done |sort -u`
 # load user and main plugins simultaneously
 for nb_plugin in $PLUGINBASEFILE_LIST; do
