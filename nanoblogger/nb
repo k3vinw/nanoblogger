@@ -65,10 +65,13 @@ PLUGIN_DIR="$1"
 PLUGINS_LIST=( ${@:1} )
 	add_plugin_script(){
 	plugin_file="$1"
-	if [ -f "$plugin_file" ] ; then
-		plugin_basefile="${PLUGIN_DIR}/${plugin_file##*\/}"
-		plugin_scripts=( ${plugin_scripts[@]} "${plugin_basefile##\/}" )
-	fi
+	plugin_basefile="${PLUGIN_DIR}/${plugin_file##*\/}"
+	plugin_basefile="${plugin_basefile##\/}"
+	plugin_rmdir=`echo "${PLUGIN_DIR//\//\\\\/}\\\\/"`
+	plugin_rmfile="${plugin_rmdir##*\/}${plugin_basefile##*\/}"
+	# remove plugins while we add them to eliminate duplications
+	[ -f "$plugin_file" ] &&
+			plugin_scripts=(${plugin_scripts[@]//$plugin_rmfile/} "$plugin_basefile" )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
@@ -76,7 +79,7 @@ PLUGINS_LIST=( ${@:1} )
 USR_PLUGINSDIR=${USR_PLUGINSDIR%%\/}
 # determine the plugins directory list
 if [ -d "$USR_PLUGINSDIR" ] && [ -d "$PLUGINS_DIR" ] && [ "$PLUGINS_DIR" != "$USR_PLUGINSDIR" ]; then
-	PLUGINSDIR_LIST="$PLUGINS_DIR${PLUGIN_DIR} $USR_PLUGINSDIR${PLUGIN_DIR}"
+	PLUGINSDIR_LIST="$USR_PLUGINSDIR${PLUGIN_DIR} $PLUGINS_DIR${PLUGIN_DIR}"
 elif [ -d "$USR_PLUGINSDIR" ]; then
 	PLUGINSDIR_LIST="$USR_PLUGINSDIR${PLUGIN_DIR}"
 else
@@ -88,8 +91,8 @@ for plugin_path in $PLUGINSDIR_LIST; do
 	# break out of loop when plugins directory doesn't exist
 	[ ! -d "$plugin_path" ] && break
 	# were plugin names specified?
-	PLUGINLIST_VAR=`echo "${PLUGINS_LIST[*]}" |grep -c '.[ ].'`
-	if [ "$PLUGINLIST_VAR" != 0 ] ; then
+	PLUGINLIST_DEFINED=`echo "${PLUGINS_LIST[*]}" |grep -c '.[ ].'`
+	if [ "$PLUGINLIST_DEFINED" != 0 ] ; then
 		# yes, so we add them in order specified (removing any commas)
 		for plugin in `echo ${PLUGINS_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
 			nb_plugin="$plugin_path/${plugin}.sh"
@@ -102,10 +105,8 @@ for plugin_path in $PLUGINSDIR_LIST; do
 		done
 	fi
 done
-# filter out duplicates (WARNING: original order may be lost)
-PLUGINBASEFILE_LIST=`for nb_plugin in ${plugin_scripts[@]}; do echo "$nb_plugin"; done |sort -u`
 # load user and main plugins simultaneously
-for nb_plugin in $PLUGINBASEFILE_LIST; do
+for nb_plugin in ${plugin_scripts[@]}; do
 	#nb_msg "loading ..$nb_plugin ..."
 	# allow user plugins to override main plugins
 	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
