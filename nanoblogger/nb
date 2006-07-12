@@ -80,8 +80,11 @@ PLUGINS_LIST=( ${@:1} )
 USR_PLUGINSDIR=${USR_PLUGINSDIR%%\/}
 # determine the plugins directory list
 if [ -d "${USR_PLUGINSDIR}${PLUGIN_DIR}" ] && [ -d "${PLUGINS_DIR}${PLUGIN_DIR}" ]; then
-	[ "${PLUGINS_DIR}" != "${USR_PLUGINSDIR}" ] &&
+	if [ "${PLUGINS_DIR}" != "${USR_PLUGINSDIR}" ]; then
 		PLUGINSDIR_LIST="${USR_PLUGINSDIR}${PLUGIN_DIR} ${PLUGINS_DIR}${PLUGIN_DIR}"
+	else
+		PLUGINSDIR_LIST="${PLUGINS_DIR}${PLUGIN_DIR}"
+	fi
 elif [ -d "${USR_PLUGINSDIR}${PLUGIN_DIR}" ]; then
 	PLUGINSDIR_LIST="${USR_PLUGINSDIR}${PLUGIN_DIR}"
 elif [ -d "${PLUGINS_DIR}${PLUGIN_DIR}" ]; then
