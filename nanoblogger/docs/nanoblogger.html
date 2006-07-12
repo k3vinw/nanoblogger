@@ -443,11 +443,11 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><em>QUERY_MODE</em> specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
 
-    <p><b>Plugin Configuration</b></p>
+    <p><b>Plugins Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em> specifies the directory where the main plugins are located. The default is set to <em>$NB_BASE_DIR/plugins</em>. When specifying PLUGINS_DIR to a non-default location, keep in mind that many sub-directories are expected to exist. It may be easier to start by copying the plugins directory and sub-directories to the desired location first.</p>
+    <p><em>PLUGINS_DIR</em> specifies the directory location of the main plugins. Main plugins provide a standard mechanism for loading plugins on a global basis. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
 
-    <p><em>USR_PLUGINSDIR</em> specifies the directory where user plugins are located. The user plugins directory allows you to run your own plugins on top of the main plugins. It's strongly recommended that you duplicate the directory tree from the main plugins directory, then place your plugins accordingly throughout the tree. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
+    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins provide a standard mechanism for loading plugins on a per-weblog basis. User plugins can override main plugins, just keep the names the same. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
