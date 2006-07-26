@@ -497,7 +497,7 @@ WRITE_META_TEMPLATE="$2"
 [ -z "$WRITE_META_TEMPLATE" ] &&
 	WRITE_META_TEMPLATE="$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE"
 # help ease transition from 3.2.x or earlier
-[ ! -f "$NB_TEMPLATE_DI/$METADATAFILE_TEMPLATE" ] &&
+[ ! -f "$NB_TEMPLATE_DIR/$METADATAFILE_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAFILE_TEMPLATE" "$NB_TEMPLATE_DIR"
 # accept user metadata
 [ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
