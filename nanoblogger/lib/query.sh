@@ -17,6 +17,8 @@ db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_filter:=query}
 # adjust offset by 1 for bash arrays (1 = 0)
 ((db_offset--))
+# allow /'s in queries
+db_query="${db_query//\//-}"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 	db_catquery=
@@ -95,6 +97,8 @@ elif [ "$db_query" = years ]; then
 	db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`)
 elif [ "$db_query" = months ]; then
 	db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`)
+elif [ "$db_query" = days ]; then
+	db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`)
 elif [ "$db_query" = max ]; then
 	db_setlimit=limit; db_query=; query_data
 else

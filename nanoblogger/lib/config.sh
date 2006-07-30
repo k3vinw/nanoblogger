@@ -127,6 +127,8 @@ fi
 : ${MAX_ENTRIES:=10}
 : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
 : ${MAX_CATPAGE_ENTRIES:=$MAX_PAGE_ENTRIES}
+: ${MAX_MONTHPAGE_ENTRIES:=$MAX_PAGE_ENTRIES}
+: ${MAX_DAYPAGE_ENTRIES:=$MAX_PAGE_ENTRIES}
 # defaults for index file name
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
 # check if we need to append directory index file to links

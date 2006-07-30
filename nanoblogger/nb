@@ -308,26 +308,45 @@ fi
 ARCH_DATATYPE=; page_filedir=
 }
 
-# create archive of given year (plugins only)
+# build yearly archives (plugins only)
 build_yeararchive(){
 query_db "$yearn"
 [ ! -z "${DB_RESULTS[*]}" ] &&
 	load_plugins archive/year
 }
 
-# create archive of given month
+# build daily archives
+build_dayarchive(){
+CACHE_TYPE=day
+query_db "$day"
+if [ ! -z "${DB_RESULTS[*]}" ]; then
+	set_daylink "$day"
+	set_daynavlinks "$day"
+	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$day_file"
+	make_archive "$day" nocat "$DAYENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$day_file"
+	NB_ArchiveTitle="$day_dir"
+	dayn=`echo "$day" |cut -c9-10`
+	load_plugins archive/day
+	paginate "$day" nocat "$MAX_DAYPAGE_ENTRIES" "$DAY_TEMPLATE" \
+		"$DAYENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$day_file"
+fi
+}
+
+# build monthly archives
 build_montharchive(){
 CACHE_TYPE=month
 query_db "$month"
 if [ ! -z "${DB_RESULTS[*]}" ]; then
+	LOOPMONTH_LIST=(${DB_RESULTS[*]})
 	set_monthlink "$month"
 	set_monthnavlinks "$month"
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
 	make_archive "$month" nocat "$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
 	NB_ArchiveTitle="$month"
 	load_plugins archive/month
-	make_page "$BLOG_DIR/$PARTS_DIR/$month_file" "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" \
-	"$BLOG_DIR/$ARCHIVES_DIR/$month_file"
+	paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
+		"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"
+	loop_day "${LOOPMONTH_LIST[*]}" build_dayarchive
 fi
 }
 
@@ -393,6 +412,19 @@ fi
 CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[@]}; do echo $cache_item; done |sort -u`)
 }
 
+loop_day(){
+loopday_list=($1)
+loopday_exec="$2"
+LOOP_MASTER=(${loopday_list[*]})
+ARCHIVE_DAYS=(`for db_item in ${LOOP_MASTER[@]}; do echo $db_item |cut -c1-10; done |sort $SORT_ARGS`)
+for dayn in ${ARCHIVE_DAYS[@]}; do
+	day="$dayn"
+	query_db "$day"
+	[ ! -z "${DB_RESULTS[*]}" ] && [ ! -z "$loopday_exec" ] &&
+		$loopday_exec
+done
+}
+
 # loops through archives, and executes instructions by years or months
 loop_archive(){
 looparch_list=($1)
@@ -418,8 +450,9 @@ for yearn in ${ARCHIVE_YEARS[@]}; do
 				month="$yearn-$monthn"
 				query_db "$month"
 				# execute instructions for each month
-				[ ! -z "${DB_RESULTS[*]}" ] && [ ! -z "$looparchexec_months" ] &&
-					$looparchexec_months
+				[ ! -z "${DB_RESULTS[*]}" ] &&
+					[ ! -z "$looparchexec_months" ] &&
+						$looparchexec_months
 			done
 		done
 	fi
@@ -479,8 +512,9 @@ if [ "$USR_QUERY" != main ]; then
 	query_db master
 fi
 # update special query results for months and years
-query_db months
 query_db years
+query_db months
+query_db days
 # set default query type for updates
 [ -z "$USR_QUERY" ] &&
 	USR_QUERY=max
@@ -518,7 +552,7 @@ elif [ "$USR_QUERY" != main ]; then
 	# build/update archives based on the query results
 	build_archives
 fi
-# build main index
+# build main weblog index
 nb_msg "$buildweblog_main"
 CACHE_TYPE=main
 paginate "$QUERY_MODE" nocat "$MAX_ENTRIES" "$MAIN_TEMPLATE" "$ENTRY_TEMPLATE" \
@@ -530,7 +564,7 @@ if [ "$USR_QUERY" != main ]; then
 		update_cache expired
 	fi
 fi
-# always load post plugins for any additional tasks
+# always load post plugins
 load_plugins post
 }
 

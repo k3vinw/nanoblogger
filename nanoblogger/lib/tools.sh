@@ -181,6 +181,14 @@ for db_item in ${MONTH_IDLIST[@]}; do
 done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
 
+# tool to lookup day's id from "days" query type
+lookup_dayid(){
+DAY_IDLIST=($2)
+for db_item in ${DAY_IDLIST[@]}; do
+	echo $db_item
+done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
+}
+
 # tool to find entry before and after from entry's id
 findba_entries(){
 BAENTRY_IDLIST=($2)
@@ -227,6 +235,45 @@ set_monthlink(){
 month_dir=`echo $1 |sed -e '/[-]/ s//\//g'`
 month_file="$month_dir/$NB_INDEXFILE"
 NB_ArchiveMonthLink="$month_dir/$NB_INDEX"
+}
+
+set_daylink(){
+day_dir=`echo $1 |sed -e '/[-]/ s//\//g'`
+day_file="$day_dir/$NB_INDEXFILE"
+NB_ArchiveDayLink="$day_dir/$NB_INDEX"
+}
+
+set_daynavlinks(){
+daynavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
+day_id=
+[ ! -z "$daynavlinks_var" ] &&
+	day_id=`lookup_dayid "$daynavlinks_var" "${DAY_DB_RESULTS[*]}"`
+if [ ! -z "$day_id" ] && [ $day_id -gt 0 ]; then
+	# determine direction based on chronological date order
+	if [ "$CHRON_ORDER" = 1 ]; then
+		prev_dayid=`expr $day_id + 1`
+		next_dayid=`expr $day_id - 1`
+	else
+		prev_dayid=`expr $day_id - 1`
+		next_dayid=`expr $day_id + 1`
+	fi
+	prev_day=; NB_PrevArchiveDayLink=
+	[ $prev_dayid -gt 0 ] &&
+		prev_day=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS |sed ''$prev_dayid'!d'`
+	if [ ! -z "$prev_day" ]; then
+		prev_day_dir=`echo $prev_day |sed -e '/[-]/ s//\//g'`
+		prev_day_file="$prev_day_dir/$NB_INDEXFILE"
+		NB_PrevArchiveDayLink="$prev_day_dir/$NB_INDEX"
+	fi
+	next_day=; NB_NextArchiveDayLink=
+	[ $next_dayid -gt 0 ] &&
+		next_day=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS |sed ''$next_dayid'!d'`
+	if [ ! -z "$next_day" ]; then
+		next_day_dir=`echo $next_day |sed -e '/[-]/ s//\//g'`
+		next_day_file="$next_day_dir/$NB_INDEXFILE"
+		NB_NextArchiveDayLink="$next_day_dir/$NB_INDEX"
+	fi
+fi
 }
 
 # set previous and next links for given month
@@ -288,12 +335,16 @@ if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 
 	month=`echo "$entrylink_mod" |cut -c1-7`
 	set_monthlink "$month"
-
+	day=`echo "$entrylink_mod" |cut -c1-10`
+	set_daylink "$day"
 else
 	month=`echo "$entrylink_var" |cut -c1-7`
 	set_monthlink "$month"
+	day=`echo "$entrylink_var" |cut -c1-10`
+	set_daylink "$day"
 	entrylink_id=`set_entryid $entrylink_var`
-	NB_EntryPermalink="$NB_ArchiveMonthLink#$entrylink_id"
+	#NB_EntryPermalink="$NB_ArchiveMonthLink#$entrylink_id"
+	NB_EntryPermalink="$NB_ArchiveDayLink#$entrylink_id"
 fi
 }
 
