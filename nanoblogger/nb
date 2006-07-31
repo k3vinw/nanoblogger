@@ -243,9 +243,12 @@ fi
 		PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
 	}
 	page_bynumber(){
+	db_limit="$end"; db_offset="$begin"
+ 	# necessary to make limit of 1 item per page work
+	[ "$page_items" = 1 ] && db_limit=1
 	set_baseurl "" "${page_dir}${page_filedir}$page_file"
 	make_archive "$page_query" "$page_catquery" "$page_entrytemplate" \
-		"$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" limit "$end" "$begin"
+		"$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" limit "$db_limit" "$db_offset"
 	make_page "$BLOG_DIR/$PARTS_DIR/${page_filedir}$arch_file" \
 		"$NB_TEMPLATE_DIR/$page_template" "${page_dir}${page_filedir}$arch_file"
 	}
@@ -256,7 +259,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`
-	end=0; page_num=0
+	end=0; page_num=0;
 	while [ "$end" -lt "$total_items" ]; do
 		begin=`expr "$end" + 1`; end=`expr "$page_items" + "$end"`
 		page_num=`expr "$page_num" + 1`
@@ -327,8 +330,8 @@ if [ ! -z "${DB_RESULTS[*]}" ]; then
 	NB_ArchiveTitle="$day_dir"
 	dayn=`echo "$day" |cut -c9-10`
 	load_plugins archive/day
-	paginate "$day" nocat "$MAX_DAYPAGE_ENTRIES" "$DAY_TEMPLATE" \
-		"$DAYENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$day_file"
+	make_page "$BLOG_DIR/$PARTS_DIR/$day_file" "$NB_TEMPLATE_DIR/$DAY_TEMPLATE" \
+	"$BLOG_DIR/$ARCHIVES_DIR/$day_file"
 fi
 }
 

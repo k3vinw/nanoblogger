@@ -219,7 +219,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>easy drafting, editing and management of entries</li>
 
-      <li>archiving by category, year, month, and entry</li>
+      <li>archiving by category, year, month, day, and entry</li>
 
       <li>pagination</li>
 
@@ -393,6 +393,10 @@ BLOG_ICON="images/favicon.ico"
     <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
 
     <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".</p>
+
+    <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of category archives. Defaults to "$MAX_PAGE_ENTRIES".</p>
+
+    <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of month archives. Defaults to "$MAX_PAGE_ENTRIES".</p>
 
     <p><b>Setting the Default Text Formatting</b></p>
 
@@ -778,17 +782,21 @@ nb [-b blog_dir] -c 1 -d cat
 
       <p>Archive plugins are initialized when the archives are updated.</p>
 
-      <p><b>Category Plugins: plugins/archive/category</b></p>
+      <p><b>Category Archive Plugins: plugins/archive/category</b></p>
 
-      <p>Category plugins are initialized for each category archive that is updated.</p>
+      <p>Category Archive plugins are initialized for each category archive that is updated.</p>
 
-      <p><b>Monthly Plugins: plugins/archive/month</b></p>
+      <p><b>Day Archive Plugins: plugins/archive/day</b></p>
 
-      <p>Monthly plugins are initialized for each monthly archive that is updated.</p>
+      <p>Day Archive plugins are initialized for each day archive that is updated.</p>
 
-      <p><b>Yearly Plugins: plugins/archive/year</b></p>
+      <p><b>Month Archive Plugins: plugins/archive/month</b></p>
 
-      <p>Yearly plugins are initialized for each yearly archive that is updated.</p>
+      <p>Month Archive plugins are initialized for each month archive that is updated.</p>
+
+      <p><b>Year Archive Plugins: plugins/archive/year</b></p>
+
+      <p>Year Archive plugins are initialized for each year archive that is updated.</p>
 
       <p><b>Entry Plugins: plugins/entry</b></p>
 
@@ -840,15 +848,15 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
-          <td align="left">archive/master_index.sh</td>
+          <td align="left">archive/day/cal2daytitle.sh</td>
 
-          <td align="left">creates a master index page of the archives</td>
+          <td align="left">creates a fancier title for the day archives</td>
 
-          <td align="left">none</td>
+          <td align="left">CAL_CMD, CAL_ARGS, DATE_LOCALE</td>
 
-          <td align="left">$ARCHIVES_DIR/index.$NB_FILETYPE</td>
+          <td align="left">$NB_ArchiveTitle</td>
 
-          <td align="left">requires makepage.htm template</td>
+          <td align="left">requires the cal command</td>
         </tr>
 
         <tr>
@@ -856,11 +864,11 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">generates a calendar with links for each active day</td>
 
-          <td align="left">none</td>
+          <td align="left">CAL_CMD, CAL_ARGS, DATE_LOCALE</td>
 
           <td align="left">$NB_MonthlyCalendar</td>
 
-          <td align="left">requires cal</td>
+          <td align="left">requires the cal command</td>
         </tr>
 
         <tr>
@@ -916,7 +924,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <td align="left">generates a calendar with links for each active day</td>
 
-          <td align="left">CAL_CMD, CAL_ARGS</td>
+          <td align="left">CAL_CMD, CAL_ARGS, DATE_LOCALE</td>
 
           <td align="left">$NB_Calendar</td>
 
@@ -1311,6 +1319,18 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">$category_file, $category_link</td>
 
           <td align="left">category should be of the form, cat_N.$NB_DBTYPE</td>
+        </tr>
+
+        <tr>
+          <td align="left">set_daylink</td>
+
+          <td align="left">sets link and file for given day</td>
+
+          <td align="left">$1</td>
+
+          <td align="left">$day_file, $day_link</td>
+
+          <td align="left">day should be of the form YYYY-MM-DD</td>
         </tr>
 
         <tr>
