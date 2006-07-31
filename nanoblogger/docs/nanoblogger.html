@@ -386,17 +386,19 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.</p>
 
-    <p><b>Setting the Maximum Number of Entries to Display on the Main Page</b></p>
+    <p><b>Setting the Maximum Number of Entries to Display for the Main Page</b></p>
 
-    <p><em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page. Defaults to "10".</p>
+    <p><em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page(s). Defaults to "10".</p>
 
     <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
 
-    <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES".</p>
+    <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES". The default for splitting archives and other such pages.</p>
 
-    <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of category archives. Defaults to "$MAX_PAGE_ENTRIES".</p>
+    <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of category archives. Defaults to "$MAX_PAGE_ENTRIES". The category archives will split when the number of entries is greater than <em>$MAX_CATPAGE_ENTRIES</em>.</p>
 
-    <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of month archives. Defaults to "$MAX_PAGE_ENTRIES".</p>
+    <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of month archives. Defaults to "$MAX_PAGE_ENTRIES". The month archives will split when the number of entries is greater than <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
+
+    <p><em>MAX_MAINPAGE_ENTRIES</em> sets the maximum number of entries to display for each main page. Defaults to "$MAX_PAGE_ENTRIES". The main page will split when <em>$MAX_MAINPAGE_ENTRIES</em> is less than <em>$MAX_ENTRIES</em>.</p>
 
     <p><b>Setting the Default Text Formatting</b></p>
 
@@ -690,13 +692,19 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">category_archive.htm</td>
 
-          <td align="left">controls look of the category pages</td>
+          <td align="left">controls structure of the category pages</td>
+        </tr>
+
+        <tr>
+          <td align="left">day_archive.htm</td>
+
+          <td align="left">controls structure of the day archive pages</td>
         </tr>
 
         <tr>
           <td align="left">main_index.htm</td>
 
-          <td align="left">controls look of the weblog's main page</td>
+          <td align="left">controls structure of the weblog's main page</td>
         </tr>
 
         <tr>
@@ -714,43 +722,43 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">month_archive.htm</td>
 
-          <td align="left">controls look of the monthly archive pages</td>
+          <td align="left">controls structure of the month archive pages</td>
         </tr>
 
         <tr>
           <td align="left">permalink.htm</td>
 
-          <td align="left">controls look of an entry's archive page</td>
+          <td align="left">controls structure of the entries' archive pages</td>
         </tr>
 
         <tr>
           <td align="left">entry.htm</td>
 
-          <td align="left">controls look of the default archive entries</td>
+          <td align="left">controls structure of the entry's content for most archives</td>
         </tr>
 
         <tr>
           <td align="left">category_entry.htm</td>
 
-          <td align="left">controls look of the category entries</td>
+          <td align="left">controls structure of the category entries</td>
         </tr>
 
         <tr>
           <td align="left">permalink_entry.htm</td>
 
-          <td align="left">controls look of the permanent archive entries</td>
+          <td align="left">controls structure of the entry's content for individual entry archives</td>
         </tr>
 
         <tr>
           <td align="left">weblog_status.htm</td>
 
-          <td align="left">controls look of weblog status</td>
+          <td align="left">controls structure of weblog status</td>
         </tr>
 
         <tr>
           <td align="left">year_archive.htm</td>
 
-          <td align="left">controls look of yearly archive pages</td>
+          <td align="left">controls structure of year archive pages</td>
         </tr>
 
         <tr>
@@ -874,7 +882,7 @@ nb [-b blog_dir] -c 1 -d cat
         <tr>
           <td align="left">archives/year/year_index.sh</td>
 
-          <td align="left">generates yearly indexes of the archives</td>
+          <td align="left">generates year archives</td>
 
           <td align="left">none</td>
 

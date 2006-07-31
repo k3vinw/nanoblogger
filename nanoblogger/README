@@ -26,6 +26,18 @@ This is the classic three step upgrade process that's guarenteed to work
    the weblog:
 	nb -b [new-blog-dir] --configure -u all
 
+Upgrading to 3.3 from the latest 3.3 RC
+---------------------------------------
+
+WARNING: For those using the default permanent link method
+(ENTRY_ARCHIVES="0"), your URL's will changed!
+
+* Manually copy the "day_archive.htm" template into your weblog's
+  template directory from the "[nb-basedir/default/templates" directory.
+* Adjust maximum number of entries before pagination occurs, see
+  nanoblogger.html for details.
+* Run with "--update all" to build new archives and permanent links.
+
 Upgrading to 3.3 (from at least 3.1)
 ------------------------------------
 
@@ -40,11 +52,11 @@ The following notes were created from the process of converting a weblog
 from version 3.1 to 3.3.
 
 1. Templates and Style sheets:
-  1. rename "templates" and "styles" directories from your weblog's
+  * rename "templates" and "styles" directories from your weblog's
      directory (e.g. mv templates old.templates).
-  2. copy new "templates" and "styles" directories into your weblog's
+  * copy new "templates" and "styles" directories into your weblog's
      directory (e.g. cp -r [nb-basedir]/default/templates [weblog-dir]).
-  3. optionally transition the old templates, paying close attention to
+  * optionally transition the old templates, paying close attention to
      changes in the template's variables.
 
 NOTE: many of the template variables were changed to a shorter naming
@@ -54,9 +66,9 @@ nanoblogger.html.
 
 2. Data (entries):
 You have two format options
-  1. keep using the old format
+  * keep using the old format
      METADATA_CLOSETAG must be set to "-----" in your blog.conf.
-  2. modify entries to use new format (recommended)
+  * modify entries to use new format (recommended)
      METADATA_CLOSETAG should be set to "END-----" in your
      blog.conf.
 
@@ -91,15 +103,15 @@ There are many additional configuration directives that you may wish to
 take advantage of.
 
 Upgrade your blog.conf
-  1. backup old blog.conf (e.g. cp blog.conf old.blog.conf)
-  2. compare differences between default/blog.conf and weblog's blog.conf
-  3. adjust/add/remove config variable settings as needed.
-  4. save new blog.conf and update weblog (e.g. nb -u all)
+  * backup old blog.conf (e.g. cp blog.conf old.blog.conf)
+  * compare differences between default/blog.conf and weblog's blog.conf
+  * adjust/add/remove config variable settings as needed.
+  * save new blog.conf and update weblog (e.g. nb -u all)
 
 4. Articles (plugin):
 You have two options
-  1. use the articles_text.sh plugin
-  2. use the articles_meta.sh plugin and modify all your articles
+  * use the articles_text.sh plugin
+  * use the articles_meta.sh plugin and modify all your articles
      to use the new format (recommended). You can use the new template,
      file.metadata for general reference.
 

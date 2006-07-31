@@ -16,7 +16,7 @@ db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
 : ${db_order:=$SORT_ARGS}
 : ${db_filter:=query}
 # adjust offset by 1 for bash arrays (1 = 0)
-((db_offset--))
+[ "$db_offset" -ge 1 ] && ((db_offset--))
 # allow /'s in queries
 db_query="${db_query//\//-}"
 # get list of categories or accept a user specified list
