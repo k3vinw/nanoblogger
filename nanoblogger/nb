@@ -538,9 +538,8 @@ fi
 [ -z "$CAT_LIST" ] && [ ! -z "${UPDATE_LIST[*]}" ] &&
 	find_categories "${UPDATE_LIST[*]}"
 # update categories specified when 'all' is queried (ignores update list)
-if [ "$USR_QUERY" = all ] && [ ! -z "$cat_num" ]; then
+[ "$USR_QUERY" = all ] && [ ! -z "$cat_num" ] &&
 	find_categories
-fi
 # update previous entry's nav. links for new entries
 if [ ! -z "$New_EntryFile" ]; then
 	findba_entries "$New_EntryFile" "${MASTER_DB_RESULTS[*]}"

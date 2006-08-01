@@ -26,18 +26,6 @@ This is the classic three step upgrade process that's guarenteed to work
    the weblog:
 	nb -b [new-blog-dir] --configure -u all
 
-Upgrading to 3.3 from the latest 3.3 RC
----------------------------------------
-
-WARNING: For those using the default permanent link method
-(ENTRY_ARCHIVES="0"), your URL's will changed!
-
-* Manually copy the "day_archive.htm" template into your weblog's
-  template directory from the "[nb-basedir/default/templates" directory.
-* Adjust maximum number of entries before pagination occurs, see
-  nanoblogger.html for details.
-* Run with "--update all" to build new archives and permanent links.
-
 Upgrading to 3.3 (from at least 3.1)
 ------------------------------------
 
@@ -50,6 +38,9 @@ shouldn't make between releases has been done.
 
 The following notes were created from the process of converting a weblog
 from version 3.1 to 3.3.
+
+WARNING: For those using the default permanent link method
+(ENTRY_ARCHIVES="0"), your URL's will changed!
 
 1. Templates and Style sheets:
   * rename "templates" and "styles" directories from your weblog's
@@ -106,6 +97,8 @@ Upgrade your blog.conf
   * backup old blog.conf (e.g. cp blog.conf old.blog.conf)
   * compare differences between default/blog.conf and weblog's blog.conf
   * adjust/add/remove config variable settings as needed.
+  * adjust maximum number of entries before pagination occurs, see
+    nanoblogger.html for details.
   * save new blog.conf and update weblog (e.g. nb -u all)
 
 4. Articles (plugin):

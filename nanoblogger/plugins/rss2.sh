@@ -8,7 +8,8 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_T
 ENTRY_EXCERPTS=0
 
 # limit number of items to include in feed
-: ${LIMIT_ITEMS:=10}
+: ${FEED_ITEMS:=10}
+: ${RSS2_ITEMS:=$FEED_ITEMS}
 # build rss2 feeds for categories (0/1 = off/on)
 : ${RSS2_CATFEEDS:=0}
 
@@ -72,7 +73,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	# generate feed entries
 	build_rssfeed(){
 	db_catquery="$1"
-	query_db all "$db_catquery" limit "$LIMIT_ITEMS"
+	query_db all "$db_catquery" limit "$RSS2_ITEMS"
 	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".rss2feed
 	for entry in ${ARCHIVE_LIST[@]}; do

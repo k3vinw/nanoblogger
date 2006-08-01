@@ -1,4 +1,4 @@
-# NanoBlogger Recent Entries Plugin
+# NanoBlogger Recent Entries List Plugin
 # List Recent entries
 #
 # sample code for templates, based off the default stylesheet
@@ -11,26 +11,30 @@
 # </div>
 
 # set how many entries to list
-: ${LIST_N:=10}
-: ${LIST_OFFSET:=1}
+: ${RECENTLIST_ENTRIES:=10}
+: ${RECENTLIST_OFFSET:=1}
 
 PLUGIN_OUTFILE1="$BLOG_DIR/$PARTS_DIR/recent_entries.$NB_FILETYPE"
 PLUGIN_OUTFILE2="$BLOG_DIR/$PARTS_DIR/older_entries.$NB_FILETYPE"
 
 # always sort in reverse chronological order so recent entries
 # stay near the top of the list
-[ "$CHRON_ORDER" != 1 ] && flip_order="-ru"
+if [ "$CHRON_ORDER" != 1 ]; then
+	RECENTLIST_SORTARGS="-ru"
+else
+	RECENTLIST_SORTARGS=
+fi
 
 nb_msg "$plugins_action recent entries links ..."
 set_baseurl "./"
 
 get_entries(){
-LIST_MODE="$1"
-[ "$LIST_MODE" = "new" ] && query_db max nocat limit "$LIST_N" "" "$flip_order"
-if [ "$LIST_MODE" = "old" ]; then
-	XLIST_OFFSET="$LIST_N"
-	XLIST_N=`expr $LIST_N + $LIST_N`
-	query_db max nocat limit "$XLIST_N" "$XLIST_OFFSET" "$flip_order"
+RECENTLIST_MODE="$1"
+[ "$RECENTLIST_MODE" = "new" ] && query_db max nocat limit "$RECENTLIST_ENTRIES" "" "$RECENTLIST_SORTARGS"
+if [ "$RECENTLIST_MODE" = "old" ]; then
+	XRECENTLIST_OFFSET="$RECENTLIST_ENTRIES"
+	XRECENTLIST_ENTRIES=`expr $RECENTLIST_ENTRIES + $RECENTLIST_ENTRIES`
+	query_db max nocat limit "$XRECENTLIST_ENTRIES" "$XRECENTLIST_OFFSET" "$RECENTLIST_SORTARGS"
 fi
 for entry in ${DB_RESULTS[*]}; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"
