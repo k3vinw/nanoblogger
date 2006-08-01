@@ -254,6 +254,8 @@ query_db "$page_query" "$page_catquery"
 total_items=${#DB_RESULTS[*]}
 if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 	nb_msg "$paginate_action ${page_filedir}$page_file ..."
+	# cleanup numbered page(s)
+	rm -f "${page_dir}${page_filedir}${page_file%%\.$NB_FILETYPE}"*[0-9]."$NB_FILETYPE"
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`; page_totals=0
@@ -565,8 +567,6 @@ fi
 # build main weblog index
 nb_msg "$buildweblog_main"
 CACHE_TYPE=main
-# cleanup for main page(s)
-rm -f "$BLOG_DIR"/index-page*."$NB_FILETYPE"
 paginate "$QUERY_MODE" nocat "$MAX_MAINPAGE_ENTRIES" "$MAIN_TEMPLATE" \
 	"$ENTRY_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 # remove expired cache data to save disk space
