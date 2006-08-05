@@ -11,13 +11,13 @@ PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 : ${CAL_CMD:=cal}
 
 if $CAL_CMD > "$PLUGIN_OUTFILE" 2>&1 ; then
-nb_msg "$plugins_action calendar ..."
 [ -z "$DATE_LOCALE" ] || CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS`
 [ ! -z "$CALENDAR" ] || CALENDAR=`$CAL_CMD $CAL_ARGS`
-CAL_HEAD=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
+CAL_HEAD=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; /[ ]*$/ s///g; 1q'`
 WEEK_DAYS=(`echo "$CALENDAR" |sed -n 2p`)
 DAYS=`echo "$CALENDAR" |sed 1,2d`
 NUM_DAY_LINES=(`echo "$DAYS" |grep -n "[0-9]" |cut -d":" -f 1`)
+nb_msg "$plugins_action weblog calendar for $CAL_HEAD ..."
 
 curr_month=`date +%Y.%m`
 query_db "$curr_month"

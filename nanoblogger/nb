@@ -232,7 +232,7 @@ fi
 			OLD_PAGELIST="$PAGE_LIST"
 		fi
 		}
-		query_db "$page_query" "$page_catquery" limit "$end" "$begin"
+		query_db "$page_query" "$page_catquery" limit "$page_limit" "$page_offset"
 		for page_entry in ${UPDATE_LIST[@]}; do
 			if [ "$USR_QUERY" = all ]; then
 				build_pagelist
@@ -253,12 +253,16 @@ fi
 query_db "$page_query" "$page_catquery"
 total_items=${#DB_RESULTS[*]}
 if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
-	nb_msg "$paginate_action ${page_filedir}$page_file ..."
-	# cleanup numbered page(s)
-	rm -f "${page_dir}${page_filedir}${page_file%%\.$NB_FILETYPE}"*[0-9]."$NB_FILETYPE"
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
 		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`; page_totals=0
+	# cleanup numbered page(s)
+	if [ "$USR_QUERY" = all ]; then
+		rm -f "${page_dir}${page_filedir}${page_file%%\.$NB_FILETYPE}"*[0-9]."$NB_FILETYPE"
+		nb_msg "$paginate_action $total_pages ($page_items/$total_items) ..."
+	else
+		nb_msg "$paginate_action ($page_items/$total_items) ..."
+	fi
 	page_limit=0; page_offset=1; page_num=0
 	while [ "$page_totals" -lt "$total_items" ]; do
 		page_totals=`expr "$page_items" + "$page_totals"`
@@ -349,6 +353,8 @@ CACHE_TYPE=month
 query_db "$month"
 if [ ! -z "${DB_RESULTS[*]}" ]; then
 	LOOPMONTH_LIST=(${DB_RESULTS[*]})
+	[ "$USR_QUERY" != all ] && [ ! -z "${UPDATE_LIST[*]}" ] &&
+		LOOPMONTH_LIST=(${UPDATE_LIST[*]})
 	set_monthlink "$month"
 	set_monthnavlinks "$month"
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
@@ -868,7 +874,8 @@ while [ "$id" -lt "$total_items" ]; do
 	[ "$entry_cat" = "$entry" ] && entry_cat=
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
 	[ ! -z "$entry_cat" ] && entry_catids="- [$entry_cat]"
-	NB_EntryDate=`filter_timestamp "$entry" |sed -e '/[\.]'$NB_DATATYPE'/ s///g'`
+	entry_date=${entry%%.$NB_DATATYPE}; entry_date=${entry_date//\_/:}
+	NB_EntryDate=${entry_date//[A-Z]/ }
 	echo " $list_entryid, $NB_EntryTitle - ($NB_EntryDate) $entry_catids"
 	id=`expr 1 + $id`
 	entry_cat=; entry_catids=; entry=

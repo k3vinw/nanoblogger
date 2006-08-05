@@ -6,12 +6,16 @@ nb_timestamp(){ $DATE_CMD "+%Y-%m-%dT%H_%M_%S"; }
 
 # convert to a more printable date format
 filter_timestamp(){
-echo "$1" |sed -e '/[\_]/ s//:/g; /[A-Z]/ s// /g'
+#echo "$1" |sed -e '/[\_]/ s//:/g; /[A-Z]/ s// /g'
+entry_date=${1%%.$NB_DATATYPE}; entry_date=${entry_date//\_/:}
+echo ${entry_date//[A-Z]/ }
 }
 
 # reverse filter time stamp to original form
 refilter_timestamp(){
-echo "$1" |sed -e '/[\:]/ s//_/g; /[ ]/ s//T/'
+#echo "$1" |sed -e '/[\:]/ s//_/g; /[ ]/ s//T/'
+entry_date=${1//\:/_}
+echo ${entry_date//[ ]/T}
 }
 
 # validate time stamp

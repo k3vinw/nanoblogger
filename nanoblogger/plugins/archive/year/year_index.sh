@@ -50,7 +50,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = al
 	}
 
 	[ "$pluginyearindex_msg" != 1 ] &&
-		nb_msg "$plugins_action yearly archives ..." && pluginyearindex_msg=1
+		nb_msg "$plugins_action year archives ..." && pluginyearindex_msg=1
 	# make NB_ArchiveEntryLinks placeholder
 	set_baseurl "../../"
 
