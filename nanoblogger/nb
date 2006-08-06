@@ -353,8 +353,10 @@ CACHE_TYPE=month
 query_db "$month"
 if [ ! -z "${DB_RESULTS[*]}" ]; then
 	LOOPMONTH_LIST=(${DB_RESULTS[*]})
-	[ "$USR_QUERY" != all ] && [ ! -z "${UPDATE_LIST[*]}" ] &&
-		LOOPMONTH_LIST=(${UPDATE_LIST[*]})
+	[ "$USR_QUERY" != all ] &&
+		LOOPMONTH_LIST=(`for update_entry in ${UPDATE_LIST[@]}; do \
+			for month_entry in ${DB_RESULTS[@]}; do echo $month_entry; done \
+				|grep "$update_entry"; done`)
 	set_monthlink "$month"
 	set_monthnavlinks "$month"
 	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
