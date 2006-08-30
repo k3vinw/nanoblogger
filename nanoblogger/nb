@@ -284,25 +284,26 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
 		[ "$page_num" -gt 1 ] &&
 			arch_file=`chg_suffix "$arch_name-page$page_num".no`
-		> "$SCRATCH_FILE"
-		echo '<br />' >> "$SCRATCH_FILE"
+		echo '<table border="0" cellspacing="1" cellpadding="3" summary="page-menu">' > "$SCRATCH_FILE"
+		echo '<tr>' >> "$SCRATCH_FILE"
 		[ "$prev_num" = 1 ] &&
-			echo '<a href="'$arch_link'">'$NB_PrevPage'</a>' >> "$SCRATCH_FILE"
+			echo '<td><a href="'$arch_link'">'$NB_PrevPage'</a></td>' >> "$SCRATCH_FILE"
 		[ "$prev_num" -gt 1 ] &&
-			echo '<a href="'$prev_page'">'$NB_PrevPage'</a>' >> "$SCRATCH_FILE"
+			echo '<td><a href="'$prev_page'">'$NB_PrevPage'</a></td>' >> "$SCRATCH_FILE"
 		i=1
 		while [ $i -le $total_pages ]; do
 			[ "$i" = 1 ] && page="$arch_link" ||
 				page=`chg_suffix "$arch_name-page$i".no`
 			if [ "$i" = "$page_num" ]; then
-				echo '['$i']' >> "$SCRATCH_FILE"
+				echo '<td>'$i'</td>' >> "$SCRATCH_FILE"
 			else
-				echo '<a href="'$page'">['$i']</a>' >> "$SCRATCH_FILE"
+				echo '<td><a href="'$page'">'$i'</a></td>' >> "$SCRATCH_FILE"
 			fi
 			i=`expr $i + 1`
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
-				echo '<a href="'$next_page'">'$NB_NextPage'</a>' >> "$SCRATCH_FILE"
+				echo '<td><a href="'$next_page'">'$NB_NextPage'</a></td>' >> "$SCRATCH_FILE"
+		echo '</tr>' >> "$SCRATCH_FILE"; echo '</table>' >> "$SCRATCH_FILE"
 		NB_PageLinks=$(< "$SCRATCH_FILE")
 		if [ ! -z "${UPDATE_LIST[*]}" ] && [ ! -z "$USR_QUERY" ]; then
 			update_pages

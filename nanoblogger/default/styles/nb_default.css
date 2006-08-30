@@ -168,6 +168,10 @@ only here for backwards compat. */
 	margin-bottom: 15px;
 	}
 
+#pagenav, .pagenav {
+	margin-bottom: 15px;
+	}
+
 #footer {
 	clear: both;
 	position: relative;

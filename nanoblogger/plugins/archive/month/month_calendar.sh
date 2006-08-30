@@ -36,7 +36,7 @@ echo '</tr>' >> "$PLUGIN_OUTFILE"
 for line in ${NUM_DAY_LINES[@]}; do
 	DN_LINES=`echo "$DAYS" |sed -n "$line"p`
 	echo '<tr>' >> "$PLUGIN_OUTFILE"
-	DNLINES_ENDSPACE=`echo "$DN_LINES" |grep -c '/  $/'`
+	DNLINES_ENDSPACE=`echo "$DN_LINES" |grep -c '  $'`
 	[ "$DNLINES_ENDSPACE" -lt 1 ] &&
 		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g; /  $/ s///g' >> "$PLUGIN_OUTFILE"
 	for dn in $DN_LINES; do
@@ -58,7 +58,7 @@ for line in ${NUM_DAY_LINES[@]}; do
 			echo '<td><span class="calendar">'$dn'</span></td>' >> "$PLUGIN_OUTFILE"
 		fi
 	done
-	DNLINES_BEGINSPACE=`echo "$DN_LINES" |grep -c '/^  /'`
+	DNLINES_BEGINSPACE=`echo "$DN_LINES" |grep -c '^  '`
 	[ "$DNLINES_BEGINSPACE" -lt 1 ] &&
 		echo "$DN_LINES" | sed -e '/  [ \t]/ s//<td><\/td>\ /g; /[0-9]/ s///g; /^  / s///g' >> "$PLUGIN_OUTFILE"
 	echo '</tr>' >> "$PLUGIN_OUTFILE"
