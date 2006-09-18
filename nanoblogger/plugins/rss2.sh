@@ -47,6 +47,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
+        <?xml-stylesheet type="text/css" href="${BASE_URL}styles/feed.css"?>
 		<rss version="2.0"
 		 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		 xmlns:dc="http://purl.org/dc/elements/1.1/"

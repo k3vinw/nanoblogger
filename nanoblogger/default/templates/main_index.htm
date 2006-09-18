@@ -66,9 +66,14 @@ $NB_RSSAltLink
 			$NB_YearLinks
 			<!-- $NB_MonthLinks -->
 		</div>
-		<div class="syndicate">
-			$template_syndicate <a href="${BASE_URL}rss.$NB_SYND_FILETYPE">RSS</a>,
-			<a href="${BASE_URL}atom.$NB_SYND_FILETYPE">Atom</a>
+		<div class="sidetitle">
+			$template_syndicate
+		</div>
+		<div class="side">
+			$template_syndicate_main
+			(<a href="${BASE_URL}rss.$NB_SYND_FILETYPE">RSS</a>,
+			<a href="${BASE_URL}atom.$NB_SYND_FILETYPE">Atom</a>)<br />
+			$NB_CategoryFeeds
 		</div>
 		<div class="sidetitle">
 			$template_contact

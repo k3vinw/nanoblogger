@@ -31,7 +31,7 @@ NB_AtomArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	set_baseurl "$BLOG_URL/"
 
-# escape special characters to help create valid xml feeds
+	# escape special characters to help create valid xml feeds
 	esc_chars(){
 		sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 		}
@@ -39,7 +39,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	NB_AtomTitle=`echo "$BLOG_TITLE" |esc_chars`
 	NB_AtomAuthor=`echo "$BLOG_AUTHOR" |esc_chars`
 
-# make atom feed
+	# make atom feed
 	make_atomfeed(){
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
@@ -50,6 +50,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
 		<feed xmlns="http://www.w3.org/2005/Atom">
+        <?xml-stylesheet type="text/css" href="${BASE_URL}styles/feed.css"?>
 		<title type="html">$NB_AtomTitle</title>
 		<link rel="alternate" type="text/html" href="$BLOG_URL"/>
 		<link rel="self" type="application/atom+xml" href="$BLOG_FEED_URL"/>
@@ -68,12 +69,12 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		</feed>
 	EOF
 	nb_msg "$MKPAGE_OUTFILE"
-# load makepage tidy plugin
+	# load makepage tidy plugin
 	[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
 		. "$PLUGINS_DIR"/makepage/tidy.sh
 	}
 
-# generate feed entries
+	# generate feed entries
 	build_atomfeed(){
 	db_catquery="$1"
 	query_db all "$db_catquery" limit "$ATOM_ITEMS"
@@ -133,7 +134,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	NB_AtomEntries=$(< "$SCRATCH_FILE".atomfeed)
 	}
 
-# generate category feed entries
+	# generate category feed entries
 	build_atom_catfeeds(){
 	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ]; then
 		db_categories=(${CAT_LIST[@]})
