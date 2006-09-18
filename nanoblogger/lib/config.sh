@@ -12,7 +12,7 @@ AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
 # loads global config
 load_globals(){
 # always load global configs
-[ -f "$NB_BASE_DIR/nb.conf" ] && . "$NB_BASE_DIR/nb.conf"
+[ -f "$NB_CFG_DIR/nb.conf" ] && . "$NB_CFG_DIR/nb.conf"
 # check for user's .nb.conf in their home directory
 [ -f "$HOME/.nb.conf" ] && . "$HOME/.nb.conf"
 # default language definition

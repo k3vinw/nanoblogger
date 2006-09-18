@@ -9,6 +9,10 @@ VERSION="3.3 RC5"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
+# documentation
+NB_DOC_DIR="$NB_BASE_DIR/docs"
+# nanoblogger's conf file
+NB_CFG_DIR="$NB_BASE_DIR"
 
 ### hardcoded paths ###
 
@@ -1060,7 +1064,7 @@ while [ $# -gt 0 ]; do
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		USR_QUERY="$2"; shift; LIST_WEBLOG=1;;
 		-n|--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
-		--manual)		load_config; $BROWSER "$NB_BASE_DIR/docs/nanoblogger.html"
+		--manual)		load_config; $BROWSER "$NB_DOC_DIR/nanoblogger.html"
 					exit 0;;
 		-m|--move)		check_arg "$2"; move_num="$2"; shift; MOVE_WEBLOG=1;;
 		-M|--makepage)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
