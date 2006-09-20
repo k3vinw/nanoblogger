@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2006-09-20T02:17:16-04:00
+# Last modified: 2006-09-20T14:57:20-04:00
 
 # <div class="sidetitle">
 # Links
@@ -112,14 +112,15 @@ build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PART
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
 # create links to feeds
-if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS_CATFEEDS" = 1 ]; then
+if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" = 1 ]; then
 	# TODO: find a way to check if atom or rss feeds exist before adding them blindly
+	# TODO: include RSS 1.0 feeds?
 	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml">RSS</a>, <a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
-elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS_CATFEEDS" != 1 ]; then
+elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" != 1 ]; then
 	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
-elif [ "$RSS_CATFEEDS" = 1 ] && [ "$ATOM_CATFEEDS" != 1 ]; then
+elif [ "$RSS2_CATFEEDS" = 1 ] && [ "$ATOM_CATFEEDS" != 1 ]; then
 	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
 fi
