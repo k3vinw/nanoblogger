@@ -1,4 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
+# Last modified: 2006-09-20T02:17:16-04:00
 
 # <div class="sidetitle">
 # Links
@@ -110,18 +111,16 @@ done
 build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
-# check if we have category feeds enabled
+# create links to feeds
 if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS_CATFEEDS" = 1 ]; then
 	# TODO: find a way to check if atom or rss feeds exist before adding them blindly
-	# Nijel: feeds list
-	sed 's@<a href="\([^"]*\)index.'$NB_FILETYPE'">\([^<]*\)</a>.*@\2 (<a href="\1index-rss.xml">RSS</a>, <a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml">RSS</a>, <a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
 elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)index.'$NB_FILETYPE'">\([^<]*\)</a>.*@\2 (<a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
-	
 elif [ "$RSS_CATFEEDS" = 1 ] && [ "$ATOM_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)index.'$NB_FILETYPE'">\([^<]*\)</a>.*@\2 (<a href="\1index-rss.xml">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
 fi
 

@@ -1,4 +1,5 @@
 # Module for querying existing records
+# Last modified: 2006-09-20T13:58:38-04:00
 
 # search, filter, and create makeshift and master db arrays
 query_db(){

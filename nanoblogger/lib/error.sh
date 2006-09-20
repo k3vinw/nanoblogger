@@ -1,4 +1,5 @@
 # Module for error handling
+# Last modified: 2006-09-20T13:57:26-04:00
 
 # function to die with a message
 die(){

@@ -1,4 +1,5 @@
 # Module for configuration file management
+# Last modified: 2006-09-20T14:09:34-04:00
 
 ### WARNING ###
 # config variables that must always load
@@ -27,7 +28,7 @@ load_globals
 # allow user specified weblog directories 
 [ ! -z "$USR_BLOGDIR" ] && BLOG_DIR="$USR_BLOGDIR"
 # auto-detect blog.conf from our CWD
-[ -z "$USR_BLOGDIR" ] && [ -f "$PWD/blog.conf" ] &&
+[ -z "$USR_BLOGDIR" ] || [ "$USR_BLOGDIR" = "./" ] && [ -f "$PWD/blog.conf" ] &&
 	BLOG_DIR="$PWD"
 BLOG_DIR="${BLOG_DIR%%\/}" # remove trailing "/"
 # export BLOG_DIR for the benefit of other components
