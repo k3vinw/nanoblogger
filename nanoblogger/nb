@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-09-23T08:13:29-04:00
+# Last modified: 2006-09-23T08:56:13-04:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -237,8 +237,9 @@ fi
 		fi
 		}
 		query_db "$page_query" "$page_catquery" limit "$page_limit" "$page_offset"
+		PAGEMOD_VAR="$New_EntryFile$Delete_EntryFile$Move_EntryFile"
 		for page_entry in ${UPDATE_LIST[@]}; do
-			if [ "$USR_QUERY" = all ] || [ ! -z "$New_EntryFile" ] && [ "$page_catquery" = nocat ]; then
+			if [ "$USR_QUERY" = all ] || [ ! -z "$PAGEMOD_VAR" ] && [ "$page_catquery" = nocat ]; then
 				build_pagelist
 			else
 				page_match=`for db_item in ${DB_RESULTS[@]}; do echo $db_item; done |grep "$page_entry"`
@@ -804,12 +805,12 @@ for entry_id in $NUMVAR; do
 				rm -fr "$Delete_EntryArchiveDir"
 			# throw out old cache data
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
-			# permanently delete entry
-			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
 			# update previous and next entries of deleted entry
 			findba_entries "$Delete_EntryFile" "${MASTER_DB_RESULTS[*]}"
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"
+			# permanently delete entry
+			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
 		fi
 	fi
 done

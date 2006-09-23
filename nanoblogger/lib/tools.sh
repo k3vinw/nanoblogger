@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-23T08:07:14-04:00
+# Last modified: 2006-09-23T08:52:21-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
