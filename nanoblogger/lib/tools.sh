@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-23T15:13:43-04:00
+# Last modified: 2006-09-23T18:53:01-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -319,12 +319,12 @@ echo "$x_id$1" |sed -e '/[\/]/ s//-/g'
 
 # use instead of set_title2link to avoid file/URL collissions
 set_smartlinkname(){
-altlinkvar="$1"
-altlinktype="$2"
-if [ "$altlinktype" = entry ]; then
-	read_metadata TITLE "$NB_DATA_DIR/$altlinkvar"
+altlink_var="$1"
+altlink_type="$2"
+if [ "$altlink_type" = entry ]; then
+	read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
 	altentry_linkname=`set_title2link "$METADATA"`
-	alte_day=`echo "$altlinkvar" |cut -c1-10`
+	alte_day=`echo "$altlink_var" |cut -c1-10`
 	query_db "$alte_day"
 	ALTLINK_LIST=(${DB_RESULTS[*]})
 	for alte in ${ALTLINK_LIST[*]}; do
@@ -336,8 +336,10 @@ if [ "$altlinktype" = entry ]; then
 		echo "$alte:$alte_linkname"
 	done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
 	link_match="$altentry_linkname"
-elif [ "$altlinktype" = cat ]; then
-	altcat_title=`sed 1q "$NB_DATA_DIR/$altlinkvar"`
+	alte_backup=${altlink_var//-//}; alte_backup=${alte_backup//T//T}
+	altlink_backup=${alte_backup%%.*}
+elif [ "$altlink_type" = cat ]; then
+	altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
 	altcat_linkname=`set_title2link "$altcat_title"`
 	query_db # get categories list
 	ALTLINK_LIST=(${db_categories[*]})
@@ -350,6 +352,7 @@ elif [ "$altlinktype" = cat ]; then
 		echo "$altc:$altc_linkname"
 	done |sort -ru > "$SCRATCH_FILE".altlinks
 	link_match="$altcat_linkname"
+	altlink_backup=${altlink_var%%\.*}
 fi
 # link match failsafe
 [ -z "$link_match" ] &&
@@ -378,9 +381,9 @@ while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
 	done
 	TOTAL_LINKCFLICTS=`get_linkconflicts "$link_match"`
 done
-smart_linkname=`sed -e '/'$altlinkvar':/!d; /'$altlinkvar':/ s///' "$SCRATCH_FILE".altlinks`
+smart_linkname=`sed -e '/'$altlink_var':/!d; /'$altlink_var':/ s///' "$SCRATCH_FILE".altlinks`
 # smart linkname failsafe 
-: ${smart_linkname:=$altlinkvar}
+: ${smart_linkname:=$altlink_backup}
 echo "$smart_linkname"
 }
 
@@ -390,7 +393,8 @@ entrylink_var="$1"
 link_type="$2"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 	entrylink_var="${entrylink_var//-//}"
-	entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	#entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	entry_dir=`echo "${entrylink_var%%\.*}" |cut -c1-10`
 	entry_linkname=`set_smartlinkname "${entrylink_var//\//-}" entry`
 	permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
 	NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
