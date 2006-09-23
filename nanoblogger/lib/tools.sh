@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-23T08:52:21-04:00
+# Last modified: 2006-09-23T15:13:43-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -330,27 +330,28 @@ if [ "$altlinktype" = entry ]; then
 	for alte in ${ALTLINK_LIST[*]}; do
 		read_metadata TITLE "$NB_DATA_DIR/$alte"
 		alte_linkname=`set_title2link "$METADATA"`
-		# failsafe for setting entry titles
+		# entry title failsafe
 		[ -z "$alte_linkname" ] &&
 			alte_linkname=`set_title2link "$notitle"`
 		echo "$alte:$alte_linkname"
 	done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
 	link_match="$altentry_linkname"
 elif [ "$altlinktype" = cat ]; then
-	cat_title=`sed 1q "$NB_DATA_DIR/$altlinkvar"`
+	altcat_title=`sed 1q "$NB_DATA_DIR/$altlinkvar"`
+	altcat_linkname=`set_title2link "$altcat_title"`
 	query_db # get categories list
 	ALTLINK_LIST=(${db_categories[*]})
 	for altc in ${ALTLINK_LIST[*]}; do
 		altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
 		altc_linkname=`set_title2link "$altc_title"`
-		# failsafe for setting category titles
+		# category title failsafe
 		[ -z "$altc_linkname" ] &&
 			altc_linkname=`set_title2link "$notitle"`
 		echo "$altc:$altc_linkname"
 	done |sort -ru > "$SCRATCH_FILE".altlinks
 	link_match="$altcat_linkname"
 fi
-# fallback for empty link grep
+# link match failsafe
 [ -z "$link_match" ] &&
 	link_match=`set_title2link "$notitle"`
 get_linkconflicts(){
@@ -378,6 +379,8 @@ while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
 	TOTAL_LINKCFLICTS=`get_linkconflicts "$link_match"`
 done
 smart_linkname=`sed -e '/'$altlinkvar':/!d; /'$altlinkvar':/ s///' "$SCRATCH_FILE".altlinks`
+# smart linkname failsafe 
+: ${smart_linkname:=$altlinkvar}
 echo "$smart_linkname"
 }
 

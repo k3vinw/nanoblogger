@@ -1,4 +1,3 @@
-* Fix updating category feeds upon entry deletion
 * add Ted Walther's Diary (insprired MicroBlogger) to credits
 * document how to create and use language definitions
 * make empty directories (e.g. plugins/../category) stick on cvs exports
