@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-20T13:59:34-04:00
+# Last modified: 2006-09-23T08:07:14-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -147,7 +147,7 @@ fi
 
 # special conversion for titles to link form
 set_title2link(){ title2link_var="$1"
-echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]//g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"
+echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]/_/g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g"
 }
 
 # set base url based on parameters
@@ -223,16 +223,13 @@ fi
 # set link/file for given category
 set_catlink(){
 catlink_var="$1"
-# default
-category_dir=${catlink_var%%\.*}
+# title-based links
+category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
+category_dir=`set_smartlinkname "$catlink_var" cat`
+# failsafe for setting category directories
+: ${category_dir:=${catlink_var%%\.*}}
 category_file="$category_dir/$NB_INDEXFILE"
 category_link="$category_dir/$NB_INDEX"
-
-# experimental title-based links
-#category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
-#category_dir=`set_title2link "$category_title"`
-#category_file="$category_dir/$NB_INDEXFILE"
-#category_link="$category_dir/$NB_INDEX"
 }
 
 # set link/file for given month
@@ -320,27 +317,84 @@ set_entryid(){
 echo "$x_id$1" |sed -e '/[\/]/ s//-/g'
 }
 
+# use instead of set_title2link to avoid file/URL collissions
+set_smartlinkname(){
+altlinkvar="$1"
+altlinktype="$2"
+if [ "$altlinktype" = entry ]; then
+	read_metadata TITLE "$NB_DATA_DIR/$altlinkvar"
+	altentry_linkname=`set_title2link "$METADATA"`
+	alte_day=`echo "$altlinkvar" |cut -c1-10`
+	query_db "$alte_day"
+	ALTLINK_LIST=(${DB_RESULTS[*]})
+	for alte in ${ALTLINK_LIST[*]}; do
+		read_metadata TITLE "$NB_DATA_DIR/$alte"
+		alte_linkname=`set_title2link "$METADATA"`
+		# failsafe for setting entry titles
+		[ -z "$alte_linkname" ] &&
+			alte_linkname=`set_title2link "$notitle"`
+		echo "$alte:$alte_linkname"
+	done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
+	link_match="$altentry_linkname"
+elif [ "$altlinktype" = cat ]; then
+	cat_title=`sed 1q "$NB_DATA_DIR/$altlinkvar"`
+	query_db # get categories list
+	ALTLINK_LIST=(${db_categories[*]})
+	for altc in ${ALTLINK_LIST[*]}; do
+		altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
+		altc_linkname=`set_title2link "$altc_title"`
+		# failsafe for setting category titles
+		[ -z "$altc_linkname" ] &&
+			altc_linkname=`set_title2link "$notitle"`
+		echo "$altc:$altc_linkname"
+	done |sort -ru > "$SCRATCH_FILE".altlinks
+	link_match="$altcat_linkname"
+fi
+# fallback for empty link grep
+[ -z "$link_match" ] &&
+	link_match=`set_title2link "$notitle"`
+get_linkconflicts(){
+	linkmatch_var="$1"
+	if [ ! -z "$linkmatch_var" ]; then
+		grep -c "${linkmatch_var}$" "$SCRATCH_FILE".altlinks
+	else
+		echo 0
+	fi
+	}
+TOTAL_LINKCFLICTS=`get_linkconflicts "$link_match"`
+ALTLINK_LIST=(`cut -d":" -f 1 "$SCRATCH_FILE".altlinks`)
+altli=0
+while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
+	for altl in ${ALTLINK_LIST[*]}; do
+		altl_match=`grep -c "${link_match}$" "$SCRATCH_FILE".altlinks`
+		if [ "$altl_match" -gt 1 ]; then
+			altli=`expr $altl_match - 1`
+			sed -e '/'$altl':*.*/ s//'$altl':'$link_match'_'${altli}'/' "$SCRATCH_FILE".altlinks > "$SCRATCH_FILE".altlinks.new
+			mv "$SCRATCH_FILE".altlinks.new "$SCRATCH_FILE".altlinks
+		else
+			altli=0 # reset counter
+		fi
+	done
+	TOTAL_LINKCFLICTS=`get_linkconflicts "$link_match"`
+done
+smart_linkname=`sed -e '/'$altlinkvar':/!d; /'$altlinkvar':/ s///' "$SCRATCH_FILE".altlinks`
+echo "$smart_linkname"
+}
+
 # set link/file for given entry
 set_entrylink(){
 entrylink_var="$1"
 link_type="$2"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
-	# default
-	entrylink_mod=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
-	entry_dir=`echo "${entrylink_mod%%\.*}" |sed -e '/\T/ s//\/T/g'`
-	permalink_file="$entry_dir/$NB_INDEXFILE"
-	NB_EntryPermalink="$entry_dir/$NB_INDEX"
+	entrylink_var="${entrylink_var//-//}"
+	entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	entry_linkname=`set_smartlinkname "${entrylink_var//\//-}" entry`
+	permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
+	NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
 
-	# experimental title-based links
-	#entrylink_var=`echo $entrylink_var |sed -e '/[-]/ s//\//g'`
-	#entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
-	#entry_linkname=`set_title2link "$NB_EntryTitle"`
-	#permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
-	#NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
-
-	month=`echo "$entrylink_mod" |cut -c1-7`
+	month=`echo "$entrylink_var" |cut -c1-7`
 	set_monthlink "$month"
-	day=`echo "$entrylink_mod" |cut -c1-10`
+	day=`echo "$entrylink_var" |cut -c1-10`
 	set_daylink "$day"
 else
 	month=`echo "$entrylink_var" |cut -c1-7`
@@ -366,14 +420,20 @@ if [ "$entrynavlinks_type" = next ]; then
 	next_entry="$entrynavlinks_entry"
 fi
 if [ ! -z "$prev_entry" ]; then
-	prev_entry_dir=`echo "$prev_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
-	prev_permalink_file="$prev_entry_dir/$NB_INDEXFILE"
-	NB_PrevEntryPermalink="$prev_entry_dir/$NB_INDEX"
+	# Nijel: support for named permalinks
+	prev_entrylink_var=`echo $prev_entry |sed -e '/[-]/ s//\//g'`
+	prev_entry_dir=`echo "$prev_entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	prev_entry_linkname=`set_smartlinkname "$prev_entry" entry`
+	prev_permalink_file="$prev_entry_dir/$prev_entry_linkname/$NB_INDEXFILE"
+	NB_PrevEntryPermalink="$prev_entry_dir/$prev_entry_linkname/$NB_INDEX"
 fi
 if [ ! -z "$next_entry" ]; then
-	next_entry_dir=`echo "$next_entry" |cut -d "." -f 1 |sed -e '/[\-]/ s//\//g; /\T/ s//\/T/g'`
-	next_permalink_file="$next_entry_dir/$NB_INDEXFILE"
-	NB_NextEntryPermalink="$next_entry_dir/$NB_INDEX"
+	# Nijel: support for named permalinks
+	next_entrylink_var=`echo $next_entry |sed -e '/[-]/ s//\//g'`
+	next_entry_dir=`echo "$next_entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	next_entry_linkname=`set_smartlinkname "$next_entry" entry`
+	next_permalink_file="$next_entry_dir/$next_entry_linkname/$NB_INDEXFILE"
+	NB_NextEntryPermalink="$next_entry_dir/$next_entry_linkname/$NB_INDEX"
 fi
 }
 

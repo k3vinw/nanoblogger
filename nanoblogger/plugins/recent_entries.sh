@@ -42,6 +42,9 @@ for entry in ${DB_RESULTS[*]}; do
 	NB_EntryID=`set_entryid $entry`
 	[ -z "$link_title" ] && link_title="$notitle"
 	set_entrylink "$entry"
+	# Nijel: support for named permalinks
+	permalink_file="$entry_dir/$entry_linkname/$NB_INDEXFILE"
+	NB_EntryPermalink="$entry_dir/$entry_linkname/$NB_INDEX"
 	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$link_title'</a><br />'
 done
 }

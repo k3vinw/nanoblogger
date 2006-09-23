@@ -132,7 +132,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 					NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`
 					NB_RSS2CatLink="$category_link"
 					NB_RSS2CatTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
-					nb_msg "$plugins_action rss $NB_RSS2Ver feed for category ..."
+					nb_msg "$plugins_action $category_dir rss $NB_RSS2Ver feed  ..."
 					build_rssfeed "$cat_db"
 					make_rssfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_RSS2CatFile"
 				fi

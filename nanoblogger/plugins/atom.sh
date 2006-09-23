@@ -145,7 +145,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 					NB_AtomTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
 					NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
 					NB_AtomCatLink="$category_link"
-					nb_msg "$plugins_action atom $NB_AtomVer feed for category ..."
+					nb_msg "$plugins_action $category_dir atom $NB_AtomVer feed ..."
 					build_atomfeed "$cat_db"
 					make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomCatFile"
 				fi
