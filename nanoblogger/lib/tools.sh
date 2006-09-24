@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-23T18:53:01-04:00
+# Last modified: 2006-09-23T21:46:43-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -337,7 +337,7 @@ if [ "$altlink_type" = entry ]; then
 	done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
 	link_match="$altentry_linkname"
 	alte_backup=${altlink_var//-//}; alte_backup=${alte_backup//T//T}
-	altlink_backup=${alte_backup%%.*}
+	alte_backup=${alte_backup%%.*}; altlink_backup="${alte_backup//*\/}"
 elif [ "$altlink_type" = cat ]; then
 	altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
 	altcat_linkname=`set_title2link "$altcat_title"`
@@ -382,8 +382,9 @@ while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
 	TOTAL_LINKCFLICTS=`get_linkconflicts "$link_match"`
 done
 smart_linkname=`sed -e '/'$altlink_var':/!d; /'$altlink_var':/ s///' "$SCRATCH_FILE".altlinks`
-# smart linkname failsafe 
-: ${smart_linkname:=$altlink_backup}
+# smart linkname failsafe and backwards compatibility
+[ -z "$smart_linkname" ] || [ "$FRIENDLY_LINKS" != 1 ] &&
+	smart_linkname="$altlink_backup"
 echo "$smart_linkname"
 }
 

@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2006-09-20T14:09:34-04:00
+# Last modified: 2006-09-23T21:50:02-04:00
 
 ### WARNING ###
 # config variables that must always load
@@ -160,6 +160,8 @@ fi
 	BLOG_INTERACTIVE="$USR_INTERACTIVE"
 # default for showing category links
 : ${CATEGORY_LINKS:=1}
+# default for friendly links
+: ${FRIENDLY_LINKS:=1}
 }
 
 # deconfigure, clear some auto-default variables
@@ -168,7 +170,8 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	QUERY_MODE=; MAX_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_CATPAGE_ENTRIES=; \
 	MAX_MONTHPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; METADATA_MARKER=; \
 	METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
-	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; USR_PLUGINSDIR=;
+	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
+	USR_PLUGINSDIR=; CATEGORY_LINKS=; FRIENDLY_LINKS=;
 }
 
 # edit $BLOG_CONF
