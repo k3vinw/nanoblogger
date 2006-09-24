@@ -1,5 +1,5 @@
 # Module for querying existing records
-# Last modified: 2006-09-20T13:58:38-04:00
+# Last modified: 2006-09-23T22:27:08-04:00
 
 # search, filter, and create makeshift and master db arrays
 query_db(){
@@ -88,23 +88,17 @@ else
 	DB_RESULTS=(`list_db |filter_$db_filter`)
 fi
 }
-if [ "$db_query" = all ]; then
-	db_query=; query_data
-elif [ "$db_query" = master ]; then
+case "$db_query" in
+	all) db_query=; query_data;;
 	# create master reference db
-	db_query=; update_db
-	MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"))
-elif [ "$db_query" = years ]; then
-	db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`)
-elif [ "$db_query" = months ]; then
-	db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`)
-elif [ "$db_query" = days ]; then
-	db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`)
-elif [ "$db_query" = max ]; then
-	db_setlimit=limit; db_query=; query_data
-else
-	query_data
-fi
+	master) db_query=; update_db
+		MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
+	years) db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`);;
+	months) db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`);;
+	days) db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`);;
+	max) db_setlimit=limit; db_query=; query_data;;
+	*) query_data;;
+esac
 db_query=; db_filter=; db_order=;
 }
 

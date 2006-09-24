@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2006-09-23T21:50:02-04:00
+# Last modified: 2006-09-23T23:21:10-04:00
 
 ### WARNING ###
 # config variables that must always load
@@ -133,6 +133,7 @@ fi
 # defaults for index file name
 : ${NB_INDEXFILE:=index.$NB_FILETYPE}
 # check if we need to append directory index file to links
+: ${SHOW_INDEXFILE:=1}
 if [ "$SHOW_INDEXFILE" = 1 ]; then
 	NB_INDEX=$NB_INDEXFILE
 else

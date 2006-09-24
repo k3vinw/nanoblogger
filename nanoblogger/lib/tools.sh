@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-23T21:46:43-04:00
+# Last modified: 2006-09-23T22:23:36-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -321,39 +321,42 @@ echo "$x_id$1" |sed -e '/[\/]/ s//-/g'
 set_smartlinkname(){
 altlink_var="$1"
 altlink_type="$2"
-if [ "$altlink_type" = entry ]; then
-	read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
-	altentry_linkname=`set_title2link "$METADATA"`
-	alte_day=`echo "$altlink_var" |cut -c1-10`
-	query_db "$alte_day"
-	ALTLINK_LIST=(${DB_RESULTS[*]})
-	for alte in ${ALTLINK_LIST[*]}; do
-		read_metadata TITLE "$NB_DATA_DIR/$alte"
-		alte_linkname=`set_title2link "$METADATA"`
-		# entry title failsafe
-		[ -z "$alte_linkname" ] &&
-			alte_linkname=`set_title2link "$notitle"`
-		echo "$alte:$alte_linkname"
-	done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
-	link_match="$altentry_linkname"
-	alte_backup=${altlink_var//-//}; alte_backup=${alte_backup//T//T}
-	alte_backup=${alte_backup%%.*}; altlink_backup="${alte_backup//*\/}"
-elif [ "$altlink_type" = cat ]; then
-	altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
-	altcat_linkname=`set_title2link "$altcat_title"`
-	query_db # get categories list
-	ALTLINK_LIST=(${db_categories[*]})
-	for altc in ${ALTLINK_LIST[*]}; do
-		altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
-		altc_linkname=`set_title2link "$altc_title"`
-		# category title failsafe
-		[ -z "$altc_linkname" ] &&
-			altc_linkname=`set_title2link "$notitle"`
-		echo "$altc:$altc_linkname"
-	done |sort -ru > "$SCRATCH_FILE".altlinks
-	link_match="$altcat_linkname"
-	altlink_backup=${altlink_var%%\.*}
-fi
+case "$altlink_type" in
+	entry)
+		read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
+		altentry_linkname=`set_title2link "$METADATA"`
+		alte_day=`echo "$altlink_var" |cut -c1-10`
+		query_db "$alte_day"
+		ALTLINK_LIST=(${DB_RESULTS[*]})
+		for alte in ${ALTLINK_LIST[*]}; do
+			read_metadata TITLE "$NB_DATA_DIR/$alte"
+			alte_linkname=`set_title2link "$METADATA"`
+			# entry title failsafe
+			[ -z "$alte_linkname" ] &&
+				alte_linkname=`set_title2link "$notitle"`
+			echo "$alte:$alte_linkname"
+		done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
+		link_match="$altentry_linkname"
+		alte_backup=${altlink_var//-//}; alte_backup=${alte_backup//T//T}
+		alte_backup=${alte_backup%%.*}; altlink_backup="${alte_backup//*\/}"
+		;;
+	cat)
+		altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
+		altcat_linkname=`set_title2link "$altcat_title"`
+		query_db # get categories list
+		ALTLINK_LIST=(${db_categories[*]})
+		for altc in ${ALTLINK_LIST[*]}; do
+			altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
+			altc_linkname=`set_title2link "$altc_title"`
+			# category title failsafe
+			[ -z "$altc_linkname" ] &&
+				altc_linkname=`set_title2link "$notitle"`
+			echo "$altc:$altc_linkname"
+		done |sort -ru > "$SCRATCH_FILE".altlinks
+		link_match="$altcat_linkname"
+		altlink_backup=${altlink_var%%\.*}
+		;;
+esac
 # link match failsafe
 [ -z "$link_match" ] &&
 	link_match=`set_title2link "$notitle"`
