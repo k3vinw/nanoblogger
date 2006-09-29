@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2006-09-23T23:21:10-04:00
+# Last modified: 2006-09-29T02:04:29-04:00
 
 ### WARNING ###
 # config variables that must always load
@@ -94,6 +94,8 @@ else
 fi
 # default date command
 : ${DATE_CMD:=date}
+# default data file date format
+: ${DB_DATEFORMAT:="%Y-%m-%dT%H_%M_%S"}
 # default to vi for editor
 : ${EDITOR:=vi}
 # default to txt for datatype suffix
@@ -163,6 +165,8 @@ fi
 : ${CATEGORY_LINKS:=1}
 # default for friendly links
 : ${FRIENDLY_LINKS:=1}
+# default limit for # of link title characters
+: ${MAX_TITLEWIDTH:=45}
 }
 
 # deconfigure, clear some auto-default variables
@@ -172,7 +176,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	MAX_MONTHPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; METADATA_MARKER=; \
 	METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
 	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
-	USR_PLUGINSDIR=; CATEGORY_LINKS=; FRIENDLY_LINKS=;
+	USR_PLUGINSDIR=; CATEGORY_LINKS=; FRIENDLY_LINKS=; MAX_TITLEWIDTH=;
 }
 
 # edit $BLOG_CONF
