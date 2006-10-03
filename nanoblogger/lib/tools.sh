@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-29T02:25:09-04:00
+# Last modified: 2006-09-29T03:20:56-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -147,7 +147,7 @@ fi
 
 # special conversion for titles to link form
 set_title2link(){ title2link_var="$1"; t2lchar_limit="$MAX_TITLEWIDTH"
-echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]/_/g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g" |cut -c1-$t2lchar_limit |sed -e '/[\_\-]*$/ s///g'
+echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`]//g; s/[\~]//g; s/[\!]//g; s/[\@]//g; s/[\#]//g; s/[\$]//g; s/[\%]//g; s/[\^]//g; s/ [\&] / and /g; s/[\&]//g; s/[\*]//g; s/[\(]//g; s/[\)]//g; s/[\+]//g; s/[\=]//g; s/\[//g; s/\]//g; s/[\{]//g; s/[\}]//g; s/[\|]//g; s/[\\]//g; s/[\;]//g; s/[\:]//g; s/[\']//g; s/[\"]//g; s/[\,]//g; s/[\<]//g; s/[\.]/_/g; s/[\>]//g; s/[\/]//g; s/[\?]//g; s/^[ ]//g; s/[ ]$//g; s/ /_/g" |cut -c1-$t2lchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
 }
 
 # set base url based on parameters
@@ -207,7 +207,7 @@ if [ "$CHRON_ORDER" = 1 ]; then
 else
 	before_entryid=`expr $entryid_var - 1`
 	after_entryid=`expr $entryid_var + 1`
-fi	
+fi
 if [ "$before_entryid" -ge 0 ]; then
 	before_entry=${BAENTRY_IDLIST[$before_entryid]%%\>[0-9]*}
 else
@@ -363,7 +363,7 @@ esac
 get_linkconflicts(){
 	linkmatch_var="$1"
 	if [ ! -z "$linkmatch_var" ]; then
-		grep -c "${linkmatch_var}$" "$SCRATCH_FILE".altlinks
+		grep -c ":${linkmatch_var}$" "$SCRATCH_FILE".altlinks
 	else
 		echo 0
 	fi
@@ -373,7 +373,7 @@ ALTLINK_LIST=(`cut -d":" -f 1 "$SCRATCH_FILE".altlinks`)
 altli=0
 while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
 	for altl in ${ALTLINK_LIST[*]}; do
-		altl_match=`grep -c "${link_match}$" "$SCRATCH_FILE".altlinks`
+		altl_match=`grep -c ":${link_match}$" "$SCRATCH_FILE".altlinks`
 		if [ "$altl_match" -gt 1 ]; then
 			altli=`expr $altl_match - 1`
 			sed -e '/'$altl':*.*/ s//'$altl':'$link_match'_'${altli}'/' "$SCRATCH_FILE".altlinks > "$SCRATCH_FILE".altlinks.new
