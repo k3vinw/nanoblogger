@@ -21,8 +21,8 @@ set_articleconf(){
 : ${ARTICLE_SUFFIX:=txt}
 : ${ARTICLE_TEMPLATE:=$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE}
 : ${ARTICLE_FILTERCMD:=sort}
-: ${ARTICLES_TITLE_FILE=:.articles_title.txt}
-: ${ARTICLE_FORMAT=:$PAGE_FORMAT}
+: ${ARTICLES_TITLE_FILE:=.articles_title.txt}
+: ${ARTICLE_FORMAT:=$PAGE_FORMAT}
 }
 
 # reset basic configs to allow for multiple article configs

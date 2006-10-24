@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2006-09-20T14:57:20-04:00
+# Last modified: 2006-10-23T18:07:53-04:00
 
 # <div class="sidetitle">
 # Links
@@ -41,7 +41,7 @@
 # validate MAX_MONTHLINKS (must be greater than 0)
 MONTHLINKS_NUMVAR=`echo "$MAX_MONTHLINKS" |grep -c "[0-9]"`
 [ "$MONTHLINKS_NUMVAR" = 0 ] &&
-	die "MAX_MONTHLINKS != > 0"
+	die "MAX_MONTHLINKS !> 0"
 # unlimited links
 if [ "$MAX_MONTHLINKS" = -1 ]; then
 	ALL_MONTHLINKS="1"
@@ -51,7 +51,7 @@ fi
 # validate MAX_YEARLINKS (must be greater than 0)
 YEARLINKS_NUMVAR=`echo "$MAX_YEARLINKS" |grep -c "[0-9]"`
 [ "$YEARLINKS_NUMVAR" = 0 ] &&
-	die "MAX_YEARLINKS != > 0"
+	die "MAX_YEARLINKS !> 0"
 # unlimited links
 if [ "$MAX_YEARLINKS" = -1 ]; then
 	ALL_YEARLINKS="1"
@@ -113,8 +113,8 @@ NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
 # create links to feeds
 if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" = 1 ]; then
-	# TODO: find a way to check if atom or rss feeds exist before adding them blindly
-	# TODO: include RSS 1.0 feeds?
+	# TODO: find a better way to check if atom or rss feeds exist before adding them blindly
+	# TODO: include RSS 1.0 feeds or just forget about them?
 	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml">RSS</a>, <a href="\1index-atom.xml">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
 	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
 elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" != 1 ]; then

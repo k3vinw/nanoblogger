@@ -124,7 +124,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 				$Atom_EntryCategory
 				<content type="xhtml">
 					<div xmlns="http://www.w3.org/1999/xhtml">
-						$Atom_EntryExcerpt
+						<![CDATA[$Atom_EntryExcerpt]]>
 					</div>
 				</content>
 
