@@ -333,6 +333,12 @@ html>body #footer {
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}
 
+.feed-small {
+	height: 14px;
+	padding-left: 15px;
+	background: url('../images/feed-icon-14x14.png') no-repeat 0% 50%;
+	}
+
 .metainfo {
 	background-color: #999;
 	color: #CCC;

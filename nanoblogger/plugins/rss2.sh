@@ -26,6 +26,14 @@ NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
 # backwards support for deprecated BLOG_LANG
 : ${BLOG_FEED_LANG:=$BLOG_LANG}
 
+# watch and reset chronological order
+if [ "$CHRON_ORDER" != 1 ]; then
+	RESTORE_SORTARGS="$SORT_ARGS"
+	SORT_ARGS="-ru"
+else
+	RESTORE_SORTARGS=
+fi
+
 if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	set_baseurl "$BLOG_URL/"
 
@@ -146,4 +154,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	make_rssfeed "$BLOG_DIR/$NB_RSS2File"
 	build_rss_catfeeds
 fi
+
+# restore chronological order
+[ ! -z "$RESTORE_SORTARGS" ] &&
+	SORT_ARGS="$RESTORE_SORTARGS"
 
