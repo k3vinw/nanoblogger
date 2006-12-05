@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-09-29T03:20:56-04:00
+# Last modified: 2006-12-04T01:05:58-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -79,8 +79,9 @@ esac
 
 # wrapper to editor command
 nb_edit(){
-# TODO: test with external editor (outside of script's process)
-EDIT_FILE="$1"
+EDIT_OPTIONS="$1"
+EDIT_FILE="$2"
+[ -z "$EDIT_FILE" ] && EDIT_FILE="$1"
 # set directory being written to
 EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 # assume current directory when no directory is found
@@ -88,13 +89,20 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 # test directory for write permissions
 [ ! -w "$EDIT_DIR" ] && [ -d "$EDIT_DIR" ] &&
 	die "'$EDIT_DIR' - $nowritedir"
-$EDITOR "$EDIT_FILE"
+case "$EDIT_OPTIONS" in
+	# prompt to continue (mostly for editors that fork off to background)
+	-p)
+		$EDITOR "$EDIT_FILE"
+		read -p "$nbedit_prompt" enter_key
+	;;
+	*) # default action
+		$EDITOR "$EDIT_FILE"
+	;;
+esac
 if [ ! -f "$EDIT_FILE" ]; then
 	nb_msg "'$EDIT_FILE' - $nbedit_nofile"
-	echo "$nbedit_prompt"
-	read -p "$NB_PROMPT" enter_key
+	die "'$EDIT_FILE' - $nbedit_failed"
 fi
-[ ! -f "$EDIT_FILE" ] && die "'$EDIT_FILE' - $nbedit_failed"
 }
 
 # convert category number to existing category database

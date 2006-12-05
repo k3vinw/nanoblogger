@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-09-23T19:48:34-04:00
+# Last modified: 2006-12-04T02:00:40-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -415,10 +415,11 @@ elif [ "$cache_update" = rebuild ]; then
 	done
 	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
 elif [ "$cache_update" = expired ]; then
-	[ -z "$cache_def" ] &&
-		cache_def="*"
+	[ -z "$cache_def" ] && cache_def="*"
+	# always cache more recent entries
+	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
 	[ -z "$CACHEUPDATE_LIST" ] &&
-		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES"
+		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
 	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
 		cache_item=${cache_item##*\/}
 		cache_regex=`echo "$cache_item" |sed -e '/[\.]'$cache_def'[^. ]*$/ s///g'`
@@ -654,6 +655,8 @@ fi
 NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 [ -z "$NUMVAR" ] && die "$novalid_entryid"
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+# find entry id(s) from specified query
+[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
 query_db "$db_query" "$db_catquery"; ENTRY_LIST=(${DB_RESULTS[*]})
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
@@ -670,7 +673,7 @@ for entry_id in $NUMVAR; do
 	Edit_EntryFile=${ENTRY_LIST[$entry_id]}
 	# write any user metadata
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_DATA_DIR/$Edit_EntryFile"
-	nb_edit "$NB_DATA_DIR/$Edit_EntryFile"
+	nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
 	# validate metafile
 	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
 		"$NB_DATA_DIR/$Edit_EntryFile"
@@ -726,6 +729,8 @@ fi
 delete_weblog(){
 # deletes categories
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+# find entry id(s) from specified query
+[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
 if [ ! -z "$cat_num" ]; then
 	cat_list="$db_catquery"
 fi
@@ -751,20 +756,30 @@ if [ ! -z "$cat_list" ]; then
 	[ -z "$CATNUMVAR" ] &&
 		die "$deleteweblog_onecat"
 fi
+[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
 query_db "$db_query" "$cat_list"; ENTRY_LIST=(${DB_RESULTS[*]})
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
+	old_entryid="$entry_id"
 	((entry_id--))
 	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
+	read_metadata TITLE "$NB_DATA_DIR/$Delete_EntryFile"; Delete_EntryTitle=`echo "$METADATA" |cut -c1-25`..
+	delete_titles="$delete_titles $old_entryid=$Delete_EntryTitle,"
 	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_num"
 done
+delete_titles=`echo "$delete_titles" |sed -e '/^[ ]/ s///; /[\,]$/ s///'`
 [ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"
-nb_msg "$deleteweblog_delentry $delete_num ..."
+nb_msg "$deleteweblog_delentry $delete_num ($delete_titles) ..."
 # confirm delete in interactive mode
 [ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 # update master.db
 nb_msg "$querydb_update"
-query_db master
+if [ ! -z "$USR_QUERY" ]; then
+	db_query="$USR_QUERY"
+else
+	db_query=master
+fi
+query_db "$db_query"
 > "$SCRATCH_FILE"
 > "$SCRATCH_FILE.x-catdbs"
 for entry_id in $NUMVAR; do
@@ -1004,7 +1019,7 @@ if [ -z "$NB_EntryBody" ]; then
 	# write any user metadata
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_EditFile"
 	# write current metadata to temp file and edit
-	write_entry "$NB_EditFile"; nb_edit "$NB_EditFile"
+	write_entry "$NB_EditFile"; nb_edit -p "$NB_EditFile"
 	# validate metafile
 	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
 		"$NB_EditFile"
@@ -1090,6 +1105,7 @@ while [ $# -gt 0 ]; do
 		--plugindir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
 		-p|--preview)		PREVIEW_WEBLOG=1;;
 		-P|--publish)		PUBLISH_WEBLOG=1;;
+		-q|--query) 		USR_QUERY="$2"; shift;;
 		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;
 		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg "$2"; USR_TITLE="$2"; shift;;

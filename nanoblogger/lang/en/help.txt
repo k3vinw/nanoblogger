@@ -42,6 +42,8 @@ Options:
  --plugindir <directory> 		specify weblog's plugin directory.					
  -p, --preview				run command to preview weblog.
  -P, --publish				run command to publish weblog.
+ -q, --query <DATE>			specify a query to run (for '--edit' and
+ 					'--delete').
  --template <file>			specify file to load as template (for
  					'--draft', '--makepage' and
  					'--makefile').

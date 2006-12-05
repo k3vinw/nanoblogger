@@ -271,14 +271,11 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
   <p><b>Creating a New Weblog</b></p>
 
-  <p>To create a new weblog from your shell prompt:</p>
+  <p>To create a new weblog (from your shell prompt):</p>
   <pre>
-cd [nb_dir]
-./nb --blogdir [myblog_dir] --add
+nb --blogdir [myblog_dir] --add
         
-</pre>where <em>nb_dir</em> is the path that NanoBlogger was installed to and <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over, and then let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
-
-  <p>For faster and easier invocation try adding "nb" to your shell's path or aliases (see shell's manual).</p>
+</pre>where <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over and finally let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
 
   <p>To set a default weblog directory:</p>
   <pre>
@@ -287,6 +284,8 @@ cd [nb_dir]
         BLOG_DIR="$HOME/public_html/[myblog_dir]"
         
 </pre>
+
+  <p>You may also change to the weblog's directory and NanoBlogger will automatically set <em>$BLOG_DIR</em> for you, so you don't have to specify it from the command line.</p>
 
   <div id="config">
     <h2><a id="s.5" name="s.5">5. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
@@ -305,7 +304,7 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
-    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, useful for specifying time in UTC. Please note that these settings have <strong>no effect</strong> on previous entries and that if you use UTC, beware of race conditions which can occur because the entry's filename will be out of synch. The solution is to also change the <em>DB_DATEARGS</em> so, that the two reflect the same date and time. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, useful for specifying time in UTC. Please note that these settings have <strong>no effect</strong> on previous entries and that if you use UTC, beware of race conditions which can occur because the entry's filename will be out of synch. The solution is to also change <em>DB_DATEARGS</em> to equal <em>DATE_ARGS</em>, so that the two reflect the same date and time. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
 
     <p>Examples:</p>
     <pre>
@@ -1204,7 +1203,7 @@ nb [-b blog_dir] -c 1 -d cat
 
           <th align="left">description</th>
 
-          <th align="left">variables</th>
+          <th align="left">variables and switches</th>
 
           <th align="left">targets</th>
 
@@ -1221,6 +1220,18 @@ nb [-b blog_dir] -c 1 -d cat
           <td align="left">console</td>
 
           <td align="left">returns exit status 1</td>
+        </tr>
+
+        <tr>
+          <td align="left">nb_edit</td>
+
+          <td align="left">simple wrapper to editor</td>
+
+          <td align="left">$1, $2, -p = force prompt (pause)</td>
+
+          <td align="left">console</td>
+
+          <td align="left">if $2 is null, then $1 assumed to be file</td>
         </tr>
 
         <tr>
