@@ -1,0 +1,9 @@
+# NanoBlogger French language definitions
+# Plugins
+# lang/fr/plugins.lang
+
+# plugins - generic messages
+plugins_action="génération"
+plugins_loadaction="chargement"
+plugins_textformataction="formattage du texte - $plugins_loadaction"
+

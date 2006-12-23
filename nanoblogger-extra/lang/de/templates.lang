@@ -1,0 +1,50 @@
+# NanoBlogger German language definitions
+# Translation: Sven Bergner <bergner@linuxtaskforce.de>
+# Templates
+# lang/de/templates.lang
+
+# weblog entry links and messages
+template_permlink="Permanenter Link"
+template_catlinks="Kategorien:"
+template_cmtlink="Kommentare"
+# PLEASE TRANSLATE
+template_postedby="Posted by"
+
+# only here for compat. with early 3.3 rc's
+permanentlink_title="$template_permlink"
+categorylinks_title="$template_catlinks"
+commentslink_title="$template_cmtlink"
+
+# PLEASE TRANSLATE
+# weblog main messages
+template_archiveindex="Archive Index"
+template_category="Categories"
+template_contact="Contact"
+template_fortune="Fortune"
+template_links="Links"
+template_rentries="Recent Entries"
+template_syndicate="Syndicate"
+template_syndicate_main="Site"
+template_status="Weblog Status"
+template_powered="powered by &#36;EDITOR, bash, cat, grep, sed, and"
+
+# PLEASE TRANSLATE
+# misc. weblog links
+template_archives="Archives"
+template_main="Main"
+template_untitled="Untitled"
+
+# PLEASE TRANSLATE
+# dynamic template messages
+template_articles="Articles"
+template_browsecat="Browse by category"
+template_browsedate="Browse by date"
+template_browseentry="Browse by entry"
+
+# weblog status messages
+# PLEASE TRANSLATE
+template_totalcats="Total categories:"
+template_totalentries="Einträge insgesamt:"
+template_lastentry="Letzter Eintrag:"
+template_lastupdated="Letzte Aktualisierung:"
+

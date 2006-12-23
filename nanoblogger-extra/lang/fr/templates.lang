@@ -1,0 +1,43 @@
+# NanoBlogger French language definitions
+# Templates
+# lang/en/templates.lang
+
+# weblog entry links and messages
+template_permlink="Lien Permanent"
+template_catlinks="Catégorie(s):"
+template_cmtlink="Commentaires"
+template_postedby="Posté par"
+
+# only here for compat. with early 3.3 rc's
+permanentlink_title="$template_permlink"
+categorylinks_title="$template_catlinks"
+commentslink_title="$template_cmtlink"
+
+# weblog main messages
+template_archiveindex="Index des Archives"
+template_category="Catégories"
+template_contact="Contact"
+template_fortune="Fortune"
+template_links="Liens"
+template_rentries="Entrées Récentes"
+template_syndicate="Syndiquer"
+template_syndicate_main="Site"
+template_status="Status du weblog"
+template_powered="Propulsé par $EDITOR, bash, cat, grep, sed, and"
+
+# misc. weblog links
+template_archives="Archives"
+template_main="Main"
+
+# dynamic template messages
+template_articles="Articles"
+template_browsecat="Parcourir par catégorie"
+template_browsedate="Parcourir par date"
+template_browseentry="Parcourir par entrée"
+
+# weblog status messages
+template_totalcats="Total des catégories:"
+template_totalentries="Total des entrées:"
+template_lastentry="Dernière entrée:"
+template_lastupdated="Dernière mise-à-jour"
+

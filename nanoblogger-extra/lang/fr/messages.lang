@@ -1,0 +1,140 @@
+# NanoBlogger French language definitions
+# Messages
+# lang/fr/messages.lang
+
+# main
+main_badopts="option invalide:"
+main_panic="Tapez '`basename $0` --help' pour plus d'informations."
+
+# check_arg
+checkarg_badarg="option requiert un argument!"
+checkarg_help="Tapez '`basename $0` --help' pour plus d'informations."
+
+# check_conf
+checkconf_nobase="Le dossier de base n'existe pas!  bye."
+checkconf_noblog="Aucun dossier de blog spécifié!    bye."
+checkconf_nousrconf="Le fichier de config du blog n'existe pas! bye!"
+checkconf_noblogdir="Le dossier de blog n'existe pas!    bye."
+checkconf_nodata="Le dossier data du blog n'existe pas! goodbye."
+checkconf_nocache="Le dossier cache du blog n'existe pas!      bye."
+checkconf_notemplates="Le dossier templates du blog n'existe pas!      bye."
+
+# query_db
+querydb_init="initialisation de la base de données master.db... "
+querydb_update="Mise-à-jour de la base de données master.db..."
+
+# validate category id(s)
+catid_bad="mauvais id(s)!"
+checkcatid_invalid="mauvais id(s) de catégorie!"
+checkcatid_novalid="vous devez spécifer un id de catégorie valide!"
+
+# validate metadata files
+checkmetatags_notag="Il manque le metatag:"
+
+# config_weblog
+configweblog_nomod="Aucun changement n'a été fait! bye"
+
+# load_template
+loadtemplate_nofile="Le fichier template n'existe pas! bye"
+
+# make_page
+makepage_nosource="Le fichier source n'existe pas! bye"
+makepage_nooutput="fichier de sortie non spécifié."
+makepage_notemplate="le fichier de template n'existe pas! bye"
+
+# paginate
+paginate_action="pagination"
+
+# build_archives
+buildarchives_action="génération des archives..."
+
+# build_weblog
+buildweblog_all="mise à jour de tous les fichiers du blog! peut prendre du temps..."
+buildweblog_files="génération des fichiers du blog..."
+buildweblog_main="génération des principales pages d'index..."
+buildweblog_cache="vidage du cache..."   
+
+# import_file
+importfile_nofile="n'existe pas!" 
+
+# nb_draft
+nbdraft_asknew="Le fichier n'existe pas! Le créer?"
+
+# nb_edit
+nbedit_nofile="Le fichier n'existe pas!"
+nbedit_prompt="taper sur la touche [entrée] pour continuer"
+nbedit_failed="échec de l'écriture du fichier. bye"
+
+# add_entry
+addentry_catinfo="id(s) de catégorie(s) sélectionné(s):"
+addentry_action="ajout d'une nouvelle entrée..."
+
+# confirm_action
+confirmaction_ask="êtes vous sûr?"
+
+# misc. validation errors
+novalid_entryid="vous devez spécifier un id d'entrée valide"
+invalid_entryid="id(s) d'entrée invalide(s)" 
+
+# edit_weblog
+editweblog_onecat="Seulement une catégorie peut être spécifiée lors de l'édition des titres"
+editweblog_title="changement du titre en:"
+editweblog_catinfo="id(s) de catégorie(s) sélectionné(s):"
+editweblog_nomod="Aucun changement n'a été fait! bye"
+editweblog_action="modification des entrées du blog..."   
+editweblog_noaction="Aucun changement n'a été fait! bye!"
+
+# delete_weblog
+deleteweblog_delcat="suppresion des catégories (ids):"
+deleteweblog_onecat="Seule une catégorie peut être spécifiée lors de la suppresion des entrées"
+deleteweblog_catinfo="Catégories sélectionnées (ids):"
+deleteweblog_delentry="suppresion de l'entrée (id):"
+
+# header attributes
+header_ID="ID"
+header_Title="Titre"
+header_Category="Catégorie ID(s)"
+header_Date="Date"
+
+# list_weblog
+listweblog_nocat="aucune catégorie n'existe encore! bye!"
+listweblog_nomatch="Aucun résultat à votre requête! bye."
+
+# move_entry
+moveentry_catfirst="Vous devez spécifier une catégory avant l'entrée"
+moveentry_catinfo="catégories sélectionnées (ids)"
+moveentry_moventry="déplacement des entrées (ids)"
+
+# add_weblog
+addweblog_noweblog="aucun dossier de blog spécifié!    bye."
+addweblog_newblog="création du dossier de blog"
+addweblog_nocreate="échec de la création du dossier de blog!"
+addweblog_copyaction="copie les fichier du blog par défaut."
+addweblog_askconf="Voulez vous configurer votre blog maintenant?"  
+addweblog_confaction="Configurationd u nouveau blog..."
+addweblog_noconf="Blo non configuré, utilisez    '`basename $0` -b [blog_dir] --configure -u all' pour le configurer plus tard."
+addweblog_newcat="création d'une nouvelle catégorie"
+addweblog_titlecat="entrez un nouveau titre de catégorie"
+addweblog_untitled="Sans titre"
+addweblog_madecat="La base de données des catégories a été créée"
+addweblog_author="entrez le nom de l'auteur"
+addweblog_title="entrez un titre"
+addweblog_desc="entrez une courte description"
+addweblog_editnew="édition d'une nouvelle entrée...."
+
+# preview_weblog
+preview_nocmd="pas de commande d'apercu de configurée! bye!"
+preview_action="apercu du  weblog ..."
+preview_asknow="voulez-vous avoir un apercu de votre blog maintenant?"
+
+# publish_weblog
+publish_nocmd="aucune commande de publication configurée! bye!"
+publish_action="publication du weblog..."
+publish_asknow="voulez-vous plubier votre blog maintenant?"
+
+# misc.
+notitle="Sans titre"
+nowritedir="Pas de droit d'écriture pour ce dossier! bye."
+samefilename="Nom de fichier déjà existant"
+filterdate_failed="echec du filtre de données, utilisez plutôt la date."
+

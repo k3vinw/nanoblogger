@@ -1,0 +1,94 @@
+# NanoBlogger French language definitions
+# Translation: Julie Wojcicki <chili-nb@ssji.net> 
+# Help
+# lang/fr/help.txt
+
+NanoBlogger - Moteur de Blog sur console
+Version $VERSION, par Kevin Wood <n1xt3r@fastmail.fm>
+
+Utilisation:
+ $BASENAME [-b blog_dir] [options]
+
+Options:
+ -a, --add				crée une entrée, une catégorie ou un
+					blog (dossier).
+ -b, --blogdir <dossier>		spécifie un dossier de blog.
+ -B, --body <text>			désuet, utiliser '-T' ou '--text'.
+ -c, --category	<ID,cat>		spécifie une catégorie (pour '--add',
+					'--delete', '--edit', '--list',
+					'--update', et '--update-cache').
+ --cfgfile <file>			spécifie un fichier de configuration
+					alternatif.
+ --configure				configure un weblog (pour '--update').
+ --datadir <dossier>			spécifie un dossier data.
+ -d, --delete <ID,cat>			efface une entrée ou une catégorie.
+ -D, --desc <text>			édite le texte de description
+					 (pour '--add',
+ 					'--draft', '--makefile' et
+ 					'--makepage').
+ -e, --edit <ID,cat>			édite une entrée ou une catégorie 
+ -E, --draft <file> 			édite ou créer un metafichier
+ -f, --file <file> 			spécifie un metafichier a importer en
+					entrée (pour '--add').
+ -h, --help				affiche ce message d'aide.
+ -i, --interactive <1=on/0=off> 	passe en mode interactif (pour '--add',
+ 					'--delete', '--preview', '--publish',
+ 					et '--update').
+ -l, --list <all,cat,DATE,max>		liste les entrées ou catégories 
+					(max par defaut cf le manuel)
+ --manual				affiche le manuel.
+ -m, --move <ID>			déplace une entrée dans une catégorie
+					(pour '--category').
+ -M, --makepage <file1> <file2> 	crée une nouvelle page de weblog (file2)
+					depuis un metafichier (file1).
+ --makefile <file> 			crée un nouveau metafichier.
+ -n, --author <text>			édite le champ auteur (pour '--add',
+					'--draft', '--makefile' et
+ 					'--makepage').
+ -p, --preview				lance l'apercu du blog.
+ -P, --publish				lance la publication du blog.
+ --template <file>			spécifie le fichier a charger 
+					comme template (pour
+ 					'--draft', '--makepage' et
+ 					'--makefile').
+ --template-dir <dossier>		spécifie un dossier template.
+ -t, --title <text>			édite le titre (pour '--add',
+					'--category', '--draft',
+ 					'--makefile' et '--makepage').
+ --tag <TAG> 	 	 		spécifie un tag (pour '--add', '--draft',
+					'--edit', '--makefile' et
+ 					 '--makepage').
+ --tag-text <text> 			édite le tag (for '--tag').
+ -T, --text <text> 			édite le corps "body" (pour '--add',
+					'--draft', '--makefile' et
+ 					'--makepage').
+ -U, --update-cache <all,DATE,max,expired>
+ 					force la mise à  jour du cache,
+					supprimant les données en cache
+					spécifiées (par defaut: expired).
+ -u, --update <all,DATE,main,max> 	force la mise à  jour des fichiers pour
+ 					les données spécifiées (par defaut:
+ 					'max').
+ -v, --verbose <1=on/0=off>		passe en mode "verbose".
+ -V, --version				affiche les informations de version.
+
+ -c,-d,-e,-m acceptent plusieurs numéros d'id séparées par des virgules (par
+exemple: 1,2,3).
+ 
+ --list et --update peuvent sélectionner les entrées par date (independemment
+des ids des entrées)
+ date = YYYY-MM-DD, YYYY-MM, YYYY
+
+Exemples:
+
+ Specifier le dossier du blog pour créer ou ajouter une entrée:
+	nb -b ~/public_html/weblog -a
+
+ créer une nouvelle catégorier nommee "News"
+	nb -b ~/public_html/weblog -t "News" -c new -a
+
+ créer une nouvelle entrée en une seule ligne!
+	nb -b ~/public_html/weblog -n 'myname' -t 'Title' -T 'Text!' -a
+
+Plus d'infos:
+ URL: http://nanoblogger.sourceforge.net
