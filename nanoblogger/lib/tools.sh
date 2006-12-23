@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-12-23T16:29:20-05:00
+# Last modified: 2006-12-23T18:34:30-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -77,9 +77,9 @@ case $confirm in
 esac
 }
 
-# sensible-browser-like utility (parses $BROWSER and %s)
+# sensible-browser-like utility (parses $NB_BROWSER, $BROWSER, and %s)
 nb_browser(){
-BROWSER_CMD="$BROWSER"
+BROWSER_CMD="$NB_BROWSER"
 BROWSER_URL="$1"
 if [ ! -z "$BROWSER_CMD" ]; then
 	BROWSER_LIST=`echo "$BROWSER_CMD" |sed -e '/[ ]/ s//%REM%/g; /[\:]/ s// /g'`
@@ -108,11 +108,11 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 case "$EDIT_OPTIONS" in
 	# prompt to continue (mostly for editors that fork off to background)
 	-p)
-		$EDITOR "$EDIT_FILE"
+		$NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		$EDITOR "$EDIT_FILE"
+		$NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then
