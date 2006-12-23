@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-12-04T02:00:40-05:00
+# Last modified: 2006-12-21T13:59:01-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -781,7 +781,7 @@ else
 fi
 query_db "$db_query"
 > "$SCRATCH_FILE"
-> "$SCRATCH_FILE.x-catdbs"
+> "$SCRATCH_FILE.x-catdbs"; > "$SCRATCH_FILE.x-entries"; > "$SCRATCH_FILE.x-update"
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
 	((entry_id--))
@@ -1160,14 +1160,14 @@ fi
 if [ "$MOVE_WEBLOG" = 1 ]; then
 	check_config; move_entry
 fi
-if [ "$UPDATE_WEBLOG" = 1 ]; then
-	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-	build_weblog
-fi
 if [ "$UPDATECACHE_WEBLOG" = 1 ]; then
 	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 	[ -z "$USR_CACHEQUERY" ] && USR_CACHEQUERY=expired
 	update_cache "$USR_CACHEQUERY" "*"
+fi
+if [ "$UPDATE_WEBLOG" = 1 ]; then
+	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+	build_weblog
 fi
 if [ "$PREVIEW_WEBLOG" = 1 ]; then
 	check_config; preview_weblog
