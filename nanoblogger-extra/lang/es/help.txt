@@ -41,6 +41,8 @@ Opciones:
  --plugindir <directory> 		especificar directorio de plugins del weblog.					
  -p, --preview				comando para ver un preview del weblog.
  -P, --publish				comndo para publicar el weblog.
+ -q, --query <DATE>			especificar a query para ver un (para '--edit' and
+ 					'--delete').
  --template <file>			especificar un archivo para cargar como plantilla (para
  					'--draft', '--makepage' y
  					'--makefile').

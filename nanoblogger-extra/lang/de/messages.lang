@@ -59,7 +59,7 @@ nbdraft_asknew="Die Datei existiert nicht! Soll sie erzeugt werden?"
 
 # nb_edit
 nbedit_nofile="Die Datei existiert nicht!"
-nbedit_prompt="Zum Fortsetzen [enter] drücken ."
+nbedit_prompt="Zum Fortsetzen [enter] drücken:"
 nbedit_failed="Die Datei konnte nicht geschrieben werden! Auf Wiedersehen."
 
 # add_entry

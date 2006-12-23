@@ -45,6 +45,8 @@ Optionen:
  --plugindir <Verzeichnis> 		Spezifiziert das Plugin Verzeichnis des Weblog.
  -p, --preview				Startet das Kommando für die Weblog-Vorschau.
  -P, --publish				Startet das Kommando zum Veröffentlichen des Weblog.
+ -q, --query <DATE>			Spezifiziert ein query zum startet (für '--edit' und
+ 					'--delete').
  --template <file>			Spezifiert file to load as template (für
  					'--draft', '--makepage' und '--makefile').
  --template-dir <Verzeichnis>		Spezifiziert das Weblog Template-Verzeichnis.

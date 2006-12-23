@@ -47,6 +47,8 @@ Options:
  					'--makepage').
  -p, --preview				lance l'apercu du blog.
  -P, --publish				lance la publication du blog.
+ -q, --query <DATE>			spécify un query la lance (pour '--edit' et
+ 					'--delete').
  --template <file>			spécifie le fichier a charger 
 					comme template (pour
  					'--draft', '--makepage' et

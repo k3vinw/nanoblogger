@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-12-21T13:59:01-05:00
+# Last modified: 2006-12-23T16:08:05-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -1096,7 +1096,7 @@ while [ $# -gt 0 ]; do
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		USR_QUERY="$2"; shift; LIST_WEBLOG=1;;
 		-n|--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
-		--manual)		load_config; $BROWSER "$NB_DOC_DIR/nanoblogger.html"
+		--manual)		load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"
 					exit 0;;
 		-m|--move)		check_arg "$2"; move_num="$2"; shift; MOVE_WEBLOG=1;;
 		-M|--makepage)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2

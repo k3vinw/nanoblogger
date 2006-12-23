@@ -62,7 +62,7 @@ nbdraft_asknew="Le fichier n'existe pas! Le créer?"
 
 # nb_edit
 nbedit_nofile="Le fichier n'existe pas!"
-nbedit_prompt="taper sur la touche [entrée] pour continuer"
+nbedit_prompt="taper sur la touche [entrée] pour continuer:"
 nbedit_failed="échec de l'écriture du fichier. bye"
 
 # add_entry
