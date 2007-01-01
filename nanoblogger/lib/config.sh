@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2006-12-23T18:42:22-05:00
+# Last modified: 2006-12-23T18:57:48-05:00
 
 ### WARNING ###
 # config variables that must always load
@@ -83,7 +83,7 @@ x_id="$BLOG_ENTRYID_TAG"
 # allow user specified author names
 [ ! -z "$USR_AUTHOR" ] && BLOG_AUTHOR="$USR_AUTHOR"
 # default to $BROWSER then lynx for browser
-[ ! -z "$BROWSER" ] && [ -z "$NB_BROWSER" ] &&
+[ -z "$NB_BROWSER" ] && [ ! -z "$BROWSER" ] &&
 	NB_BROWSER="$BROWSER"
 : ${NB_BROWSER:=lynx}
 # smart defaults for date locale
@@ -99,7 +99,7 @@ fi
 # default data file date format
 : ${DB_DATEFORMAT:="%Y-%m-%dT%H_%M_%S"}
 # default to $EDITOR then vi for editor
-[ ! -z "$EDITOR" ] && [ -z "$NB_EDITOR" ] &&
+[ -z "$NB_EDITOR" ] && [ ! -z "$EDITOR" ] &&
 	NB_EDITOR="$EDITOR"
 : ${NB_EDITOR:=vi}
 # default to txt for datatype suffix

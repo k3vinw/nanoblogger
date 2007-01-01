@@ -296,11 +296,11 @@ nb --blogdir [myblog_dir] --configure -u all
 
     <p><b>Setting the Browser</b></p>
 
-    <p>The browser defaults to the <em>BROWSER</em> variable in your Bash environment, but falls back to "lynx", when no <em>BROWSER</em> is set. You can specify a different browser to use by overriding <em>BROWSER</em> in <em>blog.conf</em> or setting the <em>BROWSER</em> variable in your Bash environment. In Mac OS X, you would set this to "open".</p>
+    <p><em>NB_BROWSER</em> specifies the browser to use and defaults to the standard <em>BROWSER</em> variable. You can specify a different browser to use by setting <em>NB_BROWSER</em> in <em>blog.conf</em>. In Mac OS X, you might choose to set this to "open". If no browser is specified, "lynx" will be used.</p>
 
     <p><b>Setting the Editor</b></p>
 
-    <p>The editor defaults to the <em>EDITOR</em> variable in your Bash environment, but falls back to "vi", when no <em>EDITOR</em> is set. You can specify a different editor to use by overriding <em>EDITOR</em> in <em>blog.conf</em> or setting the <em>EDITOR</em> variable in your Bash environment.</p>
+    <p><em>NB_EDITOR</em> specifies the editor to use and defaults to the standard <em>EDITOR</em> variable. You can specify a different editor to use by setting <em>NB_EDITOR</em> in <em>blog.conf</em>. If no editor is specified, "vi" will be used.</p>
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
@@ -449,6 +449,8 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
     <p><em>ABSOLUTE_LINKS</em> toggles between absolute and relative links. Defaults to "0", relative links.</p>
 
     <p><em>FRIENDLY_LINKS</em> toggles between friendly and unfriendly links. Friendly links are more text based, where unfriendly links are more numbers based. Defaults to "1", friendly links.</p>
+
+    <p><em>MAX_TITLEWIDTH</em> sets the maximum title width (by number of characters) generated for friendly links.</p>
 
     <p><b>Plugins Configuration</b></p>
 
@@ -626,6 +628,24 @@ nb [-b blog_dir] -c 1 -t "News" -e cat
     <pre>
 nb [-b blog_dir] -c 1 -d cat
         
+</pre>
+
+    <h3>Advanced Management</h3>
+
+    <p>Use the "--query" option to match entry ID(s) from the query results of "--list" with that of the editing and deleting operations. First run a query using "--list" to see which entry ID(s) match the query. Then you can run "--edit" or "--delete" with the "--query" option to work from the same results.</p>
+
+    <p>Editing entries by date:</p>
+    <pre>
+nb [-b blog_dir] -l YYYY-MM-DD
+nb [-b blog_dir] -q YYYY-MM-DD -e 1,2,3
+</pre>Deleting entries by date:
+    <pre>
+nb [-b blog_dir] -l YYYY-MM-DD
+nb [-b blog_dir] -q YYYY-MM-DD -d 1,2,3
+</pre>Editing entries by date and category:
+    <pre>
+nb [-b blog_dir] -c 2 -l YYYY-MM-DD
+nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 </pre>
   </div>
 
@@ -1223,11 +1243,23 @@ nb [-b blog_dir] -c 1 -d cat
         </tr>
 
         <tr>
+          <td align="left">nb_browser</td>
+
+          <td align="left">sensible-browser-like utility for launching browser</td>
+
+          <td align="left">$NB_BROWSER, $BROWSER, $1</td>
+
+          <td align="left">console</td>
+
+          <td align="left">parses $BROWSER with ":" separator</td>
+        </tr>
+
+        <tr>
           <td align="left">nb_edit</td>
 
           <td align="left">simple wrapper to editor</td>
 
-          <td align="left">$1, $2, -p = force prompt (pause)</td>
+          <td align="left">$NB_EDITOR, $EDITOR, $1, $2, -p = force prompt (pause)</td>
 
           <td align="left">console</td>
 

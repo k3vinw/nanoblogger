@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2006-12-23T16:08:05-05:00
+# Last modified: 2007-01-01T13:16:28-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -624,6 +624,7 @@ fi
 echo "$New_EntryFile" >> "$SCRATCH_FILE".newentry_list
 UPDATE_LIST=($(< "$SCRATCH_FILE".newentry_list))
 find_categories "${UPDATE_LIST[*]}"
+nb_msg "$querydb_update"; query_db update
 }
 
 # edit entry or category by id number
@@ -692,7 +693,7 @@ for entry_id in $NUMVAR; do
 	nt_cachefile=${nt_cachefile//[ ]*}
 	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
 		# update previous and next entries of modified entry
-		nb_msg "$querydb_update"
+		nb_msg "$querydb_update"; query_db update
 		query_db master
 		findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
 		set_entrynavlinks prev "$before_entry"
@@ -772,8 +773,7 @@ delete_titles=`echo "$delete_titles" |sed -e '/^[ ]/ s///; /[\,]$/ s///'`
 nb_msg "$deleteweblog_delentry $delete_num ($delete_titles) ..."
 # confirm delete in interactive mode
 [ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-# update master.db
-nb_msg "$querydb_update"
+# initialize master.db
 if [ ! -z "$USR_QUERY" ]; then
 	db_query="$USR_QUERY"
 else
@@ -848,6 +848,7 @@ for xentry in $(< "$SCRATCH_FILE.x-entries"); do
 	mv "$SCRATCH_FILE".x-update.new "$SCRATCH_FILE".x-update
 done
 UPDATE_LIST=($(< "$SCRATCH_FILE.x-update"))
+nb_msg "$querydb_update"; query_db update
 build_weblog
 }
 
@@ -882,12 +883,13 @@ done
 UPDATE_LIST=(`for entry_id in $NUMVAR; do ((entry_id--)); echo ${DB_RESULTS[$entry_id]}; done`)
 [ ! -z "${UPDATE_LIST[*]}" ] &&
 	find_categories "${UPDATE_LIST[*]}"
+nb_msg "$querydb_update"; query_db update
 build_weblog
 }
 
 # list entries and categories
 list_weblog(){
-query_db; db_query="$USR_QUERY"
+query_db cat; db_query="$USR_QUERY"
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # lists categories
 if [ "$db_query" = cat ]; then
@@ -923,6 +925,7 @@ done
 # lists entries
 [ -z "$db_query" ] && db_query="$QUERY_MODE"
 list_query="$db_query"
+# raw_db necessary for including category info
 raw_db "$db_query" "$db_catquery"
 [ -z "${DB_RESULTS[*]}" ] && die "'$list_query' - $listweblog_nomatch"
 nb_msg "$header_ID, $header_Title - ($header_Date) - [$header_Category]"

@@ -1,5 +1,5 @@
 # Module for querying existing records
-# Last modified: 2006-09-23T22:27:08-04:00
+# Last modified: 2007-01-01T02:08:06-05:00
 
 # search, filter, and create makeshift and master db arrays
 query_db(){
@@ -62,7 +62,7 @@ update_db(){
 # list all entries
 list_db(){
 # force update or gracefully recover master db reference file
-if [ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ] || [ "$db_query" = update ]; then
+if [ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ]; then
 	db_query=; update_db
 fi
 # list entries from master.db
@@ -91,12 +91,12 @@ fi
 case "$db_query" in
 	all) db_query=; query_data;;
 	# create master reference db
-	master) db_query=; update_db
-		MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
+	master) db_query=; MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
 	years) db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`);;
 	months) db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`);;
 	days) db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`);;
 	max) db_setlimit=limit; db_query=; query_data;;
+	update) db_query=; update_db;;
 	*) query_data;;
 esac
 db_query=; db_filter=; db_order=;
