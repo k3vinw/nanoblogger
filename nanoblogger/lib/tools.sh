@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2006-12-23T21:50:49-05:00
+# Last modified: 2007-01-04T15:33:04-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -78,6 +78,7 @@ esac
 }
 
 # sensible-browser-like utility (parses $NB_BROWSER, $BROWSER, and %s)
+# TODO: $BROWSE_URL must be full path or some browsers complain
 nb_browser(){
 BROWSER_CMD="$NB_BROWSER"
 BROWSER_URL="$1"
@@ -106,8 +107,7 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 [ ! -w "$EDIT_DIR" ] && [ -d "$EDIT_DIR" ] &&
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
-	# prompt to continue (mostly for editors that fork off to background)
-	-p)
+	-p) # prompt to continue (mostly for editors that fork off to background)
 		$NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
@@ -171,7 +171,7 @@ fi
 
 # special conversion for titles to link form
 set_title2link(){ title2link_var="$1"; t2lchar_limit="$MAX_TITLEWIDTH"
-echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\&\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g" |cut -c1-$t2lchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
+echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g" |cut -c1-$t2lchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
 }
 
 # set base url based on parameters

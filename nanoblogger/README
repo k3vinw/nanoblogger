@@ -1,13 +1,14 @@
+# Last modified: 2007-01-04T14:36:18-05:00
+
 NanoBlogger is a small weblog engine written in Bash for the command
 line. It uses common UNIX tools such as cat, grep, and sed to create
 static HTML content. Copyright (C) 2003-2006 Kevin Wood
 
 Installing NanoBlogger
 ----------------------
-1. download gzipped tarball from:
-   http://nanoblogger.sourceforge.net/downloads/
-2. tar xzvf nanoblogger-xx.tar.gz to [install-dir] (e.g.
-   install-dir = $HOME)
+1. download gzipped tarball:
+   http://nanoblogger.sourceforge.net/downloads/nanoblogger-xx.tar.gz
+2. decompress gzipped tarball: tar xzfv nanoblogger-xx.tar.gz
 
 Generic Upgrade Instructions
 ----------------------------
@@ -26,7 +27,7 @@ This is the classic three step upgrade process that's guarenteed to work
    the weblog:
 	nb -b [new-blog-dir] --configure -u all
 
-Upgrading to 3.3 (from at least 3.1)
+Upgrading to 3.3 (from 3.1 or greater)
 ------------------------------------
 
 Typically there shouldn't be much involved in an upgrade, but not only
@@ -72,9 +73,10 @@ executable file and executed from your weblog's "data" directory:
 
 #!/bin/sh
 # converts 3.1-3.2 entries to 3.3
-suffix=txt
-# $new_suffix must match NB_DATATYPE
-new_suffix=htm
+# $suffix must match actual suffix used for data files
+suffix=htm
+# $new_suffix must match NB_DATATYPE directive
+new_suffix=txt
 for entry in *.$suffix; do
 	sed -e '5!{ /^[\-][\-][\-][\-][\-]/ s//END-----/; }' $entry > \
 		$entry.new
@@ -109,8 +111,8 @@ You have two options
      file.metadata for general reference.
 
 5. Plugins:
-If you created your own plugins, then you'll have to take into account
-any changes to variables that your plugins may depend on.
+If you created your own plugins, you'll have to take into account any
+changes to variables, settings, etc., that your plugins may depend on.
 
 Final Notes
 -----------
@@ -118,5 +120,5 @@ Final Notes
 For more in depth documentation please see nanoblogger.html which
 should've been included with your copy of NanoBlogger.
 
-SF.net Project Page: http://nanoblogger.sourceforge.net
-Yahoo! Mailing List: http://groups.yahoo.com/group/nanoblogger
+Project Page: http://nanoblogger.sourceforge.net
+Mailing List: http://groups.yahoo.com/group/nanoblogger

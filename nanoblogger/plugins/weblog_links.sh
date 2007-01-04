@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2006-11-15T21:48:25-05:00
+# Last modified: 2007-01-04T03:22:21-05:00
 
 # <div class="sidetitle">
 # Links
@@ -112,7 +112,7 @@ build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PART
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
 
 # create links to feeds
-if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" = 1 ]; then
+if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 -a "$RSS2_CATFEEDS" = 1 ]; then
 	# TODO: find a better way to check if atom or rss feeds exist before adding them blindly
 	# TODO: include RSS 1.0 feeds or just forget about them?
 	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>, <a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"

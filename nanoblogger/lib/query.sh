@@ -1,5 +1,5 @@
 # Module for querying existing records
-# Last modified: 2007-01-01T02:08:06-05:00
+# Last modified: 2007-01-04T15:28:36-05:00
 
 # search, filter, and create makeshift and master db arrays
 query_db(){
@@ -10,8 +10,8 @@ db_limit="$4"
 db_offset="$5"
 db_order="$6"
 # sanitize db_limit and db_offset
-db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z,\-]/d'`
-db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z,\-]/d'`
+db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z]/d'`
+db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z]/d'`
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
 : ${db_order:=$SORT_ARGS}

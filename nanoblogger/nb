@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-01T13:16:28-05:00
+# Last modified: 2007-01-04T15:29:14-05:00
 
 # nanoblogger's version.
 VERSION="3.3 RC5"
@@ -764,9 +764,9 @@ for entry_id in $NUMVAR; do
 	old_entryid="$entry_id"
 	((entry_id--))
 	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
+	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_num"
 	read_metadata TITLE "$NB_DATA_DIR/$Delete_EntryFile"; Delete_EntryTitle=`echo "$METADATA" |cut -c1-25`..
 	delete_titles="$delete_titles $old_entryid=$Delete_EntryTitle,"
-	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_num"
 done
 delete_titles=`echo "$delete_titles" |sed -e '/^[ ]/ s///; /[\,]$/ s///'`
 [ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"

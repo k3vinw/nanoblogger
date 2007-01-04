@@ -399,10 +399,6 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>ENTRY_FORMAT</em> specifies the default text formatting to use for an entry. Defaults to "raw".</p>
 
-    <p><b>Toggling the Display of Permanent Links</b></p>
-
-    <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
-
     <p><b>Toggling the Building of Entry Archives</b></p>
 
     <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the building of entry archives and reconfigures the links of the entries to point to their own archive page. Note that this will increase the rebuild time since more pages will have to be generated.</p>
@@ -452,6 +448,10 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><em>MAX_TITLEWIDTH</em> sets the maximum title width (by number of characters) generated for friendly links.</p>
 
+    <p><em>CATEGORY_LINKS</em> toggles the display of an entry's category links. The default is to display category links.</p>
+
+    <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
+
     <p><b>Plugins Configuration</b></p>
 
     <p><em>PLUGINS_DIR</em> specifies the directory location of the main plugins. Main plugins provide a standard mechanism for loading plugins on a global basis. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
@@ -464,13 +464,25 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Changing the Default Language of NanoBlogger</b></p>
 
-    <p><em>NB_LANG</em> is a global configuration variable that sets the language definitions to load. The default is "en" for English</p>
+    <p><em>NB_LANG</em> is a global configuration variable that sets the language definition to load. The default is "en" for English. All language definitions should be referenced by their ISO 639-2 code.</p>
 
-    <p>Example:</p>
+    <p>Example for Spanish:</p>
     <pre>
-NB_LANG="en"
+NB_LANG="es"
     
 </pre>
+
+    <p><b>Creating Language Definitions</b></p>
+
+    <p>Creating language definitions is fairly straightforward:</p>
+
+    <ol>
+      <li>start with the default "en" set.</li>
+
+      <li>redefine all the variables to their equivalent translation in the target language.</li>
+
+      <li>save the translated set to a sub-directory named after it's ISO 639-2 alpha-3 or alpha-2 code under the "lang" directory.</li>
+    </ol>
   </div>
 
   <div id="mgmt">
@@ -632,7 +644,7 @@ nb [-b blog_dir] -c 1 -d cat
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "--query" option to match entry ID(s) from the query results of "--list" with that of the editing and deleting operations. First run a query using "--list" to see which entry ID(s) match the query. Then you can run "--edit" or "--delete" with the "--query" option to work from the same results.</p>
+    <p>Use the "--query" option to match entry ID(s) from the query results of "--list" with that of the editing and deleting operations. First run a query using "--list" to see which entry ID(s) match the query. Then you can run "--edit" or "--delete" with the "--query" option to operate from the same query.</p>
 
     <p>Editing entries by date:</p>
     <pre>
@@ -1571,9 +1583,9 @@ mput *
   <div id="comments">
     <h2><a id="s.11" name="s.11">11. Adding Support for Comments</a></h2>
 
-    <p>To add support for comments, you can use a PHP script called NanoBlogger Comments [1]. It's simple, features support for accounts, and is easy to install.</p>
+    <p>Comment services and add-ons: NanoBlogger Comments[1], CGIComment[2], blogkomm[3], JS-Kit[4], and Haloscan.com[5].</p>
 
-    <p>Integrating a comment system with your weblog requires editing the appropriate templates. Please see examples in blog.conf and templates.</p>
+    <p>Choose one and follow the included install instructions.</p>
   </div>
 
   <div id="entries.import">
@@ -1710,10 +1722,15 @@ php?&gt;
   <div id="credits">
     <h2><a id="s.14" name="s.14">14. Credits</a></h2>
 
-    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger [2], for the inspiration of this project.</p>
+    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger[6], for the inspiration of this project. Special acknowledgement goes to Ted Walther's Diary[7], which inspired Bowie to create MicroBlogger. Finally, thanks to everyone who's ever contributed a patch or feature request - see the ChangeLog.</p>
 
     <p><a href="http://nhw.pl/blg/articles/nbcom/">1. http://nhw.pl/blg/articles/nbcom/</a><br />
-    <a href="http://freshmeat.net/projects/microblogger">2. http://freshmeat.net/projects/microblogger</a><br /></p>
+    <a href="http://freshmeat.net/projects/cgicomment">2. http://freshmeat.net/projects/cgicomment</a><br />
+    <a href="http://blogkomm.com">3. http://blogkomm.com</a><br />
+    <a href="http://js-kit.com">4. http://js-kit.com</a><br />
+    <a href="http://www.haloscan.com">5. http://www.haloscan.com</a><br />
+    <a href="http://freshmeat.net/projects/microblogger">6. http://freshmeat.net/projects/microblogger</a><br />
+    <a href="http://reactor-core.org/~djw/diary/">7. http://reactor-core.org/~djw/diary/</a><br /></p>
 
     <div class="copyright">
       <span>Copyright © 2003-2006 Kevin Wood. All Rights Reserved.</span>
