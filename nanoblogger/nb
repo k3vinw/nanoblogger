@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2006 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-04T15:29:14-05:00
+# Last modified: 2007-01-13T16:12:31-05:00
 
 # nanoblogger's version.
-VERSION="3.3 RC5"
+VERSION="3.3"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`
@@ -239,7 +239,7 @@ fi
 		query_db "$page_query" "$page_catquery" limit "$page_limit" "$page_offset"
 		PAGEMOD_VAR="$New_EntryFile$Delete_EntryFile$Move_EntryFile"
 		for page_entry in ${UPDATE_LIST[@]}; do
-			if [ "$USR_QUERY" = all ] || [ ! -z "$PAGEMOD_VAR" ] && [ "$page_catquery" = nocat ]; then
+			if [ "$NB_QUERY" = all ] || [ ! -z "$PAGEMOD_VAR" ] && [ "$page_catquery" = nocat ]; then
 				build_pagelist
 			else
 				page_match=`for db_item in ${DB_RESULTS[@]}; do echo $db_item; done |grep "$page_entry"`
@@ -262,7 +262,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`; page_totals=0
 	# cleanup numbered page(s)
-	if [ "$USR_QUERY" = all ]; then
+	if [ "$NB_QUERY" = all ]; then
 		rm -f "${page_dir}${page_filedir}${page_file%%\.$NB_FILETYPE}"*[0-9]."$NB_FILETYPE"
 		nb_msg "$paginate_action $total_pages ($page_items/$total_items) ..."
 	else
@@ -310,7 +310,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 				echo '<td><a href="'$next_page'">'$NB_NextPage'</a></td>' >> "$SCRATCH_FILE"
 		echo '</tr>' >> "$SCRATCH_FILE"; echo '</table>' >> "$SCRATCH_FILE"
 		NB_PageLinks=$(< "$SCRATCH_FILE")
-		if [ ! -z "${UPDATE_LIST[*]}" ] && [ ! -z "$USR_QUERY" ]; then
+		if [ ! -z "${UPDATE_LIST[*]}" ] && [ ! -z "$NB_QUERY" ]; then
 			update_pages
 			for page_mod in ${PAGE_LIST[@]}; do
 				[ "page$page_num" = "$page_mod" ] && page_bynumber
@@ -359,7 +359,7 @@ CACHE_TYPE=month
 query_db "$month"
 if [ ! -z "${DB_RESULTS[*]}" ]; then
 	LOOPMONTH_LIST=(${DB_RESULTS[*]})
-	[ "$USR_QUERY" != all ] &&
+	[ "$NB_QUERY" != all ] &&
 		LOOPMONTH_LIST=(`for update_entry in ${UPDATE_LIST[@]}; do \
 			for month_entry in ${DB_RESULTS[@]}; do echo $month_entry; done \
 				|grep "$update_entry"; done`)
@@ -491,7 +491,7 @@ load_plugins archive
 nb_msg "$buildarchives_action"
 # build/update the category archives
 build_catarchives
-if [ "$USR_QUERY" = all ]; then
+if [ "$NB_QUERY" = all ]; then
 	# build the monthly archives
 	LOOP_LIST=(${UPDATE_LIST[*]})
 	loop_archive "${LOOP_LIST[*]}" years build_yeararchive
@@ -515,14 +515,14 @@ build_weblog(){
 # add welcome message with cat id 1 (NanoBlogger Help) to new weblogs
 if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 	# force full update
-	USR_QUERY=all
+	NB_QUERY=all
 	import_file "$NB_BASE_DIR/welcome-to-nb.txt"
 	old_catnum="$cat_num"; cat_num=1
 	add_entry; cat_num="$old_catnum"
 	rm -f "$BLOG_DIR/.nb_newblogdir"
 fi
 # for clean build remove all generated files
-if [ "$USR_QUERY" = all ] && [ -z "$cat_num" ]; then
+if [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
 	nb_msg "$buildweblog_all"
 	# confirm removal of any previously generated files
 	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
@@ -533,7 +533,7 @@ if [ "$USR_QUERY" = all ] && [ -z "$cat_num" ]; then
 	done
 fi
 # update master.db
-if [ "$USR_QUERY" != main ]; then
+if [ "$NB_QUERY" != main ]; then
 	nb_msg "$querydb_init"
 	query_db master
 fi
@@ -542,18 +542,18 @@ query_db years
 query_db months
 query_db days
 # set default query type for updates
-[ -z "$USR_QUERY" ] &&
-	USR_QUERY=max
+[ -z "$NB_QUERY" ] &&
+	NB_QUERY=max
 # set default list for updates
 if [ -z "${UPDATE_LIST[*]}" ]; then
-	query_db "$USR_QUERY" "$db_catquery"
+	query_db "$NB_QUERY" "$db_catquery"
 	UPDATE_LIST=(${DB_RESULTS[*]})
 fi
 # update categories found in update list
 [ -z "$CAT_LIST" ] && [ ! -z "${UPDATE_LIST[*]}" ] &&
 	find_categories "${UPDATE_LIST[*]}"
 # update categories specified when 'all' is queried (ignores update list)
-[ "$USR_QUERY" = all ] && [ ! -z "$cat_num" ] &&
+[ "$NB_QUERY" = all ] && [ ! -z "$cat_num" ] &&
 	find_categories
 # update previous entry's nav. links for new entries
 if [ ! -z "$New_EntryFile" ]; then
@@ -571,10 +571,10 @@ CACHE_TYPE=plugin
 # always load main plugins
 load_plugins
 nb_msg "$buildweblog_files"
-if [ "$USR_QUERY" = all ] && [ ! -z "$cat_num" ]; then
+if [ "$NB_QUERY" = all ] && [ ! -z "$cat_num" ]; then
 	# only build/update specified categories
 	build_catarchives
-elif [ "$USR_QUERY" != main ]; then
+elif [ "$NB_QUERY" != main ]; then
 	# build/update archives based on the query results
 	build_archives
 fi
@@ -584,7 +584,7 @@ CACHE_TYPE=main
 paginate "$QUERY_MODE" nocat "$MAX_MAINPAGE_ENTRIES" "$MAIN_TEMPLATE" \
 	"$ENTRY_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 # remove expired cache data to save disk space
-if [ "$USR_QUERY" != main ]; then
+if [ "$NB_QUERY" != main ]; then
 	if [ "$BLOG_CACHEMNG" != 0 ]; then
 		nb_msg "$buildweblog_cache"
 		update_cache expired
@@ -636,7 +636,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 	db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 	nb_msg "$editweblog_catinfo $cat_num"
 	query_db "$db_query" "$db_catquery"
-	if [ ! -z "$USR_TITLE" ] && [ ! -z "${DB_RESULTS[*]}" ]; then
+	if [ ! -z "$USR_TITLE" ]; then
 		set_catlink "$db_catquery"
 		[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
 			rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
@@ -647,6 +647,7 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 		done
 		UPDATE_LIST=(${DB_RESULTS[*]})
 		find_categories "${UPDATE_LIST[*]}"
+		nb_msg "$querydb_update"; query_db update
 		build_weblog; exit 0
 	else
 		die "$editweblog_nomod"
@@ -657,7 +658,7 @@ NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/
 [ -z "$NUMVAR" ] && die "$novalid_entryid"
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # find entry id(s) from specified query
-[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
+[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
 query_db "$db_query" "$db_catquery"; ENTRY_LIST=(${DB_RESULTS[*]})
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
@@ -720,6 +721,7 @@ if [ ! -z "${UPDATE_LIST[*]}" ]; then
 	# update all categories effected by entry modifications
 	[ ! -z "${CAT_MODLIST[*]}" ] &&
 		CAT_LIST=(`for modcatdb in ${CAT_LIST[@]} ${CAT_MODLIST[*]}; do echo $modcatdb; done |sort -u`)
+	nb_msg "$querydb_update"; query_db update
 	build_weblog
 else
 	die "$editweblog_noaction"
@@ -731,23 +733,23 @@ delete_weblog(){
 # deletes categories
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # find entry id(s) from specified query
-[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
-if [ ! -z "$cat_num" ]; then
-	cat_list="$db_catquery"
-fi
+[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
+cat_list="$db_catquery"
 if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	nb_msg "$deleteweblog_delcat $cat_num ..."
 	# confirm delete in interactive mode
 	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-	query_db "$db_query" "${cat_list[*]}"; UPDATE_LIST=(${DB_RESULTS[*]})
+	query_db "$db_query" "${cat_list[*]}"
 	for cat_db in ${cat_list[@]}; do
-		set_catlink "$cat_db"
+		Delete_CatDBFile="$cat_db"
+		[ -f "$NB_DATA_DIR/$cat_db" ] && set_catlink "$cat_db"
 		[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
 			rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
-		nb_msg "$editweblog_title '$USR_TITLE' ..."
 		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
-	done
-	cat_num=; [ ! -z "${UPDATE_LIST[*]}" ] && build_weblog; exit 0
+	done; cat_num=
+	UPDATE_LIST=(${DB_RESULTS[*]})
+	nb_msg "$querydb_update"; query_db update
+	build_weblog; exit 0
 fi
 # deletes entries
 NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
@@ -757,7 +759,7 @@ if [ ! -z "$cat_list" ]; then
 	[ -z "$CATNUMVAR" ] &&
 		die "$deleteweblog_onecat"
 fi
-[ ! -z "$USR_QUERY" ] && db_query="$USR_QUERY"
+[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
 query_db "$db_query" "$cat_list"; ENTRY_LIST=(${DB_RESULTS[*]})
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
@@ -774,8 +776,8 @@ nb_msg "$deleteweblog_delentry $delete_num ($delete_titles) ..."
 # confirm delete in interactive mode
 [ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
 # initialize master.db
-if [ ! -z "$USR_QUERY" ]; then
-	db_query="$USR_QUERY"
+if [ ! -z "$NB_QUERY" ]; then
+	db_query="$NB_QUERY"
 else
 	db_query=master
 fi
@@ -788,7 +790,7 @@ for entry_id in $NUMVAR; do
 	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
 		echo "$Delete_EntryFile" >> "$SCRATCH_FILE"
-		if [ ! -z "$cat_list" ]; then
+		if [ ! -z "${cat_list[*]}" ]; then
 			# removes entry from categories
 			for cat_db in ${cat_list[@]}; do
 				cat_mod=`grep "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
@@ -818,7 +820,7 @@ for entry_id in $NUMVAR; do
 			# delete permalink directory
 			[ ! -z "$entry_linkname" ] && [ -d "$Delete_EntryArchiveDir" ] &&
 				rm -fr "$Delete_EntryArchiveDir"
-			# throw out old cache data
+			# delete old cache data
 			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
 			# update previous and next entries of deleted entry
 			findba_entries "$Delete_EntryFile" "${MASTER_DB_RESULTS[*]}"
@@ -842,12 +844,12 @@ CAT_XLIST=(`sort -u "$SCRATCH_FILE.x-catdbs"`)
 # update all categories with removed entries
 [ ! -z "$CAT_XLIST" ] &&
 	CAT_LIST=(`for xcatdb in ${CAT_LIST[@]} ${CAT_XLIST[@]}; do echo $xcatdb; done |sort -u`)
-# prune all removed entries
+# prune all removed entries from update list
 for xentry in $(< "$SCRATCH_FILE.x-entries"); do
 	sed -e '/'$xentry'/d' "$SCRATCH_FILE".x-update > "$SCRATCH_FILE".x-update.new
 	mv "$SCRATCH_FILE".x-update.new "$SCRATCH_FILE".x-update
 done
-UPDATE_LIST=($(< "$SCRATCH_FILE.x-update"))
+UPDATE_LIST=(`sort -u "$SCRATCH_FILE.x-update"`)
 nb_msg "$querydb_update"; query_db update
 build_weblog
 }
@@ -889,7 +891,7 @@ build_weblog
 
 # list entries and categories
 list_weblog(){
-query_db cat; db_query="$USR_QUERY"
+query_db cat; db_query="$NB_QUERY"
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # lists categories
 if [ "$db_query" = cat ]; then
@@ -1108,7 +1110,7 @@ while [ $# -gt 0 ]; do
 		--plugindir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
 		-p|--preview)		PREVIEW_WEBLOG=1;;
 		-P|--publish)		PUBLISH_WEBLOG=1;;
-		-q|--query) 		USR_QUERY="$2"; shift;;
+		-q|--query) 		NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
 		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;
 		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;
 		-t|--title)		check_arg "$2"; USR_TITLE="$2"; shift;;
@@ -1131,6 +1133,7 @@ done
 
 
 # post-processing for all command line args
+: ${NB_QUERY:=$USR_QUERY}
 if [ "$CONFIG_WEBLOG" = 1 ]; then
 	check_config; config_weblog
 fi

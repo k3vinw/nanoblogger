@@ -1,214 +1,306 @@
-2006-07-05 16:32  n1xt3r
+2007-01-04 15:52  n1xt3r
 
-	* nb: Fix: user plugins directory incorrectly handled path
-	  specified.
+	* README, TODO, nb, nb.conf, default/blog.conf,
+	  docs/nanoblogger.html, lib/config.sh, lib/query.sh, lib/tools.sh,
+	  plugins/weblog_links.sh:
 
-2006-07-05 13:32  n1xt3r
+	- Fix: CATEGORY_FEEDS had no effect.
+	- Fix: query limit of -1 was ignored.
+	- Fix: tried to show delete information before checking if entry existed.
+	- Fix: MAX_TITLE_WIDTH was too short, now defaults to 150.
+	- Documented language definitions.
+	- Several updates to documentation and comments.
 
-	* ChangeLog, nb, lang/en/help.txt: Specify user plugins directory
-	  from command line.
+2007-01-04 00:15  n1xt3r
 
-2006-07-05 02:04  n1xt3r
+	* default/plugins/test.off:
 
-	* nb, docs/nanoblogger.html: Fix: format plugins conflicted with
-	  user plugins.
+	- Emptied default plugins directory.
 
-2006-07-04 15:39  n1xt3r
+2007-01-04 00:11  n1xt3r
 
-	* nb: Plugins list is created and analyzed for duplicates.
+	* default/blog.conf:
 
-2006-07-04 14:16  n1xt3r
+	- Added default info for MAX_TITLEWIDTH.
 
-	* nb: Fix: plugin loading routine could be tricked into exiting too
-	  soon.
+2007-01-01 13:29  n1xt3r
 
-2006-07-04 13:51  n1xt3r
+	* nb, default/blog.conf, docs/nanoblogger.html, lib/config.sh,
+	  lib/query.sh, lib/tools.sh:
 
-	* ChangeLog, nb: User plugins take precedence over main plugins
-	  with identical names.
+	- Fix: "query_db master" always forced update of master.db regardless of
+	  any changes.
+	- Fix: Couldn't override $BROWSER or $EDITOR in a sane way.
+	- $NB_BROWSER overrides $BROWSER and $NB_EDITOR overrides $EDITOR.
 
-2006-07-04 03:28  n1xt3r
+2006-12-23 18:52  n1xt3r
 
-	* ChangeLog, nb, docs/nanoblogger.html, lib/config.sh: Fix:
-	  resolved issues with non-existant plugin directories.
+	* default/blog.conf, lib/config.sh, lib/tools.sh:
 
-2006-07-04 02:07  n1xt3r
+	- Implemented $EDITOR and $BROWSER replacement variables - $NB_EDITOR,
+	  $NB_BROWSER.
+	- Fix: default for previewing weblog could choke on debianutils' $BROWSER
+	  variable.
 
-	* README, nb, lib/tools.sh, plugins/calendar.sh,
-	  plugins/archive/month/month_calendar.sh: Fix: race condition when
-	  loading user plugins.
+2006-12-23 16:32  n1xt3r
 
-2006-07-03 23:43  n1xt3r
+	* nb, lib/tools.sh:
 
-	* ChangeLog, plugins/calendar.sh,
-	  plugins/archive/month/month_calendar.sh: Fix: replaced
-	  non-portable sed commands in calendar plugins.
+	- Fix: straight invocation of $BROWSER conflicted with sensible-browser.
+	- Attempted to update language definitions.
 
-2006-07-03 21:35  n1xt3r
+2006-12-23 12:44  n1xt3r
 
-	* default/plugins/: test.off, test.sh: Disabled test plugin for
-	  users plugins.
+	* TODO, nb, default/blog.conf, lib/tools.sh:
 
-2006-07-03 21:30  n1xt3r
+	- Fix: noncritical temp files were not created in time, sending errors to
+	  stdout.
+	- Fix: sed command in title2link() could be shortened (thanks Dmitry
+	  Kohmanyuk)
+	- Fix: cache files updated after weblog generation from same command line.
 
-	* default/plugins/test.sh: Added sample test.sh plugin for users
-	  plugin.
+2006-12-05 10:01  n1xt3r
 
-2006-07-03 21:24  n1xt3r
+	* nb, docs/nanoblogger.html, lang/en/help.txt,
+	  lang/en/messages.lang, lib/tools.sh:
 
-	* default/plugins/dummy: [no log message]
+	- Fix: cached older entries when chron. order was plain - should be latest.
+	- Added prompt when editing entries to accomodate ext. editing processes.
+	- New "--query" option to assist in editing or deleting of entries that
+	  match a particular query.
 
-2006-07-03 21:24  n1xt3r
+2006-11-25 19:42  n1xt3r
 
-	* default/plugins/dummy: Updating default weblog's directory tree.
-
-2006-07-03 19:31  n1xt3r
-
-	* docs/nanoblogger.html, lib/config.sh: - Fix SHOW_INDEXFILE.  -
-	  Corrected some minor info in user manual.
-
-2006-07-03 18:38  n1xt3r
-
-	* ChangeLog: - Update Changelog.  - Version change to 3.3 RC5.
-
-2006-07-03 18:09  n1xt3r
-
-	* README, nb, default/blog.conf, docs/nanoblogger.html,
-	  lib/config.sh: Added plugins directory to the default weblog's
-	  directory.
-
-2006-07-03 17:36  n1xt3r
-
-	* nb, default/blog.conf, docs/nanoblogger.html: Update user manual
-	  with user plugins and category plugins information.
-
-2006-07-03 14:57  n1xt3r
-
-	* README, nb, default/blog.conf, docs/nanoblogger.html,
-	  lib/config.sh: Added support for user plugins directory.
-
-2006-07-03 12:26  n1xt3r
-
-	* README, plugins/atom.sh, plugins/rss.sh, plugins/rss2.sh: -
-	  Syndication plugins only update on changes or forced updates
-	  (e.g. -u all).  - Updated upgrade instructions in README.
-
-2006-07-02 23:35  n1xt3r
-
-	* README, default/blog.conf, docs/nanoblogger.html: README with
-	  release notes.
-
-2006-07-02 14:27  n1xt3r
-
-	* TODO, nb, default/blog.conf, lib/config.sh: - Automatic detection
-	  of locale used for dates.  - Added preliminary support for
-	  category plugins.
-
-2006-06-08 03:53  n1xt3r
-
-	* default/blog.conf, docs/nanoblogger.html, lib/config.sh: -
-	  Manually setting NB_INDEX from blog.conf, is no longer necessary.
-	  - New config variable SHOW_INDEXFILE handles display of
-	  directory index   files in links.
-
-2006-06-02 21:43  n1xt3r
-
-	* nb, docs/nanoblogger.html, lib/config.sh, plugins/atom.sh,
-	  plugins/rss.sh, plugins/rss2.sh, plugins/zyx_articles_meta.sh,
-	  plugins/zyx_articles_text.off: - Rewrote some parts of user
-	  manual.  - Removed reference to trap as command requirement,
-	  since included in bash.  - Minor improvement to command line
-	  parsing (invalid opts handling).
-
-2006-05-18 22:36  n1xt3r
-
-	* nb, default/styles/nb_steelblue.css, plugins/01_mymood.off,
-	  plugins/weblog_links.sh: - Fix: order of command line parsing
-	  (bug from sf.net, robl2) - Fix: my_moods.sh plugin now respects
-	  interactive mode (bug from sf.net, robl2) - Fix: unquoted
-	  arguments caused grep command to fail (bug from sf.net, silcus)
-
-2006-04-11 01:41  n1xt3r
-
-	* default/styles/nb_clean.css, default/styles/nb_default.css,
+	* TODO, default/images/feed-icon-14x14.png,
+	  default/styles/nb_clean.css, default/styles/nb_default.css,
 	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
-	  default/styles/nb_steelblue.css, lib/query.sh, plugins/atom.sh,
-	  plugins/rss.sh, plugins/rss2.sh: - Minor CSS tweaks to calendar -
-	  Fix conflict between usage of LIMIT_ITEMS and MAX_ENTRIES.
+	  default/styles/nb_steelblue.css,
+	  default/templates/main_index.htm, docs/nanoblogger.html,
+	  plugins/atom.sh, plugins/rss2.sh, plugins/weblog_links.sh:
 
-2006-03-27 23:06  n1xt3r
+	- integrated feed icon.
+	- Fix: syndication feeds didn't retain their reverse chronological order.
 
-	* docs/nanoblogger.html: Update user manual's information on the
-	  format of an entry.
+2006-10-24 13:44  n1xt3r
 
-2006-03-27 22:27  n1xt3r
+	* plugins/: atom.sh, weblog_links.sh, z001_articles_meta.sh,
+	  entry/mod/moods.sh:
 
-	* TODO, default/styles/nb_clean.css, default/styles/nb_default.css,
-	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
-	  default/styles/nb_steelblue.css: - Fix (by Kyle Shrinak) CSS
-	  fonts, sans/serif made more platform friendly.  - Enhanced (by
-	  unknown) CSS design, side bar aligns to right of content.
+	Fix: regex for detecting moods variables was too broad.
+	Fix: Michal Čihař noticed non-escaped HTML caused Tidy to skip output from
+	atom.sh plugin.
+	Fix: Romain Lenglet noticed variables were not being initialized for
+	the meta-based articles plugin.
 
-2006-03-21 12:41  n1xt3r
+2006-10-03 14:17  n1xt3r
+
+	* lib/tools.sh:
+
+	Fix: It was discovered that regex used in set_smarlinkname() was too broad.
+
+2006-09-29 02:27  n1xt3r
+
+	* lib/tools.sh:
+
+	Fix: regex to reduce title length, always removed one character too many.
+
+2006-09-29 02:19  n1xt3r
+
+	* nb.conf, docs/nanoblogger.html, lib/config.sh, lib/tools.sh:
+
+	Limited length of entry's URL when greater than $MAX_TITLEWIDTH.
+
+2006-09-24 15:23  n1xt3r
+
+	* default/blog.conf, lib/config.sh, lib/query.sh, lib/tools.sh,
+	  plugins/recent_entries.sh:
+
+	Fix: Recent entries plugin works with set_smartlinkname().
+
+2006-09-23 22:14  n1xt3r
+
+	* default/blog.conf, docs/nanoblogger.html, lib/config.sh,
+	  lib/tools.sh:
+
+	Backwards support for previous linking methods.
+
+2006-09-23 19:55  n1xt3r
+
+	* nb, lib/tools.sh:
+
+	Fix: deleted entry list was updated in an illogical fashion causing
+	non-critical race conditions.
+
+2006-09-23 17:34  n1xt3r
+
+	* TODO, lib/tools.sh:
+
+	Fix: set_smartlinkname() was missing operative variable for categories.
+
+2006-09-23 09:07  n1xt3r
+
+	* TODO, nb, lib/tools.sh:
+
+	- Fix: noncritical sed errors upon entry deletion.
+	- Improved pagination of entries without categories.
+
+2006-09-23 08:29  n1xt3r
+
+	* nb, lib/tools.sh, plugins/atom.sh, plugins/recent_entries.sh,
+	  plugins/rss2.sh:
+
+	- Enabled title based links.
+	- Automatically manages same titled links of both entries and categories.
+	- Fix: previous and next entries update again.
+	- Fix: pagination of main page completes upon adding new entries.
+
+2006-09-20 15:01  n1xt3r
+
+	* plugins/weblog_links.sh:
+
+	Fix: properly checks RSS2_CATFEEDS before creating RSS 2.0 feed links
+
+2006-09-20 14:25  n1xt3r
+
+	* README, lib/config.sh, lib/error.sh, lib/query.sh, lib/tools.sh,
+	  plugins/weblog_links.sh:
+
+	- Fix: Feed list handles SHOW_INDEXFILE
+	- Fix: --blogdir ($BLOG_DIR) handles "./"
+
+2006-09-18 16:28  n1xt3r
+
+	* nb, lib/config.sh:
+
+	Removed bad module add of templates.
+
+2006-09-18 13:39  n1xt3r
+
+	* TODO, default/templates/main_index.htm, lang/en/templates.lang,
+	  plugins/atom.sh, plugins/rss2.sh, plugins/weblog_links.sh:
+
+	- Patch: add CSS for feeds, by nijel
+	- Patch: include list of syndication feeds to template, by nijel
+
+2006-08-30 12:48  n1xt3r
 
 	* nb, default/styles/nb_clean.css, default/styles/nb_default.css,
 	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
-	  default/styles/nb_steelblue.css, plugins/calendar.sh,
-	  plugins/archive/month/month_calendar.sh: - Calendar header links
-	  to monthly archive.  - Fix: more reliable checking of modified
-	  entries before updating.
+	  default/styles/nb_steelblue.css,
+	  default/templates/category_archive.htm,
+	  default/templates/main_index.htm,
+	  default/templates/month_archive.htm, lib/config.sh,
+	  plugins/calendar.sh, plugins/archive/month/month_calendar.sh:
 
-2006-03-17 16:40  n1xt3r
+	- Cleaned up design and code for page navigation menus.
+	- Patch: applied calendar-fix.patch from Nijel to fix grep expression.
 
-	* TODO, plugins/calendar.sh, plugins/recent_entries.sh,
+2006-08-05 21:37  n1xt3r
+
+	* nb:
+
+	Fix: build_dayarchive() didn't compare update list against month list.
+
+2006-08-05 17:08  n1xt3r
+
+	* TODO, nb, lib/tools.sh, plugins/calendar.sh,
 	  plugins/archive/month/month_calendar.sh,
-	  plugins/makepage/tidy.sh: - Cleaned up markup code generated by
-	  calendar plugins.  - Removed redundant messages from tidy
-	  plugin's console output.
+	  plugins/archive/year/year_index.sh:
 
-2006-03-03 14:19  n1xt3r
+	- Fix: previous commit broke paginate() update routines..
+	- Fix: day archives looped entire month regardless of modified entries.
+	- Enhanced speed when listing entries.
 
-	* lang/de/help.txt, lang/de/messages.lang, lang/de/plugins.lang,
-	  lang/de/templates.lang, plugins/calendar.sh,
-	  plugins/archive/month/month_calendar.sh: - Patch #351596 from
-	  bugs.debian.org applied to fix calendar output.  - Moved language
-	  definitions out to new 'lang' module.
+2006-08-01 15:08  n1xt3r
 
-2006-02-18 17:49  n1xt3r
+	* README, nb, docs/nanoblogger.html, plugins/atom.sh,
+	  plugins/recent_entries.sh, plugins/rss2.sh:
 
-	* TODO, docs/nanoblogger.html, plugins/post/clean_parts.off,
-	  plugins/post/rsync_weblog.off: Replaced rsync example with a post
-	  plugin to cleanup "parts" directory.
+	- LIMIT_ITEMS changed to FEED_ITEMS, default for syndication plugins.
+	- new control variables for syndication plugins, ATOM_ITEMS, RSS2_ITEMS,
+	  RSS_ITEMS.
+	- LIST_N changed to RECENTLIST_ENTRIES and LIST_OFFSET to
+	  RECENTLIST_OFFSET.
 
-2006-02-02 00:47  n1xt3r
+2006-07-31 20:30  n1xt3r
 
-	* default/blog.conf, default/templates/main_index.htm,
-	  plugins/zyx_articles_meta.sh, plugins/zyx_articles_text.off: -
-	  Fix articles plugin HTML semantics and title for lists.  - Fix
-	  minor typos in blog.conf.
+	* nb:
 
-2006-02-01 00:26  n1xt3r
+	Automatically remove old numbered pages leftover from pagination.
 
-	* nb, default/blog.conf, default/styles/nb_clean.css,
-	  default/styles/nb_default.css, default/styles/nb_rusted.css,
-	  default/styles/nb_spring.css, default/styles/nb_steelblue.css,
-	  docs/nanoblogger.html, lib/config.sh, lib/query.sh, lib/tools.sh,
-	  plugins/recent_entries.sh, plugins/archive/year/year_index.sh: -
-	  Configurable chronological order of weblog.  - Minor CSS
-	  improvements to calendar's text size.
+2006-07-31 18:32  n1xt3r
 
-2006-01-30 18:57  n1xt3r
+	* README, TODO, nb, default/templates/day_archive.htm,
+	  docs/nanoblogger.html, lib/config.sh, lib/query.sh:
 
-	* default/styles/: nb_clean.css, nb_default.css, nb_rusted.css,
-	  nb_spring.css, nb_steelblue.css: Fix inconsistent and large text
-	  size of side links in CSS code.
+	- Fix: pagination wasn't setting limits and offsets correctly.
+	- Main page can be split using pagination.
 
-2006-01-27 17:37  n1xt3r
+2006-07-30 22:27  n1xt3r
 
-	* nb, lib/query.sh: Fix non-fatal file moving violation on systems
-	  with locked down /tmp.
+	* TODO, nb, default/templates/day_archive.htm,
+	  default/templates/month_archive.htm, docs/nanoblogger.html,
+	  lib/config.sh:
 
-2006-01-27 14:41  n1xt3r
+	- Fix: pagination with limit of 1 was calculated incorrectly.
+	- Added necessary page navigational links to month archive template.
 
-	* ChangeLog, nb, docs/nanoblogger.html: Updated copyright to 2006.
+2006-07-30 00:11  n1xt3r
+
+	* nb, nb.conf, default/templates/day_archive.htm,
+	  default/templates/permalink.htm, lib/config.sh, lib/query.sh,
+	  lib/tools.sh, plugins/archive/day/cal2daytitle.sh,
+	  plugins/archive/year/year_index.sh:
+
+	- Archives by day.
+	- Permanent links anchor to day archives unless individual archives
+	  enabled.
+	- Automatic pagination of month and day archives.
+
+2006-07-26 12:45  n1xt3r
+
+	* lib/tools.sh:
+
+	Fix (by Niels Heirbaut): metadata templates were being overwritten because
+	of a typo in a conditional statement.
+
+2006-07-12 15:14  n1xt3r
+
+	* nb:
+
+	Fix: previous commit broke handling user plugins directory exclusively.
+
+2006-07-12 14:55  n1xt3r
+
+	* nb, docs/nanoblogger.html:
+
+	Fix: some plugins failed to load when user plugins tree structure differed
+	from the main plugins.
+
+2006-07-11 01:57  n1xt3r
+
+	* nb:
+
+	- Multiple copies of plugins are handled through Bash internals (instead of
+	  "sort -u").
+	- User plugins are loaded in their natural order.
+	- User plugins load before main plugins.
+
+2006-07-09 18:00  n1xt3r
+
+	* nb, plugins/z001_articles_meta.sh:
+
+	Changed naming convention for plugins to include both letters and numbers.
+
+2006-07-08 21:00  n1xt3r
+
+	* nb:
+
+	Fix: reduced redundancy and further improved logic in loading user plugins.
+
+2006-07-07 20:01  n1xt3r
+
+	* TODO, nb, plugins/makepage/tidy.sh:
+
+	Fix: code for loading user plugins contained bad logic.
 

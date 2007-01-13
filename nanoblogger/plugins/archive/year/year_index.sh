@@ -2,10 +2,10 @@
 
 # concatenate modification variables
 YEARIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
-YEARIMOD_QUERY=`echo "$USR_QUERY" |grep "^$yearn"`
+YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 
 # check for weblog modifications
-if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
 	# tool to lookup year's id from "years" query type
 	lookup_yearid(){
 	YEAR_IDLIST=($2)

@@ -3,11 +3,11 @@
 # by archive/year/year_index.sh plugin
 
 # concatenate modification variables
-MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
-MASTERIMOD_QUERY=`echo "$USR_QUERY" |grep "^[0-9].*"`
+MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Move_EntryFile$USR_TITLE"
+MASTERIMOD_QUERY=`echo "$NB_QUERY" |grep "^[0-9].*"`
 
 # check for weblog modifications
-if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
 	nb_msg "$plugins_action archive index page ..."
 	# help ease transition from 3.2.x or earlier
 	YEAR_TEMPLATECOPY="$NB_BASE_DIR/default/templates/$YEAR_TEMPLATE"

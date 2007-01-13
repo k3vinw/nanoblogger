@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-04T15:33:04-05:00
+# Last modified: 2007-01-12T17:27:31-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -86,11 +86,11 @@ if [ ! -z "$BROWSER_CMD" ]; then
 	BROWSER_LIST=`echo "$BROWSER_CMD" |sed -e '/[ ]/ s//%REM%/g; /[\:]/ s// /g'`
 	for browser in $BROWSER_LIST; do
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
-		browser_cmd=`echo "$browser" |sed -e 's/[\%]REM[\%]/ /g; s/[\%]s/'$browserurl_sedvar'/g'`
+		browser_cmd=`echo "$browser" |sed -e 's/[\%]REM[\%]/ /g; s/[\%][\%]/\%/g; s/[\%]s/'$browserurl_sedvar'/g'`
 		$browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
-	[ $? != 0 ] && nb_msg "none of the browsers in \$BROWSER worked!"
+	[ $? != 0 ] && nb_msg "$nbbrowser_nobrowser"
 fi
 }
 
@@ -347,13 +347,15 @@ altlink_var="$1"
 altlink_type="$2"
 case "$altlink_type" in
 	entry)
-		read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
+		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
+			read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
 		altentry_linktitle=`set_title2link "$METADATA"`
 		alte_day=`echo "$altlink_var" |cut -c1-10`
 		query_db "$alte_day"
 		ALTLINK_LIST=(${DB_RESULTS[*]})
 		for alte in ${ALTLINK_LIST[*]}; do
-			read_metadata TITLE "$NB_DATA_DIR/$alte"
+			[ -f "$NB_DATA_DIR/$alte" ] &&
+				read_metadata TITLE "$NB_DATA_DIR/$alte"
 			alte_linktitle=`set_title2link "$METADATA"`
 			# entry title failsafe
 			[ -z "$alte_linktitle" ] &&
@@ -365,12 +367,14 @@ case "$altlink_type" in
 		alte_backup=${alte_backup%%.*}; altlink_backup="${alte_backup//*\/}"
 		;;
 	cat)
-		altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
+		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
+			altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
 		altcat_linktitle=`set_title2link "$altcat_title"`
 		query_db # get categories list
 		ALTLINK_LIST=(${db_categories[*]})
 		for altc in ${ALTLINK_LIST[*]}; do
-			altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
+			[ -f "$NB_DATA_DIR/$altc" ] &&
+				altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
 			altc_linktitle=`set_title2link "$altc_title"`
 			# category title failsafe
 			[ -z "$altc_linktitle" ] &&
@@ -491,7 +495,7 @@ done
 CAT_LIST=( ${category_list[@]} )
 [ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
 	CAT_LIST=( `cat_id "$cat_num"` )
-[ -z "$cat_num" ] && [ "$USR_QUERY" = all ] &&
+[ -z "$cat_num" ] && [ "$NB_QUERY" = all ] &&
 	CAT_LIST=${db_categories[@]}
 CAT_LIST=(`for cat_id in ${CAT_LIST[@]}; do echo "$cat_id"; done |sort -u`)
 }

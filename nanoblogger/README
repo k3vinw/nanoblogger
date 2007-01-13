@@ -91,6 +91,12 @@ NOTE: "5!" tells sed to ignore the fifth line where the first seperator
 occurs. This only works for the old entries, in other words *don't* add
 new entries with 3.3 until you've finished this step!!
 
+If you've changed the suffix of the entry data files, you will also have
+to modify the category database files. With GNU sed, a simple:
+sed -i -e 's/[\.]old_suffix/\.new_suffix/' cat_*.db
+
+from inside the "data" directory, should do the job.
+
 3. Configuration files:
 There are many additional configuration directives that you may wish to
 take advantage of.

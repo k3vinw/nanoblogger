@@ -57,6 +57,9 @@ buildweblog_cache="cleaning up cache ..."
 # import_file
 importfile_nofile="doesn't exist!"
 
+# nb_browser
+nbbrowser_nobrowser="none of the browsers in \$NB_BROWSER worked!"
+
 # nb_draft
 nbdraft_asknew="file doesn't exist! create?"
 

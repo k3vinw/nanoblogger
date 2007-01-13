@@ -36,7 +36,7 @@ else
 	RESTORE_SORTARGS=
 fi
 
-if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 	set_baseurl "$BLOG_URL/"
 
 	# escape special characters to help create valid xml feeds

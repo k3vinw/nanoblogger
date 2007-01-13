@@ -79,7 +79,7 @@ add_articlelink(){
 create_article(){
 BLOGPAGE_SRCFILE="$BLOG_DIR/$ARTICLE_DIR/$article_srcfile"
 BLOGPAGE_OUTFILE="$BLOG_DIR/$ARTICLE_DIR/$article_file"
-[ "$USR_QUERY" = articles ] || [ "$USR_QUERY" = all ] && rm -f "$BLOGPAGE_OUTFILE"
+[ "$NB_QUERY" = articles ] || [ "$NB_QUERY" = all ] && rm -f "$BLOGPAGE_OUTFILE"
 if [ "$BLOGPAGE_SRCFILE" -nt "$BLOGPAGE_OUTFILE" ]; then
 	# set text formatting for page content
 	BLOGPAGE_FORMAT="$ARTICLE_FORMAT"

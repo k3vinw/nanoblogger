@@ -644,19 +644,19 @@ nb [-b blog_dir] -c 1 -d cat
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "--query" option to match entry ID(s) from the query results of "--list" with that of the editing and deleting operations. First run a query using "--list" to see which entry ID(s) match the query. Then you can run "--edit" or "--delete" with the "--query" option to operate from the same query.</p>
+    <p>Use the "--query" option to help manipulate entries more quickly. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit" or "--delete" options.</p>
 
     <p>Editing entries by date:</p>
     <pre>
-nb [-b blog_dir] -l YYYY-MM-DD
+nb [-b blog_dir] -q YYYY-MM-DD -l
 nb [-b blog_dir] -q YYYY-MM-DD -e 1,2,3
 </pre>Deleting entries by date:
     <pre>
-nb [-b blog_dir] -l YYYY-MM-DD
+nb [-b blog_dir] -q YYYY-MM-DD -l
 nb [-b blog_dir] -q YYYY-MM-DD -d 1,2,3
 </pre>Editing entries by date and category:
     <pre>
-nb [-b blog_dir] -c 2 -l YYYY-MM-DD
+nb [-b blog_dir] -c 2 -q YYYY-MM-DD -l
 nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 </pre>
   </div>

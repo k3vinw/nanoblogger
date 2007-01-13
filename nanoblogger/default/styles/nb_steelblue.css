@@ -137,8 +137,7 @@ html>body #container {
 }
 
 #content {
-	float: left;
-	width: 65%;
+	width: 550px;
 	padding: 10px 10px 10px 40px;
 	background-color: #FFF;
 	/* border: 1px solid red; */
@@ -154,8 +153,10 @@ only here for backwards compat. */
 #links {
 	float: right;
 	background-color: #DDD;
-	width: 25%;
+	width: 210px;
 	padding: 10px;
+	margin-left: 30px;
+	margin-bottom: 20px;
 	border-left: 1px dotted #999;
 	}
 
@@ -202,8 +203,9 @@ html>body #footer {
 .intro {
 	background-color: #FFF;
 	color: #333;
+	width: 480px;
+	padding: 0px 10px 10px 0px;
 	font-weight: normal;
-	padding: 10px;
 	margin-bottom: 45px;
 	border-bottom: 1px solid #4682B4;
 	}
@@ -222,7 +224,11 @@ html>body #footer {
 	}
 
 .blogbody {
-	padding: 0px;
+	padding: 0px 30px 0px 0px;
+	}
+
+.blogbody p {
+	text-align: justify;
 	}
 
 .blogbody a,
@@ -245,6 +251,7 @@ html>body #footer {
 .date	{
 	color: #666; 
 	margin-bottom: 10px;
+	width: 500px;
 	text-align: left;
 	line-height: 1.7em;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -328,7 +335,7 @@ html>body #footer {
 	background-color: #EEE;
 	padding: 2px;
 	margin-top: 10px;
-	text-align: center;
+	text-align: right;
 	font-size: xx-small; /* for IE 5.5 */
 	f\ont-size: x-small; /* feed to compliant browsers */
 	}

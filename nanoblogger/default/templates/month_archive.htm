@@ -24,6 +24,11 @@ $NB_RSSAltLink
 		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
 		<span class="description">$BLOG_DESCRIPTION</span>
 	</div>
+	<div id="links">
+		<div class="calendar">
+			$NB_MonthlyCalendar
+		</div>
+	</div>
 	<div id="content">
 		<div id="wrap">
 			<a id="top"></a>
@@ -43,11 +48,6 @@ $([ ! -z "$next_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveMonth
 			<div class="pagenav" align="center">
 				$NB_PageLinks
 			</div>
-		</div>
-	</div>
-	<div id="links">
-		<div class="calendar">
-			$NB_MonthlyCalendar
 		</div>
 	</div>
 </div>
