@@ -57,6 +57,9 @@ buildweblog_cache="vidage du cache..."
 # import_file
 importfile_nofile="n'existe pas!" 
 
+# nb_browser
+nbbrowser_nobrowser="aucun des navigateurs dans $NB_BROWSER n'a travaillé !"
+
 # nb_draft
 nbdraft_asknew="Le fichier n'existe pas! Le créer?"
 

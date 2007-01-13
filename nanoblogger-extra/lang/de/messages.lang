@@ -54,6 +54,9 @@ buildweblog_cache="Cache aufräumen ..."
 # import_file
 importfile_nofile="existiert nicht!"
 
+# nb_browser
+nbbrowser_nobrowser="keine der Datenbanksuchroutinen in $NB_BROWSER bearbeitet!"
+
 # nb_draft
 nbdraft_asknew="Die Datei existiert nicht! Soll sie erzeugt werden?"
 
