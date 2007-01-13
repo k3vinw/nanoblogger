@@ -1,3 +1,28 @@
+2007-01-13 16:58  n1xt3r
+
+	* docs/nanoblogger.html:
+
+	- Major updates to default templates and style sheets that effects the
+	  rendering in web browsers.
+	- Improved --query option to work in conjunction with the --list option.
+	- New nb_browser message for language definitions.
+
+2007-01-13 16:31  n1xt3r
+
+	* ChangeLog, README, nb, default/styles/nb_clean.css,
+	  default/styles/nb_default.css, default/styles/nb_rusted.css,
+	  default/styles/nb_spring.css, default/styles/nb_steelblue.css,
+	  default/templates/main_index.htm,
+	  default/templates/month_archive.htm, docs/nanoblogger.html,
+	  lang/en/messages.lang, lib/query.sh, lib/tools.sh,
+	  plugins/atom.sh, plugins/rss2.sh, plugins/z001_articles_meta.sh,
+	  plugins/archive/master_index.sh,
+	  plugins/archive/year/year_index.sh:
+
+	- Fix: multiple minor update issues when by deleting categories.
+	- Fix: multiple accounts where a file should've been tested for existance
+	  that created a series of noncritical errors.
+
 2007-01-04 15:52  n1xt3r
 
 	* README, TODO, nb, nb.conf, default/blog.conf,
