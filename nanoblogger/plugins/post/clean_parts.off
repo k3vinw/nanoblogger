@@ -1,3 +1,5 @@
 # plugin to cleanup parts directory
-[ -d "$BLOG_DIR/$PARTS_DIR" ] &&
+if [ -d "$BLOG_DIR/$PARTS_DIR" ]; then
+	nb_msg "cleaning up $PARTS_DIR ..."
 	rm -fr "$BLOG_DIR/$PARTS_DIR"/*
+fi
