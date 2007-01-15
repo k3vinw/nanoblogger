@@ -1,5 +1,39 @@
-# Module for querying existing records
-# Last modified: 2007-01-12T23:53:05-05:00
+# Module for querying and managing database 
+# Last modified: 2007-01-15T02:08:45-05:00
+
+# update master db
+rebuild_maindb(){
+	DB_YYYY=`echo "$db_query" |cut -c1-4`
+	DB_MM=`echo "$db_query" |cut -c6-7`
+	DB_DD=`echo "$db_query" |cut -c9-10`
+	: ${DB_YYYY:=[0-9][0-9][0-9][0-9]}
+	: ${DB_MM:=[0-9][0-9]}
+	: ${DB_DD:=[0-9][0-9]}
+	DB_DATE="${DB_YYYY}*${DB_MM}"
+	for db_item in "$NB_DATA_DIR"/${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
+		entry=${db_item//*\/}
+		# index related categories by id
+		for cat_db in ${db_categories[@]}; do
+			CATDB_RESULTS=($(< "$NB_DATA_DIR/$cat_db"))
+			for catdb_item in ${CATDB_RESULTS[@]}; do
+				db_match=nomatch
+				[ "$catdb_item" = "$entry" ] &&
+					db_match=match
+				if [ "$db_match" = match ]; then
+					cat_idnum="${cat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
+					[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
+					oldcat_idnum="$cat_idnum,"
+				fi
+			done
+		done
+		cat_idnum="${cat_idnum//\, }"
+		[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
+		[ -f "$NB_DATA_DIR/$entry" ] &&
+			echo "$entry$cat_ids"
+		oldcat_idnum=; cat_idnum=; cat_ids=
+	done |sort $db_order > "$SCRATCH_FILE.master.$NB_DBTYPE"
+	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
+}
 
 # search, filter, and create makeshift and master db arrays
 query_db(){
@@ -31,39 +65,11 @@ fi
 # filter_ filters
 filter_query(){ grep "$db_query." |cut -d">" -f 1 |sort $db_order; } # allow for empty $db_query
 filter_raw(){ grep "$db_query." |sort $db_order; }
-# update master db
-update_db(){
-	DB_YYYY=`echo "$db_query" |cut -c1-4`
-	DB_MM=`echo "$db_query" |cut -c6-7`
-	DB_DD=`echo "$db_query" |cut -c9-10`
-	: ${DB_YYYY:=[0-9][0-9][0-9][0-9]}
-	: ${DB_MM:=[0-9][0-9]}
-	: ${DB_DD:=[0-9][0-9]}
-	DB_DATE="${DB_YYYY}*${DB_MM}"
-	for db_item in "$NB_DATA_DIR"/${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
-		entry=${db_item//*\/}
-		# index related categories by id
-		for cat_db in ${db_categories[@]}; do
-			cat_var=`grep "$entry" "$NB_DATA_DIR/$cat_db"`
-			if [ ! -z "$cat_var" ]; then
-				cat_idnum=`echo "$cat_db" |sed -e '/cat[\_]/ s///g; /[\.]'$NB_DBTYPE'/ s///g'`
-				[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
-				oldcat_idnum="$cat_idnum,"
-			fi
-		done
-		cat_idnum=`echo $cat_idnum |sed -e '/\,[ ]$/ s///g'`
-		[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
-		[ -f "$NB_DATA_DIR/$entry" ] &&
-			echo "$entry$cat_ids"
-		oldcat_idnum=; cat_idnum=; cat_ids=
-	done |sort $db_order > "$SCRATCH_FILE.master.$NB_DBTYPE"
-	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
-}
 # list all entries
 list_db(){
-# force update or gracefully recover master db reference file
+# gracefully rebuild main database
 if [ ! -f "$NB_DATA_DIR/master.$NB_DBTYPE" ]; then
-	db_query=; update_db
+	db_query=; rebuild_maindb
 fi
 # list entries from master.db
 if [ -z "$db_catquery" ]; then
@@ -96,7 +102,7 @@ case "$db_query" in
 	months) db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`);;
 	days) db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`);;
 	max) db_setlimit=limit; db_query=; query_data;;
-	update) db_query=; update_db;;
+	rebuild) db_query=; rebuild_maindb;;
 	*) query_data;;
 esac
 db_query=; db_filter=; db_order=;
@@ -106,5 +112,72 @@ db_query=; db_filter=; db_order=;
 raw_db(){
 db_filter=raw
 query_db "$1" "$2" "$3" "$4" "$5" "$6"
+}
+
+# do not use this on cat db's
+resort_db(){
+db_file="$1"
+db_order="$2"
+: ${db_order:=$SORT_ARGS}
+if [ -f "$db_file" ]; then
+	sort $db_order "$db_file" > "$db_file".tmp
+	mv "$db_file".tmp "$db_file"
+fi
+}
+
+index_cats(){
+indexcat_item="$1"
+# index related categories by id
+query_db
+for cat_db in ${db_categories[@]}; do
+	CATDB_RESULTS=($(< "$NB_DATA_DIR/$cat_db"))
+	for catindexcat_item in ${CATDB_RESULTS[@]}; do
+		db_match=no
+		[ "$catindexcat_item" = "$indexcat_item" ] &&
+			db_match=yes
+		if [ "$db_match" = yes ]; then
+			cat_idnum="${cat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
+			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
+			oldcat_idnum="$cat_idnum,"
+		fi
+	done
+done
+cat_idnum="${cat_idnum//\, }"
+[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
+#oldcat_idnum=; cat_idnum=; cat_ids=
+}
+
+update_maindb(){
+db_item="$1"
+db_file="$2"
+if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
+	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" &&
+		mv "$db_file".tmp "$db_file"
+	index_cats "$db_item"
+	[ -f "$NB_DATA_DIR/$db_item" ] &&
+		echo "$db_item$cat_ids" >> "$db_file"
+	resort_db "$db_file"
+fi
+}
+
+update_db(){
+db_item="$1"
+db_file="$2"
+if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
+	grep_db=`grep "$db_item" "$db_file"`
+	[ -z "$grep_db" ] &&
+		echo "$db_item" >> "$db_file"
+fi
+}
+
+delete_db(){
+db_item="$1"
+db_file="$2"
+if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
+	grep_db=`grep "$db_item" "$db_file"`
+	[ ! -z "$grep_db" ] &&
+		sed -e '/'$db_item'/d' "$db_file" > "$db_file".tmp &&
+			mv "$db_file".tmp "$db_file"
+fi
 }
 

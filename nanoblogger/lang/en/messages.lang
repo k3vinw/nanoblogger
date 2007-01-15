@@ -20,8 +20,8 @@ checkconf_nocache="weblog's cache directory doesn't exist! goodbye."
 checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
 
 # query_db
-querydb_init="initializing master database ..."
-querydb_update="updating master database ..."
+querydb_init="initializing main database ..."
+querydb_update="updating main database ..."
 
 # validate category id(s)
 catid_bad="bad id(s)!"
