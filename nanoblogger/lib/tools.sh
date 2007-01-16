@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-16T02:41:26-05:00
+# Last modified: 2007-01-16T13:50:27-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -438,11 +438,13 @@ if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 else
 	month=`echo "$entrylink_var" |cut -c1-7`
 	set_monthlink "$month"
-	day=`echo "$entrylink_var" |cut -c1-10`
-	set_daylink "$day"
 	entrylink_id=`set_entryid $entrylink_var`
-	#NB_EntryPermalink="$NB_ArchiveMonthLink#$entrylink_id"
-	NB_EntryPermalink="$NB_ArchiveDayLink#$entrylink_id"
+	NB_EntryPermalink="$NB_ArchiveMonthLink#$entrylink_id"
+	if [ "$DAY_ARCHIVES" = 1 ]; then
+		day=`echo "$entrylink_var" |cut -c1-10`
+		set_daylink "$day"
+		NB_EntryPermalink="$NB_ArchiveDayLink#$entrylink_id"
+	fi
 fi
 }
 

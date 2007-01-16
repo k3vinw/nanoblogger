@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-16T02:46:36-05:00
+# Last modified: 2007-01-16T14:27:48-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -237,7 +237,7 @@ fi
 		fi
 		}
 		query_db "$page_query" "$page_catquery" limit "$page_limit" "$page_offset"
-		PAGEMOD_VAR="$New_EntryFile$Delete_EntryFile$Move_EntryFile"
+		PAGEMOD_VAR="$New_EntryFile$Delete_EntryFile$DeleteCatDBFile$Move_EntryFile"
 		for page_entry in ${UPDATE_LIST[@]}; do
 			if [ "$NB_QUERY" = all ] || [ ! -z "$PAGEMOD_VAR" ] && [ "$page_catquery" = nocat ]; then
 				build_pagelist
@@ -371,7 +371,8 @@ if [ ! -z "${DB_RESULTS[*]}" ]; then
 	load_plugins archive/month
 	paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
 		"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"
-	loop_day "${LOOPMONTH_LIST[*]}" build_dayarchive
+	[ "$DAY_ARCHIVES" = 1 ] &&
+		loop_day "${LOOPMONTH_LIST[*]}" build_dayarchive
 fi
 }
 
@@ -582,6 +583,9 @@ fi
 # build main weblog index
 nb_msg "$buildweblog_main"
 CACHE_TYPE=main
+# reset UPDATE_LIST so main index gets updated
+query_db "$QUERY_MODE" nocat
+UPDATE_LIST=(${DB_RESULTS[*]})
 paginate "$QUERY_MODE" nocat "$MAX_MAINPAGE_ENTRIES" "$MAIN_TEMPLATE" \
 	"$ENTRY_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 # remove expired cache data to save disk space

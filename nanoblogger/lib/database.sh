@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-16T02:16:05-05:00
+# Last modified: 2007-01-16T03:07:16-05:00
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -114,7 +114,8 @@ db_filter=raw
 query_db "$1" "$2" "$3" "$4" "$5" "$6"
 }
 
-print_entry(){ echo "$1%%>[0-9]*}"; }
+# split and display entry and categories from database results
+print_entry(){ echo "${1%%>[0-9]*}"; }
 print_cat(){ echo "${1##*\>}"; }
 
 # do not use this on cat db's
