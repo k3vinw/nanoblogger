@@ -1,7 +1,7 @@
-# Module for querying and managing database 
-# Last modified: 2007-01-15T02:08:45-05:00
+# Module for database functions
+# Last modified: 2007-01-16T02:16:05-05:00
 
-# update master db
+# rebuild main database from scratch
 rebuild_maindb(){
 	DB_YYYY=`echo "$db_query" |cut -c1-4`
 	DB_MM=`echo "$db_query" |cut -c6-7`
@@ -35,7 +35,7 @@ rebuild_maindb(){
 	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
 
-# search, filter, and create makeshift and master db arrays
+# search, filter, and create makeshift and main db arrays
 query_db(){
 db_query="$1"
 db_catquery="$2"
@@ -113,6 +113,9 @@ raw_db(){
 db_filter=raw
 query_db "$1" "$2" "$3" "$4" "$5" "$6"
 }
+
+print_entry(){ echo "$1%%>[0-9]*}"; }
+print_cat(){ echo "${1##*\>}"; }
 
 # do not use this on cat db's
 resort_db(){
