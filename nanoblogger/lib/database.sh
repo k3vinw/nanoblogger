@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-16T03:07:16-05:00
+# Last modified: 2007-01-17T00:11:04-05:00
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -118,13 +118,27 @@ query_db "$1" "$2" "$3" "$4" "$5" "$6"
 print_entry(){ echo "${1%%>[0-9]*}"; }
 print_cat(){ echo "${1##*\>}"; }
 
-# do not use this on cat db's
+# do not use this on cat db's ...
 resort_db(){
 db_file="$1"
 db_order="$2"
 : ${db_order:=$SORT_ARGS}
 if [ -f "$db_file" ]; then
 	sort $db_order "$db_file" > "$db_file".tmp
+	mv "$db_file".tmp "$db_file"
+fi
+}
+
+# ... use this instead
+resort_catdb(){
+catdb_file="$1"
+db_order="$2"
+: ${db_order:=$SORT_ARGS}
+if [ -f "$catdb_file" ]; then
+	catdb_title=`sed 1q "$db_file"`
+	echo "$catdb_title" > "$db_file".tmp
+	sed 1d "$db_file" |sort "$db_order" >> "$db_file".tmp
+
 	mv "$db_file".tmp "$db_file"
 fi
 }
