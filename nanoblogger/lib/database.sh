@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-17T00:11:04-05:00
+# Last modified: 2007-01-17T02:25:15-05:00
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -135,11 +135,11 @@ catdb_file="$1"
 db_order="$2"
 : ${db_order:=$SORT_ARGS}
 if [ -f "$catdb_file" ]; then
-	catdb_title=`sed 1q "$db_file"`
-	echo "$catdb_title" > "$db_file".tmp
-	sed 1d "$db_file" |sort "$db_order" >> "$db_file".tmp
+	catdb_title=`sed 1q "$catdb_file"`
+	echo "$catdb_title" > "$catdb_file".tmp
+	sed 1d "$catdb_file" |sort "$db_order" >> "$catdb_file".tmp
 
-	mv "$db_file".tmp "$db_file"
+	mv "$catdb_file".tmp "$catdb_file"
 fi
 }
 
