@@ -133,10 +133,8 @@ publish_action="Veröffentliche Weblog ..."
 publish_asknow="Soll der Weblog jetzt veröffentlicht werden?"
 
 # misc.
-# PLEASE TRANSLATE
-notitle="Untitled"
-# PLEASE TRANSLATE
-nowritedir="no write permissions for directory! goodbye."
+notitle="Kein Titel"
+nowritedir="Es gibt keine Schreibrechte für das Verzeichnis! Auf Wiedersehen."
 filterdate_failed="Die Filterung nach Datum ist fehlgeschlagen, verwende Zeitstempel stattdessen."
 samefilename="Der Dateiname existiert bereits!"
 
