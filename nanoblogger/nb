@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-17T02:25:17-05:00
+# Last modified: 2007-01-19T14:33:53-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -103,7 +103,7 @@ for plugin_path in $PLUGINSDIR_LIST; do
 	PLUGINLIST_DEFINED=`echo "${PLUGINS_LIST[*]}" |grep -c '.[ ].'`
 	if [ "$PLUGINLIST_DEFINED" != 0 ] ; then
 		# yes, so we add them in order specified (removing any commas)
-		for plugin in `echo ${PLUGINS_LIST[@]} |sed -e '/[\,]/ s// /g; /[ ][ ]/ s// /g'`; do
+		for plugin in `echo ${PLUGINS_LIST[@]/\,/ } |sed -e '/[ ][ ]/ s// /g'`; do
 			nb_plugin="$plugin_path/${plugin}.sh"
 			add_plugin_script "$nb_plugin"
 		done
@@ -394,51 +394,6 @@ if [ ! -z "${CAT_LIST[*]}" ]; then
 fi
 }
 
-# update the cache
-update_cache(){
-cache_update="$1"
-cache_def="$2"
-CACHEUPDATE_LIST=($3)
-if [ "$cache_update" = build ]; then
-	[ -z "$cache_def" ] &&
-		cache_def=entry_metadata
-	for cache_item in ${CACHEUPDATE_LIST[@]}; do
-		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
-	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
-elif [ "$cache_update" = rebuild ]; then
-	> "$SCRATCH_FILE".$cache_def-cache_list
-	[ -z "$cache_def" ] &&
-		cache_def=entry_metadata
-	for cache_item in ${CACHEUPDATE_LIST[@]}; do
-		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
-	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
-elif [ "$cache_update" = expired ]; then
-	[ -z "$cache_def" ] && cache_def="*"
-	# always cache more recent entries
-	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
-	[ -z "$CACHEUPDATE_LIST" ] &&
-		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
-	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
-		cache_item=${cache_item##*\/}
-		cache_regex="${cache_item%%\.$cache_def*}"
-		cache_match=`echo "${DB_RESULTS[*]}" |grep -c "$cache_regex"`
-		[ "$cache_match" != 1 ] &&
-			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
-	done
-else
-	[ -z "$cache_def" ] &&
-		cache_def="*"
-	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
-	for cache_item in ${DB_RESULTS[@]}; do
-		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
-	done
-fi
-CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[@]}; do echo $cache_item; done |sort -u`)
-}
-
 loop_day(){
 loopday_list=($1)
 loopday_exec="$2"
@@ -536,7 +491,6 @@ fi
 # update master.db
 if [ "$NB_QUERY" != main ]; then
 	nb_msg "$querydb_init"
-	#resort_db "$NB_DATA_DIR/master.db"
 	query_db master
 fi
 # update special query results for months and years
@@ -551,9 +505,6 @@ if [ -z "${UPDATE_LIST[*]}" ]; then
 	query_db "$NB_QUERY" "$db_catquery"
 	UPDATE_LIST=(${DB_RESULTS[*]})
 fi
-# update categories found in update list
-[ -z "$CAT_LIST" ] &&
-	find_categories "${UPDATE_LIST[*]}"
 # only update specified categories 
 [ ! -z "$cat_num" ] && [ "$UPDATE_WEBLOG" = 1 ] &&
 	find_categories
@@ -624,14 +575,15 @@ chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 if [ ! -z "$cat_num" ]; then
 	for cat_db in $db_catquery; do 
 		update_db "$New_EntryFile" "$NB_DATA_DIR/$cat_db"
-		resort_catdb "$NB_DATA_DIR/$cat_db"
 	done
 fi
 echo "$New_EntryFile" >> "$SCRATCH_FILE".newentry_list
 UPDATE_LIST=($(< "$SCRATCH_FILE".newentry_list))
 find_categories "${UPDATE_LIST[*]}"
+resort_categories
 nb_msg "$querydb_update"
 update_maindb "$New_EntryFile" "$NB_DATA_DIR/master.db"
+resort_db "$NB_DATA_DIR/master.db"
 }
 
 # edit entry or category by id number
@@ -650,9 +602,9 @@ if [ ! -z "$cat_num" ] && [ "$edit_num" = cat ]; then
 		echo "$USR_TITLE" > "$NB_DATA_DIR/$db_catquery".tmp
 		sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp
 		mv "$NB_DATA_DIR/$db_catquery".tmp "$NB_DATA_DIR/$db_catquery"
-		resort_catdb "$NB_DATA_DIR/$db_catquery"
 		UPDATE_LIST=($(< "$NB_DATA_DIR/$db_catquery"))
 		find_categories "${UPDATE_LIST[*]}"
+		resort_categories
 		build_weblog; exit 0
 	else
 		die "$editweblog_nomod"
@@ -673,11 +625,12 @@ for entry_id in $NUMVAR; do
 done
 > "$SCRATCH_FILE"
 # for chg_entrydate
-> "$SCRATCH_FILE.mod-catdbs"
 [ ! -z "$cat_num" ] && nb_msg "$editweblog_catinfo $cat_num"
 for entry_id in $NUMVAR; do
 	((entry_id--)) # adjust offset by 1 for arrays (1 = 0)
 	Edit_EntryFile=${ENTRY_LIST[$entry_id]}
+	read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
+	OldEdit_EntryTitle="$METADATA"
 	# write any user metadata
 	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$NB_DATA_DIR/$Edit_EntryFile"
 	nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
@@ -692,32 +645,36 @@ for entry_id in $NUMVAR; do
 	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
 		Edit_EntryFile="$New_EntryDateFile"
 	# add timestamp modified entries to update list
-	[ ! -z "$Old_EntryFile" ] &&
-		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 	if [ ! -z "$Old_EntryFile" ]; then
+		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
 		nb_msg "$querydb_update"
 		find_categories "$Old_EntryFile"
 		for olde_catdb in ${CAT_LIST[*]}; do
 			delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 			update_db "$Edit_EntryFile" "$NB_DATA_DIR/$olde_catdb"
-			resort_catdb "$NB_DATA_DIR/$olde_catdb"
 		done
 		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
+		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
+		resort_db "$NB_DATA_DIR/master.db"
 	fi
-	update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
 	# use cached version for 'newer than' comparison
 	nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
 	nt_cachefile=${nt_cachefile//[ ]*}
 	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
-		# update previous and next entries of modified entry
-		query_db master
-		findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
-		set_entrynavlinks prev "$before_entry"
-		set_entrynavlinks next "$after_entry"
-		[ ! -z "$prev_entry" ] &&
-			echo "$prev_entry" >> "$SCRATCH_FILE"
-		[ ! -z "$next_entry" ] &&
-			echo "$next_entry" >> "$SCRATCH_FILE"
+		read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
+		NewEdit_EntryTitle="$METADATA"
+		if [ "$OldEdit_EntryTitle" != "$NewEdit_EntryTitle" ] || \
+		[ ! -z "$Old_EntryFile" ]; then
+			# update previous and next entries of modified entry
+			query_db master
+			findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
+			set_entrynavlinks prev "$before_entry"
+			set_entrynavlinks next "$after_entry"
+			[ ! -z "$prev_entry" ] &&
+				echo "$prev_entry" >> "$SCRATCH_FILE"
+			[ ! -z "$next_entry" ] &&
+				echo "$next_entry" >> "$SCRATCH_FILE"
+		fi
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 		# remove old cache data for clean build
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
@@ -732,10 +689,7 @@ UPDATE_LIST=($(< "$SCRATCH_FILE"))
 if [ ! -z "${UPDATE_LIST[*]}" ]; then
 	nb_msg "$editweblog_action"
 	find_categories "${UPDATE_LIST[*]}"
-	CAT_MODLIST=(`sort -u "$SCRATCH_FILE.mod-catdbs"`)
-	# update all categories effected by entry modifications
-	[ ! -z "${CAT_MODLIST[*]}" ] &&
-		CAT_LIST=(`for modcatdb in ${CAT_LIST[@]} ${CAT_MODLIST[*]}; do echo $modcatdb; done |sort -u`)
+	resort_categories
 	build_weblog
 else
 	die "$editweblog_noaction"
@@ -766,6 +720,7 @@ if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
 	for oldcat_dbitem in ${DB_RESULTS[*]}; do
 		update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
 	done
+	resort_db "$NB_DATA_DIR/master.db"
 	build_weblog; exit 0
 fi
 # deletes entries
@@ -891,7 +846,6 @@ for entry_id in $NUMVAR; do
 		if [ ! -z "$db_catquery" ]; then
 			for cat_db in ${cat_list[@]}; do
 				update_db "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"
-				resort_catdb "$NB_DATA_DIR/$cat_db"
 			done
 		fi
 		nb_msg "$querydb_update"
@@ -901,6 +855,8 @@ done
 UPDATE_LIST=($(< "$SCRATCH_FILE"))
 [ ! -z "${UPDATE_LIST[*]}" ] &&
 	find_categories "${UPDATE_LIST[*]}"
+resort_categories
+resort_db "$NB_DATA_DIR/master.db"
 build_weblog
 }
 

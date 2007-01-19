@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-16T13:50:27-05:00
+# Last modified: 2007-01-19T04:19:24-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -506,6 +506,15 @@ CAT_LIST=( ${category_list[@]} )
 CAT_LIST=(`for cat_id in ${CAT_LIST[@]}; do echo "$cat_id"; done |sort -u`)
 }
 
+# resort category databases from list
+resort_categories(){
+RESORT_CATDBLIST=($1)
+[ -z "${RESORT_CATDBLIST[*]}" ] && RESORT_CATDBLIST=(${CAT_LIST[*]})
+for mod_catdb in ${CAT_LIST[@]}; do
+	resort_catdb "$NB_DATA_DIR/$mod_catdb"
+done
+}
+
 # generate timestamp as metadata variables
 meta_timestamp(){
 NB_MetaDate=`filter_dateformat "$DATE_FORMAT"`
@@ -787,6 +796,50 @@ else
 fi
 }
 
+# tool to help manage the cache
+update_cache(){
+cache_update="$1"
+cache_def="$2"
+CACHEUPDATE_LIST=($3)
+if [ "$cache_update" = build ]; then
+	[ -z "$cache_def" ] && cache_def=entry_metadata
+	for cache_item in ${CACHEUPDATE_LIST[@]}; do
+		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
+	done
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
+elif [ "$cache_update" = rebuild ]; then
+	> "$SCRATCH_FILE".$cache_def-cache_list
+	[ -z "$cache_def" ] && cache_def=entry_metadata
+	for cache_item in ${CACHEUPDATE_LIST[@]}; do
+		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
+	done
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
+elif [ "$cache_update" = expired ]; then
+	[ -z "$cache_def" ] && cache_def="*"
+	# always cache more recent entries
+	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
+	[ -z "$CACHEUPDATE_LIST" ] &&
+		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
+	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
+		cache_item=${cache_item##*\/}
+		cache_regex="${cache_item%%\.$cache_def*}"
+		cache_match=`echo "${DB_RESULTS[*]}" |grep -c "$cache_regex"`
+		[ "$cache_match" != 1 ] &&
+			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
+	done
+else
+	[ -z "$cache_def" ] &&
+		cache_def="*"
+	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
+	for cache_item in ${DB_RESULTS[@]}; do
+		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
+	done
+fi
+[ ! -z "${CACHEUPDATE_LIST[*]}" ] &&
+	CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[@]}; do echo $cache_item; done |sort -u`)
+}
+
 # tool to help change an entry's date/timestamp
 # (e.g. TIMESTAMP: YYYY-MM-DD HH:MM:SS)
 chg_entrydate(){
@@ -807,28 +860,6 @@ if [ ! -z "$New_EntryTimeStamp" ]; then
 	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
 	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
 		Old_EntryFile="$EntryDate_File"
-		# update relative categories
-		if [ ! -z "${cat_list[*]}" ]; then
-			for cat_db in ${cat_list[@]}; do
-				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
-					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
-					> "$NB_DATA_DIR/$cat_db".tmp
-					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
-					echo "$cat_db" >> "$SCRATCH_FILE.mod-catdbs"
-				fi
-			done
-		else
-			for cat_db in ${db_categories[@]}; do
-				cat_mod=`grep "$Old_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				if [ ! -z "$cat_mod" ] && [ ! -z "$Old_EntryFile" ]; then
-					sed -e '/'$Old_EntryFile'/ s//'$New_EntryDateFile'/' "$NB_DATA_DIR/$cat_db" \
-					> "$NB_DATA_DIR/$cat_db".tmp
-					mv "$NB_DATA_DIR/$cat_db".tmp "$NB_DATA_DIR/$cat_db"
-					echo "$cat_db" >> "$SCRATCH_FILE.mod-catdbs"
-				fi
-			done
-		fi
 		mv "$NB_DATA_DIR/$Old_EntryFile" "$NB_DATA_DIR/$New_EntryDateFile"
 		set_entrylink "$Old_EntryFile"
 		Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"

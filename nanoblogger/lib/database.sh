@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-17T02:25:15-05:00
+# Last modified: 2007-01-19T02:30:16-05:00
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -118,7 +118,7 @@ query_db "$1" "$2" "$3" "$4" "$5" "$6"
 print_entry(){ echo "${1%%>[0-9]*}"; }
 print_cat(){ echo "${1##*\>}"; }
 
-# do not use this on cat db's ...
+# resort database
 resort_db(){
 db_file="$1"
 db_order="$2"
@@ -129,7 +129,7 @@ if [ -f "$db_file" ]; then
 fi
 }
 
-# ... use this instead
+# resort category database 
 resort_catdb(){
 catdb_file="$1"
 db_order="$2"
@@ -143,9 +143,9 @@ if [ -f "$catdb_file" ]; then
 fi
 }
 
+# index related categories by id
 index_cats(){
 indexcat_item="$1"
-# index related categories by id
 query_db
 for cat_db in ${db_categories[@]}; do
 	CATDB_RESULTS=($(< "$NB_DATA_DIR/$cat_db"))
@@ -165,6 +165,7 @@ cat_idnum="${cat_idnum//\, }"
 #oldcat_idnum=; cat_idnum=; cat_ids=
 }
 
+# update entry and it's related categories for main database
 update_maindb(){
 db_item="$1"
 db_file="$2"
@@ -174,10 +175,10 @@ if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 	index_cats "$db_item"
 	[ -f "$NB_DATA_DIR/$db_item" ] &&
 		echo "$db_item$cat_ids" >> "$db_file"
-	resort_db "$db_file"
 fi
 }
 
+# update entry for a database
 update_db(){
 db_item="$1"
 db_file="$2"
@@ -188,6 +189,7 @@ if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 fi
 }
 
+# delete an entry from a database
 delete_db(){
 db_item="$1"
 db_file="$2"
