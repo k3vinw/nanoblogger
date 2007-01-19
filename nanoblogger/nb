@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-19T15:04:25-05:00
+# Last modified: 2007-01-19T17:15:28-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -647,12 +647,12 @@ for entry_id in $NUMVAR; do
 	# add timestamp modified entries to update list
 	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
+		nb_msg "$querydb_update"
 		find_categories "$Old_EntryFile"
 		for olde_catdb in ${CAT_LIST[*]}; do
 			delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 			update_db "$Edit_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 		done
-		nb_msg "$querydb_update"
 		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
 		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
 		resort_db "$NB_DATA_DIR/master.db"
@@ -755,13 +755,13 @@ else
 fi
 query_db "$db_query"
 > "$SCRATCH_FILE"; > "$SCRATCH_FILE.x-update"
+nb_msg "$querydb_update"
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
 	((entry_id--))
 	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
 	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
 		echo "$Delete_EntryFile" >> "$SCRATCH_FILE"
-		nb_msg "$querydb_update"
 		if [ ! -z "${cat_list[*]}" ]; then
 			# deletes entry from categories
 			for cat_db in ${cat_list[@]}; do
@@ -838,13 +838,14 @@ nb_msg "$moveentry_catinfo $cat_num"
 nb_msg "$moveentry_moventry $move_num ..."
 > "$SCRATCH_FILE"
 nb_msg "$querydb_update"
+query_db
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
 	((entry_id--))
 	Move_EntryFile=${DB_RESULTS[$entry_id]}
 	if [ -f "$NB_DATA_DIR/$Move_EntryFile" ]; then
 		echo "$Move_EntryFile" >> "$SCRATCH_FILE"
-		if [ ! -z "$db_catquery" ]; then
+		if [ ! -z "${cat_list[*]}" ]; then
 			for cat_db in ${cat_list[@]}; do
 				update_db "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"
 			done

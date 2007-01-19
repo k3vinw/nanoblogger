@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-19T02:30:16-05:00
+# Last modified: 2007-01-19T17:27:21-05:00
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -144,25 +144,28 @@ fi
 }
 
 # index related categories by id
-index_cats(){
+index_catids(){
 indexcat_item="$1"
-query_db
-for cat_db in ${db_categories[@]}; do
-	CATDB_RESULTS=($(< "$NB_DATA_DIR/$cat_db"))
-	for catindexcat_item in ${CATDB_RESULTS[@]}; do
-		db_match=no
-		[ "$catindexcat_item" = "$indexcat_item" ] &&
-			db_match=yes
-		if [ "$db_match" = yes ]; then
-			cat_idnum="${cat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
+indexcat_list=($2)
+[ -z "${indexcat_list[*]}" ] &&
+	indexcat_list=(`for ic_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${ic_db//*\/}; done`)
+cat_ids=; cat_idnum=
+for indexcat_db in ${indexcat_list[@]}; do
+	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))
+	for catdb_item in ${CATDB_RESULTS[@]}; do
+		db_match=nomatch
+		[ "$catdb_item" = "$indexcat_item" ] &&
+			db_match=match
+		if [ "$db_match" = match ]; then
+			cat_idnum="${indexcat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
 			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
 			oldcat_idnum="$cat_idnum,"
 		fi
 	done
 done
-cat_idnum="${cat_idnum//\, }"
+cat_ids=; cat_idnum="${cat_idnum//\, }"
 [ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
-#oldcat_idnum=; cat_idnum=; cat_ids=
+oldcat_idnum=; cat_idnum=
 }
 
 # update entry and it's related categories for main database
@@ -172,7 +175,7 @@ db_file="$2"
 if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" &&
 		mv "$db_file".tmp "$db_file"
-	index_cats "$db_item"
+	index_catids "$db_item"
 	[ -f "$NB_DATA_DIR/$db_item" ] &&
 		echo "$db_item$cat_ids" >> "$db_file"
 fi
