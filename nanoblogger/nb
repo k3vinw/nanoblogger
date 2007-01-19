@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-19T14:33:53-05:00
+# Last modified: 2007-01-19T15:04:25-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -647,12 +647,12 @@ for entry_id in $NUMVAR; do
 	# add timestamp modified entries to update list
 	if [ ! -z "$Old_EntryFile" ]; then
 		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
-		nb_msg "$querydb_update"
 		find_categories "$Old_EntryFile"
 		for olde_catdb in ${CAT_LIST[*]}; do
 			delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 			update_db "$Edit_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 		done
+		nb_msg "$querydb_update"
 		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
 		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
 		resort_db "$NB_DATA_DIR/master.db"
@@ -837,6 +837,7 @@ db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"; [ -z "$cat_num" ] && di
 nb_msg "$moveentry_catinfo $cat_num"
 nb_msg "$moveentry_moventry $move_num ..."
 > "$SCRATCH_FILE"
+nb_msg "$querydb_update"
 for entry_id in $NUMVAR; do
 	# adjust offset by 1 for arrays (1 = 0)
 	((entry_id--))
@@ -848,7 +849,6 @@ for entry_id in $NUMVAR; do
 				update_db "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"
 			done
 		fi
-		nb_msg "$querydb_update"
 		update_maindb "$Move_EntryFile" "$NB_DATA_DIR/master.db"
 	fi
 done
