@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-19T17:15:28-05:00
+# Last modified: 2007-01-19T22:48:00-05:00
 
 # nanoblogger's version.
 VERSION="3.3"
@@ -506,8 +506,7 @@ if [ -z "${UPDATE_LIST[*]}" ]; then
 	UPDATE_LIST=(${DB_RESULTS[*]})
 fi
 # only update specified categories 
-[ ! -z "$cat_num" ] && [ "$UPDATE_WEBLOG" = 1 ] &&
-	find_categories
+[ "$UPDATE_WEBLOG" = 1 ] && find_categories
 # update previous entry's nav. links for new entries
 if [ ! -z "$New_EntryFile" ]; then
 	findba_entries "$New_EntryFile" "${MASTER_DB_RESULTS[*]}"
