@@ -1,5 +1,8 @@
 # NanoBlogger Plugin to create excerpt of an entry
 
-# strips markup and only grabs text up to 1st blank line
-NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -e 's/<[^>]*>//g' |sed -e '1,/^$/!d'`
+# Example1: grabs text up to 1st blank line
+NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -e '1,/^$/!d'`
+
+# Example2: strips markup and only grabs text up to 1st blank line
+#NB_EntryExcerpt=`echo "$NB_EntryBody" |sed -e 's/<[^>]*>//g; 1,/^$/!d'`
 
