@@ -1,11 +1,11 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.3 Copyright 2007 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-20T02:16:46-05:00
+# Last modified: 2007-01-22T03:31:00-05:00
 
 # nanoblogger's version.
-VERSION="3.3"
+VERSION="3.4 RC1"
 
 # nanoblogger's base install directory.
 NB_BASE_DIR=`dirname $0`

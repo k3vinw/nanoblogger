@@ -112,7 +112,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 			fi
 		done
 		Atom_EntryCategory=$(< "$SCRATCH_FILE".atomfeed-category)
-		if [ "$ENTRY_EXCERPTS" = 1 ]; then
+		if [ "$ENTRY_EXCERPTS" = 1 ] && [ ! -z "$NB_EntryExcerpt" ]; then
 			#Atom_EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			Atom_EntryExcerpt="$NB_EntryExcerpt"
 		else

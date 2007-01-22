@@ -106,7 +106,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
 			NB_RSS2EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
-		if [ "$ENTRY_EXCERPTS" = 1 ]; then
+		if [ "$ENTRY_EXCERPTS" = 1 ] && [ ! -z "$NB_EntryExcerpt" ]; then
 			#NB_RSS2EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			NB_RSS2EntryExcerpt="$NB_EntryExcerpt"
 		else

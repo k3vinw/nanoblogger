@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-19T22:21:35-05:00
+# Last modified: 2007-01-21T21:42:10-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -621,6 +621,7 @@ load_entry(){
 ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
+: ${ENTRY_PLUGINSLIST:=entry entry/mod entry/format}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=`echo "$entry" |cut -c9-10`
 	entry_time=`filter_timestamp "$entry" |cut -c12-19`
@@ -643,10 +644,14 @@ if [ -f "$ENTRY_FILE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 			read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
 			NB_EntryBody="$METADATA"
-			load_plugins entry
-			load_plugins entry/mod
-			[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-			load_plugins entry/format "$NB_EntryFormat"
+			for entry_pluginsdir in $ENTRY_PLUGINSLIST; do
+				if [ "$entry_pluginsdir" = "entry/format" ]; then
+					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
+					load_plugins $entry_pluginsdir "$NB_EntryFormat"
+				else
+					load_plugins $entry_pluginsdir
+				fi
+			done
 			write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
 			# update cache list for some post-cache management
 			#update_cache build $ENTRY_CACHETYPE "$entry"
