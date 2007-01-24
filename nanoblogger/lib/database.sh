@@ -1,5 +1,30 @@
 # Module for database functions
-# Last modified: 2007-01-19T17:27:21-05:00
+# Last modified: 2007-01-24T03:40:24-05:00
+
+# index related categories by id
+index_catids(){
+indexcat_item="$1"
+indexcat_list=($2)
+[ -z "${indexcat_list[*]}" ] &&
+	indexcat_list=(`for ic_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${ic_db//*\/}; done`)
+cat_ids=; cat_idnum=
+for indexcat_db in ${indexcat_list[@]}; do
+	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))
+	for catdb_item in ${CATDB_RESULTS[@]}; do
+		db_match=nomatch
+		[ "$catdb_item" = "$indexcat_item" ] &&
+			db_match=match
+		if [ "$db_match" = match ]; then
+			cat_idnum="${indexcat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
+			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
+			oldcat_idnum="$cat_idnum,"
+		fi
+	done
+done
+cat_ids=; cat_idnum="${cat_idnum//\, }"
+[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
+oldcat_idnum=; cat_idnum=
+}
 
 # rebuild main database from scratch
 rebuild_maindb(){
@@ -12,25 +37,10 @@ rebuild_maindb(){
 	DB_DATE="${DB_YYYY}*${DB_MM}"
 	for db_item in "$NB_DATA_DIR"/${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
 		entry=${db_item//*\/}
-		# index related categories by id
-		for cat_db in ${db_categories[@]}; do
-			CATDB_RESULTS=($(< "$NB_DATA_DIR/$cat_db"))
-			for catdb_item in ${CATDB_RESULTS[@]}; do
-				db_match=nomatch
-				[ "$catdb_item" = "$entry" ] &&
-					db_match=match
-				if [ "$db_match" = match ]; then
-					cat_idnum="${cat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
-					[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
-					oldcat_idnum="$cat_idnum,"
-				fi
-			done
-		done
-		cat_idnum="${cat_idnum//\, }"
-		[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
+		index_catids "$entry"
 		[ -f "$NB_DATA_DIR/$entry" ] &&
 			echo "$entry$cat_ids"
-		oldcat_idnum=; cat_idnum=; cat_ids=
+		cat_ids=
 	done |sort $db_order > "$SCRATCH_FILE.master.$NB_DBTYPE"
 	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
 }
@@ -141,31 +151,6 @@ if [ -f "$catdb_file" ]; then
 
 	mv "$catdb_file".tmp "$catdb_file"
 fi
-}
-
-# index related categories by id
-index_catids(){
-indexcat_item="$1"
-indexcat_list=($2)
-[ -z "${indexcat_list[*]}" ] &&
-	indexcat_list=(`for ic_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${ic_db//*\/}; done`)
-cat_ids=; cat_idnum=
-for indexcat_db in ${indexcat_list[@]}; do
-	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))
-	for catdb_item in ${CATDB_RESULTS[@]}; do
-		db_match=nomatch
-		[ "$catdb_item" = "$indexcat_item" ] &&
-			db_match=match
-		if [ "$db_match" = match ]; then
-			cat_idnum="${indexcat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
-			[ "$cat_idnum" != "$oldcat_idnum" ] && cat_idnum="$oldcat_idnum$cat_idnum"
-			oldcat_idnum="$cat_idnum,"
-		fi
-	done
-done
-cat_ids=; cat_idnum="${cat_idnum//\, }"
-[ ! -z "$cat_idnum" ] && cat_ids=">$cat_idnum"
-oldcat_idnum=; cat_idnum=
 }
 
 # update entry and it's related categories for main database
