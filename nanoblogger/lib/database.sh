@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-24T03:40:24-05:00
+# Last modified: 2007-01-25T03:40:05-05:00
 
 # index related categories by id
 index_catids(){
@@ -12,7 +12,7 @@ for indexcat_db in ${indexcat_list[@]}; do
 	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))
 	for catdb_item in ${CATDB_RESULTS[@]}; do
 		db_match=nomatch
-		[ "$catdb_item" = "$indexcat_item" ] &&
+		[ "${catdb_item%%>[0-9]*}" = "$indexcat_item" ] &&
 			db_match=match
 		if [ "$db_match" = match ]; then
 			cat_idnum="${indexcat_db/cat\_/}"; cat_idnum="${cat_idnum/\.$NB_DBTYPE/}"
@@ -124,9 +124,21 @@ db_filter=raw
 query_db "$1" "$2" "$3" "$4" "$5" "$6"
 }
 
-# split and display entry and categories from database results
+# split and display entry and categories from raw database results
 print_entry(){ echo "${1%%>[0-9]*}"; }
 print_cat(){ echo "${1##*\>}"; }
+
+# get categories for entry from main db
+get_catids(){
+db_item="$1"
+db_file="$2"
+if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
+	entry_match=`grep "$db_item" "$db_file"`
+	entry_catids=`print_cat "$entry_match"`
+	[ "$entry_catids" != "$db_item" ] &&
+		echo "$entry_catids"
+fi
+}
 
 # resort database
 resort_db(){
@@ -163,6 +175,20 @@ if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 	index_catids "$db_item"
 	[ -f "$NB_DATA_DIR/$db_item" ] &&
 		echo "$db_item$cat_ids" >> "$db_file"
+fi
+}
+
+# update entry and it's related categories for cat database
+update_catdb(){
+db_item="$1"
+db_file="$2"
+if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
+	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" &&
+		mv "$db_file".tmp "$db_file"
+	cat_ids=`get_catids "$db_item" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+	[ ! -z "$cat_ids" ] && cat_ids=">$cat_ids"
+	echo "$db_item$cat_ids" >> "$db_file"
+	cat_ids=
 fi
 }
 

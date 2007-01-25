@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-21T21:42:10-05:00
+# Last modified: 2007-01-25T03:24:50-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -480,14 +480,14 @@ fi
 
 # tool to build list of related categories from list of entries
 find_categories(){
-UPDATE_CATLIST=($1)
+FIND_CATLIST=($1)
 category_list=()
 build_catlist(){
 [ ! -z "$cat_var" ] &&
 	category_list=( ${category_list[@]} $cat_db )
 }
 # acquire all the categories
-for relative_entry in ${UPDATE_CATLIST[@]}; do
+for relative_entry in ${FIND_CATLIST[@]}; do
 	raw_db "$relative_entry"
 	cat_ids=`print_cat "${DB_RESULTS[*]}"`
 	cat_ids="${cat_ids//\,/ }"
@@ -512,6 +512,22 @@ RESORT_CATDBLIST=($1)
 [ -z "${RESORT_CATDBLIST[*]}" ] && RESORT_CATDBLIST=(${CAT_LIST[*]})
 for mod_catdb in ${CAT_LIST[@]}; do
 	resort_catdb "$NB_DATA_DIR/$mod_catdb"
+done
+}
+
+# update categories with cat id's from main db with list of entries
+update_categories(){
+UPDATE_CATLIST=($1)
+[ -z "${UPDATE_CATLIST[*]}" ] && UPDATE_CATLIST=(${UPDATE_LIST[*]})
+for ucat_entry in ${UPDATE_CATLIST[@]}; do
+	cat_ids=`get_catids "$ucat_entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+	cat_ids="${cat_ids//\,/ }"
+	for cat_id in $cat_ids; do
+		cat_var="$cat_id"
+		cat_db="cat_$cat_id.$NB_DBTYPE"
+		update_catdb "$ucat_entry" "$NB_DATA_DIR/$cat_db"
+	done
+	cat_id=; cat_ids=; cat_var=; cat_db=;
 done
 }
 
