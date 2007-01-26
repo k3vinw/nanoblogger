@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-25T20:43:46-05:00
+# Last modified: 2007-01-25T20:48:55-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -654,7 +654,7 @@ for entry_id in $NUMVAR; do
 		done
 		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
 		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
-		update_categories "$Old_EntryFile $Edit_EntryFile"
+		update_categories "$Edit_EntryFile"
 		resort_categories
 		resort_db "$NB_DATA_DIR/master.db"
 	fi
