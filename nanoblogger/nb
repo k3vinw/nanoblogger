@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-25T04:03:06-05:00
+# Last modified: 2007-01-25T20:43:46-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -573,7 +573,7 @@ chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 # add to specified categories
 if [ ! -z "$cat_num" ]; then
 	for cat_db in $db_catquery; do 
-		update_catdb "$New_EntryFile" "$NB_DATA_DIR/$cat_db"
+		update_db "$New_EntryFile" "$NB_DATA_DIR/$cat_db"
 	done
 fi
 echo "$New_EntryFile" >> "$SCRATCH_FILE".newentry_list
@@ -651,10 +651,11 @@ for entry_id in $NUMVAR; do
 		find_categories "$Old_EntryFile"
 		for olde_catdb in ${CAT_LIST[*]}; do
 			delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
-			update_catdb "$Edit_EntryFile" "$NB_DATA_DIR/$olde_catdb"
 		done
 		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
 		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
+		update_categories "$Old_EntryFile $Edit_EntryFile"
+		resort_categories
 		resort_db "$NB_DATA_DIR/master.db"
 	fi
 	# use cached version for 'newer than' comparison
@@ -855,7 +856,7 @@ for entry_id in $NUMVAR; do
 		echo "$Move_EntryFile" >> "$SCRATCH_FILE"
 		if [ ! -z "${cat_list[*]}" ]; then
 			for cat_db in ${cat_list[@]}; do
-				update_catdb "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"
+				update_db "$Move_EntryFile" "$NB_DATA_DIR/$cat_db"
 			done
 		fi
 		update_maindb "$Move_EntryFile" "$NB_DATA_DIR/master.db"
