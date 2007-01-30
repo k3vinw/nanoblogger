@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-25T20:48:55-05:00
+# Last modified: 2007-01-30T05:14:18-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -547,6 +547,9 @@ if [ "$NB_QUERY" != main ]; then
 fi
 # always load post plugins
 load_plugins post
+if [ "$SHOW_BENCHMARK" = 1 ]; then
+	times
+fi
 }
 
 # add new entry
@@ -884,9 +887,8 @@ while [ "$id" -lt "$total_items" ]; do
 	list_entryid=`expr 1 + $list_entryid`
 	entry=${EXPLODE_RESULTS[$id]%%>[0-9]*}
 	entry_cat=${EXPLODE_RESULTS[$id]##*\>}
-	[ "$entry_cat" = "$entry" ] && entry_cat=
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
-	[ ! -z "$entry_cat" ] && entry_catids="- [$entry_cat]"
+	[ "$entry_cat" != "$entry" ] && entry_catids="- [$entry_cat]"
 	entry_date=${entry%%.$NB_DATATYPE}; entry_date=${entry_date//\_/:}
 	NB_EntryDate=${entry_date//[A-Z]/ }
 	echo " $list_entryid, $NB_EntryTitle - ($NB_EntryDate) $entry_catids"
@@ -1068,8 +1070,6 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-a|--add)		ADD_WEBLOG=1;;
 		-b|--blogdir)		check_arg "$2"; USR_BLOGDIR="$2"; shift;;
-		# -B and --body options deprecated in favor of -T and --text
-		-B|--body)		check_arg "$2"; USR_TEXT="$2"; shift;;
 		-c|--category)		check_arg "$2"; cat_num="$2"; shift;;
 		--cfgfile)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
 		--configure)		CONFIG_WEBLOG=1;;
@@ -1083,8 +1083,7 @@ while [ $# -gt 0 ]; do
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		USR_QUERY="$2"; shift; LIST_WEBLOG=1;;
 		-n|--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
-		--manual)		load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"
-					exit 0;;
+		--manual)		load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"; exit 0;;
 		-m|--move)		check_arg "$2"; move_num="$2"; shift; MOVE_WEBLOG=1;;
 		-M|--makepage)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;

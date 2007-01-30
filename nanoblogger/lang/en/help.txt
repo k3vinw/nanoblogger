@@ -8,8 +8,6 @@ Options:
  -a, --add				create new entry, category, or weblog
 					(directory).
  -b, --blogdir <directory>		specify weblog directory.
- -B, --body <text>			deprecated, please use '-T' or '--text'
- 					instead.
  -c, --category	<ID,cat>		specify category (for '--add',
 					'--delete', '--edit', '--list',
 					'--update', and '--update-cache').

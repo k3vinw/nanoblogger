@@ -57,16 +57,34 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 	ARCHENTRY_LIST=${DB_RESULTS[*]}
 	NB_ArchiveEntryLinks=$(
 	for entry in ${ARCHENTRY_LIST[*]}; do
-		load_entry "$NB_DATA_DIR/$entry" NOBODY
-		NB_ArchiveEntryTitle="$NB_EntryTitle"
+		read_metadata TITLE "$NB_DATA_DIR/$entry"
+		NB_ArchiveEntryTitle="$METADATA"
 		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
+		if [ "$CATEGORY_LINKS" = 1 ];then
+			# Command to help filter order of categories
+			: ${CATLINKS_FILTERCMD:=sort}
+			>"$SCRATCH_FILE".category_links
+			entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+			entry_catids=(`print_cat "$entry_wcatids"`)
+			for entry_catnum in ${entry_catids//\,/ }; do
+				cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$entry_catnum.$NB_DBTYPE"`
+				set_catlink cat_"$entry_catnum.$NB_DBTYPE"
+				cat_index="$category_link"
+				# following must fit on single line
+				$CATLINKS_FILTERCMD  >> "$SCRATCH_FILE".category_links <<-EOF
+					<!-- $cat_title --><a href="${ARCHIVES_PATH}$cat_index">$cat_title</a>,
+				EOF
+			done
+			NB_EntryCategories=$(< "$SCRATCH_FILE.category_links")
+			NB_EntryCategories="${NB_EntryCategories%%,}"
+		fi
 		cat <<-EOF
 			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a>
 			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
-			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
+			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories")<br />
 		EOF
 	done; month=)
 
