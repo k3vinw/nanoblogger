@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-01-30T05:14:18-05:00
+# Last modified: 2007-02-03T13:44:12-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -876,7 +876,7 @@ build_weblog
 
 # list entries and categories
 list_weblog(){
-query_db cat; db_query="$NB_QUERY"
+query_db; db_query="$NB_QUERY"
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 explode_list(){
 EXPLODE_RESULTS=($1)

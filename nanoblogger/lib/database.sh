@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-01-30T04:58:28-05:00
+# Last modified: 2007-02-03T14:15:07-05:00
 
 # index related categories by id
 index_catids(){
@@ -183,10 +183,7 @@ else
 fi
 [ "${db_categories[*]}" = "cat_*.$NB_DBTYPE" ] && db_categories=()
 query_cmd(){
-qc_validquery=0
-[[ $db_query1 != *[^0-9]* ]] && [[ $db_query2 != *[^0-9]* ]] && qc_validquery=1
-[[ $db_query1 = [\*] ]] || [[ $db_query2 = [\*] ]] && qc_validquery=1
-if [ $qc_validquery = 1 ]; then
+if [[ "$db_query" = *[\,]* ]]; then
 	sed -e '/'$db_query1'.*/,/'$db_query2'.*/!d'
 else
 	grep "$db_query."
