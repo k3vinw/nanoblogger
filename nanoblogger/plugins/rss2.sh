@@ -5,7 +5,7 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_T
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
-ENTRY_EXCERPTS=0
+: ${ENTRY_EXCERPTS:=0}
 
 # limit number of items to include in feed
 : ${FEED_ITEMS:=10}
@@ -94,16 +94,16 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
-		rss2_catids=(`sed -e '/'$entry'[\>]/!d; /[\>\,]/ s// /g' \
-				"$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
-		for rss2_catnum in ${rss2_catids[@]}; do
+		rss2entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+		rss2entry_catids=`print_cat "$rss2entry_wcatids"`
+		for rss2_catnum in ${rss2entry_catids//\,/ }; do
 			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$rss2_catnum.$NB_DBTYPE"`
 			[ "$cat_title" != "$oldcat_title" ] &&
 				cat_title="$oldcat_title $cat_title"
 			oldcat_title="$cat_title,"
 		done
 		if [ ! -z "$cat_title" ]; then
-			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			NB_RSS2EntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
 		if [ "$ENTRY_EXCERPTS" = 1 ] && [ ! -z "$NB_EntryExcerpt" ]; then

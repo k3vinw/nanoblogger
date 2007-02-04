@@ -5,7 +5,7 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_T
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
-ENTRY_EXCERPTS=0
+: ${ENTRY_EXCERPTS:=0}
 
 # limit number of items to include in feed
 : ${FEED_ITEMS:=10}
@@ -100,11 +100,11 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		Atom_EntryCategory=; cat_title=
 		> "$SCRATCH_FILE".atomfeed-category
-		atom_catids=(`sed -e '/'$entry'[\>]/!d; /[\>\,]/ s// /g' \
-				"$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
-		for atom_catnum in ${atom_catids[@]}; do
-			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$atom_catnum.$NB_DBTYPE"`
-			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+		atomentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+		atomentry_catids=`print_cat "$atomentry_wcatids"`
+		for atomentry_catdb in ${atomentry_catids//\,/ }; do
+			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$atomentry_catdb.$NB_DBTYPE"`
+			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			if [ ! -z "$cat_title" ]; then
 				cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
 					<category term="$cat_title" />

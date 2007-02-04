@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-02-03T14:15:07-05:00
+# Last modified: 2007-02-04T17:43:38-05:00
 
 # index related categories by id
 index_catids(){
@@ -161,8 +161,8 @@ db_limit="$4"
 db_offset="$5"
 db_order="$6"
 # sanitize db_limit and db_offset
-db_limit=`echo "$db_limit" |sed -e '/[A-Z,a-z]/d'`
-db_offset=`echo "$db_offset" |sed -e '/[A-Z,a-z]/d'`
+[[ $db_limit = *[^0-9]* ]] && db_limit=
+[[ $db_offset = *[^0-9]* ]] && db_offset=
 : ${db_limit:=$MAX_ENTRIES}
 : ${db_limit:=0}; : ${db_offset:=1}
 : ${db_order:=$SORT_ARGS}

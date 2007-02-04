@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-03T13:44:12-05:00
+# Last modified: 2007-02-04T17:29:27-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -500,8 +500,7 @@ query_db days
 # generate our update list from the query
 if [ -z "${UPDATE_LIST[*]}" ]; then
 	# query falls back to default query mode 
-	[ -z "$NB_QUERY" ] &&
-		NB_QUERY="$QUERY_MODE"
+	[ -z "$NB_QUERY" ] && NB_QUERY="$QUERY_MODE"
 	query_db "$NB_QUERY" "$db_catquery"
 	UPDATE_LIST=(${DB_RESULTS[*]})
 fi

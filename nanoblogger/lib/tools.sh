@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-01-25T03:24:50-05:00
+# Last modified: 2007-02-04T17:52:39-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -62,9 +62,9 @@ fi
 chg_suffix(){
 filename="$1"
 suffix="$2"
-old_suffix=`echo $filename |cut -d"." -f2`
+old_suffix="${filename##*.}"
 [ ! -z "$suffix" ] && NB_FILETYPE="$suffix"
-echo "$filename" |sed -e '{$ s/\.'$old_suffix'$/\.'$NB_FILETYPE'/g; }'
+echo "${filename//[\.]$old_suffix/.$NB_FILETYPE}"
 }
 
 # tool to require confirmation
