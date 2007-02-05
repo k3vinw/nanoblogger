@@ -40,7 +40,7 @@ Options:
  --plugindir <directory> 		specify weblog's plugin directory.					
  -p, --preview				run command to preview weblog.
  -P, --publish				run command to publish weblog.
- -q, --query <DATE>			specify a query to run (for '--edit' and
+ -q, --query <all,DATE,max>		specify a query to run (for '--edit' and
  					'--delete').
  --template <file>			specify file to load as template (for
  					'--draft', '--makepage' and
@@ -56,12 +56,11 @@ Options:
  -T, --text <text> 			set text of body (for '--add',
 					'--draft', '--makefile' and
  					'--makepage').
- -U, --update-cache <all,DATE,RANGE,
- max,expired> 				force update of weblog's cache removing
+ -U, --update-cache <all,DATE,max,
+ expired> 				force update of weblog's cache removing
  					specified cached data (defaults to
  					'expired').
- -u, --update <all,DATE,RANGE,main,
- max> 					force update of weblog's files updating
+ -u, --update <all,DATE,main,max>	force update of weblog's files updating
  					specified weblog data (defaults to
  					'max').
  -v, --verbose <1=on/0=off>		toggle level of verbosity.
@@ -71,7 +70,7 @@ Options:
  
  --list and --update can match entries by date (irrelevant of entry id(s)).
 
- DATE = YYYY-MM-DD, YYYY-MM, YYYY, RANGE = DATE1,DATE2
+ DATE = YYYY-MM-DD, YYYY-MM, YYYY (or range = DATE1,DATE2)
 
 Examples:
 
