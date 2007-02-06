@@ -100,16 +100,16 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		NB_RSSEntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSSEntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSSEntrySubject=; cat_title=; oldcat_title=
-		rss_catids=(`sed -e '/'$entry'[\>]/!d; /[\>\,]/ s// /g' \
-				"$NB_DATA_DIR/master.$NB_DBTYPE" |cut -d" " -f 2-`)
-		for rss_catnum in ${rss_catids[@]}; do
+		rssentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
+		rssentry_catids=`print_cat "$rss2entry_wcatids"`
+		for rss_catnum in ${rssentry_catids//\,/ }; do
 			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$rss_catnum.$NB_DBTYPE"`
 			[ "$cat_title" != "$oldcat_title" ] &&
 				cat_title="$oldcat_title $cat_title"
 			oldcat_title="$cat_title,"
 		done
 		if [ ! -z "$cat_title" ]; then
-			cat_title=`echo $cat_title |sed -e '{$ s/\,[ ]$//g; }' |esc_chars`
+			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			NB_RSSEntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
 		if [ "$ENTRY_EXCERPTS" = 1 ]; then
