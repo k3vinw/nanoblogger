@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-04T17:52:39-05:00
+# Last modified: 2007-02-07T16:08:44-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -501,7 +501,7 @@ done
 CAT_LIST=( ${category_list[@]} )
 [ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
 	CAT_LIST=( `cat_id "$cat_num"` )
-[ -z "$cat_num" ] && [ "$NB_QUERY" = all ] &&
+[ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ] && 
 	CAT_LIST=${db_categories[@]}
 CAT_LIST=(`for cat_id in ${CAT_LIST[@]}; do echo "$cat_id"; done |sort -u`)
 }

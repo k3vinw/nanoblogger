@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-05T01:23:06-05:00
+# Last modified: 2007-02-07T16:06:29-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -63,6 +63,7 @@ load_config
 	die "'$BLOG_DIR' - $nowritedir"
 # set default query mode for all operations
 : ${NB_QUERY:=$QUERY_MODE}
+# override default query mode
 [ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
 }
 
@@ -481,7 +482,7 @@ if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 	rm -f "$BLOG_DIR/.nb_newblogdir"
 fi
 # for clean build remove all generated files
-if [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
+if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
 	nb_msg "$buildweblog_all"
 	# confirm removal of any previously generated files
 	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
