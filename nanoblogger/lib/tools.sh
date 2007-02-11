@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-11T02:30:17-05:00
+# Last modified: 2007-02-11T03:01:56-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -603,38 +603,38 @@ fi
 load_metadata(){
 METADATA_TYPE="$1" # ALL, NOBODY, or valid metadata key
 METADATA_FILE="$2"
-if [ -f "$METADATA_FILE" ]; then
-	case $METADATA_TYPE in
-		AUTHOR)
-			read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
-			NB_EntryAuthor="$NB_MetaAuthor";;
-		BODY)
-			read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
-			NB_EntryBody="$NB_MetaBody";;
-		DATE)
-			read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
-			NB_EntryDate="$NB_MetaDate";;
-		DESC)
-			NB_EntryDescription="$NB_MetaDescription"
-			read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
-		FORMAT)
-			read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
-			NB_EntryFormat="$NB_MetaFormat";;
-		TITLE)
-			read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
-			NB_EntryTitle="$NB_MetaTitle";;
-		ALL)
-			load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
-			load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
-			load_metadata FORMAT "$METADATA_FILE"; load_metadata BODY "$METADATA_FILE";;
-		NOBODY)
-			load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
-			load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
-			load_metadata FORMAT "$METADATA_FILE";;
-		*)
-			load_metadata ALL "$METADATA_FILE";;
-	esac
-fi
+[ ! -f "$METADATA_FILE" ] &&
+	die "'$METADATA_FILE' $importfile_nofile"
+case $METADATA_TYPE in
+	AUTHOR)
+		read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
+		NB_EntryAuthor="$NB_MetaAuthor";;
+	BODY)
+		read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
+		NB_EntryBody="$NB_MetaBody";;
+	DATE)
+		read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
+		NB_EntryDate="$NB_MetaDate";;
+	DESC)
+		NB_EntryDescription="$NB_MetaDescription"
+		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
+	FORMAT)
+		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
+		NB_EntryFormat="$NB_MetaFormat";;
+	TITLE)
+		read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
+		NB_EntryTitle="$NB_MetaTitle";;
+	ALL)
+		load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
+		load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
+		load_metadata FORMAT "$METADATA_FILE"; load_metadata BODY "$METADATA_FILE";;
+	NOBODY)
+		load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
+		load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
+		load_metadata FORMAT "$METADATA_FILE";;
+	*)
+		load_metadata ALL "$METADATA_FILE";;
+esac
 }
 
 # write entry's metadata to file
@@ -644,7 +644,7 @@ WRITE_ENTRY_FILE="$1"
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
-write_template "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
+write_template > "$WRITE_ENTRY_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 }
 
@@ -714,7 +714,7 @@ WRITE_META_TEMPLATE="$2"
 [ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
 meta_timestamp
 load_template "$WRITE_META_TEMPLATE"
-write_template "$TEMPLATE_DATA" > "$WRITE_META_FILE"
+write_template > "$WRITE_META_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
 }
 
@@ -747,7 +747,7 @@ load_plugins page/format "$MKPAGE_FORMAT"
 # Set NB_Entries for backwards compatibility
 NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TEMPLATE"
-write_template "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
+write_template > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 load_plugins makepage
 MKPAGE_CONTENT=; MKPAGE_FORMAT=; MKPAGE_TITLE=; NB_MetaTitle=; NB_EntryTitle=

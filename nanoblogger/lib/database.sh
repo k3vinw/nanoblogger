@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-02-10T19:03:28-05:00
+# Last modified: 2007-02-11T14:45:24-05:00
 
 # index related categories by id
 index_catids(){
@@ -36,10 +36,12 @@ rebuild_maindb(){
 	: ${DB_DD:=[0-9][0-9]}
 	DB_DATE="${DB_YYYY}*${DB_MM}"
 	for db_item in "$NB_DATA_DIR"/${DB_DATE}*${DB_DD}*.$NB_DATATYPE; do
-		entry=${db_item//*\/}
-		index_catids "$entry"
-		[ -f "$NB_DATA_DIR/$entry" ] &&
-			echo "$entry$cat_ids"
+		if [ -f "$db_item" ]; then
+			entry=${db_item//*\/}
+			index_catids "$entry"
+			[ -f "$NB_DATA_DIR/$entry" ] &&
+				echo "$entry$cat_ids"
+		fi
 		cat_ids=
 	done |sort $db_order > "$SCRATCH_FILE.master.$NB_DBTYPE"
 	cp "$SCRATCH_FILE.master.$NB_DBTYPE" "$NB_DATA_DIR/master.$NB_DBTYPE"
@@ -177,7 +179,8 @@ db_query2="${db_query##*\,}"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
 	db_catquery=
-	db_categories=(`for cat_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo "${cat_db//*\/}"; done`)
+	[ `echo "$NB_DATA_DIR"/cat_*.$NB_DBTYPE` != "cat_*.$NB_DBTYPE" ] &&
+		db_categories=(`for cat_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo "${cat_db//*\/}"; done`)
 else
 	db_categories=($db_catquery)
 fi

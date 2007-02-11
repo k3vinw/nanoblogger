@@ -1253,7 +1253,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$@</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">returns exit status 1</td>
         </tr>
@@ -1265,7 +1265,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$NB_BROWSER, $BROWSER, $1</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">parses $BROWSER with ":" separator</td>
         </tr>
@@ -1277,7 +1277,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$NB_EDITOR, $EDITOR, $1, $2, -p = force prompt (pause)</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">if $2 is null, then $1 assumed to be file</td>
         </tr>
@@ -1289,7 +1289,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$@</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">use instead of echo when appropriate</td>
         </tr>
@@ -1301,7 +1301,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">none</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">can be used with $BLOG_INTERACTIVE</td>
         </tr>
@@ -1337,7 +1337,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$1, $2</td>
 
-          <td align="left">console or redirect</td>
+          <td align="left">stdout</td>
 
           <td align="left">example: lookup_entryid 2005-12-14T00_00_00.$NB_DATATYPE "$MASTER_DB_RESULTS"</td>
         </tr>
@@ -1349,7 +1349,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$1, $2</td>
 
-          <td align="left">console or redirect</td>
+          <td align="left">stdout</td>
 
           <td align="left">example: query_db months; lookup_monthid 2005-12 "$MONTH_DB_RESULTS"</td>
         </tr>
@@ -1361,7 +1361,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$1</td>
 
-          <td align="left">console or redirect</td>
+          <td align="left">stdout</td>
 
           <td align="left">none</td>
         </tr>
@@ -1421,7 +1421,7 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 
           <td align="left">$1</td>
 
-          <td align="left">console or redirect</td>
+          <td align="left">stdout</td>
 
           <td align="left">entry should be of the form CCYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
         </tr>
@@ -1460,6 +1460,18 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
           <td align="left">$TEMPLATE_DATA</td>
 
           <td align="left">never load template data more than once, make_page calls load_template</td>
+        </tr>
+
+        <tr>
+          <td align="left">write_template</td>
+
+          <td align="left">writes template data to stdout</td>
+
+          <td align="left">$TEMPLATE_DATA</td>
+
+          <td align="left">stdout</td>
+
+          <td align="left">example: write_template "$TEMPLATE_DATA" &gt; "$OUTFILE"</td>
         </tr>
 
         <tr>
