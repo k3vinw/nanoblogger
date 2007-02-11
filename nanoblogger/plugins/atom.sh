@@ -101,7 +101,9 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		Atom_EntryCategory=; cat_title=
 		> "$SCRATCH_FILE".atomfeed-category
 		atomentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
-		atomentry_catids=`print_cat "$atomentry_wcatids"`
+		atomentry_catids="${atomentry_wcatids##*\>}"
+		[ "$atomentry_wcatids" = "$atomentry_catids" ] &&
+			atomentry_catids=
 		for atomentry_catdb in ${atomentry_catids//\,/ }; do
 			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$atomentry_catdb.$NB_DBTYPE"`
 			cat_title=`echo "${cat_title##\,}" |esc_chars`

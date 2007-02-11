@@ -70,7 +70,7 @@ Options:
  
  --list and --update can match entries by date (irrelevant of entry id(s)).
 
- DATE = YYYY-MM-DD, YYYY-MM, YYYY (or range = DATE1,DATE2)
+ DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
 
 Examples:
 

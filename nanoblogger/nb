@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-07T16:06:29-05:00
+# Last modified: 2007-02-10T18:56:26-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -550,7 +550,7 @@ if [ "$NB_QUERY" != main ]; then
 fi
 # always load post plugins
 load_plugins post
-if [ "$SHOW_BENCHMARK" = 1 ]; then
+if [ "$SHOW_TIMES" = 1 ] && [ "$VERBOSE" != 0 ]; then
 	times
 fi
 }

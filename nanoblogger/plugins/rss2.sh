@@ -95,7 +95,9 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
 		rss2entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
-		rss2entry_catids=`print_cat "$rss2entry_wcatids"`
+		rss2entry_catids="${rss2entry_wcatids##*\>}"
+		[ "$rss2entry_wcatids" = "$rss2entry_catids" ] &&
+			rss2entry_catids=
 		for rss2_catnum in ${rss2entry_catids//\,/ }; do
 			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$rss2_catnum.$NB_DBTYPE"`
 			[ "$cat_title" != "$oldcat_title" ] &&

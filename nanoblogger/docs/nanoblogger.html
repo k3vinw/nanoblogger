@@ -430,7 +430,11 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Toggling Interactive Mode</b></p>
 
-    <p><em>BLOG_INTERACTIVE</em> toggles interactive mode for your weblog and has the same effect as the <code>--interactive</code> command line option. The default is "0" for disabled, setting to "1" will toggle the mode back on.</p>
+    <p><em>BLOG_INTERACTIVE</em> toggles interactive mode for your weblog and has the same effect as the <code>--interactive</code> command line option. The default is "0" for disabled, setting this to "1" will toggle the mode back on.</p>
+
+    <p><b>Toggling the Display of Time Statistics</b></p>
+
+    <p><em>SHOW_TIMES</em> toggles showing the accumulated user and system times for the build process. This will probably only prove useful if you don't already have the time command on your system. The default is "0" for off, setting this to "1" will toggle it back on.</p>
 
     <p><b>Changing the File Type</b></p>
 
@@ -438,7 +442,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Changing the Default Query Mode</b></p>
 
-    <p><em>QUERY_MODE</em> specifies the default query mode for listing entries and displaying them on the main page. Defaults to "$MAX_ENTRIES".</p>
+    <p><em>QUERY_MODE</em> specifies the default query mode for listing and managing entries. It also controls how they are displayed on the main page. Defaults to "$MAX_ENTRIES".</p>
 
     <p><b>Links Configuration</b></p>
 
@@ -599,16 +603,16 @@ nb [-b blog_dir] -c 1 -d 1
 
     <p>Specifying a new entry's date using the TIMESTAMP metatag:</p>
     <pre>
-nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -a
+nb [-b blog_dir] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -a
     
 </pre>Changing an old entry's date:
     <pre>
-nb [-b blog_dir] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -e 2
+nb [-b blog_dir] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -e 2
      
 </pre>Manually changing an entry's date:
     <pre>
 1. nb [-b blog_dir] -e 2
-2. TIMESTAMP: YYYY-MM-DD HH:MM:SS
+2. TIMESTAMP: CCYY-MM-DD HH:MM:SS
      
 </pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
 
@@ -648,16 +652,16 @@ nb [-b blog_dir] -c 1 -d cat
 
     <p>Editing entries by date:</p>
     <pre>
-nb [-b blog_dir] -q YYYY-MM-DD -l
-nb [-b blog_dir] -q YYYY-MM-DD -e 1,2,3
+nb [-b blog_dir] -q CCYY-MM-DD -l
+nb [-b blog_dir] -q CCYY-MM-DD -e 1,2,3
 </pre>Deleting entries by date:
     <pre>
-nb [-b blog_dir] -q YYYY-MM-DD -l
-nb [-b blog_dir] -q YYYY-MM-DD -d 1,2,3
+nb [-b blog_dir] -q CCYY-MM-DD -l
+nb [-b blog_dir] -q CCYY-MM-DD -d 1,2,3
 </pre>Editing entries by date and category:
     <pre>
-nb [-b blog_dir] -c 2 -q YYYY-MM-DD -l
-nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
+nb [-b blog_dir] -c 2 -q CCYY-MM-DD -l
+nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
 </pre>
   </div>
 
@@ -1395,7 +1399,7 @@ nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$day_file, $day_link</td>
 
-          <td align="left">day should be of the form YYYY-MM-DD</td>
+          <td align="left">day should be of the form CCYY-MM-DD</td>
         </tr>
 
         <tr>
@@ -1407,7 +1411,7 @@ nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$month_file, $month_link</td>
 
-          <td align="left">month should be of the form YYYY-MM</td>
+          <td align="left">month should be of the form CCYY-MM</td>
         </tr>
 
         <tr>
@@ -1419,7 +1423,7 @@ nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">console or redirect</td>
 
-          <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+          <td align="left">entry should be of the form CCYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
         </tr>
 
         <tr>
@@ -1431,7 +1435,7 @@ nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$entry_dir, $permalink_file, $NB_EntryPermalink</td>
 
-          <td align="left">entry should be of the form YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+          <td align="left">entry should be of the form CCYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
         </tr>
 
         <tr>
@@ -1456,6 +1460,18 @@ nb [-b blog_dir] -c 2 -q YYYY-MM-DD -e 1
           <td align="left">$TEMPLATE_DATA</td>
 
           <td align="left">never load template data more than once, make_page calls load_template</td>
+        </tr>
+
+        <tr>
+          <td align="left">load_metadata</td>
+
+          <td align="left">loads metadata from (entry) file</td>
+
+          <td align="left">METADATA_TYPE=$1, $METADATA_FILE=$2</td>
+
+          <td align="left">depends on $METADATA_TYPE</td>
+
+          <td align="left">metadata type can be ALL, NOBODY, BODY, TITLE, AUTHOR, DATE, DESC, FORMAT</td>
         </tr>
 
         <tr>
@@ -1597,7 +1613,7 @@ mput *
 
     <p>An entry file name is of the format:</p>
     <pre>
-YYYY-MM-DDTHH_MM_SS.txt
+CCYY-MM-DDTHH_MM_SS.txt
         
 </pre>So a typical entry's file name would look something like this:
     <pre>

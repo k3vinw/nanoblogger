@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-07T16:08:44-05:00
+# Last modified: 2007-02-10T21:10:54-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -601,23 +601,37 @@ fi
 
 # load standard metadata from file into tangible shell variables
 load_metadata(){
-METADATA_TYPE="$1" # ALL or NOBODY :)
+METADATA_TYPE="$1" # ALL, NOBODY, or valid metadata key
 METADATA_FILE="$2"
 if [ -f "$METADATA_FILE" ]; then
-	read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
-	NB_EntryTitle="$NB_MetaTitle"
-	read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
-	NB_EntryAuthor="$NB_MetaAuthor"
-	read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
-	NB_EntryDate="$NB_MetaDate"
-	read_metadata DESC "$METADATA_FILE"; NB_MetaDescription="$METADATA"
-	NB_EntryDescription="$NB_MetaDescription"
-	read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
-	NB_EntryFormat="$NB_MetaFormat"
-	if [ "$METADATA_TYPE" = ALL ]; then
-		read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
-		NB_EntryBody="$NB_MetaBody"
-	fi
+	case $METADATA_TYPE in
+		AUTHOR)
+			read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
+			NB_EntryAuthor="$NB_MetaAuthor";;
+		BODY)
+			read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
+			NB_EntryBody="$NB_MetaBody";;
+		DATE)
+			read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
+			NB_EntryDate="$NB_MetaDate";;
+		DESC)
+			NB_EntryDescription="$NB_MetaDescription"
+			read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
+		FORMAT)
+			read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
+			NB_EntryFormat="$NB_MetaFormat";;
+		TITLE)
+			read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
+			NB_EntryTitle="$NB_MetaTitle";;
+		ALL)
+			load_metadata AUTHOR;  load_metadata TITLE; load_metadata DATE; load_metadata DESC
+			load_metadata FORMAT; load_metadata BODY;;
+		NOBODY)
+			load_metadata AUTHOR;  load_metadata TITLE; load_metadata DATE; load_metadata DESC
+			load_metadata FORMAT;;
+		*)
+			load_metadata ALL;;
+	esac
 fi
 }
 
@@ -648,8 +662,8 @@ if [ -f "$ENTRY_FILE" ]; then
 			ENTRY_CACHETYPE=metadata
 		fi
 	fi
-	if [ "$ENTRY_DATATYPE" = NOBODY ]; then
-		load_metadata NOBODY "$ENTRY_FILE"
+	if [ "$ENTRY_DATATYPE" != ALL ] || [ "$ENTRY_DATATYPE" = NOBODY ]; then
+		load_metadata "$ENTRY_DATATYPE" "$ENTRY_FILE"
 		load_plugins entry
 		NB_EntryID=`set_entryid $entry`
 	else
