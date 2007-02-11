@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-10T18:56:26-05:00
+# Last modified: 2007-02-11T02:20:55-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -150,11 +150,18 @@ else
 fi
 }
 
+# write template data to stdout
+write_template(){
+cat <<-EOF
+	$1
+EOF
+}
+
 # create entry archive
 make_entryarchive(){
 if [ "$ENTRY_ARCHIVES" = 1 ]; then
 	mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$permalink_file"`
-	echo "$TEMPLATE_DATA" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
+	write_template "$TEMPLATE_DATA" > "$BLOG_DIR/$PARTS_DIR/$permalink_file"
 	make_page "$BLOG_DIR/$PARTS_DIR/$permalink_file" "$NB_TEMPLATE_DIR/$PERMALINK_TEMPLATE" \
 	"$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 fi
@@ -181,7 +188,7 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_entrynavlinks next "$after_entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
-				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
+				write_template "$TEMPLATE_DATA" >> "$PARTS_FILE"
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"
@@ -189,7 +196,7 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			[ ! -z "$TEMPLATE_DATA" ] &&
-				echo "$TEMPLATE_DATA" >> "$PARTS_FILE"
+				write_template "$TEMPLATE_DATA" >> "$PARTS_FILE"
 		fi
 	fi
 done

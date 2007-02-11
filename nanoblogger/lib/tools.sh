@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-10T21:10:54-05:00
+# Last modified: 2007-02-11T02:30:17-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -624,13 +624,15 @@ if [ -f "$METADATA_FILE" ]; then
 			read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
 			NB_EntryTitle="$NB_MetaTitle";;
 		ALL)
-			load_metadata AUTHOR;  load_metadata TITLE; load_metadata DATE; load_metadata DESC
-			load_metadata FORMAT; load_metadata BODY;;
+			load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
+			load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
+			load_metadata FORMAT "$METADATA_FILE"; load_metadata BODY "$METADATA_FILE";;
 		NOBODY)
-			load_metadata AUTHOR;  load_metadata TITLE; load_metadata DATE; load_metadata DESC
-			load_metadata FORMAT;;
+			load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
+			load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
+			load_metadata FORMAT "$METADATA_FILE";;
 		*)
-			load_metadata ALL;;
+			load_metadata ALL "$METADATA_FILE";;
 	esac
 fi
 }
@@ -642,7 +644,7 @@ WRITE_ENTRY_FILE="$1"
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
-echo "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
+write_template "$TEMPLATE_DATA" > "$WRITE_ENTRY_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
 }
 
@@ -712,7 +714,7 @@ WRITE_META_TEMPLATE="$2"
 [ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
 meta_timestamp
 load_template "$WRITE_META_TEMPLATE"
-echo "$TEMPLATE_DATA" > "$WRITE_META_FILE"
+write_template "$TEMPLATE_DATA" > "$WRITE_META_FILE"
 write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
 }
 
@@ -745,7 +747,7 @@ load_plugins page/format "$MKPAGE_FORMAT"
 # Set NB_Entries for backwards compatibility
 NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TEMPLATE"
-echo "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
+write_template "$TEMPLATE_DATA" > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 load_plugins makepage
 MKPAGE_CONTENT=; MKPAGE_FORMAT=; MKPAGE_TITLE=; NB_MetaTitle=; NB_EntryTitle=
