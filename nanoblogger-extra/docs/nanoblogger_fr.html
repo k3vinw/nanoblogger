@@ -108,7 +108,7 @@ li {
     <h2>by <a href="mailto:n1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood) </h2>
 
 <h2>Traduit par <a  href="mailto:deber@users.sourceforge.net">Denis Bernard</a>  </h2>
-    <p><em>Le guide officiel du moteur de blog NanoBlogger 3.3 <br/>Traduction de la version originale du 13 janvier 2007 en langue anglaise </em></p>
+    <p><em>Le guide officiel du moteur de blog NanoBlogger 3.3 <br/>Traduction de nanoblogger.html (CVS 1.119 du 11 février 2007)</em></p>
  </div>
 
   <div id="toc">
@@ -267,7 +267,7 @@ nb [<span class="underline">-b blog_drep</span>] [<span class="underline">option
 
   <h2><a id="s.3" name="s.3">3. Dépendances</a></h2><p>Programmes:</p>
 
-  <p>Bash (au moins v2.05), cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, read, rm, sed, sort, touch.</p>
+  <p>Bash (au moins v2.05),cat, cp, cut, dirname, date*, expr, grep, mkdir, mv, rm, sed, sort</p>
 
   <p>* = version GNU recommandée, mais non indispensable.</p>
 
@@ -433,14 +433,17 @@ NOBODY = Tous, sauf les métadonnées dans le BODY des entrées (plus rapide et 
 
     <p><em>BLOG_INTERACTIVE</em> active le mode interactif pour votre blog et a le même effet que la commande en ligne : <code>--interactive</code>. Par défaut c'est "0" pour désactivé, le mettre à "1" l'activera à nouveau.</p>
 
+    <p><b>Activer l'affichage des statistiques des temps</b></p>
+
+    <p><em>SHOW_TIMES</em> active les temps cumulés de l'utilisateur et du système pour le processus de construction. Ceci s'avèrera probablement utile si vous n'avez pas déjà la commande "time" sur votre système. Par défaut c'est "0" pour désactivé, le mettre à "1" l'activera à nouveau.</p>
+
     <p><b>Changer le type de fichier</b></p>
 
     <p><em>NB_FILETYPE</em> spécifie le type de fichier. En bref, le suffixe des fichiers générés. Par défaut : "html".</p>
 
     <p><b>Changer le critère du mode de requête</b></p>
 
-
-    <p><em>QUERY_MODE</em> spécifie le mode de requête pour lister et afficher les entrées sur la page principale. Par défaut : "$MAX_ENTRIES".</p>
+    <p><em>QUERY_MODE</em> specifie le mode de requête pour lister et gérer les entrées. Il contrôle aussi comment elles sont affichées sur la page principale. Par défaut : "$MAX_ENTRIES".</p>
 
     <p><b>Configuration des liens</b></p>
 
@@ -601,11 +604,11 @@ nb [-b blog_rep] -c 1 -d 1
 
     <p>Spécifier la date d'une nouvelle entrée en utilisant la métabalise TIMESTAMP :</p>
     <pre>
-nb [-b blog_rep] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -a
+nb [-b blog_rep] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -a
     
 </pre>Changer la date d'une entrée ancienne :
     <pre>
-nb [-b blog_rep] --tag TIMESTAMP --tag-text "YYYY-MM-DD HH:MM:SS" -e 2
+nb [-b blog_rep] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -e 2
      
 </pre>Changer manuellement la date d'une entrée :
     <pre>
@@ -650,16 +653,16 @@ nb [-b blog_rep] -c 1 -d cat
 
     <p>Éditer les entrées par date :</p>
     <pre>
-nb [-b blog_rep] -q YYYY-MM-DD -l
-nb [-b blog_rep] -q YYYY-MM-DD -e 1,2,3
+nb [-b blog_rep] -q CCYY-MM-DD -l
+nb [-b blog_rep] -q CCYY-MM-DD -e 1,2,3
 </pre>Supprimer des entrées par date :
     <pre>
-nb [-b blog_rep] -q YYYY-MM-DD -l
-nb [-b blog_rep] -q YYYY-MM-DD -d 1,2,3
+nb [-b blog_rep] -q CCYY-MM-DD -l
+nb [-b blog_rep] -q CCYY-MM-DD -d 1,2,3
 </pre>Éditer des entrées par date et catégorie :
     <pre>
-nb [-b blog_rep] -c 2 -q YYYY-MM-DD -l
-nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
+nb [-b blog_rep] -c 2 -q CCYY-MM-DD -l
+nb [-b blog_rep] -c 2 -q CCYY-MM-DD -e 1
 </pre>
   </div>
 
@@ -1251,7 +1254,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$@</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">renvoie le statut de sortie "1"</td>
         </tr>
@@ -1263,7 +1266,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$NB_BROWSER, $BROWSER, $1</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">parse $BROWSER avec le séparateur ":"</td>
         </tr>
@@ -1275,7 +1278,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$NB_EDITOR, $EDITOR, $1, $2, -p = force l'invite de commande, prompt (pause)</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">si $2 est nul, alors $1 est supposé être le fichier</td>
         </tr>
@@ -1287,7 +1290,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$@</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">employé au lieu de "echo" quand c'est possible</td>
         </tr>
@@ -1299,7 +1302,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">néant</td>
 
-          <td align="left">console</td>
+          <td align="left">stdout</td>
 
           <td align="left">peut être employé avec $BLOG_INTERACTIVE</td>
         </tr>
@@ -1335,7 +1338,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$1, $2</td>
 
-          <td align="left">console ou redirection</td>
+          <td align="left">stdout</td>
 
           <td align="left">exemple: lookup_entryid 2005-12-14T00_00_00.$NB_DATATYPE "$MASTER_DB_RESULTS"</td>
         </tr>
@@ -1347,7 +1350,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$1, $2</td>
 
-          <td align="left">console ou redirection</td>
+          <td align="left">stdout</td>
 
           <td align="left">exemple: query_db months; lookup_monthid 2005-12 "$MONTH_DB_RESULTS"</td>
         </tr>
@@ -1359,7 +1362,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$1</td>
 
-          <td align="left">console ou redirection</td>
+          <td align="left">stdout</td>
 
           <td align="left">néant</td>
         </tr>
@@ -1397,7 +1400,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$day_file, $day_link</td>
 
-          <td align="left">le jour devrait être au format YYYY-MM-DD</td>
+          <td align="left">le jour devrait être au format CCYY-MM-DD</td>
         </tr>
 
         <tr>
@@ -1409,7 +1412,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$month_file, $month_link</td>
 
-          <td align="left">le mois devrait être au format YYYY-MM</td>
+          <td align="left">le mois devrait être au format CCYY-MM</td>
         </tr>
 
         <tr>
@@ -1419,9 +1422,9 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$1</td>
 
-          <td align="left">console ou redirection</td>
+          <td align="left">stdout</td>
 
-          <td align="left">l'entrée devrait être au format YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+          <td align="left">l'entrée devrait être au format CCYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
         </tr>
 
         <tr>
@@ -1433,7 +1436,7 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
 
           <td align="left">$entry_dir, $permalink_file, $NB_EntryPermalink</td>
 
-          <td align="left">l'entrée devrait être au format YYYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
+          <td align="left">l'entrée devrait être au format CCYY-MM-DDTHH_MM_SS.$NB_DATATYPE</td>
         </tr>
 
         <tr>
@@ -1458,6 +1461,30 @@ nb [-b blog_rep] -c 2 -q YYYY-MM-DD -e 1
           <td align="left">$TEMPLATE_DATA</td>
 
           <td align="left">ne jamais charger les données template plus d'une à la fois, make_page appelle load_template</td>
+        </tr>
+
+        <tr>
+          <td align="left">write_template</td>
+
+          <td align="left">écrit le template vers la sortie standard</td>
+
+          <td align="left">$TEMPLATE_DATA</td>
+
+          <td align="left">stdout</td>
+
+          <td align="left">exemple: write_template "$TEMPLATE_DATA" &gt; "$OUTFILE"</td>
+        </tr>
+
+        <tr>
+          <td align="left">load_metadata</td>
+
+          <td align="left">charge la métadonnée d'un fichier (entrée)</td>
+
+          <td align="left">METADATA_TYPE=$1, $METADATA_FILE=$2</td>
+
+          <td align="left">dépends de $METADATA_TYPE</td>
+
+          <td align="left">le type de métadonnée peut être ALL, NOBODY, BODY, TITLE, AUTHOR, DATE, DESC, FORMAT</td>
         </tr>
 
         <tr>
@@ -1599,7 +1626,7 @@ mput *
 
     <p>Un nom de fichier d'une entrée a pour format :</p>
     <pre>
-AAAA-MM-JJTHH_MM_SS.txt
+CCYY-MM-DDTHH_MM_SS.txt
         
 </pre>Ainsi, le fichier d'une entrée sera typiquement nommé comme suit :
     <pre>
