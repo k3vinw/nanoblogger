@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-11T03:01:56-05:00
+# Last modified: 2007-02-13T14:37:10-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -665,12 +665,12 @@ if [ -f "$ENTRY_FILE" ]; then
 		fi
 	fi
 	if [ "$ENTRY_DATATYPE" != ALL ] || [ "$ENTRY_DATATYPE" = NOBODY ]; then
+		NB_EntryID=`set_entryid $entry`
 		load_metadata "$ENTRY_DATATYPE" "$ENTRY_FILE"
 		load_plugins entry
-		NB_EntryID=`set_entryid $entry`
 	else
-		load_metadata NOBODY "$ENTRY_FILE"
 		NB_EntryID=`set_entryid $entry`
+		load_metadata NOBODY "$ENTRY_FILE"
 		# use cache when entry data unchanged
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"

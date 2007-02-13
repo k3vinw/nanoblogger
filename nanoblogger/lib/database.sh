@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-02-11T14:45:24-05:00
+# Last modified: 2007-02-13T14:44:56-05:00
 
 # index related categories by id
 index_catids(){
@@ -178,8 +178,8 @@ db_query1="${db_query%%\,*}"
 db_query2="${db_query##*\,}"
 # get list of categories or accept a user specified list
 if [ -z "$db_catquery" ] || [ "$db_catquery" = nocat ]; then
-	db_catquery=
-	[ `echo "$NB_DATA_DIR"/cat_*.$NB_DBTYPE` != "cat_*.$NB_DBTYPE" ] &&
+	db_catquery=; db_catvar=`echo "$NB_DATA_DIR"/cat_*.$NB_DBTYPE`
+	[ "$db_catvar" != "cat_*.$NB_DBTYPE" ] &&
 		db_categories=(`for cat_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo "${cat_db//*\/}"; done`)
 else
 	db_categories=($db_catquery)
