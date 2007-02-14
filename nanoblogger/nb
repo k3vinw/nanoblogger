@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-11T11:59:38-05:00
+# Last modified: 2007-02-13T23:35:52-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -270,7 +270,7 @@ query_db "$page_query" "$page_catquery"
 total_items=${#DB_RESULTS[*]}
 if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
-		y=`expr $page_items + $y`; echo $y; done |grep -c "."; }
+		let y=${page_items}+$y; echo $y; done |grep -c "."; }
 	total_pages=`get_pages`; page_totals=0
 	# cleanup numbered page(s)
 	if [ "$NB_QUERY" = all ]; then
@@ -281,18 +281,18 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 	fi
 	page_limit=0; page_offset=1; page_num=0
 	while [ "$page_totals" -lt "$total_items" ]; do
-		page_totals=`expr "$page_items" + "$page_totals"`
-		page_offset=`expr "$page_offset" + "$page_limit"`
+		let page_totals=${page_items}+$page_totals
+		let page_offset=${page_offset}+$page_limit
 		# if page items overflow, use difference to set new limit
 		if [ "$page_totals" -ge "$total_items" ]; then
-			page_diff=`expr "$page_totals" - "$total_items"`
-			page_limit=`expr "$page_limit" - "$page_diff"`
+			let page_diff=${page_totals}-$total_items
+			let page_limit=${page_limit}-$page_diff
 		else
 			page_limit="$page_items"
 		fi
-		page_num=`expr "$page_num" + 1`
-		prev_num=`expr "$page_num" - 1`
-		next_num=`expr "$page_num" + 1`
+		let page_num=${page_num}+1
+		let prev_num=${page_num}-1
+		let next_num=${page_num}+1
 		arch_file="$page_file"
 		arch_link="./$NB_INDEX"
 		arch_name=`echo "$page_file" |cut -d"." -f 1`
@@ -315,7 +315,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 			else
 				echo '<td><a href="'$page'">'$i'</a></td>' >> "$SCRATCH_FILE"
 			fi
-			i=`expr $i + 1`
+			let i=${i}+1
 		done
 		! [ "$next_num" -gt "$total_pages" ] &&
 				echo '<td><a href="'$next_page'">'$NB_NextPage'</a></td>' >> "$SCRATCH_FILE"
@@ -895,7 +895,7 @@ list_entryid=0
 id=0
 total_items=${#EXPLODE_RESULTS[*]}
 while [ "$id" -lt "$total_items" ]; do
-	list_entryid=`expr 1 + $list_entryid`
+	let list_entryid=${list_entryid}+1
 	entry=${EXPLODE_RESULTS[$id]%%>[0-9]*}
 	entry_cat=${EXPLODE_RESULTS[$id]##*\>}
 	read_metadata TITLE "$NB_DATA_DIR/$entry"; NB_EntryTitle="$METADATA"
@@ -903,7 +903,7 @@ while [ "$id" -lt "$total_items" ]; do
 	entry_date=${entry%%.$NB_DATATYPE}; entry_date=${entry_date//\_/:}
 	NB_EntryDate=${entry_date//[A-Z]/ }
 	echo " $list_entryid, $NB_EntryTitle - ($NB_EntryDate) $entry_catids"
-	id=`expr 1 + $id`
+	let id=${id}+1
 	entry_cat=; entry_catids=; entry=
 done
 }
@@ -916,7 +916,7 @@ if [ "$db_query" = cat ]; then
 	while [ "$id" -le "$cat_total" ]; do
 		[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
 			echo " $id, `sed 1q "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`"
-		id=`expr 1 + $id`
+		let id=${id}+1
 	done; exit 0
 fi
 [ -z "$db_query" ] && db_query="$QUERY_MODE"
@@ -971,7 +971,7 @@ if [ ! -z "$cat_num" ]; then
 		query_db; id=0
 		cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
 		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
-			id=`expr 1 + $id`
+			let id=${id}+1
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
 				nb_msg "$addweblog_newcat id: $id ..."
 				if [ ! -z "$USR_TITLE" ]; then
@@ -985,7 +985,7 @@ if [ ! -z "$cat_num" ]; then
 				cat_num="$id"; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 				cat_total="$id"
 			else
-				cat_total=`expr 1 + $cat_total`
+				let cat_total=${cat_total}+1
 			fi
 		done
 		nb_msg "$addweblog_madecat '$cat_title'."; exit 0

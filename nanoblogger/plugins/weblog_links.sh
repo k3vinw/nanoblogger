@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2007-01-04T03:22:21-05:00
+# Last modified: 2007-02-13T23:37:01-05:00
 
 # <div class="sidetitle">
 # Links
@@ -92,7 +92,7 @@ for query_nyear in ${NYEARS[*]}; do
 	query_db "$query_nyear"
 	months_nyear=${#DB_RESULTS[*]}
 	[ "$months_nyear" -gt 0 ] &&
-		month_tally=`expr $month_tally + $months_nyear`
+		let month_tally=${month_tally}+$months_nyear
 done
 
 # get total number of months and tally total entries from MAX_MONTHLINKS
@@ -105,7 +105,7 @@ for query_nmonth in ${NMONTHS[*]}; do
 	query_db "$query_nmonth"
 	entries_nmonth=${#DB_RESULTS[*]}
 	[ "$entries_nmonth" -gt 0 ] &&
-		entry_tally=`expr $entry_tally + $entries_nmonth`
+		let entry_tally=${entry_tally}+$entries_nmonth
 done
 
 build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"

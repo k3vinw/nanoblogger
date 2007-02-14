@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-13T14:37:10-05:00
+# Last modified: 2007-02-13T23:35:10-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -226,11 +226,11 @@ entryid_var=`lookup_entryid "$1" "${BAENTRY_IDLIST[*]}"`
 ((entryid_var--))
 # determine direction based on chronological date order
 if [ "$CHRON_ORDER" = 1 ]; then
-	before_entryid=`expr $entryid_var + 1`
-	after_entryid=`expr $entryid_var - 1`
+	let before_entryid=${entryid_var}+1
+	let after_entryid=${entryid_var}-1
 else
-	before_entryid=`expr $entryid_var - 1`
-	after_entryid=`expr $entryid_var + 1`
+	let before_entryid=${entryid_var}-1
+	let after_entryid=${entryid_var}+1
 fi
 if [ "$before_entryid" -ge 0 ]; then
 	before_entry=${BAENTRY_IDLIST[$before_entryid]%%\>[0-9]*}
@@ -277,11 +277,11 @@ day_id=
 if [ ! -z "$day_id" ] && [ $day_id -gt 0 ]; then
 	# determine direction based on chronological date order
 	if [ "$CHRON_ORDER" = 1 ]; then
-		prev_dayid=`expr $day_id + 1`
-		next_dayid=`expr $day_id - 1`
+		let prev_dayid=${day_id}+1
+		let next_dayid=${day_id}-1
 	else
-		prev_dayid=`expr $day_id - 1`
-		next_dayid=`expr $day_id + 1`
+		let prev_dayid=${day_id}-1
+		let next_dayid=${day_id}+1
 	fi
 	prev_day=; NB_PrevArchiveDayLink=
 	[ $prev_dayid -gt 0 ] &&
@@ -311,11 +311,11 @@ month_id=
 if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 	# determine direction based on chronological date order
 	if [ "$CHRON_ORDER" = 1 ]; then
-		prev_monthid=`expr $month_id + 1`
-		next_monthid=`expr $month_id - 1`
+		let prev_monthid=${month_id}+1
+		let next_monthid=${month_id}-1
 	else
-		prev_monthid=`expr $month_id - 1`
-		next_monthid=`expr $month_id + 1`
+		let prev_monthid=${month_id}-1
+		let next_monthid=${month_id}+1
 	fi
 	prev_month=; NB_PrevArchiveMonthLink=
 	[ $prev_monthid -gt 0 ] &&
@@ -403,7 +403,7 @@ while [ "$TOTAL_LINKCFLICTS" -gt 1 ]; do
 	for altl in ${ALTLINK_LIST[*]}; do
 		altl_match=`grep -c ":${link_match}$" "$SCRATCH_FILE".altlinks`
 		if [ "$altl_match" -gt 1 ]; then
-			altli=`expr $altl_match - 1`
+			let altli=${altl_match}-1
 			sed -e '/'$altl':*.*/ s//'$altl':'$link_match'_'${altli}'/' "$SCRATCH_FILE".altlinks > "$SCRATCH_FILE".altlinks.new
 			mv "$SCRATCH_FILE".altlinks.new "$SCRATCH_FILE".altlinks
 		else
