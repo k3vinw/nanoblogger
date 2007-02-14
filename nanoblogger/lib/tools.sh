@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-13T23:35:10-05:00
+# Last modified: 2007-02-14T01:36:01-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -258,19 +258,19 @@ category_link="$category_dir/$NB_INDEX"
 
 # set link/file for given month
 set_monthlink(){
-month_dir=`echo $1 |sed -e '/[-]/ s//\//g'`
+month_dir="${1//\-//}"
 month_file="$month_dir/$NB_INDEXFILE"
 NB_ArchiveMonthLink="$month_dir/$NB_INDEX"
 }
 
 set_daylink(){
-day_dir=`echo $1 |sed -e '/[-]/ s//\//g'`
+day_dir="${1//\-//}"
 day_file="$day_dir/$NB_INDEXFILE"
 NB_ArchiveDayLink="$day_dir/$NB_INDEX"
 }
 
 set_daynavlinks(){
-daynavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
+daynavlinks_var="${1//\//-}"
 day_id=
 [ ! -z "$daynavlinks_var" ] &&
 	day_id=`lookup_dayid "$daynavlinks_var" "${DAY_DB_RESULTS[*]}"`
@@ -285,17 +285,17 @@ if [ ! -z "$day_id" ] && [ $day_id -gt 0 ]; then
 	fi
 	prev_day=; NB_PrevArchiveDayLink=
 	[ $prev_dayid -gt 0 ] &&
-		prev_day=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS |sed ''$prev_dayid'!d'`
+		prev_day=`sed ''$prev_dayid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS`
 	if [ ! -z "$prev_day" ]; then
-		prev_day_dir=`echo $prev_day |sed -e '/[-]/ s//\//g'`
+		prev_day_dir="${prev_day//\-//}"
 		prev_day_file="$prev_day_dir/$NB_INDEXFILE"
 		NB_PrevArchiveDayLink="$prev_day_dir/$NB_INDEX"
 	fi
 	next_day=; NB_NextArchiveDayLink=
 	[ $next_dayid -gt 0 ] &&
-		next_day=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS |sed ''$next_dayid'!d'`
+		next_day=`sed ''$next_dayid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS`
 	if [ ! -z "$next_day" ]; then
-		next_day_dir=`echo $next_day |sed -e '/[-]/ s//\//g'`
+		next_day_dir="${next_day//\-//}"
 		next_day_file="$next_day_dir/$NB_INDEXFILE"
 		NB_NextArchiveDayLink="$next_day_dir/$NB_INDEX"
 	fi
@@ -304,7 +304,7 @@ fi
 
 # set previous and next links for given month
 set_monthnavlinks(){
-monthnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
+monthnavlinks_var="${1//\//-}"
 month_id=
 [ ! -z "$monthnavlinks_var" ] &&
 	month_id=`lookup_monthid "$monthnavlinks_var" "${MONTH_DB_RESULTS[*]}"`
@@ -319,17 +319,17 @@ if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 	fi
 	prev_month=; NB_PrevArchiveMonthLink=
 	[ $prev_monthid -gt 0 ] &&
-		prev_month=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS |sed ''$prev_monthid'!d'`
+		prev_month=`sed ''$prev_monthid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS`
 	if [ ! -z "$prev_month" ]; then
-		prev_month_dir=`echo $prev_month |sed -e '/[-]/ s//\//g'`
+		prev_month_dir="${prev_month//\-//}"
 		prev_month_file="$prev_month_dir/$NB_INDEXFILE"
 		NB_PrevArchiveMonthLink="$prev_month_dir/$NB_INDEX"
 	fi
 	next_month=; NB_NextArchiveMonthLink=
 	[ $next_monthid -gt 0 ] &&
-		next_month=`cat "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS |sed ''$next_monthid'!d'`
+		next_month=`sed ''$next_monthid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS`
 	if [ ! -z "$next_month" ]; then
-		next_month_dir=`echo $next_month |sed -e '/[-]/ s//\//g'`
+		next_month_dir="${next_month//\-//}"
 		next_month_file="$next_month_dir/$NB_INDEXFILE"
 		NB_NextArchiveMonthLink="$next_month_dir/$NB_INDEX"
 	fi
@@ -654,6 +654,7 @@ ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
 : ${ENTRY_PLUGINSLIST:=entry entry/mod entry/format}
+: ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=`echo "$entry" |cut -c9-10`
 	entry_time=`filter_timestamp "$entry" |cut -c12-19`
@@ -857,12 +858,12 @@ elif [ "$cache_update" = expired ]; then
 	# always cache more recent entries
 	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
 	[ -z "$CACHEUPDATE_LIST" ] &&
-		query_db "$QUERY_MODE" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
+		query_db "$NB_QUERY" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
 	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
 		cache_item=${cache_item##*\/}
 		cache_regex="${cache_item%%\.$cache_def*}"
 		cache_match=`echo "${DB_RESULTS[*]}" |grep -c "$cache_regex"`
-		[ "$cache_match" != 1 ] &&
+		[ "$cache_match" = 0 ] &&
 			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
 	done
 else
