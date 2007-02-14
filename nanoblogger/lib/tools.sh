@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-14T01:36:01-05:00
+# Last modified: 2007-02-14T02:08:38-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -857,8 +857,7 @@ elif [ "$cache_update" = expired ]; then
 	[ -z "$cache_def" ] && cache_def="*"
 	# always cache more recent entries
 	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
-	[ -z "$CACHEUPDATE_LIST" ] &&
-		query_db "$NB_QUERY" "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
+	query_db all "$db_catquery" limit "$MAX_CACHE_ENTRIES" "" "$db_order"
 	for cache_item in "$BLOG_DIR/$CACHE_DIR"/*.$cache_def; do
 		cache_item=${cache_item##*\/}
 		cache_regex="${cache_item%%\.$cache_def*}"
