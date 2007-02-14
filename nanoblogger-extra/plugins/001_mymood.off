@@ -51,7 +51,7 @@ if [ -d "$MOODS_DIR" ]; then
 			mood_var=`echo "${mood_list[@]:$moodoffset:$moodlimit}" |cut -d" " -f1 | sed -e '/[\*\]/ s//[*]/'`
 			mood_img=`echo "${mood_list[@]:$moodoffset:$moodlimit}" |cut -d" " -f3`
 			create_moods
-			moodoffset=`expr $moodoffset + $moodlimit`
+			let moodoffset=${moodoffset}+$moodlimit
 		done
 	fi
 	}
