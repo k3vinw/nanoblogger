@@ -2,50 +2,34 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-14T01:20:26-05:00
+# Last modified: 2007-02-18T18:09:30-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
 
-# nanoblogger's base install directory.
+# -- hardcoded paths --
+# where to expect nanoblogger's base
 NB_BASE_DIR=`dirname $0`
-# documentation
+# where to expect nanoblogger's documentation
 NB_DOC_DIR="$NB_BASE_DIR/docs"
-# nanoblogger's conf file
+# where to expect nanoblogger's conf file
 NB_CFG_DIR="$NB_BASE_DIR"
-
-### hardcoded paths ###
-
 # nanoblogger's language definitions directory.
 NB_LANG_DIR="${NB_BASE_DIR}/lang"
 # nanoblogger's module directory.
 NB_LIB_DIR="${NB_BASE_DIR}/lib"
-# the world writable temp directory
-NB_TEMP_DIR="/tmp"
+# --
 
-### end hardcoded paths ###
-
-# prompt to use when asking something.
-NB_PROMPT=": "
-
-# default verbosity, 0 = silent
-VERBOSE=1
-
-# cleanup for special temp files
-SCRATCH_FILE="$NB_TEMP_DIR/nb_scratch$$"
-NB_TEMP_FILES="$NB_TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
-[ ! -z "$NB_TEMP_FILES" ] && trap "rm -fr $NB_TEMP_FILES; exit" 0 1 2 3 15
-
-# load the modules
+# -- modules --
 . ${NB_LIB_DIR}/error.sh
 . ${NB_LIB_DIR}/tools.sh
 . ${NB_LIB_DIR}/config.sh
 . ${NB_LIB_DIR}/database.sh
+# --
 
-# insure a sane configuration or die
+# insure a sane configuration, do or die!
 check_config(){
 load_config
-# die without the base directory
 [ ! -d "$NB_BASE_DIR" ] &&
 	die "`basename $0`: '$NB_BASE_DIR' - $checkconf_nobase."
 [ -z "$BLOG_DIR" ] && die "$checkconf_noblog"
@@ -56,15 +40,14 @@ load_config
 [ ! -d "$BLOG_DIR/$CACHE_DIR" ] && die "'$CACHE_DIR' - $checkconf_nocache"
 [ ! -d "$BLOG_DIR/$PARTS_DIR" ] && die "'$PARTS_DIR' - $checkconf_nocache"
 [ ! -d "$NB_TEMPLATE_DIR" ] && die "'$NB_TEMPLATE_DIR' - $checkconf_notemplates"
-# die without write permissions
 [ ! -w "$NB_TEMP_DIR" ] &&
 	die "'$NB_TEMP_DIR' - $nowritedir"
 [ ! -w "$BLOG_DIR" ] &&
 	die "'$BLOG_DIR' - $nowritedir"
-# set default query mode for all operations
-: ${NB_QUERY:=$QUERY_MODE}
-# override default query mode
-[ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
+# if we're still alive set trap for special temp files
+SCRATCH_FILE="$NB_TEMP_DIR/nb_scratch$$"
+NB_TEMP_FILES="$NB_TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
+[ ! -z "$NB_TEMP_FILES" ] && trap "rm -fr $NB_TEMP_FILES; exit" 0 1 2 3 15
 }
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR

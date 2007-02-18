@@ -1,14 +1,13 @@
 # Module for configuration file management
-# Last modified: 2007-01-04T14:46:14-05:00
+# Last modified: 2007-02-18T18:52:49-05:00
 
-### WARNING ###
+# --- WARNING ---
 # config variables that must always load
 
 # automatically set time zone using GNU specific, 'date +%z'
 tzd_mm=`date +%z |cut -c4-5`
 AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
-
-### end WARNING ###
+# ---
 
 # loads global config
 load_globals(){
@@ -22,6 +21,10 @@ load_globals(){
 
 # loads global and user configurations
 load_config(){
+# set temp directory
+NB_TEMP_DIR="/tmp"
+# prompt to use when asking something.
+NB_PROMPT=": "
 # set deprecated BASE_DIR for temporary compatibility
 BASE_DIR="$NB_BASE_DIR"
 load_globals
@@ -51,33 +54,32 @@ export BLOG_DIR
 # default location for user plugins
 : ${USR_PLUGINSDIR:=$BLOG_DIR/plugins}
 
-### WARNING ###
+# --- WARNING ---
 # changing the following requires manually modifying
-# the "default" and weblog directory structure
+# the weblog directory structure
 
 # load user defined directory to store archives
 ARCHIVES_DIR="$BLOG_ARCHIVES_DIR"
 # default directory to store archives of weblog
 [ -z "$ARCHIVES_DIR" ] && ARCHIVES_DIR=archives
-
 # load user defined directory to store cached data
 CACHE_DIR="$BLOG_CACHE_DIR"
 # default directory to store cached data of weblog
 [ -z "$CACHE_DIR" ] && CACHE_DIR=cache
-
 # load user defined directory to store parts
 PARTS_DIR="$BLOG_PARTS_DIR"
 # default directory to store parts of weblog
 [ -z "$PARTS_DIR" ] && PARTS_DIR=parts
-
-### end WARNING ###
 
 # letter to prepend to entry's html id tag
 # WARNING: effects permanent links
 # load user defined id tag
 x_id="$BLOG_ENTRYID_TAG"
 : ${x_id:=e}
+# ---
 
+# default verbosity, 0 = silent
+: ${VERBOSE:=1}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
 # allow user specified author names
@@ -109,7 +111,7 @@ fi
 # default to html for page suffix
 : ${NB_FILETYPE:=html}
 
-### WARNING ###
+# --- WARNING ---
 # changing the following requires manually modifying
 # *all* existing entry data files!
 
@@ -117,8 +119,7 @@ fi
 : ${METADATA_MARKER:=-----}
 # default metadata close tag (e.g. 'END-----')
 : ${METADATA_CLOSETAG:=$METADATA_MARKER}
-
-### end WARNING ###
+# ---
 
 # default to raw processing for page content
 : ${PAGE_FORMAT:=raw}
@@ -130,6 +131,10 @@ fi
 : ${BLOG_TZD:=$AUTO_TZD}
 # default to max filter for query mode
 : ${QUERY_MODE:=max}
+# set default query mode for all operations
+: ${NB_QUERY:=$QUERY_MODE}
+# override default query mode
+[ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
 # defaults for maximum entries to display on each page
 : ${MAX_ENTRIES:=10}
 : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}

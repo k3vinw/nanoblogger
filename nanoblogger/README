@@ -2,7 +2,7 @@
 
 NanoBlogger is a small weblog engine written in Bash for the command
 line. It uses common UNIX tools such as cat, grep, and sed to create
-static HTML content. Copyright (C) 2003-2006 Kevin Wood
+static HTML content.
 
 Installing NanoBlogger
 ----------------------
