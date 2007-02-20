@@ -23,16 +23,15 @@ template_fortune="Spruch des Tages"
 template_links="Links"
 template_rentries="Aktuelle Einträge"
 template_syndicate="Zusammenfassung"
-template_syndicate_main="Site"
+template_syndicate_main="Seite"
 template_status="Weblog Status"
-template_powered="powered by &#36;EDITOR, bash, cat, grep, sed, and"
+template_powered="Erstellt mit &#36;EDITOR, bash, cat, grep, sed, and"
 
 # misc. weblog links
 template_archives="Archive"
 template_main="Übersicht"
 template_untitled="Ohne Titel"
 
-# PLEASE TRANSLATE
 # dynamic template messages
 template_articles="Artikel"
 template_browsecat="Sortiert nach Kategorie"

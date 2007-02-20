@@ -12,8 +12,6 @@ Optionen:
  -a, --add				erzeugt einen neuen Eintrag, Kategorie, oder Weblog
 					(Verzeichnis).
  -b, --blogdir <Verzeichnis>		spezifiziert das Weblog Verzeichnis.
- -B, --body <text>			veraltet, bitte stattdessen '-T'
-					oder '--text' benutzen.
  -c, --category	<ID,cat>		Spezifiziert die Kategorie (für '--add',
 					'--delete', '--edit', '--list',
 					'--update', und '--update-cache').
@@ -71,7 +69,8 @@ Optionen:
  -c,-d,-e,-m akzeptieren mehrere IDs durch Komma getrennt (z.B. 1,2,3).
  
  --list und --update können auf ein Datum beschränkt werden (irrelevant bei Eintrag ID(s)).
- date = YYYY-MM-DD, YYYY-MM, YYYY
+
+ DATE = CCYY-MM-DD, CCYY-MM, CCYY (oder ein Zeitraum = DATE1,DATE2)
 
 Beispiele:
 

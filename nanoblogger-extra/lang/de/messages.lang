@@ -20,6 +20,10 @@ checkconf_nodata="Datenverzeichnis des Weblog existiert nicht! Auf Wiedersehen."
 checkconf_nocache="Cacheverzeichnis des Weblog existiert! Auf Wiedersehen."
 checkconf_notemplates="Template Verzeichnis des Weblog existiert nicht! Auf Wiedersehen."
 
+# query_db
+querydb_init="Initialisiere Hauptdatenbank ..."
+querydb_update="Aktualisiere Hauptdatenbank ..."
+
 # validate category id(s)
 catid_bad="Falsche ID(s)!"
 checkcatid_invalid="Ungültige Kategorie ID(s):"
@@ -49,7 +53,7 @@ buildarchives_action="Archive werden generiert ..."
 buildweblog_all="Alle Dateien des Weblog werden aktualisiert! Das kann eine Weile dauern ..."
 buildweblog_files="Weblog Dateien werden generiert ..."
 buildweblog_main="Die Haupt-Index-Seite(n) wird/werden generiert ..."
-buildweblog_cache="Cache aufräumen ..."
+buildweblog_cache="Cache wird aufgeräumt ..."
 
 # import_file
 importfile_nofile="existiert nicht!"
