@@ -3,10 +3,10 @@
 # lang/en/templates.lang
 
 # weblog entry links and messages
-template_permlink="Lien Permanent"
-template_catlinks="Catégorie(s):"
+template_permlink="Lien permanent"
+template_catlinks="CatÃ©gorie(s):"
 template_cmtlink="Commentaires"
-template_postedby="Posté par"
+template_postedby="PostÃ© par"
 
 # only here for compat. with early 3.3 rc's
 permanentlink_title="$template_permlink"
@@ -14,30 +14,30 @@ categorylinks_title="$template_catlinks"
 commentslink_title="$template_cmtlink"
 
 # weblog main messages
-template_archiveindex="Index des Archives"
-template_category="Catégories"
+template_archiveindex="Index des archives"
+template_category="CatÃ©gories"
 template_contact="Contact"
 template_fortune="Fortune"
 template_links="Liens"
-template_rentries="Entrées Récentes"
+template_rentries="EntrÃ©es rÃ©centes"
 template_syndicate="Syndiquer"
 template_syndicate_main="Site"
-template_status="Status du weblog"
-template_powered="Propulsé par $EDITOR, bash, cat, grep, sed, and"
+template_status="Statut du blog"
+template_powered="PropulsÃ© par &#36;EDITOR, bash, cat, grep, sed, et"
 
 # misc. weblog links
 template_archives="Archives"
-template_main="Main"
+template_main="Accueil"
 
 # dynamic template messages
 template_articles="Articles"
-template_browsecat="Parcourir par catégorie"
+template_browsecat="Parcourir par catÃ©gorie"
 template_browsedate="Parcourir par date"
-template_browseentry="Parcourir par entrée"
+template_browseentry="Parcourir par entrÃ©e"
 
 # weblog status messages
-template_totalcats="Total des catégories:"
-template_totalentries="Total des entrées:"
-template_lastentry="Dernière entrée:"
-template_lastupdated="Dernière mise-à-jour"
+template_totalcats="Total des catÃ©gories :"
+template_totalentries="Total des entrÃ©es :"
+template_lastentry="DerniÃ¨re entrÃ©e :"
+template_lastupdated="DerniÃ¨re mise Ã  jour :"
 

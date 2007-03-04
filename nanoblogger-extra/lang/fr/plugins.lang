@@ -3,7 +3,7 @@
 # lang/fr/plugins.lang
 
 # plugins - generic messages
-plugins_action="génération"
+plugins_action="gÃ©nÃ©ration"
 plugins_loadaction="chargement"
 plugins_textformataction="formattage du texte - $plugins_loadaction"
 

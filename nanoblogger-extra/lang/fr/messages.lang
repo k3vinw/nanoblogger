@@ -3,141 +3,140 @@
 # lang/fr/messages.lang
 
 # main
-main_badopts="option invalide:"
+main_badopts="option invalide :"
 main_panic="Tapez '`basename $0` --help' pour plus d'informations."
 
 # check_arg
-checkarg_badarg="option requiert un argument!"
+checkarg_badarg="option requiert un argument !"
 checkarg_help="Tapez '`basename $0` --help' pour plus d'informations."
 
 # check_conf
-checkconf_nobase="Le dossier de base n'existe pas!  bye."
-checkconf_noblog="Aucun dossier de blog spécifié!    bye."
-checkconf_nousrconf="Le fichier de config du blog n'existe pas! bye!"
-checkconf_noblogdir="Le dossier de blog n'existe pas!    bye."
-checkconf_nodata="Le dossier data du blog n'existe pas! goodbye."
-checkconf_nocache="Le dossier cache du blog n'existe pas!      bye."
-checkconf_notemplates="Le dossier templates du blog n'existe pas!      bye."
+checkconf_nobase="le rÃ©pertoire de base n'existe pas ! bye."
+checkconf_noblog="aucun rÃ©pertoire de blog specifiÃ© ! bye."
+checkconf_nousrconf="le fichier de config du blog n'existe pas ! bye."
+checkconf_noblogdir="le rÃ©pertoire de blog n'existe pas ! bye."
+checkconf_nodata="le rÃ©pertoire data du blog n'existe pas ! bye."
+checkconf_nocache="le rÃ©pertoire cache du blog n'existe pas ! bye."
+checkconf_notemplates="le rÃ©pertoire templates du blog n'existe pas ! bye."
 
 # query_db
-querydb_init="initialisation de la base de données master.db... "
-querydb_update="Mise-à-jour de la base de données master.db..."
+querydb_init="initialisation de la base de donnÃ©es principale..."
+querydb_update="mise Ã  jour de la base de donnÃ©es principale..."
 
 # validate category id(s)
-catid_bad="mauvais id(s)!"
-checkcatid_invalid="mauvais id(s) de catégorie!"
-checkcatid_novalid="vous devez spécifer un id de catégorie valide!"
+catid_bad="mauvaise id(s) !"
+checkcatid_invalid="mauvaise(s) id(s) de catÃ©gorie !"
+checkcatid_novalid="vous devez spÃ©cifier une id de catÃ©gorie valide !"
 
 # validate metadata files
-checkmetatags_notag="Il manque le metatag:"
+checkmetatags_notag="il manque la mÃ©tabalise :"
 
 # config_weblog
-configweblog_nomod="Aucun changement n'a été fait! bye"
+configweblog_nomod="aucun changement n'a Ã©tÃ© fait ! bye."
 
 # load_template
-loadtemplate_nofile="Le fichier template n'existe pas! bye"
+loadtemplate_nofile="le fichier 'template' n'existe pas ! bye."
 
 # make_page
-makepage_nosource="Le fichier source n'existe pas! bye"
-makepage_nooutput="fichier de sortie non spécifié."
-makepage_notemplate="le fichier de template n'existe pas! bye"
+makepage_nosource="le fichier source n'existe pas ! bye."
+makepage_nooutput="fichier de sortie non spÃ©cifiÃ©."
+makepage_notemplate="le fichier de 'template' n'existe pas ! bye."
 
 # paginate
 paginate_action="pagination"
 
 # build_archives
-buildarchives_action="génération des archives..."
+buildarchives_action="gÃ©nÃ©ration des archives..."
 
 # build_weblog
-buildweblog_all="mise à jour de tous les fichiers du blog! peut prendre du temps..."
-buildweblog_files="génération des fichiers du blog..."
-buildweblog_main="génération des principales pages d'index..."
+buildweblog_all="mise Ã  jour de tous les fichiers du blog ! Ã§a peut prendre du temps..."
+buildweblog_files="gÃ©nÃ©ration des fichiers du blog..."
+buildweblog_main="gÃ©nÃ©ration des principales pages index..."
 buildweblog_cache="vidage du cache..."   
 
 # import_file
-importfile_nofile="n'existe pas!" 
+importfile_nofile="n'existe pas !"
 
 # nb_browser
-nbbrowser_nobrowser="aucun des navigateurs dans $NB_BROWSER n'a travaillé !"
+nbbrowser_nobrowser="aucun des navigateurs dans \$NB_BROWSER n'a fonctionnÃ© !"
 
 # nb_draft
-nbdraft_asknew="Le fichier n'existe pas! Le créer?"
+nbdraft_asknew="le fichier n'existe pas ! le crÃ©er ?"
 
 # nb_edit
-nbedit_nofile="Le fichier n'existe pas!"
-nbedit_prompt="taper sur la touche [entrée] pour continuer:"
-nbedit_failed="échec de l'écriture du fichier. bye"
+nbedit_nofile="le fichier n'existe pas !"
+nbedit_prompt="taper sur la touche [entrÃ©e] pour continuer :"
+nbedit_failed="Ã©chec de l'Ã©criture du fichier ! bye."
 
 # add_entry
-addentry_catinfo="id(s) de catégorie(s) sélectionné(s):"
-addentry_action="ajout d'une nouvelle entrée..."
+addentry_catinfo="id(s) de catÃ©gorie(s) sÃ©lectionnÃ©e(s) :"
+addentry_action="ajout d'une nouvelle entrÃ©e..."
 
 # confirm_action
-confirmaction_ask="êtes vous sûr?"
+confirmaction_ask="Ãªtes-vous certain ?"
 
 # misc. validation errors
-novalid_entryid="vous devez spécifier un id d'entrée valide"
-invalid_entryid="id(s) d'entrée invalide(s)" 
+novalid_entryid="vous devez spÃ©cifier une id d'entrÃ©e valide."
+invalid_entryid="id(s) d'entrÃ©e invalide(s) :"
 
 # edit_weblog
-editweblog_onecat="Seulement une catégorie peut être spécifiée lors de l'édition des titres"
-editweblog_title="changement du titre en:"
-editweblog_catinfo="id(s) de catégorie(s) sélectionné(s):"
-editweblog_nomod="Aucun changement n'a été fait! bye"
-editweblog_action="modification des entrées du blog..."   
-editweblog_noaction="Aucun changement n'a été fait! bye!"
+editweblog_onecat="une seule catÃ©gorie peut Ãªtre spÃ©cifiÃ©e lors de l'Ã©dition des titres"
+editweblog_title="changement du titre en :"
+editweblog_catinfo="id(s) de catÃ©gorie(s) sÃ©lectionnÃ©e(s):"
+editweblog_nomod="aucun changement n'a Ã©tÃ© fait ! bye."
+editweblog_action="modification des entrÃ©es du blog..."
+editweblog_noaction="aucun changement n'a Ã©tÃ© fait ! bye."
 
 # delete_weblog
-deleteweblog_delcat="suppresion des catégories (ids):"
-deleteweblog_onecat="Seule une catégorie peut être spécifiée lors de la suppresion des entrées"
-deleteweblog_catinfo="Catégories sélectionnées (ids):"
-deleteweblog_delentry="suppresion de l'entrée (id):"
+deleteweblog_delcat="suppression de(s) catÃ©gorie(s) id(s) :"
+deleteweblog_onecat="une seule une catÃ©gorie peut Ãªtre specifiÃ©e lors de la suppression des entrÃ©es !"
+deleteweblog_catinfo="catÃ©gorie(s) sÃ©lectionnÃ©e(s) (ids) :"
+deleteweblog_delentry="suppression de l'entrÃ©e id(s) :"
 
 # header attributes
 header_ID="ID"
 header_Title="Titre"
-header_Category="Catégorie ID(s)"
+header_Category="Categorie ID(s)"
 header_Date="Date"
 
 # list_weblog
-listweblog_nocat="aucune catégorie n'existe encore! bye!"
-listweblog_nomatch="Aucun résultat à votre requête! bye."
+listweblog_nocat="aucune catÃ©gorie n'existe plus! bye !"
+listweblog_nomatch="Aucun rÃ©sultat correspondant Ã  votre requÃªte ! bye."
 
 # move_entry
-moveentry_catfirst="Vous devez spécifier une catégory avant l'entrée"
-moveentry_catinfo="catégories sélectionnées (ids)"
-moveentry_moventry="déplacement des entrées (ids)"
+moveentry_catfirst="Vous devez spÃ©cifier une catÃ©gorie avant l'entrÃ©e !"
+moveentry_catinfo="sÃ©lectionne la catÃ©gorie id(s) :"
+moveentry_moventry="dÃ©placement de l'entrÃ©e id(s) :"
 
 # add_weblog
-addweblog_noweblog="aucun dossier de blog spécifié!    bye."
-addweblog_newblog="création du dossier de blog"
-addweblog_nocreate="échec de la création du dossier de blog!"
-addweblog_copyaction="copie les fichier du blog par défaut."
-addweblog_askconf="Voulez vous configurer votre blog maintenant?"  
-addweblog_confaction="Configurationd u nouveau blog..."
-addweblog_noconf="Blo non configuré, utilisez    '`basename $0` -b [blog_dir] --configure -u all' pour le configurer plus tard."
-addweblog_newcat="création d'une nouvelle catégorie"
-addweblog_titlecat="entrez un nouveau titre de catégorie"
+addweblog_noweblog="aucun repertoire de blog specifiÃ© ! bye."
+addweblog_newblog="crÃ©ation du repertoire de blog"
+addweblog_nocreate="Ã©chec de la crÃ©ation du repertoire de blog !"
+addweblog_copyaction="copie les fichier du blog par defaut."
+addweblog_askconf="voulez-vous configurer votre  nouveau blog maintenant ?"
+addweblog_confaction="configuration du nouveau blog..."
+addweblog_noconf="blog non configurÃ© ! utilisez '`basename $0` -b [blog_rep] --configure -u all' pour le configurer plus tard."
+addweblog_newcat="crÃ©ation d'une nouvelle catÃ©gorie"
+addweblog_titlecat="entrez un nouveau titre de catÃ©gorie"
 addweblog_untitled="Sans titre"
-addweblog_madecat="La base de données des catégories a été créée"
+addweblog_madecat="la base de donnÃ©es des catÃ©gories a Ã©tÃ© crÃ©Ã©e pour"
 addweblog_author="entrez le nom de l'auteur"
 addweblog_title="entrez un titre"
 addweblog_desc="entrez une courte description"
-addweblog_editnew="édition d'une nouvelle entrée...."
+addweblog_editnew="Ã©dition d'une nouvelle entrÃ©e..."
 
 # preview_weblog
-preview_nocmd="pas de commande d'apercu de configurée! bye!"
-preview_action="apercu du  weblog ..."
-preview_asknow="voulez-vous avoir un apercu de votre blog maintenant?"
+preview_nocmd="pas de commande d'aperÃ§u configurÃ©e ! bye !"
+preview_action="aperÃ§u du blog ..."
+preview_asknow="voulez-vous avoir un aperÃ§u de votre blog maintenant ?"
 
 # publish_weblog
-publish_nocmd="aucune commande de publication configurée! bye!"
-publish_action="publication du weblog..."
-publish_asknow="voulez-vous plubier votre blog maintenant?"
+publish_nocmd="aucune commande de publication configurÃ©e ! bye !"
+publish_action="publication du blog..."
+publish_asknow="voulez-vous publier votre blog maintenant ?"
 
 # misc.
 notitle="Sans titre"
-nowritedir="Pas de droit d'écriture pour ce dossier! bye."
-samefilename="Nom de fichier déjà existant"
-filterdate_failed="echec du filtre de données, utilisez plutôt la date."
-
+nowritedir="pas de droit en Ã©criture pour ce rÃ©pertoire ! bye."
+samefilename="le nom de fichier existe dÃ©jÃ  !"
+filterdate_failed="Ã©chec du filtre de date, "timestamp" utilisÃ© Ã  la place."
