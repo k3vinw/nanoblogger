@@ -1,96 +1,102 @@
 # NanoBlogger French language definitions
-# Translation: Julie Wojcicki <chili-nb@ssji.net> 
+# Translation: Julie Wojcicki <chili-nb@ssji.net>
+# Revised by: denis BERNARD <deber@users.sourceforge.net>
 # Help
 # lang/fr/help.txt
 
-NanoBlogger - Moteur de Blog sur console
+NanoBlogger - Moteur de blog pour console.
 Version $VERSION, par Kevin Wood <n1xt3r@fastmail.fm>
 
-Utilisation:
+Usage:
  $BASENAME [-b blog_dir] [options]
 
 Options:
- -a, --add				crÈe une entrÈe, une catÈgorie ou un
-					blog (dossier).
- -b, --blogdir <dossier>		spÈcifie un dossier de blog.
- -B, --body <text>			dÈsuet, utiliser '-T' ou '--text'.
- -c, --category	<ID,cat>		spÈcifie une catÈgorie (pour '--add',
+ -a, --add				cr√©e une nouvelle entr√©e, cat√©gorie ou
+					un blog (r√©pertoire).
+ -b, --blogdir <directory>		sp√©cifie le r√©pertoire du blog.
+ -c, --category	<ID,cat>		sp√©cifie la cat√©gorie (pour '--add',
 					'--delete', '--edit', '--list',
 					'--update', et '--update-cache').
- --cfgfile <file>			spÈcifie un fichier de configuration
+ --cfgfile <file>			sp√©cifie un fichier de configuration
 					alternatif.
- --configure				configure un weblog (pour '--update').
- --datadir <dossier>			spÈcifie un dossier data.
- -d, --delete <ID,cat>			efface une entrÈe ou une catÈgorie.
- -D, --desc <text>			Èdite le texte de description
-					 (pour '--add',
+ --configure				configure le blog (pour '--update').
+ --datadir <directory>			sp√©cifie le r√©pertoire "data" du blog.
+ -d, --delete <ID,cat>			supprime une entr√©e ou une cat√©gorie.
+ -D, --desc <text>			met le texte descriptif (pour '--add',
  					'--draft', '--makefile' et
- 					'--makepage').
- -e, --edit <ID,cat>			Èdite une entrÈe ou une catÈgorie 
- -E, --draft <file> 			Èdite ou crÈer un metafichier
- -f, --file <file> 			spÈcifie un metafichier a importer en
-					entrÈe (pour '--add').
+					'--makepage').
+ -e, --edit <ID,cat>			√©dite une entr√©e ou une cat√©gorie.
+ -E, --draft <file> 			√©dite ou cr√©e un m√©tafichier.
+ -f, --file <file> 			sp√©cifier un m√©tafichier √† importer
+					comme entr√©e (pour '--add').
  -h, --help				affiche ce message d'aide.
  -i, --interactive <1=on/0=off> 	passe en mode interactif (pour '--add',
  					'--delete', '--preview', '--publish',
  					et '--update').
- -l, --list <all,cat,DATE,max>		liste les entrÈes ou catÈgories 
-					(max par defaut cf le manuel)
+ -l, --list <all,cat,DATE,max>		liste les entr√©es ou les cat√©gories
+					(par d√©faut, max).
  --manual				affiche le manuel.
- -m, --move <ID>			dÈplace une entrÈe dans une catÈgorie
-					(pour '--category').
- -M, --makepage <file1> <file2> 	crÈe une nouvelle page de weblog (file2)
-					depuis un metafichier (file1).
- --makefile <file> 			crÈe un nouveau metafichier.
- -n, --author <text>			Èdite le champ auteur (pour '--add',
+ -m, --move <ID>			affecte une cat√©gorie sp√©cifique √† une
+					entr√©e (pour '--category').
+ -M, --makepage <file1> <file2> 	cr√©e une nouvelle page de blog
+					(fichier2) depuis le m√©tafichier
+					(fichier1).
+ --makefile <file> 			cr√©e un nouveau m√©tafichier.
+ -n, --author <text>			met le nom de l'auteur (pour '--add',
 					'--draft', '--makefile' et
  					'--makepage').
- -p, --preview				lance l'apercu du blog.
- -P, --publish				lance la publication du blog.
- -q, --query <DATE>			spÈcify un query la lance (pour '--edit' et
+ --plugindir <directory> 		sp√©cifie le r√©pertoire "plugin" du blog.
+ -p, --preview				lance l'aper√ßu du blog.
+ -P, --publish				lance une commande pour la publication du
+					blog.
+ -q, --query <all,DATE,max>		sp√©cifie une requ√™te (pour '--edit' et
  					'--delete').
- --template <file>			spÈcifie le fichier a charger 
-					comme template (pour
- 					'--draft', '--makepage' et
- 					'--makefile').
- --template-dir <dossier>		spÈcifie un dossier template.
- -t, --title <text>			Èdite le titre (pour '--add',
+ --template <file>			sp√©cifie le fichier √† charger comme
+					"template" (pour '--draft',
+					'--makepage' et '--makefile').
+ --template-dir <directory>		sp√©cifie le r√©pertoire "template" du blog.
+ -t, --title <text>			met le titre (pour '--add',
 					'--category', '--draft',
  					'--makefile' et '--makepage').
- --tag <TAG> 	 	 		spÈcifie un tag (pour '--add', '--draft',
-					'--edit', '--makefile' et
+ --tag <TAG> 	 	 		sp√©cifie la balise (pour '--add',
+					'--draft', '--edit', '--makefile' et
  					 '--makepage').
- --tag-text <text> 			Èdite le tag (for '--tag').
- -T, --text <text> 			Èdite le corps "body" (pour '--add',
+ --tag-text <text> 			√©crit la balise (pour '--tag').
+ -T, --text <text> 			√©crit le texte de "body" (pour '--add',
 					'--draft', '--makefile' et
  					'--makepage').
- -U, --update-cache <all,DATE,max,expired>
- 					force la mise ‡  jour du cache,
-					supprimant les donnÈes en cache
-					spÈcifiÈes (par defaut: expired).
- -u, --update <all,DATE,main,max> 	force la mise ‡  jour des fichiers pour
- 					les donnÈes spÈcifiÈes (par defaut:
- 					'max').
- -v, --verbose <1=on/0=off>		passe en mode "verbose".
- -V, --version				affiche les informations de version.
+ -U, --update-cache <all,DATE,max,
+ expired> 				force la mise √† jour du cache du blog
+					en enlevant les donn√©es mises en cache
+					suivant la sp√©cification (par d√©faut,
+ 					'expired').
+ -u, --update <all,DATE,main,max>	force la mise √† jour des donn√©es des
+					fichiers du blog suivant la
+					sp√©cification (par d√©faut, 'max').
+ -v, --verbose <1=on/0=off>		bascule le niveau de verbosit√©.
+ -V, --version				affiche la version.
 
- -c,-d,-e,-m acceptent plusieurs numÈros d'id sÈparÈes par des virgules (par
-exemple: 1,2,3).
+ -c,-d,-e,-m	acceptent plusieurs num√©ros d'ID s√©par√©s par
+		des virgules (par ex. 1,2,3).
  
- --list et --update peuvent sÈlectionner les entrÈes par date (independemment
-des ids des entrÈes)
- date = YYYY-MM-DD, YYYY-MM, YYYY
+ --list et --update	peuvent s√©lectionner les entr√©es par
+			date (ind√©pendamment des ids des entr√©es).
+
+ DATE = CCYY-MM-DD, CCYY-MM, CCYY (ou plage = DATE1,DATE2)
 
 Exemples:
 
- Specifier le dossier du blog pour crÈer ou ajouter une entrÈe:
-	nb -b ~/public_html/weblog -a
+ sp√©cifier le r√©pertoire du blog √† cr√©er ou bien pour ajouter une nouvelle
+ entr√©e :
+	nb -b ~/public_html/blog -a
 
- crÈer une nouvelle catÈgorier nommee "News"
-	nb -b ~/public_html/weblog -t "News" -c new -a
+ cr√©er une nouvelle cat√©gorie dont le titre est "Nouvelles" :
+	nb -b ~/public_html/blog -t "Nouvelles" -c new  -a
 
- crÈer une nouvelle entrÈe en une seule ligne!
-	nb -b ~/public_html/weblog -n 'myname' -t 'Title' -T 'Text!' -a
+ cr√©er une nouvelle entr√©e en utilisant seulement les options de la ligne de
+ commande !
+	nb -b ~/public_html/blog -n 'mon_nom' -t 'Titre' -T 'Texte!' -a
 
-Plus d'infos:
+Plus d'info :
  URL: http://nanoblogger.sourceforge.net
+
