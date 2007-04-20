@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-02-14T02:08:38-05:00
+# Last modified: 2007-04-20T16:52:48-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -107,7 +107,7 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 [ ! -w "$EDIT_DIR" ] && [ -d "$EDIT_DIR" ] &&
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
-	-p) # prompt to continue (mostly for editors that fork off to background)
+	-p) # prompt to continue (kludge for editors that detach from process)
 		$NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
@@ -194,26 +194,10 @@ fi
 ARCHIVES_PATH="${BASE_URL}$ARCHIVES_DIR/"
 }
 
-# tool to lookup entry's id from master database
-lookup_entryid(){
-ENTRY_IDLIST=($2)
-for db_item in ${ENTRY_IDLIST[@]}; do
-	echo $db_item
-done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
-}
-
-# tool to lookup month's id from "months" query type
-lookup_monthid(){
-MONTH_IDLIST=($2)
-for db_item in ${MONTH_IDLIST[@]}; do
-	echo $db_item
-done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
-}
-
-# tool to lookup day's id from "days" query type
-lookup_dayid(){
-DAY_IDLIST=($2)
-for db_item in ${DAY_IDLIST[@]}; do
+# tool to lookup ID from master database
+lookup_id(){
+INPUT_IDLIST=($2)
+for db_item in ${INPUT_IDLIST[@]}; do
 	echo $db_item
 done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 }
@@ -221,7 +205,7 @@ done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
 # tool to find entry before and after from entry's id
 findba_entries(){
 BAENTRY_IDLIST=($2)
-entryid_var=`lookup_entryid "$1" "${BAENTRY_IDLIST[*]}"`
+entryid_var=`lookup_id "$1" "${BAENTRY_IDLIST[*]}"`
 # adjust offset by 1 for bash arrays (1 = 0)
 ((entryid_var--))
 # determine direction based on chronological date order
@@ -273,8 +257,10 @@ set_daynavlinks(){
 daynavlinks_var="${1//\//-}"
 day_id=
 [ ! -z "$daynavlinks_var" ] &&
-	day_id=`lookup_dayid "$daynavlinks_var" "${DAY_DB_RESULTS[*]}"`
+	day_id=`lookup_id "$daynavlinks_var" "${DAY_DB_RESULTS[*]}"`
 if [ ! -z "$day_id" ] && [ $day_id -gt 0 ]; then
+	# adjust for bash array - 1 = 0
+	((day_id--))
 	# determine direction based on chronological date order
 	if [ "$CHRON_ORDER" = 1 ]; then
 		let prev_dayid=${day_id}+1
@@ -284,16 +270,16 @@ if [ ! -z "$day_id" ] && [ $day_id -gt 0 ]; then
 		let next_dayid=${day_id}+1
 	fi
 	prev_day=; NB_PrevArchiveDayLink=
-	[ $prev_dayid -gt 0 ] &&
-		prev_day=`sed ''$prev_dayid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS`
+	[ $prev_dayid -ge 0 ] &&
+		prev_day=${DAY_DB_RESULTS[$prev_dayid]}
 	if [ ! -z "$prev_day" ]; then
 		prev_day_dir="${prev_day//\-//}"
 		prev_day_file="$prev_day_dir/$NB_INDEXFILE"
 		NB_PrevArchiveDayLink="$prev_day_dir/$NB_INDEX"
 	fi
 	next_day=; NB_NextArchiveDayLink=
-	[ $next_dayid -gt 0 ] &&
-		next_day=`sed ''$next_dayid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-10 |sort $SORT_ARGS`
+	[ $next_dayid -ge 0 ] &&
+		next_day=${DAY_DB_RESULTS[$next_dayid]}
 	if [ ! -z "$next_day" ]; then
 		next_day_dir="${next_day//\-//}"
 		next_day_file="$next_day_dir/$NB_INDEXFILE"
@@ -307,8 +293,10 @@ set_monthnavlinks(){
 monthnavlinks_var="${1//\//-}"
 month_id=
 [ ! -z "$monthnavlinks_var" ] &&
-	month_id=`lookup_monthid "$monthnavlinks_var" "${MONTH_DB_RESULTS[*]}"`
+	month_id=`lookup_id "$monthnavlinks_var" "${MONTH_DB_RESULTS[*]}"`
 if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
+	# adjust for bash array - 1 = 0
+	((month_id--))
 	# determine direction based on chronological date order
 	if [ "$CHRON_ORDER" = 1 ]; then
 		let prev_monthid=${month_id}+1
@@ -318,16 +306,16 @@ if [ ! -z "$month_id" ] && [ $month_id -gt 0 ]; then
 		let next_monthid=${month_id}+1
 	fi
 	prev_month=; NB_PrevArchiveMonthLink=
-	[ $prev_monthid -gt 0 ] &&
-		prev_month=`sed ''$prev_monthid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS`
+	[ $prev_monthid -ge 0 ] &&
+		prev_month=${MONTH_DB_RESULTS[$prev_monthid]}
 	if [ ! -z "$prev_month" ]; then
 		prev_month_dir="${prev_month//\-//}"
 		prev_month_file="$prev_month_dir/$NB_INDEXFILE"
 		NB_PrevArchiveMonthLink="$prev_month_dir/$NB_INDEX"
 	fi
 	next_month=; NB_NextArchiveMonthLink=
-	[ $next_monthid -gt 0 ] &&
-		next_month=`sed ''$next_monthid'!d' "$NB_DATA_DIR/master.$NB_DBTYPE" |cut -c1-7 |sort $SORT_ARGS`
+	[ $next_monthid -ge 0 ] &&
+		next_month=${MONTH_DB_RESULTS[$next_monthid]}
 	if [ ! -z "$next_month" ]; then
 		next_month_dir="${next_month//\-//}"
 		next_month_file="$next_month_dir/$NB_INDEXFILE"

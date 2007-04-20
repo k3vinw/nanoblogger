@@ -6,19 +6,12 @@ YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 
 # check for weblog modifications
 if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
-	# tool to lookup year's id from "years" query type
-	lookup_yearid(){
-	YEAR_IDLIST=($2)
-	for yid in ${YEAR_IDLIST[@]}; do
-		echo $yid
-	done |grep -n "$1" |cut -d":" -f 1 |grep '^[0-9].*$'
-	}
 	# set previous and next links for given year
 	set_yearnavlinks(){
 	yearnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
 	year_id=
 	[ ! -z "$yearnavlinks_var" ] &&
-		year_id=`lookup_yearid "$yearnavlinks_var" "${YEAR_DB_RESULTS[*]}"`
+		year_id=`lookup_id "$yearnavlinks_var" "${YEAR_DB_RESULTS[*]}"`
 	if [ ! -z "$year_id" ] && [ $year_id -ge 0 ]; then
 		# adjust for bash array - 1 = 0
 		((year_id--))

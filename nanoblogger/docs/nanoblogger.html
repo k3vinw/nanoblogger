@@ -1335,27 +1335,15 @@ nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
         </tr>
 
         <tr>
-          <td align="left">lookup_entryid</td>
+          <td align="left">lookup_id</td>
 
-          <td align="left">lookup entry's id from master database</td>
-
-          <td align="left">$1, $2</td>
-
-          <td align="left">stdout</td>
-
-          <td align="left">example: lookup_entryid 2005-12-14T00_00_00.$NB_DATATYPE "$MASTER_DB_RESULTS"</td>
-        </tr>
-
-        <tr>
-          <td align="left">lookup_monthid</td>
-
-          <td align="left">lookup month's id from "months" query type</td>
+          <td align="left">lookup id of item matched from master database</td>
 
           <td align="left">$1, $2</td>
 
           <td align="left">stdout</td>
 
-          <td align="left">example: query_db months; lookup_monthid 2005-12 "$MONTH_DB_RESULTS"</td>
+          <td align="left">example: lookup_id 2005-12-14T00_00_00.$NB_DATATYPE "$MASTER_DB_RESULTS"</td>
         </tr>
 
         <tr>
