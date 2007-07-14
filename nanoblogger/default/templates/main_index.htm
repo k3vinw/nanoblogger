@@ -19,11 +19,25 @@ $NB_RSSAltLink
 
 <body>
 
-<div id="container" class="clearfix">
-	<div id="header" class="clearfix">
-		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-		<span class="description">$BLOG_DESCRIPTION</span>
+<div id="banner">
+	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+	<span class="description">$BLOG_DESCRIPTION</span>
+</div>
+
+<div id="container">
+
+	<div id="content">
+
+		<div class="blog">
+			$NB_MetaBody
+			<div class="menu" align="center">
+				$NB_PageLinks
+				<a href="#top">$NB_TopPage</a>
+			</div>
+		</div>
+
 	</div>
+
 	<div id="links">
 		<div class="calendar">
 			$NB_Calendar
@@ -58,7 +72,7 @@ $NB_RSSAltLink
 		<div class="sidetitle">
 			$template_syndicate
 		</div>
-		<div class="side">
+		<div class="syndicate">
 			$template_syndicate_main
 			(<a href="${BASE_URL}rss.$NB_SYND_FILETYPE" class="feed-small">RSS</a>,
 			<a href="${BASE_URL}atom.$NB_SYND_FILETYPE" class="feed-small">Atom</a>)<br />
@@ -76,26 +90,10 @@ $NB_RSSAltLink
 		<div class="side">
 			$NB_BlogStatus
 		</div>
-	</div>
-	<div id="content">
-		<div id="wrap">
-			<a id="top"></a>
-			<div class="blog">
-				$NB_MetaBody
-			</div>
+		<div class="powered">
+			$template_powered
+			<a href="http://nanoblogger.sourceforge.net">nb $VERSION</a>
 		</div>
-		<div class="pagenav" align="center">
-			$NB_PageLinks
-		</div>
-	</div>
-</div>
-<div id="footer" style="clear:both;">
-	<div class="metainfo">
-		$template_powered
-		<a href="http://nanoblogger.sourceforge.net">nb $VERSION</a>
-	</div>
-	<div class="menu">
-		<a href="#top">$NB_TopPage</a><br />
 	</div>
 </div>
 

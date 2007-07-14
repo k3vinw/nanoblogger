@@ -17,20 +17,19 @@ $NB_RSS2AltLink
 $NB_RSSAltLink
 </head>
 
+
 <body>
 
-<div id="container" class="clearfix">
-	<div id="header" class="clearfix">
-		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-		<span class="description">$BLOG_DESCRIPTION</span>
-	</div>
-	<div id="links">
-		<div class="calendar">
-			$NB_MonthlyCalendar
-		</div>
-	</div>
+<div id="banner">
+	<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+	<span class="description">$BLOG_DESCRIPTION</span>
+</div>
+
+<div id="container">
+
 	<div id="content">
-		<div id="wrap">
+
+		<div class="blog">
 			<a id="top"></a>
 			<h2>$NB_ArchiveTitle $template_archives</h2>
 			<div id="menu">
@@ -38,23 +37,27 @@ $NB_RSSAltLink
 				<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">$template_archives</a> &#62;
 				<a href="${BASE_URL}$ARCHIVES_DIR/$year/$NB_INDEX">$yearn</a> &#62;
 				<br />
-$([ ! -z "$prev_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveMonthLink'">'$NB_PrevPage'</a>')
+	$([ ! -z "$prev_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevArchiveMonthLink'">'$NB_PrevPage'</a>')
 				$monthn
-$([ ! -z "$next_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveMonthLink'">'$NB_NextPage'</a>')
+	$([ ! -z "$next_month" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextArchiveMonthLink'">'$NB_NextPage'</a>')
 			</div>
-			<div class="archives">
-				$NB_MetaBody
-			</div>
-			<div class="pagenav" align="center">
+			$NB_MetaBody
+			<div class="menu" align="center">
 				$NB_PageLinks
+				<a href="#top">$NB_TopPage</a>
 			</div>
 		</div>
+
 	</div>
-</div>
-<div id="footer" style="clear:both;">
-	<div class="menu">
-		<a href="#top">$NB_TopPage</a><br />
+
+	<div id="links">
+
+		<div class="calendar">
+		$NB_MonthlyCalendar
+		</div>
+
 	</div>
+
 </div>
 
 </body>

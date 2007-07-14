@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-02-18T18:09:30-05:00
+# Last modified: 2007-07-14T14:25:54-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -653,22 +653,19 @@ for entry_id in $NUMVAR; do
 	fi
 	# use cached version for 'newer than' comparison
 	nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
-	nt_cachefile=${nt_cachefile//[ ]*}
+	nt_cachefile=${nt_cachefile//[ ]*/}
 	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
 		read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
 		NewEdit_EntryTitle="$METADATA"
-		if [ "$OldEdit_EntryTitle" != "$NewEdit_EntryTitle" ] || \
-		[ ! -z "$Old_EntryFile" ]; then
-			# update previous and next entries of modified entry
-			query_db master
-			findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
-			set_entrynavlinks prev "$before_entry"
-			set_entrynavlinks next "$after_entry"
-			[ ! -z "$prev_entry" ] &&
-				echo "$prev_entry" >> "$SCRATCH_FILE"
-			[ ! -z "$next_entry" ] &&
-				echo "$next_entry" >> "$SCRATCH_FILE"
-		fi
+		# update previous and next entries of modified entry
+		query_db master
+		findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
+		set_entrynavlinks prev "$before_entry"
+		set_entrynavlinks next "$after_entry"
+		[ ! -z "$prev_entry" ] &&
+			echo "$prev_entry" >> "$SCRATCH_FILE"
+		[ ! -z "$next_entry" ] &&
+			echo "$next_entry" >> "$SCRATCH_FILE"
 		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
 		# remove old cache data for clean build
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*

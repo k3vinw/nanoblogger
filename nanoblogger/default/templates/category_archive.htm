@@ -16,12 +16,15 @@ $NB_RSSAltLink
 
 <body>
 
-<div id="container" class="clearfix">
-	<div id="header" class="clearfix">
-		<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
-		<span class="description">$BLOG_DESCRIPTION</span>
-	</div>
-	<div id="altcontent">
+<div id="banner">
+<h1><a href="${BASE_URL}$NB_INDEX" accesskey="1">$BLOG_TITLE</a></h1>
+<span class="description">$BLOG_DESCRIPTION</span>
+</div>
+
+<div id="container">
+
+	<div class="archives">
+
 		<a id="top"></a>
 		<h2>$NB_ArchiveTitle $template_archives</h2>
 		<div id="menu">
@@ -30,18 +33,14 @@ $NB_RSSAltLink
 			<br />
 			$NB_ArchiveTitle
 		</div>
-		<div class="archives">
-			$NB_MetaBody
-		</div>
-		<div class="pagenav" align="center">
+		$NB_MetaBody
+		<div class="menu" align="center">
 			$NB_PageLinks
+			<a href="#top">$NB_TopPage</a><br />
 		</div>
+
 	</div>
-</div>
-<div id="footer" style="clear:both;">
-	<div class="menu">
-		<a href="#top">$NB_TopPage</a><br />
-	</div>
+
 </div>
 
 </body>
