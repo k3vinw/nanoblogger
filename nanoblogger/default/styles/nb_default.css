@@ -1,17 +1,20 @@
-/* css by Guennadi */
+/*
+	NanoBlogger Clean
+	Simple 2 column layout
+*/
 
 body {
-	font-family: verdana, arial, sans-serif;
-	margin:0px 0px 0px 0px;
+	font: 12px/1.5 "Times New Roman", Times, serif;
 	background:#FFF;
+	margin:0;
+	padding:0;
 }
-a { color: #003366; text-decoration: none; }
-a:link { color: #003366; text-decoration: none; }
-a:visited { color: #003366; text-decoration: none; }
-a:active { color: #999999; text-decoration:
-underline; }
-a:hover { color: #999999; text-decoration:
-underline; }
+
+a 		{ color: #003366; text-decoration: none; }
+a:link		{ color: #003366; text-decoration: none; }
+a:visited	{ color: #003366; text-decoration: none; }
+a:active	{ color: #999999;  }
+a:hover		{ color: #999999;  }
 
 h1 {
 	margin-top: 25px;
@@ -21,11 +24,11 @@ h1 {
 	}
 
 h2 {
-	color: #999999;
+	color: #666;
 	margin-bottom: 1.5em;
 	padding: 0;
 	text-align: center;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: "Times New Roman", Times, serif;
 	font-size: large;
 	font-weight: bold;
 	}
@@ -34,7 +37,7 @@ h3 {
 	margin-top: 1.5em;
 	margin-bottom: -0.75em;
 	padding: 0;
-	color: #003366;
+	color: #666;
 	font-size: medium;
 	}
 
@@ -44,34 +47,42 @@ h4, h5, h6 {
 	font-size: x-small;
 	}
 
+
 blockquote {
-	background-color: #EEE;
+	background-color:#EEE;
 	padding:2mm;
-	border-left: 5px solid #BBB;
+	border-left:5px solid #BBB;
+}
+
+img {
+	border: 0;
 }
 
 pre {
-	padding: 2mm;
+	padding:2mm;
 	border-top:1px solid #999;
-	border-left: 1px solid #999;
-	border-bottom: 1px solid #999;
+	border-bottom:1px solid #999;
 }
 
 #banner {
-	font-family: verdana, arial, sans-serif;
-	background-color: #999999;
+	margin:0;
+	padding:0;
+	margin-top:0;
+	font-family: "Times New Roman", Times, serif;
+	background-color: #FFF;
+	color: #333;
 	font-size:large;
-	font-weight: normal;
+	font-weight:normal;
 	text-align:left;
-	padding:15px;
 	border-top:1px dotted #999;
-	border-bottom: 1px dotted #999;
+	border-bottom:1px dotted #999;
+	padding:15px;
 }
 
 #banner h1 {
-	margin: 0;
-	padding: 0 0 0 10px;
-	font-size: large;
+	margin:0;
+	padding:0 0 0 10px;
+	font-size:x-large;
 }
 
 #banner a,
@@ -79,48 +90,61 @@ pre {
 #banner a:visited,
 #banner a:active,
 #banner a:hover {
-	font-family: verdana, arial, sans-serif;
-	font-size: large;
-	color: #FFF;
-	text-decoration: none;
+	font-size:x-large;
+	color: #333;
+	text-decoration:none;
 }
 
 .description {
-	font-family: verdana, arial, serif;
-	color:#FFF;
+	color: #333;
 	font-size:small;
-	font-weight: bold;
-	text-transform: lowercase;
-	padding: 0 0 0 10px;
+	font-weight:bold;
+	text-transform:lowercase;
+	padding:0 0 0 10px;
 }
 
 #content {
-	position:absolute;
-	margin-right: 20px;
-	margin-left: 225px;
-	margin-bottom: 20px;
-	border:1px solid #FFF;
-	width: 80%;
+	margin:0;
+	padding:0;
+	margin-left:215px;
+	background-color:#FFF;
 }
 
 #container {
-	border:1px solid #FFF;
+	margin:0;
+	padding:0;
+	background-color:#FFF;
 }
 
 #links {
-	padding:15px;
+	margin:0;
+	padding:0;
+	float:left;
+	width:199px;
+	background-color:#FFF;
 	border:1px solid #FFF;
-	width:180px;
-	background: #FFF;
 	border-right: 1px dotted #999;
+	padding:15px 0 15px 0;
+}
+
+#footer {
+	margin:0;
+	padding:0;
+	clear:both;
+	background-color:#999999;
+	border-top:1px dotted #999;
+	border-bottom:1px dotted #999;
 }
 
 .blog {
-	width:84%;
+	margin:0;
+	padding:0;
 	padding:15px;
 }
 
 .archives {
+	margin:0;
+	padding:0;
 	font-family: verdana, arial, sans-serif;
 	color:#333;
 	font-size:small;
@@ -131,8 +155,8 @@ pre {
 	font-family: verdana, arial, sans-serif;
 	color:#333;
 	font-size:small;
-	font-weight: normal;
-	line-height: 120%;
+	font-weight:normal;
+	line-height:120%;
 }
 
 .blogbody a,
@@ -140,112 +164,123 @@ pre {
 .blogbody a:visited,
 .blogbody a:active,
 .blogbody a:hover {
-	font-weight: normal;
-	text-decoration: underline;
+	font-weight:normal;
+	text-decoration:underline;
 }
 
 .title {
-	font-family: verdana, arial, sans-serif;
-	font-size: small;
-	text-transform: uppercase;
-	color: #003366;
-	margin-bottom: 15px;
+	font-family: "Times New Roman", Times, serif;
+	font-size:small;
+	text-transform:uppercase;
+	color: #666;
+	margin-bottom:15px;
 }
 
 #menu, .menu {
 	font-family: verdana, arial, sans-serif;
-	font-size: small;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	font-size:small;
+	margin-top:25px;
+	margin-bottom:25px;
 	text-align:center;
 }
 
 .date {
-	font-family: verdana, arial, sans-serif;
-	font-size: small;
-	color: #666;
-	border-bottom: 1px solid #999;
-	margin-bottom: 10px;
-	font-weight: bold;
+	font-family: "Times New Roman", Times, serif;
+	font-size:small;
+	color: #333;
+	border-bottom:1px solid #999;
+	margin-bottom:10px;
+	font-weight:bold;
+	line-height: 1.7em;
 	text-align:left;
 }
 
 .posted {
-	font-family: verdana, arial, sans-serif;
-	font-size: x-small;
-	color: #000000;
-	margin-bottom: 25px;
+	font-size:x-small;
+	color:#000000;
+	margin-bottom:25px;
 }
 
 .calendar {
-	color:#003366;
-	padding: 2px;
-	text-align: center;
-	f\ont-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: x-small; /* for IE 5.5 */
-	f\ont-size: small; /* feed to compliant browsers */
-	font-weight: normal;
+	font-family: "Times New Roman", Times, serif;
+	color: #666;
+	padding:2px;
+	text-align:center;
+	font-size:x-small;
+	font-weight:normal;
 	}
+
+.calendar table {
+	border-left:15px solid #FFF;
+	border-right:15px solid #FFF;
+}
 
 .calendar a,
 .calendar a:link,
 .calendar a:active,
 .calendar a:hover {
-	font-weight: bold;
-	text-decoration: underline;
+	font-weight:bold;
+	text-decoration:underline;
 }
 
 .calendarhead {	
-	color:#003366;
-	padding: 2px;
-	text-align: center;
-	font-weight: bold;
-	letter-spacing: 0.2em;
-	text-transform: uppercase;
-	border-bottom: 1px solid #999;
+	color: #666600;
+	padding:2px 15px 2px 15px;
+	border-left:15px solid #FFF;
+	border-right:15px solid #FFF;
+	text-align:center;
+	font-weight:bold;
+	letter-spacing:0.2em;
+	text-transform:uppercase;
+	border-bottom:1px solid #999;
 	}
 
 .calendarhead a,
 .calendarhead a:link,
 .calendarhead a:visited {
-	text-decoration: none;
+	text-decoration:none;
 	}
 .calendarhead a:hover {
-	text-decoration: underline;
+	text-decoration:underline;
 	}
 
 .calendarday {
-	font-weight: bold;
-	text-align: center;
+	font-weight:bold;
+	text-align:center;
 }
 
 .side {
+	margin:0;
+	padding:0;
+	padding:2px 15px 2px 15px;
 	font-family: verdana, arial, sans-serif;
 	color:#333;
 	font-size:x-small;
-	font-weight: normal;
-	line-height: 150%;
-	padding:2px;
+	font-weight:normal;
+	line-height:150%;
 }
 
 .sidetitle {
-	font-family: verdana, arial, sans-serif;
-	color:#003366;
+	color: #666600;
 	font-size:small;
-	font-weight: normal;
+	font-weight:normal;
 	padding:2px;
 	margin-top:10px;
-	letter-spacing: .1em;
-	border-bottom: 1px dotted #999;
+	letter-spacing:0.1em;
+	border-bottom:1px dotted #999;
+	border-left:15px solid #FFF;
+	border-right:15px solid #FFF;
 	text-align:center;
-	text-transform: lowercase;
+	text-transform:lowercase;
 }
 
 .syndicate {
 	font-family: verdana, arial, sans-serif;
 	font-size:xx-small;
-	line-height: 150%;
-	padding:2px;
+	line-height:150%;
+	padding:2px 15px 2px 15px;
+	border-left:15px solid #FFF;
+	border-right:15px solid #FFF;
 	margin-top:10px;
 	background:#EEE;
 	color:#666;
@@ -253,16 +288,14 @@ pre {
 
 .powered {
 	font-family: verdana, arial, sans-serif;
+	font-size:xx-small;
+	line-height:150%;
 	background:#EEE;
 	color:#666;
-	font-size:xx-small;
-	border-top:1px solid #CCC;
-	border-bottom: 1px solid #CCC;
-	line-height: 150%;
-	padding:2px;
-	margin-top:10px;
+	padding:2px 15px 2px 15px;
+	border-left:15px solid #FFF;
+	border-right:15px solid #FFF;
 	text-align:center;
-	letter-spacing: .2em;
 }
 
 .comments-body {

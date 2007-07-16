@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="$BLOG_CHARSET"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -25,18 +24,6 @@ $NB_RSSAltLink
 </div>
 
 <div id="container">
-
-	<div id="content">
-
-		<div class="blog">
-			$NB_MetaBody
-			<div class="menu" align="center">
-				$NB_PageLinks
-				<a href="#top">$NB_TopPage</a>
-			</div>
-		</div>
-
-	</div>
 
 	<div id="links">
 		<div class="calendar">
@@ -90,11 +77,29 @@ $NB_RSSAltLink
 		<div class="side">
 			$NB_BlogStatus
 		</div>
+		<div class="sidetitle">
+		</div>
 		<div class="powered">
 			$template_powered
 			<a href="http://nanoblogger.sourceforge.net">nb $VERSION</a>
 		</div>
 	</div>
+
+	<div id="content">
+
+		<a id="top"></a>
+		<div class="blog">
+			$NB_MetaBody
+			<div class="menu" align="center">
+				$NB_PageLinks
+			</div>
+		</div>
+		<div class="menu">
+			<a href="#top">$NB_TopPage</a>
+		</div>
+
+	</div>
+
 </div>
 
 </body>
