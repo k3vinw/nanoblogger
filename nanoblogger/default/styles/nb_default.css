@@ -275,20 +275,27 @@ pre {
 .syndicate {
 	font-family: verdana, arial, sans-serif;
 	font-size:xx-small;
-	line-height:150%;
+	color:#666;
+	background-color:#EEE;
+	margin-top:10px;
 	padding:2px 15px 2px 15px;
 	border-left:15px solid #FFF;
 	border-right:15px solid #FFF;
-	margin-top:10px;
-	background:#EEE;
-	color:#666;
+	line-height:150%;
+	text-align:right;
+}
+
+.feed-small {
+	height: 14px;
+	padding-left: 15px;
+	background: url('../images/feed-icon-14x14.png') no-repeat 0% 50%;
 }
 
 .powered {
 	font-family: verdana, arial, sans-serif;
 	font-size:xx-small;
 	line-height:150%;
-	background:#EEE;
+	background-color:#EEE;
 	color:#666;
 	padding:2px 15px 2px 15px;
 	border-left:15px solid #FFF;
@@ -385,4 +392,12 @@ pre {
 	font-weight: normal;
 	text-decoration: underline;
 	color:#333;
+}
+
+.fortune {
+	color: #555;
+	font-weight: normal;
+	font-style: italic;
+	font-size: x-small;
+	padding:2px 15px 2px 15px;
 }
