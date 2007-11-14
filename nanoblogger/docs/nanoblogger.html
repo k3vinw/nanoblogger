@@ -290,7 +290,7 @@ nb --blogdir [myblog_dir] --add
   <div id="config">
     <h2><a id="s.5" name="s.5">5. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
     <pre>
-nb --blogdir [myblog_dir] --configure -u all
+nb --blogdir [myblog_dir] --configure -q all -u
         
 </pre>This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
@@ -547,11 +547,11 @@ nb [-b blog_dir] -l
         
 </pre>Listing all entries:
     <pre>
-nb [-b blog_dir] -l all
+nb [-b blog_dir] -q all -l
         
 </pre>Listing entries for a category:
     <pre>
-nb [-b blog_dir] -c 1 -l
+nb [-b blog_dir] -c 1 -q all -l
         
 </pre>
 
@@ -638,7 +638,7 @@ nb [-b blog_dir] -t "New Category" -c new -a
         
 </pre>Listing available categories:
     <pre>
-nb [-b blog_dir] -l cat
+nb [-b blog_dir] -q cat -l
         
 </pre>Editing a category's title:
     <pre>
@@ -652,20 +652,20 @@ nb [-b blog_dir] -c 1 -d cat
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "--query" option to manipulate entries by date. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit" or "--delete" options. Using the entry ID(s) from your last query.</p>
+    <p>Use the "--query" option to manipulate the list of entries which to operate from. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit", "--delete", "--move", or "--update" options. Using the entry ID(s) from your last query.</p>
 
-    <p>Editing entries by date:</p>
+    <p>Editing entries by query:</p>
     <pre>
-nb [-b blog_dir] -q CCYY-MM-DD -l
-nb [-b blog_dir] -q CCYY-MM-DD -e 1,2,3
-</pre>Deleting entries by date:
+nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -l
+nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -e 1,2,3
+</pre>Deleting entries by query:
     <pre>
-nb [-b blog_dir] -q CCYY-MM-DD -l
-nb [-b blog_dir] -q CCYY-MM-DD -d 1,2,3
-</pre>Editing entries by date and category:
+nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -l
+nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -d 1,2,3
+</pre>Editing entries by category and query:
     <pre>
-nb [-b blog_dir] -c 2 -q CCYY-MM-DD -l
-nb [-b blog_dir] -c 2 -q CCYY-MM-DD -e 1
+nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -l
+nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 </pre>
   </div>
 
@@ -1658,7 +1658,7 @@ END-----
     <p>The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
     Update the weblog with the new entries:</p>
     <pre>
-nb [-b blog_dir] -u all
+nb [-b blog_dir] -q all -u
         
 </pre>
   </div>

@@ -8,7 +8,7 @@ Options:
  -a, --add				create new entry, category, or weblog
 					(directory).
  -b, --blogdir <directory>		specify weblog directory.
- -c, --category	<ID,cat>		specify category (for '--add',
+ -c, --category	<ID,new>		specify category (for '--add',
 					'--delete', '--edit', '--list',
 					'--update', and '--update-cache').
  --cfgfile <file>			specify an alternate configuration file.
@@ -26,8 +26,8 @@ Options:
  -i, --interactive <1=on/0=off> 	toggle interactive mode (for '--add',
  					'--delete', '--preview', '--publish',
  					and '--update').
- -l, --list <all,cat,DATE,max>		list entries or categories (defaults to
- 					max).
+ -l, --list				list entries or categories (for
+ 					'--query' and '--category').
  --manual				view the manual.
  -m, --move <ID>			move an entry to a specified
 					category (for '--category').
@@ -40,8 +40,9 @@ Options:
  --plugindir <directory> 		specify weblog's plugin directory.					
  -p, --preview				run command to preview weblog.
  -P, --publish				run command to publish weblog.
- -q, --query <all,DATE,max>		specify a query to run (for '--edit' and
- 					'--delete').
+ -q, --query <all,cat,DATE,main,max, 	specify a query to run (for '--edit',
+ expired> 				'--delete', '--list', '--move',
+					'--update', and '--update-cache').
  --template <file>			specify file to load as template (for
  					'--draft', '--makepage' and
  					'--makefile').
@@ -56,20 +57,15 @@ Options:
  -T, --text <text> 			set text of body (for '--add',
 					'--draft', '--makefile' and
  					'--makepage').
- -U, --update-cache <all,DATE,max,
- expired> 				force update of weblog's cache removing
- 					specified cached data (defaults to
- 					'expired').
- -u, --update <all,DATE,main,max>	force update of weblog's files updating
- 					specified weblog data (defaults to
- 					'max').
+ -U, --update-cache 			force cache update (for '--query', query
+ 					defaults to 'expired').
+ -u, --update 				force weblog update (for '--query',
+ 					query defaults to 'max').
  -v, --verbose <1=on/0=off>		toggle level of verbosity.
  -V, --version				display version information.
 
  -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
  
- --list and --update can match entries by date (irrelevant of entry id(s)).
-
  DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
 
 Examples:
@@ -80,7 +76,7 @@ Examples:
  create new category and title it "News"
 	nb -b ~/public_html/weblog -t "News" -c new -a
 
- create new entry using nothing but command line options!
+ create new entry using nothing but command line options
 	nb -b ~/public_html/weblog -n 'myname' -t 'Title' -T 'Text!' -a
 
 More info:

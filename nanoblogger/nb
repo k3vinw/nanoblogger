@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-07-14T14:25:54-04:00
+# Last modified: 2007-11-13T13:42:15-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -470,6 +470,7 @@ if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 fi
 # for clean build remove all generated files
 if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
+	NB_QUERY=all
 	nb_msg "$buildweblog_all"
 	# confirm removal of any previously generated files
 	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
@@ -1069,7 +1070,7 @@ while [ $# -gt 0 ]; do
 		-f|--file) 		check_arg "$2"; USR_ADDFILE="$2"; shift;;
 		-h|--help)		show_help; exit 0;;
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
-		-l|--list)		USR_QUERY="$2"; shift; LIST_WEBLOG=1;;
+		-l|--list)		LIST_WEBLOG=1;;
 		-n|--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
 		--manual)		load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"; exit 0;;
 		-m|--move)		check_arg "$2"; move_num="$2"; shift; MOVE_WEBLOG=1;;
@@ -1086,8 +1087,8 @@ while [ $# -gt 0 ]; do
 		--tag) 			check_arg "$2"; USR_METATAG="$2"; shift;;
 		--tag-text) 		check_arg "$2"; USR_TAGTEXT="$2"; shift;;
 		-T|--text) 		check_arg "$2"; USR_TEXT="$2"; shift;;
-		-u|--update)		USR_QUERY="$2"; shift; UPDATE_WEBLOG=1;;
-		-U|--update-cache) 	USR_CACHEQUERY="$2"; shift; UPDATECACHE_WEBLOG=1;;
+		-u|--update)		UPDATE_WEBLOG=1;;
+		-U|--update-cache) 	UPDATECACHE_WEBLOG=1;;
 		-v|--verbose)		check_arg "$2"; VERBOSE="$2"; shift;;
 		-V|--version)		echo "NanoBlogger $VERSION"; exit 0;;
 		--)			shift; break;;
@@ -1135,6 +1136,7 @@ if [ "$MOVE_WEBLOG" = 1 ]; then
 	check_config; move_entry
 fi
 if [ "$UPDATECACHE_WEBLOG" = 1 ]; then
+	USR_CACHEQUERY="$NB_QUERY"
 	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 	[ -z "$USR_CACHEQUERY" ] && USR_CACHEQUERY=expired
 	update_cache "$USR_CACHEQUERY" "*"
