@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-11-03T19:17:54-04:00
+# Last modified: 2007-12-18T14:53:06-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -25,6 +25,7 @@ echo "$1" |grep '^[0-9][0-9][0-9][0-9][\-][0-9][0-9][\-][0-9][0-9][A-Z][0-9][0-9
 }
 
 # filter custom date format for a new entry
+# synopsis: filter_dateformat [date] [date args]
 filter_dateformat(){
 FILTER_DATE="$1"
 FILTER_ARGS="$2"
@@ -40,21 +41,22 @@ fi
 }
 
 # filter custom date string using GNU specific 'date -d'
+# synopsis: filter_datestring [date] [date args] [date description]
 filter_datestring(){
 FILTER_DATE="$1"
 FILTER_ARGS="$2"
-FILTER_STRING="$3"
+FILTER_DESC="$3"
 : ${FILTER_ARGS:=$DATE_ARGS}
 if [ ! -z "$DATE_FORMAT" ]; then
 	[ ! -z "$DATE_LOCALE" ] &&
-		LC_ALL="$DATE_LOCALE" $DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_STRING"
+		LC_ALL="$DATE_LOCALE" $DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_DESC"
 	[ -z "$DATE_LOCALE" ] &&
-		$DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_STRING"
+		$DATE_CMD +"$DATE_FORMAT" $DATE_ARGS -d "$FILTER_DESC"
 else
 	[ ! -z "$DATE_LOCALE" ] &&
-		LC_ALL="$DATE_LOCALE" $DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
+		LC_ALL="$DATE_LOCALE" $DATE_CMD $DATE_ARGS -d "$FILTER_DESC"
 	[ -z "$DATE_LOCALE" ] &&
-		$DATE_CMD $DATE_ARGS -d "$FILTER_STRING"
+		$DATE_CMD $DATE_ARGS -d "$FILTER_DESC"
 fi
 }
 
@@ -78,7 +80,8 @@ esac
 }
 
 # sensible-browser-like utility (parses $NB_BROWSER, $BROWSER, and %s)
-# TODO: $BROWSE_URL must be full path or some browsers complain
+# synopsis: nb_browser [url]
+# NOTE: $BROWSE_URL must be full path or some browsers complain
 nb_browser(){
 BROWSER_CMD="$NB_BROWSER"
 BROWSER_URL="$1"
@@ -95,6 +98,7 @@ fi
 }
 
 # wrapper to editor command
+# synopsis: nb_edit [options] file
 nb_edit(){
 EDIT_OPTIONS="$1"
 EDIT_FILE="$2"
@@ -119,6 +123,20 @@ if [ ! -f "$EDIT_FILE" ]; then
 	nb_msg "'$EDIT_FILE' - $nbedit_nofile"
 	die "'$EDIT_FILE' - $nbedit_failed"
 fi
+}
+
+# print a file (line by line)
+# synopsis: nb_print file [number of lines|blank for all]
+nb_print(){
+nbprint_file="$1"
+maxnbprint_cnt=$2
+nbprint_cnt=0
+while read line; do
+	let nbprint_cnt=${nbprint_cnt}+1
+	[ ! -z $maxnbprint_cnt ] && [ $nbprint_cnt -gt $maxnbprint_cnt ] &&
+		break
+	echo $line
+done < $nbprint_file
 }
 
 # convert category number to existing category database
@@ -233,7 +251,7 @@ fi
 set_catlink(){
 catlink_var="$1"
 # title-based links
-category_title=`sed 1q "$NB_DATA_DIR/$catlink_var"`
+category_title=`nb_print "$NB_DATA_DIR/$catlink_var" 1`
 category_dir=`set_smartlinktitle "$catlink_var" cat`
 # failsafe for setting category directories
 : ${category_dir:=${catlink_var%%\.*}}
@@ -357,13 +375,13 @@ case "$altlink_type" in
 		;;
 	cat)
 		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
-			altcat_title=`sed 1q "$NB_DATA_DIR/$altlink_var"`
+			altcat_title=`nb_print "$NB_DATA_DIR/$altlink_var" 1`
 		altcat_linktitle=`set_title2link "$altcat_title"`
 		query_db # get categories list
 		ALTLINK_LIST=(${db_categories[*]})
 		for altc in ${ALTLINK_LIST[*]}; do
 			[ -f "$NB_DATA_DIR/$altc" ] &&
-				altc_title=`sed 1q "$NB_DATA_DIR/$altc"`
+				altc_title=`nb_print "$NB_DATA_DIR/$altc" 1`
 			altc_linktitle=`set_title2link "$altc_title"`
 			# category title failsafe
 			[ -z "$altc_linktitle" ] &&

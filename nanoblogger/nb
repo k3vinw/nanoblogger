@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2007-11-13T13:42:15-05:00
+# Last modified: 2007-12-18T03:10:36-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -373,7 +373,7 @@ CACHE_TYPE=cat
 if [ ! -z "${CAT_LIST[*]}" ]; then
 	for cat_arch in ${CAT_LIST[@]}; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
-			NB_ArchiveTitle=`sed 1q "$NB_DATA_DIR/$cat_arch"`
+			NB_ArchiveTitle=`nb_print "$NB_DATA_DIR/$cat_arch" 1`
 			set_catlink "$cat_arch"
 			[ ! -z "$CATARCH_DATATYPE" ] &&
 				ARCH_DATATYPE="$CATARCH_DATATYPE"
@@ -474,7 +474,7 @@ if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
 	nb_msg "$buildweblog_all"
 	# confirm removal of any previously generated files
 	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-	# use "--update-cache all" to clear cached data
+	# use "--force" to clear cached data
 	for update_dir in "$ARCHIVES_DIR" "$PARTS_DIR"; do
 		[ ! -z "$update_dir" ] && [ -d "$BLOG_DIR/$update_dir" ] &&
 			rm -fr "$BLOG_DIR"/"$update_dir"/*
@@ -893,7 +893,7 @@ if [ "$db_query" = cat ]; then
 	cat_total=${#db_categories[*]}
 	while [ "$id" -le "$cat_total" ]; do
 		[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
-			echo " $id, `sed 1q "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`"
+			echo " $id, `nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE 1`"
 		let id=${id}+1
 	done; exit 0
 fi
@@ -1068,6 +1068,7 @@ while [ $# -gt 0 ]; do
 		-e|--edit)		check_arg "$2"; edit_num="$2"; shift; EDIT_WEBLOG=1;;
 		-E|--draft) 		check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		-f|--file) 		check_arg "$2"; USR_ADDFILE="$2"; shift;;
+		-F|--force) 		FORCE_UPDATE=1; UPDATECACHE_WEBLOG=1;;
 		-h|--help)		show_help; exit 0;;
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
 		-l|--list)		LIST_WEBLOG=1;;

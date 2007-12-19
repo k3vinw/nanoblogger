@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2007-02-13T14:44:56-05:00
+# Last modified: 2007-12-18T03:07:41-05:00
 
 # index related categories by id
 index_catids(){
@@ -85,7 +85,7 @@ catdb_file="$1"
 db_order="$2"
 : ${db_order:=$SORT_ARGS}
 if [ -f "$catdb_file" ]; then
-	catdb_title=`sed 1q "$catdb_file"`
+	catdb_title=`nb_print "$catdb_file" 1`
 	echo "$catdb_title" > "$catdb_file".tmp
 	sed 1d "$catdb_file" |sort "$db_order" >> "$catdb_file".tmp
 	mv "$catdb_file".tmp "$catdb_file"
@@ -145,8 +145,8 @@ fi
 rebuild_catdb(){
 catdb_file="$1"
 if [ -f "$catdb_file" ]; then
-	catdb_title=`sed 1q "$catdb_file"`
-	CATDB_RESULTS=(`sed 1d "$catdb_file"`)
+	catdb_title=`nb_print "$catdb_file" 1`
+	CATDB_RESULTS=(`nb_print "$catdb_file" 1`)
 	for bcatdb_item in ${CATDB_RESULTS[@]}; do
 		update_catdb "$bcatdb_item" "$catdb_file"
 	done

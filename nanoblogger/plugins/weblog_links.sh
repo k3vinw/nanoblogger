@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2007-02-13T23:37:01-05:00
+# Last modified: 2007-12-18T03:12:48-05:00
 
 # <div class="sidetitle">
 # Links
@@ -74,7 +74,7 @@ for cat_link in ${db_categories[*]}; do
 		cat_index="$category_link"
 		query_db "$db_query" "$cat_link"
 		cat_total=${#DB_RESULTS[*]}
-		NB_CategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
+		NB_CategoryTitle=`nb_print "$NB_DATA_DIR/$cat_link" 1`
 		cat <<-EOF
 			<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
 		EOF

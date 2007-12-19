@@ -105,7 +105,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		[ "$atomentry_wcatids" = "$atomentry_catids" ] &&
 			atomentry_catids=
 		for atomentry_catdb in ${atomentry_catids//\,/ }; do
-			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$atomentry_catdb.$NB_DBTYPE"`
+			cat_title=`nb_print "$NB_DATA_DIR"/cat_"$atomentry_catdb.$NB_DBTYPE" 1`
 			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			if [ ! -z "$cat_title" ]; then
 				cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
@@ -152,7 +152,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 			for cat_db in ${db_categories[@]}; do
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					set_catlink "$cat_db"
-					NB_AtomTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
+					NB_AtomTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
 					NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
 					NB_AtomCatLink="$category_link"
 					nb_msg "$plugins_action $category_dir atom $NB_AtomVer feed ..."

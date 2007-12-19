@@ -462,9 +462,9 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Plugins Configuration</b></p>
 
-    <p><em>PLUGINS_DIR</em> specifies the directory location of the main plugins. Main plugins provide a standard mechanism for loading plugins on a global basis. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
+    <p><em>PLUGINS_DIR</em> specifies the directory location of global plugins. Global plugins effect all weblogs. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
 
-    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins provide a standard mechanism for loading plugins on a per-weblog basis. User plugins can override main plugins, just keep the names the same. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
+    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins only effects the specified weblog. User plugins can override main plugins, just keep the names the same. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
@@ -652,7 +652,7 @@ nb [-b blog_dir] -c 1 -d cat
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "--query" option to manipulate the list of entries which to operate from. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit", "--delete", "--move", or "--update" options. Using the entry ID(s) from your last query.</p>
+    <p>Use the "--query" option to manipulate the list of entries which to operate from. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit", "--delete", "--move", or "--update" options. Using the entry ID(s) from your last query accordingly.</p>
 
     <p>Editing entries by query:</p>
     <pre>
@@ -695,7 +695,7 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 
           <td align="left">dollar sign</td>
 
-          <td align="left">prepend backslash to escape, e.g. "\$"</td>
+          <td align="left">prefix backslash to escape, e.g. "\$"</td>
         </tr>
 
         <tr>
@@ -703,7 +703,7 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 
           <td align="left">back quote</td>
 
-          <td align="left">form of command substitution, prepend backslash to escape, e.g. "\`"</td>
+          <td align="left">form of command substitution, prefix backslash to escape, e.g. "\`"</td>
         </tr>
 
         <tr>
@@ -711,7 +711,7 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 
           <td align="left">dollar sign and left parenthesis</td>
 
-          <td align="left">form of command substitution, prepend backslash to escape, e.g. "\$("</td>
+          <td align="left">form of command substitution, prefix backslash to escape, e.g. "\$("</td>
         </tr>
       </table>
     </div>
@@ -1287,6 +1287,18 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
         </tr>
 
         <tr>
+          <td align="left">nb_print</td>
+
+          <td align="left">prints a file line by line</td>
+
+          <td align="left">filename=$1, number of lines=$2 (blank for all)</td>
+
+          <td align="left">stdout</td>
+
+          <td align="left">use instead of "sed 1q"</td>
+        </tr>
+
+        <tr>
           <td align="left">nb_msg</td>
 
           <td align="left">preferred method of verbosity</td>
@@ -1603,7 +1615,7 @@ mput *
   <div id="comments">
     <h2><a id="s.11" name="s.11">11. Adding Support for Comments</a></h2>
 
-    <p>Comment services and add-ons: NanoBlogger Comments[1], CGIComment[2], blogkomm[3], JS-Kit[4], and Haloscan.com[5].</p>
+    <p>Comment services and add-on's: NanoBlogger Comments[1], CGIComment[2], blogkomm[3], JS-Kit[4], and Haloscan.com[5].</p>
 
     <p>Choose one and follow the included install instructions.</p>
   </div>
@@ -1693,13 +1705,24 @@ BLOG_DIR="/path/to/weblog"
     
 </pre>
 
-    <p><b>Running User Plugins Exclusively</b></p>
+    <p><b>Disabling Plugins</b></p>
 
-    <p>Set <em>PLUGINS_DIR</em> to "[weblog_dir]/plugins".</p>edit blog.conf
+    <p>You may wish to disable the global plugins or all plugins.</p>
+
+    <p>To disable global plugins edit <em>blog.conf</em> and change <em>PLUGINS_DIR</em> to a preexisting directory:</p>
     <pre>
 PLUGINS_DIR="$BLOG_DIR/plugins"
     
 </pre>
+
+    <p>To disable all plugins, including user's, edit <em>blog.conf</em> and change <em>PLUGINS_DIR</em> and <em>USR_PLUGINSDIR</em> to a preexisting (empty) directory:</p>
+    <pre>
+PLUGINS_DIR="$BLOG_DIR/no-plugins"
+USR_PLUGINSDIR="$BLOG_DIR/no-plugins"
+
+</pre>
+
+    <p>As noted previously, plugins can be disabled on an individual basis by changing their suffix to something other than ".sh".</p>
 
     <p><b>Adding Shell Scripting to Your Templates</b></p>
 
@@ -1753,7 +1776,7 @@ php?&gt;
     <a href="http://reactor-core.org/~djw/diary/">7. http://reactor-core.org/~djw/diary/</a><br /></p>
 
     <div class="copyright">
-      <span>Copyright © 2003-2007 Kevin Wood. All Rights Reserved.</span>
+      <span>Copyright © 2003-2008 Kevin Wood. All Rights Reserved.</span>
     </div>
   </div>
 </body>

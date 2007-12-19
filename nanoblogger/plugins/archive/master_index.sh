@@ -28,7 +28,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 			cat_index="$category_link"
 			query_db "$db_query" "$cat_link"
 			cat_total=${#DB_RESULTS[*]}
-			NB_ArchiveCategoryTitle=`sed 1q "$NB_DATA_DIR/$cat_link"`
+			NB_ArchiveCategoryTitle=`nb_print "$NB_DATA_DIR/$cat_link" 1`
 			# following needs to fit on single line
 			cat <<-EOF
 <!-- $NB_ArchiveCategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_ArchiveCategoryTitle</a> ($cat_total) <br />

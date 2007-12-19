@@ -10,7 +10,7 @@ if [ "$CATEGORY_LINKS" = 1 ]; then
 	[ "$entry_wcatids" = "$entry_catids" ] &&
 		entry_catids=
 	for entry_catnum in ${entry_catids//\,/ }; do
-		cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$entry_catnum.$NB_DBTYPE"`
+		cat_title=`nb_print "$NB_DATA_DIR"/cat_"$entry_catnum.$NB_DBTYPE" 1`
 		set_catlink cat_"$entry_catnum.$NB_DBTYPE"
 		cat_index="$category_link"
 		# following must fit on single line

@@ -58,7 +58,7 @@ addalist_name(){
 NB_ArticlesListTitle=
 # Reads alternate title for list from $ARTICLES_TITLE_FILE (1st line).
 [ -f "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE" ] &&
-	NB_ArticlesListTitle=`sed 1q $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE`
+	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE 1`
 [ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ARTICLE_DIR"
 # fallback to our language definition for list's title
 [ ! -z "$template_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
@@ -79,7 +79,8 @@ add_articlelink(){
 create_article(){
 BLOGPAGE_SRCFILE="$BLOG_DIR/$ARTICLE_DIR/$article_srcfile"
 BLOGPAGE_OUTFILE="$BLOG_DIR/$ARTICLE_DIR/$article_file"
-[ "$NB_QUERY" = articles ] || [ "$NB_QUERY" = all ] && rm -f "$BLOGPAGE_OUTFILE"
+[ "$NB_QUERY" = articles ] || [ "$NB_QUERY" = all ] &&
+	[ -z "$cat_num" ] && rm -f "$BLOGPAGE_OUTFILE"
 if [ "$BLOGPAGE_SRCFILE" -nt "$BLOGPAGE_OUTFILE" ]; then
 	# set text formatting for page content
 	BLOGPAGE_FORMAT="$ARTICLE_FORMAT"

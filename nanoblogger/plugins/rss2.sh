@@ -99,7 +99,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		[ "$rss2entry_wcatids" = "$rss2entry_catids" ] &&
 			rss2entry_catids=
 		for rss2_catnum in ${rss2entry_catids//\,/ }; do
-			cat_title=`sed 1q "$NB_DATA_DIR"/cat_"$rss2_catnum.$NB_DBTYPE"`
+			cat_title=`nb_print "$NB_DATA_DIR"/cat_"$rss2_catnum.$NB_DBTYPE" 1`
 			[ "$cat_title" != "$oldcat_title" ] &&
 				cat_title="$oldcat_title $cat_title"
 			oldcat_title="$cat_title,"
@@ -141,7 +141,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 					set_catlink "$cat_db"
 					NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`
 					NB_RSS2CatLink="$category_link"
-					NB_RSS2CatTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
+					NB_RSS2CatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
 					nb_msg "$plugins_action $category_dir rss $NB_RSS2Ver feed  ..."
 					build_rssfeed "$cat_db"
 					make_rssfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_RSS2CatFile"
