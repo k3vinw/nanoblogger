@@ -45,7 +45,7 @@ fi
 
 # new way
 article_name=`echo "$articlelink_var" |cut -d"." -f 1`
-article_dir=`set_title2link "$article_name"`
+article_dir=`translit_text "$article_name"`
 article_file="$article_dir/index.$NB_FILETYPE"
 article_link="$article_dir/$NB_INDEX"
 
@@ -79,8 +79,13 @@ add_articlelink(){
 create_article(){
 BLOGPAGE_SRCFILE="$BLOG_DIR/$ARTICLE_DIR/$article_srcfile"
 BLOGPAGE_OUTFILE="$BLOG_DIR/$ARTICLE_DIR/$article_file"
-[ "$NB_QUERY" = articles ] || [ "$NB_QUERY" = all ] &&
-	[ -z "$cat_num" ] && rm -f "$BLOGPAGE_OUTFILE"
+case "$NB_QUERY" in
+		all|article|article[a-z])
+			[ -z "$cat_num" ] && rm -f "$BLOGPAGE_OUTFILE"
+		;;
+		*) :
+		;;
+esac
 if [ "$BLOGPAGE_SRCFILE" -nt "$BLOGPAGE_OUTFILE" ]; then
 	# set text formatting for page content
 	BLOGPAGE_FORMAT="$ARTICLE_FORMAT"

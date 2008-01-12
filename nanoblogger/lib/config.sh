@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2007-02-18T18:52:49-05:00
+# Last modified: 2008-01-12T01:48:54-05:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -117,8 +117,10 @@ fi
 
 # default metadata marker (a.k.a. spacer)
 : ${METADATA_MARKER:=-----}
-# default metadata close tag (e.g. 'END-----')
-: ${METADATA_CLOSETAG:=$METADATA_MARKER}
+# default metadata close var (e.g. 'END-----')
+: ${METADATA_CLOSEVAR:=END-----}
+# depecrated METADATA_CLOSETAG here for transitional purposes only
+: ${METADATA_CLOSETAG:=$METADATA_CLOSEVAR}
 # ---
 
 # default to raw processing for page content
@@ -158,7 +160,8 @@ fi
 # default to auto cache management
 : ${BLOG_CACHEMNG:=1}
 # default for maximum entries to save in cache
-: ${MAX_CACHE_ENTRIES:=$MAX_ENTRIES}
+[ -z "$MAX_CACHE_ENTRIES" ] &&
+	let MAX_CACHE_ENTRIES=${MAX_ENTRIES}*2
 # default chronological order for archives
 : ${CHRON_ORDER:=1}
 # determine sort order (-u required)
@@ -172,8 +175,10 @@ fi
 	BLOG_INTERACTIVE="$USR_INTERACTIVE"
 # default for showing category links
 : ${CATEGORY_LINKS:=1}
-# default for category feeds - disabled
-: ${CATEGORY_FEEDS:=0}
+# depecrated CATEGORY_LINKS here for tansitional purposes only
+CATEGORY_LINKS="$CATEGORY_LINKS"
+# default for category feeds - leave unset
+: ${CATEGORY_FEEDS:=}
 # default for friendly links
 : ${FRIENDLY_LINKS:=1}
 # default limit for # of link title characters
@@ -185,7 +190,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
 	QUERY_MODE=; MAX_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_CATPAGE_ENTRIES=; \
 	MAX_MONTHPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; METADATA_MARKER=; \
-	METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
+	METADATA_CLOSEVAR=; METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
 	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
 	USR_PLUGINSDIR=; CATEGORY_LINKS=; CATEGORY_FEEDS=; FRIENDLY_LINKS=; \
 	MAX_TITLEWIDTH=;

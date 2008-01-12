@@ -3,7 +3,7 @@
 # by archive/year/year_index.sh plugin
 
 # concatenate modification variables
-MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Move_EntryFile$USR_TITLE"
+MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Cat_EntryFile$USR_TITLE"
 MASTERIMOD_QUERY=`echo "$NB_QUERY" |grep "^[0-9].*"`
 
 # check for weblog modifications
@@ -22,13 +22,13 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 
 	# create links for categories
 	build_catlinks(){
-	for cat_link in ${db_categories[*]}; do
-		if [ -f "$NB_DATA_DIR/$cat_link" ]; then
-			set_catlink "$cat_link"
+	for bcat_link in ${db_categories[*]}; do
+		if [ -f "$NB_DATA_DIR/$bcat_link" ]; then
+			set_catlink "$bcat_link"
 			cat_index="$category_link"
-			query_db "$db_query" "$cat_link"
+			query_db "$db_query" "$bcat_link"
 			cat_total=${#DB_RESULTS[*]}
-			NB_ArchiveCategoryTitle=`nb_print "$NB_DATA_DIR/$cat_link" 1`
+			NB_ArchiveCategoryTitle=`nb_print "$NB_DATA_DIR/$bcat_link" 1`
 			# following needs to fit on single line
 			cat <<-EOF
 <!-- $NB_ArchiveCategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_ArchiveCategoryTitle</a> ($cat_total) <br />
@@ -37,8 +37,8 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 	done
 	}
 
-	build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$SCRATCH_FILE.category_links.$NB_FILETYPE"
-	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.category_links.$NB_FILETYPE")
+	build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$SCRATCH_FILE.cat_links.$NB_FILETYPE"
+	NB_ArchiveCategoryLinks=$(< "$SCRATCH_FILE.cat_links.$NB_FILETYPE")
 
 	make_yearlink(){
 	NB_ArchiveYearTitle="$yearlink"
@@ -62,7 +62,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 	cat_total=${#db_categories[*]}
 	if [ "$cat_total" -gt 0 ]; then
 		# make NB_CategoryLinks placeholder
-		NB_BrowseCatLinks=$(
+		NB_BrowseCategoryLinks=$(
 		cat <<-EOF
 			<a id="category"></a>
 			<strong>$template_browsecat</strong>
@@ -75,7 +75,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 
 	# make NB_ArchiveLinks placeholder
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/archive_links.$NB_FILETYPE <<-EOF
-		$NB_BrowseCatLinks
+		$NB_BrowseCategoryLinks
 		<a id="date"></a>
 		<strong>$template_browsedate</strong>
 		<div>

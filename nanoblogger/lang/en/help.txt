@@ -2,85 +2,82 @@ NanoBlogger - Command line weblog engine.
 Version $VERSION, by Kevin Wood <n1xt3r@fastmail.fm>
 
 Usage:
- $BASENAME [-b blog_dir] [options]
+ $BASENAME [-b blog_dir] [options] <action>
+
+Actions:
+ add					- create new entry, tag, or weblog
+					  (directory).
+ configure				- configure weblog (for 'update').
+ delete <ID,tag>			- delete an entry, tag, or un-tag entry.
+ draft <file> 				- edit or create metafile.
+ edit <ID,tag>				- edit an entry or tag.
+ list					- list entries or tags (for
+ 					  'query' and 'tag', defaults to
+					  'max').
+ make-page <file1> <file2> 		- create new weblog page (file2) from
+					  metafile (file1).
+ tag-entry <ID>				- tag entry (for 'tag').
+ tag-list 				- list tags (same as 'query tag list').
+ manual					- view the manual.
+ make-file <file> 			- create new metafile.
+ preview				- run command to preview weblog.
+ publish				- run command to publish weblog.
+ query <all,tag,DATE,main,max, 		- specify a query to run (for 'edit',
+        expired> 			  'delete', 'list', 'tag-entry',
+					  'update', and 'update-cache').
+ tag <ID,new> 				- specify tag (for 'add', 'delete',
+ 					  'edit', 'list', 'update', and
+					  'update-cache').
+ file <file> 				- specify metafile to import as entry
+ 					  (for 'add').
+ update-cache 				- force cache update (for 'query',
+ 					  defaults to 'expired').
+ update 				- force weblog update (for 'query',
+ 					  defaults to 'max').
 
 Options:
- -a, --add				create new entry, category, or weblog
-					(directory).
- -b, --blogdir <directory>		specify weblog directory.
- -c, --category	<ID,new>		specify category (for '--add',
-					'--delete', '--edit', '--list',
-					'--update', and '--update-cache').
- --cfgfile <file>			specify an alternate configuration file.
- --configure				configure weblog (for '--update').
- --datadir <directory>			specify weblog's data directory.
- -d, --delete <ID,cat>			delete an entry or category.
- -D, --desc <text>			set text of description (for '--add',
- 					'--draft', '--makefile' and
- 					'--makepage').
- -e, --edit <ID,cat>			edit an entry or category.
- -E, --draft <file> 			edit or create metafile.
- -f, --file <file> 			specify metafile to import as entry
- 					(for '--add').
- -F, --force 				force cache update. (synonymous with
- 					--update-cache).
- -h, --help				show this help message.
- -i, --interactive <1=on/0=off> 	toggle interactive mode (for '--add',
- 					'--delete', '--preview', '--publish',
- 					and '--update').
- -l, --list				list entries or categories (for
- 					'--query' and '--category', defaults to
-					'max').
- --manual				view the manual.
- -m, --move <ID>			move an entry to a specified
-					category (for '--category').
- -M, --makepage <file1> <file2> 	create new weblog page (file2) from
-					metafile (file1).
- --makefile <file> 			create new metafile.
- -n, --author <text>			set text of author (for '--add',
-					'--draft', '--makefile' and
- 					'--makepage').
- --plugindir <directory> 		specify weblog's plugin directory.					
- -p, --preview				run command to preview weblog.
- -P, --publish				run command to publish weblog.
- -q, --query <all,cat,DATE,main,max, 	specify a query to run (for '--edit',
- expired> 				'--delete', '--list', '--move',
-					'--update', and '--update-cache').
+ -b, --blog-dir <directory>		specify weblog directory.
+ -f, --force 				force cache update. (synonymous with
+ 					'update-cache').
+ -h,--help				show this help message.
+ -i, --interactive <1=on/0=off> 	toggle interactive mode (for 'add',
+ 					'delete', 'preview', 'publish', and
+					'update').
+ -v, --verbose <1=on/0=off>		toggle verbosity.
+ --conf-file <file>			specify an alternate configuration file.
+ --desc <text>				set text of description (for 'add',
+ 					'draft', 'make-file' and 'make-page').
+ --data-dir <directory>			specify weblog's data directory.
+ --title <text> 			set title (for 'add', 'tag', 'draft',
+ 					'make-file' and 'make-page').
+ --author <text>			set text of author (for 'add', 'draft',
+ 					'make-file' and 'make-page').
+ --plugin-dir <directory> 		specify weblog's plugin directory.
+ --text <text> 				set text of body (for 'add', 'draft',
+ 					'make-file' and 'make-page').
  --template <file>			specify file to load as template (for
- 					'--draft', '--makepage' and
- 					'--makefile').
+ 					'draft', 'make-page' and 'make-file').
  --template-dir <directory>		specify weblog's template directory.
- -t, --title <text>			set text of title (for '--add',
-					'--category', '--draft',
- 					'--makefile' and '--makepage').
- --tag <TAG> 	 	 		specify tag (for '--add', '--draft',
-					'--edit', '--makefile' and
- 					 '--makepage').
- --tag-text <text> 			set text of tag (for '--tag').
- -T, --text <text> 			set text of body (for '--add',
-					'--draft', '--makefile' and
- 					'--makepage').
- -U, --update-cache 			force cache update (for '--query',
- 					defaults to 'expired').
- -u, --update 				force weblog update (for '--query',
- 					defaults to 'max').
- -v, --verbose <1=on/0=off>		toggle level of verbosity.
- -V, --version				display version information.
+ --var <VARIABLE>  	 		define meta-variable (for '-a', '-E',
+ 					'-e', '--make-file' and '-M').
+ --set-var <input>  			set meta-variable (for '--var').
+ --version				display version information.
 
- -c,-d,-e,-m accepts multiple ID numbers seperated by commas (e.g. 1,2,3).
+ tag,delete,edit,tag-entry accepts multiple ID numbers seperated by commas (e.g.
+ 1,2,3).
  
  DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
 
 Examples:
 
  specify the weblog directory to create or add new entry
-	nb -b ~/public_html/weblog -a
+	nb -b ~/public_html/weblog add
 
- create new category and title it "News"
-	nb -b ~/public_html/weblog -t "News" -c new -a
+ create new "examples" tag
+	nb -b ~/public_html/weblog --title new --author examples add
 
  create new entry using nothing but command line options
-	nb -b ~/public_html/weblog -n 'myname' -t 'Title' -T 'Text!' -a
+	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add
 
 More info:
  URL: http://nanoblogger.sourceforge.net

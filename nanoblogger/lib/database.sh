@@ -1,12 +1,12 @@
 # Module for database functions
-# Last modified: 2007-12-18T03:07:41-05:00
+# Last modified: 2008-01-11T00:11:14-05:00
 
 # index related categories by id
 index_catids(){
 indexcat_item="$1"
 indexcat_list=($2)
 [ -z "${indexcat_list[*]}" ] &&
-	indexcat_list=(`for ic_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${ic_db//*\/}; done`)
+	indexcat_list=(`for it_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${it_db//*\/}; done`)
 cat_ids=; cat_idnum=
 for indexcat_db in ${indexcat_list[@]}; do
 	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))
@@ -105,7 +105,7 @@ if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 fi
 }
 
-# update entry and it's related categories for cat database
+# update entry and it's related categories for category database
 update_catdb(){
 db_item="$1"
 db_file="$2"
@@ -147,8 +147,8 @@ catdb_file="$1"
 if [ -f "$catdb_file" ]; then
 	catdb_title=`nb_print "$catdb_file" 1`
 	CATDB_RESULTS=(`nb_print "$catdb_file" 1`)
-	for bcatdb_item in ${CATDB_RESULTS[@]}; do
-		update_catdb "$bcatdb_item" "$catdb_file"
+	for rbcatdb_item in ${CATDB_RESULTS[@]}; do
+		update_catdb "$rbcatdb_item" "$catdb_file"
 	done
 	resort_catdb "$catdb_file"
 fi
@@ -233,7 +233,7 @@ else
 fi
 }
 case "$db_query" in
-	all) db_query=; query_data;;
+	a|any|all) db_query=; query_data;;
 	# create master reference db
 	master) db_query=; MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
 	years) db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`);;

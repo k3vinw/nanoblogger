@@ -23,13 +23,13 @@ checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
 querydb_init="initializing main database ..."
 querydb_update="updating main database ..."
 
-# validate category id(s)
+# validate tag id(s)
 catid_bad="bad id(s)!"
-checkcatid_invalid="invalid category id(s):"
-checkcatid_novalid="must specify valid category id!"
+checkcatid_invalid="invalid tag id(s):"
+checkcatid_novalid="must specify valid tag id!"
 
 # validate metadata files
-checkmetatags_notag="missing metatag:"
+checkmetavars_novar="missing metavar:"
 
 # config_weblog
 configweblog_nomod="no changes were made! goodbye."
@@ -69,7 +69,7 @@ nbedit_prompt="press [enter] to continue:"
 nbedit_failed="failed to write file! goodbye."
 
 # add_entry
-addentry_catinfo="selected category id(s):"
+addentry_catinfo="selected tag id(s):"
 addentry_action="adding new entry ..."
 
 # confirm_action
@@ -80,33 +80,33 @@ novalid_entryid="must specify a valid entry id."
 invalid_entryid="invalid entry id(s):"
 
 # edit_weblog
-editweblog_onecat="only one category can be specified when editing a title!"
+editweblog_onecat="only one tag can be specified when editing a title!"
 editweblog_title="changing title to:"
-editweblog_catinfo="selected category id(s):"
+editweblog_catinfo="selected tag id(s):"
 editweblog_nomod="no changes were made! goodbye."
 editweblog_action="processing modified weblog entries ..."
 editweblog_noaction="no changes were made! goodbye."
 
 # delete_weblog
-deleteweblog_delcat="deleting category id(s):"
-deleteweblog_onecat="only one category can be specified when deleting entries from a category!"
-deleteweblog_catinfo="selected category id(s):"
+deleteweblog_delcat="deleting tag id(s):"
+deleteweblog_onecat="only one tag can be specified when untagging entries!"
+deleteweblog_catinfo="selected tag id(s):"
 deleteweblog_delentry="deleting entry id(s):"
 
 # header attributes
 header_ID="ID"
 header_Title="Title"
-header_Category="Category ID(s)"
+header_Category="Tag ID(s)"
 header_Date="Date"
 
 # list_weblog
-listweblog_nocat="no categories exist yet! goodbye."
+listweblog_nocat="no tags exist yet! goodbye."
 listweblog_nomatch="nothing matched your query! goodbye."
 
-# move_entry
-moveentry_catfirst="must specify category before entry!"
-moveentry_catinfo="selected category id(s):"
-moveentry_moventry="moving entry id(s):"
+# cat_entry
+catentry_catfirst="must specify tag before entry!"
+catentry_catinfo="selected tag id(s):"
+catentry_tagging="tagging entry id(s):"
 
 # add_weblog
 addweblog_noweblog="no weblog directory specified! goodbye."
@@ -116,10 +116,10 @@ addweblog_copyaction="copying default weblog files ..."
 addweblog_askconf="would you like to configure the new weblog now?"
 addweblog_confaction="configuring new weblog ..."
 addweblog_noconf="weblog not configured! use '`basename $0` -b [blog_dir] --configure -u all' to configure later."
-addweblog_newcat="creating new category"
-addweblog_titlecat="enter the new category's title"
+addweblog_newcat="creating new tag"
+addweblog_titlecat="enter name for the new tag"
 addweblog_untitled="Untitled"
-addweblog_madecat="category database created for"
+addweblog_madecat="tag database created for"
 addweblog_author="enter author's name"
 addweblog_title="enter a title"
 addweblog_desc="enter a short description"

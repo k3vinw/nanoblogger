@@ -1,7 +1,8 @@
 # NanoBlogger RSS 2.0 Feed Plugin
+# synopsis: nb -q feed -t 1 -u
 
 # concatenate modification variables
-FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
+FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
@@ -34,7 +35,8 @@ else
 	RESTORE_SORTARGS=
 fi
 
-if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
+if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *) [ 1 = false ];; esac; then
+	
 	set_baseurl "$BLOG_URL/"
 
 	# escape special characters to help create valid xml feeds
@@ -50,6 +52,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL"
+	[ ! -z "$NB_RSS2CatTitle" ] &&
+		NB_RSS2Title="$template_catarchives $NB_RSS2CatTitle | $NB_RSS2Title"
 	[ ! -z "$NB_RSS2CatLink" ] &&
 		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
 
@@ -133,7 +137,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 
 	# generate category feed entries
 	build_rss_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$RSS2_CATFEEDS" = 1 ]; then
+	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$RSS2_CATFEEDS" = 1; then
 		db_categories=(${CAT_LIST[@]})
 		if [ ! -z "${db_categories[*]}" ]; then
 			for cat_db in ${db_categories[@]}; do

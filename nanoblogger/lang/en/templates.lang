@@ -3,14 +3,16 @@
 # lang/en/templates.lang
 
 # weblog entry links and messages
-template_permlink="Permanent Link"
-template_catlinks="Categories:"
+template_permlink="Permanent link"
+template_catlinks="File under:"
 template_cmtlink="Comments"
 template_postedby="Posted by"
 
 # only here for compat. with early 3.3 rc's
 permanentlink_title="$template_permlink"
 categorylinks_title="$template_catlinks"
+# depecrated catlinks_title here for transitional purposes
+catlinks_title="$categorylinks_title"
 commentslink_title="$template_cmtlink"
 
 # weblog main messages
@@ -19,18 +21,20 @@ template_category="Categories"
 template_contact="Contact"
 template_fortune="Fortune"
 template_links="Links"
-template_rentries="Recent Entries"
+template_rentries="Recent entries"
 template_syndicate="Syndicate"
 template_syndicate_main="Site"
-template_status="Weblog Status"
+template_status="Weblog status"
 template_powered="powered by &#36;EDITOR, bash, cat, grep, sed, and"
 
 # misc. weblog links
 template_archives="Archives"
 template_main="Main"
+template_catarchives="Filed under:"
 
 # dynamic template messages
 template_articles="Articles"
+# depecrated template_browsecat here for transitional purposes
 template_browsecat="Browse by category"
 template_browsedate="Browse by date"
 template_browseentry="Browse by entry"

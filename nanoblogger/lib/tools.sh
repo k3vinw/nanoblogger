@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2007-12-18T14:53:06-05:00
+# Last modified: 2008-01-11T17:52:17-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -86,10 +86,10 @@ nb_browser(){
 BROWSER_CMD="$NB_BROWSER"
 BROWSER_URL="$1"
 if [ ! -z "$BROWSER_CMD" ]; then
-	BROWSER_LIST=`echo "$BROWSER_CMD" |sed -e '/[ ]/ s//%REM%/g; /[\:]/ s// /g'`
+	BROWSER_LIST=`echo "$BROWSER_CMD" |sed -e '/[ ]/ s//%REM%/g; /\:/ s// /g'`
 	for browser in $BROWSER_LIST; do
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
-		browser_cmd=`echo "$browser" |sed -e 's/[\%]REM[\%]/ /g; s/[\%][\%]/\%/g; s/[\%]s/'$browserurl_sedvar'/g'`
+		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		$browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
@@ -139,7 +139,7 @@ while read line; do
 done < $nbprint_file
 }
 
-# convert category number to existing category database
+# convert category number to existing cateogory database
 cat_id(){
 cat_query=(`echo "$1" |grep '[0-9]' |sed -e '/,/ s// /g; /[A-Z,a-z\)\.-]/d'`)
 query_db
@@ -163,14 +163,14 @@ done
 [ ! -z "$1" ] && [ -z "${cat_list[*]}" ] && die "$checkcatid_novalid"
 }
 
-# check file for required metadata tags
-check_metatags(){
-VALIDATE_TAGS="$1"
+# check file for required metadata vars
+check_metavars(){
+VALIDATE_VARS="$1"
 VALIDATE_METAFILE="$2"
-for mtag in $VALIDATE_TAGS; do
-	MTAG_NUM=`grep -c "^$mtag" "$VALIDATE_METAFILE"`
-	[ "$MTAG_NUM" = 0 ] &&
-		die "'$VALIDATE_METAFILE' - $checkmetatags_notag '$mtag'"
+for mvar in $VALIDATE_VARS; do
+	MVAR_NUM=`grep -c "^$mvar" "$VALIDATE_METAFILE"`
+	[ "$MVAR_NUM" = 0 ] &&
+		die "'$VALIDATE_METAFILE' - $checkmetavars_novar '$mvar'"
 done
 }
 
@@ -179,7 +179,7 @@ import_file(){
 IMPORT_FILE="$1"
 if [ -f "$IMPORT_FILE" ]; then
 	# validate metafile
-	check_metatags "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSETAG" \
+	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 		"$IMPORT_FILE"
 	load_metadata ALL "$IMPORT_FILE"
 else
@@ -187,10 +187,10 @@ else
 fi
 }
 
-# special conversion for titles to link form
-set_title2link(){ title2link_var="$1"; t2lchar_limit="$MAX_TITLEWIDTH"
-nonascii="${title2link_var//[a-zA-Z0-9_-]/}" # isolate all non-printable/non-ascii characters
-echo "$title2link_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g; s/[$nonascii ]/_/g" |cut -c1-$t2lchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
+# transliterate text into a suitable form for web links
+translit_text(){ translittext_var="$1"; ttchar_limit="$MAX_TITLEWIDTH"
+nonascii="${translittext_var//[a-zA-Z0-9_-]/}" # isolate all non-printable/non-ascii characters
+echo "$translittext_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g; s/[$nonascii ]/_/g" |cut -c1-$ttchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
 }
 
 # set base url based on parameters
@@ -253,7 +253,7 @@ catlink_var="$1"
 # title-based links
 category_title=`nb_print "$NB_DATA_DIR/$catlink_var" 1`
 category_dir=`set_smartlinktitle "$catlink_var" cat`
-# failsafe for setting category directories
+# failsafe for setting cat directories
 : ${category_dir:=${catlink_var%%\.*}}
 category_file="$category_dir/$NB_INDEXFILE"
 category_link="$category_dir/$NB_INDEX"
@@ -348,7 +348,7 @@ set_entryid(){
 echo "$x_id$1" |sed -e '/[\/]/ s//-/g'
 }
 
-# use instead of set_title2link to avoid file/URL collissions
+# use instead of translit_text to avoid file/URL collissions
 set_smartlinktitle(){
 altlink_var="$1"
 altlink_type="$2"
@@ -356,17 +356,17 @@ case "$altlink_type" in
 	entry)
 		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
 			read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
-		altentry_linktitle=`set_title2link "$METADATA"`
+		altentry_linktitle=`translit_text "$METADATA"`
 		alte_day=`echo "$altlink_var" |cut -c1-10`
 		query_db "$alte_day"
 		ALTLINK_LIST=(${DB_RESULTS[*]})
 		for alte in ${ALTLINK_LIST[*]}; do
 			[ -f "$NB_DATA_DIR/$alte" ] &&
 				read_metadata TITLE "$NB_DATA_DIR/$alte"
-			alte_linktitle=`set_title2link "$METADATA"`
+			alte_linktitle=`translit_text "$METADATA"`
 			# entry title failsafe
 			[ -z "$alte_linktitle" ] &&
-				alte_linktitle=`set_title2link "$notitle"`
+				alte_linktitle=`translit_text "$notitle"`
 			echo "$alte:$alte_linktitle"
 		done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
 		link_match="$altentry_linktitle"
@@ -376,17 +376,17 @@ case "$altlink_type" in
 	cat)
 		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
 			altcat_title=`nb_print "$NB_DATA_DIR/$altlink_var" 1`
-		altcat_linktitle=`set_title2link "$altcat_title"`
+		altcat_linktitle=`translit_text "$altcat_title"`
 		query_db # get categories list
 		ALTLINK_LIST=(${db_categories[*]})
-		for altc in ${ALTLINK_LIST[*]}; do
-			[ -f "$NB_DATA_DIR/$altc" ] &&
-				altc_title=`nb_print "$NB_DATA_DIR/$altc" 1`
-			altc_linktitle=`set_title2link "$altc_title"`
-			# category title failsafe
-			[ -z "$altc_linktitle" ] &&
-				altc_linktitle=`set_title2link "$notitle"`
-			echo "$altc:$altc_linktitle"
+		for altt in ${ALTLINK_LIST[*]}; do
+			[ -f "$NB_DATA_DIR/$altt" ] &&
+				altt_title=`nb_print "$NB_DATA_DIR/$altt" 1`
+			altt_linktitle=`translit_text "$altt_title"`
+			# cat title failsafe
+			[ -z "$altt_linktitle" ] &&
+				altt_linktitle=`translit_text "$notitle"`
+			echo "$altt:$altt_linktitle"
 		done |sort -ru > "$SCRATCH_FILE".altlinks
 		link_match="$altcat_linktitle"
 		altlink_backup=${altlink_var%%\.*}
@@ -394,7 +394,7 @@ case "$altlink_type" in
 esac
 # link match failsafe
 [ -z "$link_match" ] &&
-	link_match=`set_title2link "$notitle"`
+	link_match=`translit_text "$notitle"`
 get_linkconflicts(){
 	linkmatch_var="$1"
 	if [ ! -z "$linkmatch_var" ]; then
@@ -488,10 +488,10 @@ fi
 # tool to build list of related categories from list of entries
 find_categories(){
 FIND_CATLIST=($1)
-category_list=()
+cat_list=()
 build_catlist(){
 [ ! -z "$cat_var" ] &&
-	category_list=( ${category_list[@]} $cat_db )
+	cat_list=( ${cat_list[@]} $cat_db )
 }
 # acquire all the categories
 for relative_entry in ${FIND_CATLIST[@]}; do
@@ -505,7 +505,7 @@ for relative_entry in ${FIND_CATLIST[@]}; do
 	done
 	cat_id=; cat_ids=; cat_var=; cat_db=;
 done
-CAT_LIST=( ${category_list[@]} )
+CAT_LIST=( ${cat_list[@]} )
 [ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
 	CAT_LIST=( `cat_id "$cat_num"` )
 [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ] && 
@@ -522,7 +522,7 @@ for mod_catdb in ${CAT_LIST[@]}; do
 done
 }
 
-# update categories with cat id's from main db with list of entries
+# update categories with cateogory id's from main db with list of entries
 update_categories(){
 UPDATE_CATLIST=($1)
 [ -z "${UPDATE_CATLIST[*]}" ] && UPDATE_CATLIST=(${UPDATE_LIST[*]})
@@ -551,42 +551,40 @@ fi
 
 # read file's metadata
 read_metadata(){
-MTAG="$1"
 META_FILE="$2"
-MTAG_CLOSE=`echo "$MTAG" |sed -e '/[^ ].*[\,]/ s///'`
-if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
-	MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
-	METADATA=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/!d; /^'$MTAG'[\:]/d; /^'$MTAG_CLOSE'/d' "$META_FILE"`
+MVAR_CLOSE=`echo "$1" |sed -e '/[^ ].*[\,]/ s///'`
+if [ "$1" != "$MVAR_CLOSE" ] && [ ! -z "$MVAR_CLOSE" ]; then
+	MVAR=`echo "$1" |sed -e '/[\,].*[^ ]$/ s///'`
+	METADATA=`sed -e '/^'$MVAR'[\:]/,/^'$MVAR_CLOSE'/!d; /^'$MVAR'[\:]/d; /^'$MVAR_CLOSE'/d' "$META_FILE"`
 else
-	METADATA=`sed -e '/^'$MTAG'[\:]/!d; /^'$MTAG'[\:] */ s///' "$META_FILE"`
+	METADATA=`sed -e '/^'$1'[\:]/!d; /^'$1'[\:] */ s///' "$META_FILE"`
 fi
 }
 
 # write metadata out to file
 write_metadata(){
-MTAG="$1"
 METADATA="$2"
 META_FILE="$3"
-MTAG_CLOSE=`echo "$MTAG" |sed -e '/[^ ].*[\,]/ s///'`
-if [ ! -z "$MTAG" ] && [ ! -z "$METADATA" ]; then
-	if [ "$MTAG" != "$MTAG_CLOSE" ] && [ ! -z "$MTAG_CLOSE" ]; then
-		MTAG=`echo "$MTAG" |sed -e '/[\,].*[^ ]$/ s///'`
+MVAR_CLOSE=`echo "$1" |sed -e '/[^ ].*[\,]/ s///'`
+if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
+	if [ "$1" != "$MVAR_CLOSE" ] && [ ! -z "$MVAR_CLOSE" ]; then
+		MVAR=`echo "$1" |sed -e '/[\,].*[^ ]$/ s///'`
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/,/^'$MTAG_CLOSE'/d; /^'$MTAG'[\:]/d; /^'$MTAG_CLOSE'/d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$MVAR'[\:]/,/^'$MVAR_CLOSE'/d; /^'$MVAR'[\:]/d; /^'$MVAR_CLOSE'/d' "$META_FILE"`
 		fi
 		cat > "$META_FILE" <<-EOF
 			$META_OTHER
-			$MTAG:
+			$MVAR:
 			$METADATA
-			$MTAG_CLOSE
+			$MVAR_CLOSE
 		EOF
 	else
 		if [ -f "$META_FILE" ]; then
-			META_OTHER=`sed -e '/^'$MTAG'[\:]/d' "$META_FILE"`
+			META_OTHER=`sed -e '/^'$1'[\:]/d' "$META_FILE"`
 		fi
-		# prepend modified or new single line tags
+		# prepend modified or new single line vars
 		cat > "$META_FILE" <<-EOF
-			$MTAG: $METADATA
+			$1: $METADATA
 			$META_OTHER
 		EOF
 	fi
@@ -594,15 +592,15 @@ fi
 }
 
 # create/modify user metadata field
-write_tag(){
-WRITE_MTAG="$1"
-WRITE_MTAGTEXT="$2"
-WRITEMETATAG_FILE="$3"
-[ ! -z "$USR_METATAG" ] && WRITE_MTAG="$USR_METATAG"
-[ ! -z "$USR_TAGTEXT" ] && WRITE_MTAGTEXT="$USR_TAGTEXT"
-if [ ! -z "$WRITE_MTAG" ]; then
-	write_metadata "$WRITE_MTAG" "$WRITE_MTAGTEXT" \
-		"$WRITEMETATAG_FILE"
+write_var(){
+WRITE_MVAR="$1"
+WRITE_MVARVALUE="$2"
+WRITEMETAVAR_FILE="$3"
+[ ! -z "$USR_METAVAR" ] && WRITE_MVAR="$USR_METAVAR"
+[ ! -z "$USR_VARVALUE" ] && WRITE_MVARVALUE="$USR_VARVALUE"
+if [ ! -z "$WRITE_MVAR" ]; then
+	write_metadata "$WRITE_MVAR" "$WRITE_MVARVALUE" \
+		"$WRITEMETAVAR_FILE"
 fi
 }
 
@@ -617,7 +615,7 @@ case $METADATA_TYPE in
 		read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
 		NB_EntryAuthor="$NB_MetaAuthor";;
 	BODY)
-		read_metadata "BODY,$METADATA_CLOSETAG" "$METADATA_FILE"; NB_MetaBody="$METADATA"
+		read_metadata "BODY,$METADATA_CLOSEVAR" "$METADATA_FILE"; NB_MetaBody="$METADATA"
 		NB_EntryBody="$NB_MetaBody";;
 	DATE)
 		read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
@@ -652,7 +650,7 @@ WRITE_ENTRY_FILE="$1"
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 write_template > "$WRITE_ENTRY_FILE"
-write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_ENTRY_FILE"
+write_var "$USR_METAVAR" "$USR_VARVALUE" "$WRITE_ENTRY_FILE"
 }
 
 # load entry from it's metadata file
@@ -682,7 +680,7 @@ if [ -f "$ENTRY_FILE" ]; then
 		# use cache when entry data unchanged
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
-			read_metadata "BODY,$METADATA_CLOSETAG" "$ENTRY_FILE"
+			read_metadata "BODY,$METADATA_CLOSEVAR" "$ENTRY_FILE"
 			NB_EntryBody="$METADATA"
 			for entry_pluginsdir in $ENTRY_PLUGINSLIST; do
 				if [ "$entry_pluginsdir" = "entry/format" ]; then
@@ -718,12 +716,14 @@ WRITE_META_TEMPLATE="$2"
 [ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 [ -z "$NB_MetaAuthor" ] && NB_MetaAuthor="$BLOG_AUTHOR"
 [ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
-[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+if [ ! -z "$USR_TITLE" ]; then
+	NB_MetaTitle="$USR_TITLE"; USR_TITLE=
+fi
 [ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
 meta_timestamp
 load_template "$WRITE_META_TEMPLATE"
 write_template > "$WRITE_META_FILE"
-write_tag "$USR_METATAG" "$USR_TAGTEXT" "$WRITE_META_FILE"
+write_var "$USR_METAVAR" "$USR_VARVALUE" "$WRITE_META_FILE"
 }
 
 # create weblog page from text (parts) files
@@ -731,7 +731,9 @@ make_page(){
 MKPAGE_SRCFILE="$1"
 MKPAGE_TEMPLATE="$2"
 MKPAGE_OUTFILE="$3"
-[ ! -z "$USR_TITLE" ] && MKPAGE_TITLE="$USR_TITLE"
+if [ -z "$MKPAGE_TITLE" ] && [ ! -z "$USR_TITLE" ]; then
+	MKPAGE_TITLE="$USR_TITLE"; USR_TITLE=
+fi
 if [ ! -z "$MKPAGE_TITLE" ]; then
 	NB_MetaTitle="$MKPAGE_TITLE"
 	# Set NB_EntryTitle for backwards compatibility
@@ -768,7 +770,7 @@ BLOGPAGE_TEMPLATE="$2"
 BLOGPAGE_OUTFILE="$3"
 [ ! -z "$USR_TEMPLATE" ] && BLOGPAGE_TEMPLATE="$USR_TEMPLATE"
 if [ -f "$BLOGPAGE_SRCFILE" ]; then
-	write_tag "$USR_METATAG" "$USR_TAGTEXT" "$BLOGPAGE_SRCFILE"
+	write_var "$USR_METAVAR" "$USR_VARVALUE" "$BLOGPAGE_SRCFILE"
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
 	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 	[ -z "$NB_MetaAuthor" ] && NB_MetaAuthor="$BLOG_AUTHOR"
@@ -799,7 +801,7 @@ fi
 if [ -f "$EDITDRAFT_FILE" ]; then
 	nb_edit "$EDITDRAFT_FILE"
 	# validate metafile
-	check_metatags "TITLE: BODY: $METADATA_CLOSETAG" "$EDITDRAFT_FILE"
+	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$EDITDRAFT_FILE"
 	# modify date (DATE metadata)
 	meta_timestamp && write_metadata DATE "$NB_MetaDate" "$EDITDRAFT_FILE"
 fi
@@ -846,21 +848,22 @@ update_cache(){
 cache_update="$1"
 cache_def="$2"
 CACHEUPDATE_LIST=($3)
-if [ "$cache_update" = build ]; then
+case "$cache_update" in
+	build)
 	[ -z "$cache_def" ] && cache_def=entry_metadata
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
-elif [ "$cache_update" = rebuild ]; then
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list));;
+	rebuild)
 	> "$SCRATCH_FILE".$cache_def-cache_list
 	[ -z "$cache_def" ] && cache_def=entry_metadata
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list))
-elif [ "$cache_update" = expired ]; then
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list));;
+	expired)
 	[ -z "$cache_def" ] && cache_def="*"
 	# always cache more recent entries
 	[ "$CHRON_ORDER" != 1 ] && db_order="-ru"
@@ -871,15 +874,15 @@ elif [ "$cache_update" = expired ]; then
 		cache_match=`echo "${DB_RESULTS[*]}" |grep -c "$cache_regex"`
 		[ "$cache_match" = 0 ] &&
 			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
-	done
-else
+	done;;
+	*)
 	[ -z "$cache_def" ] &&
 		cache_def="*"
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
 	for cache_item in ${DB_RESULTS[@]}; do
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
-	done
-fi
+	done;;
+esac
 [ ! -z "${CACHEUPDATE_LIST[*]}" ] &&
 	CACHE_LIST=(`for cache_item in ${CACHEUPDATE_LIST[@]}; do echo $cache_item; done |sort -u`)
 }
@@ -890,8 +893,8 @@ chg_entrydate(){
 EntryDate_File="$1"
 EntryDate_TimeStamp="$2"
 # read timestamp from command line
-[ "$USR_METATAG" = TIMESTAMP ] &&
-	EntryDate_TimeStamp="$USR_TAGTEXT"
+[ "$USR_METAVAR" = TIMESTAMP ] &&
+	EntryDate_TimeStamp="$USR_VARVALUE"
 # validate timestamp format
 Edit_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
 New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`

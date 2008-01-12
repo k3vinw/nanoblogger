@@ -1,7 +1,7 @@
 # NanoBlogger Plugin that creates yearly archive indexes
 
 # concatenate modification variables
-YEARIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
+YEARIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
 YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 
 # check for weblog modifications
@@ -56,10 +56,10 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
-		if [ "$CATEGORY_LINKS" = 1 ];then
+		if [ "$CAT_LINKS" = 1 ];then
 			# Command to help filter order of categories
 			: ${CATLINKS_FILTERCMD:=sort}
-			>"$SCRATCH_FILE".category_links
+			>"$SCRATCH_FILE".cat_links
 			entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 			entry_catids=(`print_cat "$entry_wcatids"`)
 			for entry_catnum in ${entry_catids//\,/ }; do
@@ -67,11 +67,11 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 				set_catlink cat_"$entry_catnum.$NB_DBTYPE"
 				cat_index="$category_link"
 				# following must fit on single line
-				$CATLINKS_FILTERCMD  >> "$SCRATCH_FILE".category_links <<-EOF
+				$CATLINKS_FILTERCMD  >> "$SCRATCH_FILE".cat_links <<-EOF
 					<!-- $cat_title --><a href="${ARCHIVES_PATH}$cat_index">$cat_title</a>,
 				EOF
 			done
-			NB_EntryCategories=$(< "$SCRATCH_FILE.category_links")
+			NB_EntryCategories=$(< "$SCRATCH_FILE.cat_links")
 			NB_EntryCategories="${NB_EntryCategories%%,}"
 		fi
 		cat <<-EOF

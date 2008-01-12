@@ -1,12 +1,12 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2007-12-18T03:12:48-05:00
+# Last modified: 2008-01-12T02:16:12-05:00
 
 # <div class="sidetitle">
 # Links
 # </div>
 #
 # <div class="side">
-# $NB_Main_Links
+# $NB_MainLinks
 # </div>
 
 # <div class="sidetitle">
@@ -14,7 +14,7 @@
 # </div>
 #
 # <div class="side">
-# $NB_Category_Links
+# $NB_CategoryLinks
 # </div>
 
 # <div class="sidetitle">
@@ -22,7 +22,7 @@
 # </div>
 #
 # <div class="side">
-# $NB_Month_Links
+# $NB_MonthLinks
 # </div>
 
 # command used to filter order of category links
@@ -66,15 +66,15 @@ NB_MainLinks="$TEMPLATE_DATA"
 
 # create links for categories
 build_catlinks(){
-for cat_link in ${db_categories[*]}; do
-	if [ -f "$NB_DATA_DIR/$cat_link" ]; then
-		#cat_index=`chg_suffix "$cat_link"`
-		#cat_feed=`chg_suffix "$cat_link" "$NB_SYND_FILETYPE"`
-		set_catlink "$cat_link"
+for bcat_link in ${db_categories[*]}; do
+	if [ -f "$NB_DATA_DIR/$bcat_link" ]; then
+		#cat_index=`chg_suffix "$bcat_link"`
+		#cat_feed=`chg_suffix "$bcat_link" "$NB_SYND_FILETYPE"`
+		set_catlink "$bcat_link"
 		cat_index="$category_link"
-		query_db "$db_query" "$cat_link"
+		query_db "$db_query" "$bcat_link"
 		cat_total=${#DB_RESULTS[*]}
-		NB_CategoryTitle=`nb_print "$NB_DATA_DIR/$cat_link" 1`
+		NB_CategoryTitle=`nb_print "$NB_DATA_DIR/$bcat_link" 1`
 		cat <<-EOF
 			<!-- $NB_CategoryTitle --><a href="${ARCHIVES_PATH}$cat_index">$NB_CategoryTitle</a> ($cat_total) <br />
 		EOF
@@ -108,21 +108,21 @@ for query_nmonth in ${NMONTHS[*]}; do
 		let entry_tally=${entry_tally}+$entries_nmonth
 done
 
-build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE"
-NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE")
+build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE"
+NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE")
 
 # create links to feeds
 if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 -a "$RSS2_CATFEEDS" = 1 ]; then
 	# TODO: find a better way to check if atom or rss feeds exist before adding them blindly
 	# TODO: include RSS 1.0 feeds or just forget about them?
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>, <a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>, <a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
 elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
 elif [ "$RSS2_CATFEEDS" = 1 ] && [ "$ATOM_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/category_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/category_feeds.$NB_FILETYPE")
+	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
 fi
 
 # helper to create links to year archives

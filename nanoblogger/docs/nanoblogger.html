@@ -145,7 +145,7 @@ li {
       <tr>
         <td>6.</td>
 
-        <td><a href="#s.6">Managing Entries and Categories</a></td>
+        <td><a href="#s.6">Managing Entries and Categories (Tags)</a></td>
       </tr>
 
       <tr>
@@ -213,7 +213,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
     <h2><a id="s.2" name="s.2">2. Features</a></h2>
 
     <ul>
-      <li>intuitive command line interface</li>
+      <li>flexible command line interface</li>
 
       <li>highly configurable and script-able :)</li>
 
@@ -231,7 +231,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
       <li>support for multiple weblogs</li>
 
-      <li>support for multiple categories</li>
+      <li>support for multiple categories (tags)</li>
 
       <li>support for relative and absolute links</li>
 
@@ -273,7 +273,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
   <p>To create a new weblog (from your shell prompt):</p>
   <pre>
-nb --blogdir [myblog_dir] --add
+nb --blog-dir [myblog_dir] add
         
 </pre>where <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over and finally let you edit the weblog's configuration. Multiple weblogs can be created this way. Running the same command again on an existing weblog directory will add a new entry.
 
@@ -290,7 +290,7 @@ nb --blogdir [myblog_dir] --add
   <div id="config">
     <h2><a id="s.5" name="s.5">5. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
     <pre>
-nb --blogdir [myblog_dir] --configure -q all -u
+nb --blog-dir [myblog_dir] configure query all update
         
 </pre>This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
@@ -389,9 +389,9 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES". The default for splitting archives and other such pages.</p>
 
-    <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of category archives. Defaults to "$MAX_PAGE_ENTRIES". The category archives will split when the number of entries is greater than <em>$MAX_CATPAGE_ENTRIES</em>.</p>
+    <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each category archive page. Defaults to "$MAX_PAGE_ENTRIES". The category archives will split when the number of entries is greater than <em>$MAX_CATPAGE_ENTRIES</em>.</p>
 
-    <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each page of month archives. Defaults to "$MAX_PAGE_ENTRIES". The month archives will split when the number of entries is greater than <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
+    <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each month archive page. Defaults to "$MAX_PAGE_ENTRIES". The month archives will split when the number of entries is greater than <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
 
     <p><em>MAX_MAINPAGE_ENTRIES</em> sets the maximum number of entries to display for each main page. Defaults to "$MAX_PAGE_ENTRIES". The main page will split when <em>$MAX_MAINPAGE_ENTRIES</em> is less than <em>$MAX_ENTRIES</em>.</p>
 
@@ -420,13 +420,13 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Setting Actions for Previewing and Publishing</b></p>
 
-    <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective options, <em>--preview</em> and <em>--publish</em>.</p>
+    <p><em>BLOG_PREVIEW_CMD</em> and <em>BLOG_PUBLISH_CMD</em> may both be set to a custom command to run when invoked by their respective actions, <em>preview</em> and <em>publish</em>.</p>
 
     <p><b>Setting the Cache Preferences</b></p>
 
     <p><em>MAX_CACHE_ENTRIES</em> sets the maximum number of entries to store in the cache. Defaults to "$MAX_ENTRIES".</p>
 
-    <p>Setting <em>BLOG_CACHEMNG</em> to "0" disables automatic management of the cache. The cache may be managed manually using the <code>--update-cache</code> command line option.</p>
+    <p>Setting <em>BLOG_CACHEMNG</em> to "0" disables automatic management of the cache. The cache may be managed manually using the <code>update-cache</code> command line action.</p>
 
     <p><b>Toggling Interactive Mode</b></p>
 
@@ -456,7 +456,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><em>MAX_TITLEWIDTH</em> sets the maximum title width (by number of characters) generated for friendly links.</p>
 
-    <p><em>CATEGORY_LINKS</em> toggles the display of an entry's category links. The default is to display category links.</p>
+    <p><em>CATEGORY_LINKS</em> toggles the display of an entry's categories (tags). The default is to display.</p>
 
     <p><em>PERMALINKS</em> toggles the display of an entry's permanent link. The default is to display permanent links.</p>
 
@@ -464,7 +464,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><em>PLUGINS_DIR</em> specifies the directory location of global plugins. Global plugins effect all weblogs. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
 
-    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins only effects the specified weblog. User plugins can override main plugins, just keep the names the same. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
+    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins only effect the specified weblog. Global plugins may be overriden by user plugins on an individual basis. For example, if you copy raw.sh into "$BLOG_DIR/plugins/entry/format/", your copy will be used instead of the global raw.sh. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
@@ -494,25 +494,25 @@ NB_LANG="es"
   </div>
 
   <div id="mgmt">
-    <h2><a id="s.6" name="s.6">6. Managing Entries and Categories</a></h2>Commands to manage entries and categories.
+    <h2><a id="s.6" name="s.6">6. Managing Entries and Categories (Tags)</a></h2>Commands to manage entries and tags.
 
     <h3>Managing Entries</h3>
 
     <p><b>Entry ID's</b></p>
 
-    <p>The latest entry added, will always have an ID of "1", entry's added before that will have ID's of higher values. An entry will have a different ID for each category it belongs in. When modifying entries from a category, ID's for both category and entry must be specified.</p>
+    <p>The latest entry added, will always have an ID of "1", entry's added before that will have ID's of higher values. An entry may have a different ID for each tag view. When modifying entries based on it's tag, ID's for both tag and entry must be specified.</p>
 
     <p><b>Drafting Entries</b></p>
 
     <p>Creating a new draft:</p>
     <pre>
-nb [-b blog_dir] --draft draft.txt
+nb [-b blog_dir] draft draft.txt
     
 </pre>
 
     <p>Importing the draft as a new entry:</p>
     <pre>
-nb [-b blog_dir] --file draft.txt -a
+nb [-b blog_dir] file draft.txt add
     
 </pre>
 
@@ -520,38 +520,38 @@ nb [-b blog_dir] --file draft.txt -a
 
     <p>Adding a new entry:</p>
     <pre>
-nb [-b blog_dir] -a
+nb [-b blog_dir] add
         
-</pre>Adding a new entry to a category:
+</pre>Tagging a new entry:
     <pre>
-nb [-b blog_dir] -c 1 -a
-        
+nb [-b blog_dir] tag 1 add
+
 </pre>Setting title and author for new entry:
     <pre>
-nb [-b blog_dir] -t "New Entry" -n [entry_author] -a
+nb [-b blog_dir] --title "New Entry" --author [entry_author] add
         
 </pre>Setting title, author, and body for new entry:
     <pre>
-nb [-b blog_dir] -t "New Entry" -n [entry_author] -T "This is my message." -a
+nb [-b blog_dir] --title "New Entry" --author [entry_author] --text "This is my message." add
         
 </pre>Importing new entry from file:
     <pre>
-nb [-b blog_dir] --file draft.txt -a
+nb [-b blog_dir] file draft.txt add
 </pre>
 
     <p><b>Listing Entries</b></p>
 
     <p>Listing current entries:</p>
     <pre>
-nb [-b blog_dir] -l
+nb [-b blog_dir] list
         
 </pre>Listing all entries:
     <pre>
-nb [-b blog_dir] -q all -l
+nb [-b blog_dir] query all list
         
-</pre>Listing entries for a category:
+</pre>Listing entries by tag:
     <pre>
-nb [-b blog_dir] -c 1 -q all -l
+nb [-b blog_dir] tag 1 query all list
         
 </pre>
 
@@ -559,31 +559,31 @@ nb [-b blog_dir] -c 1 -q all -l
 
     <p>Editing the last entry created:</p>
     <pre>
-nb [-b blog_dir] -e 1
+nb [-b blog_dir] edit 1
         
-</pre>Editing an entry from a category:
+</pre>Editing an entry by tag:
     <pre>
-nb [-b blog_dir] -c 1 -e 1
+nb [-b blog_dir] tag 1 edit 1
         
 </pre>Editing multiple entries:
     <pre>
-nb [-b blog_dir] -e 1,2,3
+nb [-b blog_dir] edit 1,2,3
         
 </pre>
 
-    <p><b>Moving Entries</b></p>
+    <p><b>Assigning Entries To Tags</b></p>
 
-    <p>Moving an entry to a category:</p>
+    <p>Assigning a tag to an entry:</p>
     <pre>
-nb [-b blog_dir] -c 1 -m 1
+nb [-b blog_dir] tag 1 tag-entry 1
         
-</pre>Moving an entry to multiple categories:
+</pre>Assigning multiple tags to an entry:
     <pre>
-nb [-b blog_dir] -c 1,2,3 -m 1
+nb [-b blog_dir] tag 1,2,3 tag-entry 1
         
-</pre>Moving multiple entries to a category:
+</pre>Assigning multiple entries to a tag:
     <pre>
-nb [-b blog_dir] -c 1 -m 1,2,3
+nb [-b blog_dir] tag 1 tag-entry 1,2,3
         
 </pre>
 
@@ -591,81 +591,85 @@ nb [-b blog_dir] -c 1 -m 1,2,3
 
     <p>Permanently deleting an entry:</p>
     <pre>
-nb [-b blog_dir] -d 1
+nb [-b blog_dir] delete 1
         
 </pre>Permanently deleting multiple entries:
     <pre>
-nb [-b blog_dir] -d 1,2,3
+nb [-b blog_dir] delete 1,2,3
         
-</pre>Deleting an entry from a category:
+</pre>Untagging an entry:
     <pre>
-nb [-b blog_dir] -c 1 -d 1
+nb [-b blog_dir] tag 1 delete 1
         
 </pre>
 
     <p><b>Changing Entry's Date</b></p>
 
-    <p>Specifying a new entry's date using the TIMESTAMP metatag:</p>
+    <p>Specifying a new entry's date using the TIMESTAMP metavar:</p>
     <pre>
-nb [-b blog_dir] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -a
+nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add
     
 </pre>Changing an old entry's date:
     <pre>
-nb [-b blog_dir] --tag TIMESTAMP --tag-text "CCYY-MM-DD HH:MM:SS" -e 2
+nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit 2
      
 </pre>Manually changing an entry's date:
     <pre>
-1. nb [-b blog_dir] -e 2
+1. nb [-b blog_dir] edit 2
 2. TIMESTAMP: CCYY-MM-DD HH:MM:SS
      
 </pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
 
-    <h3>Managing Categories</h3>
+    <h3>Managing Tags</h3>
 
-    <p><b>Category ID's</b></p>
+    <p><b>Tag ID's</b></p>
 
-    <p>Category ID's count up from "1". A category's ID remains constant until that category is deleted. Deleting a category will free up that category's ID for use by a new category upon creation.</p>
+    <p>Tag ID's count up from 1. A tag's ID remains constant until that tag is deleted. Deleting a tag will free up that tag's ID for use by a new tag upon creation.</p>
 
-    <p><b>Category Commands</b></p>
+    <p><b>Tag Commands</b></p>
 
-    <p>Creating a new category:</p>
+    <p>Creating a new tag:</p>
     <pre>
-nb [-b blog_dir] -c new -a
+nb [-b blog_dir] tag new add
         
-</pre>Setting the title for a new category:
+</pre>Setting the title for a new tag:
     <pre>
-nb [-b blog_dir] -t "New Category" -c new -a
+nb [-b blog_dir] --title examples tag new add
         
-</pre>Listing available categories:
+</pre>Listing available tags:
     <pre>
-nb [-b blog_dir] -q cat -l
+nb [-b blog_dir] query tag list
         
-</pre>Editing a category's title:
+</pre>Tagging existing entries:
     <pre>
-nb [-b blog_dir] -c 1 -t "News" -e cat
+nb [-b blog_dir] tag 1 tag-entry 1
+
+</pre>Editing a tag's title:
+    <pre>
+nb [-b blog_dir] tag 1 --title example edit tag
         
-</pre>Deleting a category:
+</pre>Deleting a tag:
     <pre>
-nb [-b blog_dir] -c 1 -d cat
+nb [-b blog_dir] tag 1 delete tag
         
 </pre>
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "--query" option to manipulate the list of entries which to operate from. First review your query by combining the "--query" with the "--list" option to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "--edit", "--delete", "--move", or "--update" options. Using the entry ID(s) from your last query accordingly.</p>
+    <p>Use the "query" action to manipulate the list of entries which to operate from. First review your query by combining the "query" with the "list" action to see which entry ID(s) matched your query. Then operate from that same query by combining the "query" action with one of the "edit", "delete", "tag-entry", or "update" actions. Using the entry ID(s) from your last query accordingly.</p>
 
     <p>Editing entries by query:</p>
     <pre>
-nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -l
-nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -e 1,2,3
+nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] query [all,CCYY-MM-DD,max] edit 1,2,3
 </pre>Deleting entries by query:
     <pre>
-nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -l
-nb [-b blog_dir] -q [all,CCYY-MM-DD,max] -d 1,2,3
-</pre>Editing entries by category and query:
+nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] query [all,CCYY-MM-DD,max] delete 1,2,3
+</pre>Editing entries by tag and query:
     <pre>
-nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -l
-nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
+nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 </pre>
   </div>
 
@@ -675,11 +679,11 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
     <div class="tables">
       <p><b>Special Template Characters</b></p>
 
-      <p><span class="warning">IMPORTANT</span>: Escaping these characters prevents them from changing.</p>
+      <p><span class="warning">IMPORTANT</span>: Escaping these characters is necessary to prevent them from being interpreted by the shell.</p>
 
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
-          Special characters that effect the templates:
+          Special characters that, when placed in templates, are interpretated by the shell if not escaped:
         </caption>
 
         <tr>
@@ -1359,9 +1363,9 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
         </tr>
 
         <tr>
-          <td align="left">set_title2link</td>
+          <td align="left">translit_text</td>
 
-          <td align="left">transforms text for use in links</td>
+          <td align="left">transliterates text into a suitable form for web links</td>
 
           <td align="left">$1</td>
 
@@ -1495,7 +1499,7 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 
           <td align="left">writes metadata to file</td>
 
-          <td align="left">MTAG=$1, METADATA=$2, META_FILE=$3</td>
+          <td align="left">MVAR=$1, METADATA=$2, META_FILE=$3</td>
 
           <td align="left">$META_FILE</td>
 
@@ -1507,7 +1511,7 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
 
           <td align="left">extracts metadata from (entry) file</td>
 
-          <td align="left">MTAG=$1, META_FILE=$2</td>
+          <td align="left">MVAR=$1, META_FILE=$2</td>
 
           <td align="left">$METADATA</td>
 
@@ -1515,15 +1519,15 @@ nb [-b blog_dir] -c 2 -q [all,CCYY-MM-DD,max] -e 1
         </tr>
 
         <tr>
-          <td align="left">write_tag</td>
+          <td align="left">write_var</td>
 
           <td align="left">create/modify user metedata field</td>
 
-          <td align="left">WRITE_MTAG=$1, WRITE_MTAGTEXT=$2, WRITEMETATAG_FILE=$3</td>
+          <td align="left">WRITE_MVAR=$1, WRITE_MVARVALUE=$2, WRITEMETAVAR_FILE=$3</td>
 
-          <td align="left">$WRITEMETATAG_FILE</td>
+          <td align="left">$WRITEMETAVAR_FILE</td>
 
-          <td align="left">example: write_tag MODTIME "$(date)"</td>
+          <td align="left">example: write_var MODTIME "$(date)"</td>
         </tr>
 
         <tr>
@@ -1637,7 +1641,7 @@ CCYY-MM-DDTHH_MM_SS.txt
         
 </pre>
 
-    <p>The format of an entry is made up of metadata tags. Most of the metadata tags are of the format TAG: VALUE, then a carriage return that separates one tag from the next. The order of the metadata tags are insignificant. The <em>BODY</em> tag is special and needs to be terminated by the <em>END-----</em> tag. By default the content of the BODY tag must contain valid HTML with all entities properly escaped.</p>Example of an entry's format:
+    <p>The format of an entry is made up of metadata variables. Most of the metadata variables are of the format VAR: VALUE, then a carriage return that separates one variable from the next. The order of the metadata variables are insignificant. The <em>BODY</em> variable is special and needs to be terminated by the <em>END-----</em> marker. By default the content of the BODY variable must contain valid HTML with all entities properly escaped.</p>Example of an entry's format:
     <pre>
 TITLE: A New Entry
 AUTHOR: foo
@@ -1670,7 +1674,7 @@ END-----
     <p>The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
     Update the weblog with the new entries:</p>
     <pre>
-nb [-b blog_dir] -q all -u
+nb [-b blog_dir] --force query all update
         
 </pre>
   </div>
@@ -1680,22 +1684,24 @@ nb [-b blog_dir] -q all -u
 
     <p><b>Useful Editor's Commands</b></p>Create a new metafile:
     <pre>
-nb [-b blogdir] --makefile somefile.txt
+nb [-b blogdir] make-file somefile.txt
 </pre>Import the metafile as a new weblog entry:
     <pre>
-nb [-b blogdir] --file somefile.txt --add
+nb [-b blogdir] file somefile.txt add
 </pre>or export the metafile as a new weblog page:
     <pre>
-nb [-b blogdir] --makepage somefile.txt somefile.html
+nb [-b blogdir] make-page somefile.txt somefile.html
 </pre><em>Please note that these tasks are easier when the editor supports a sub-shell or when you can suspend your editor from the active shell (assuming there is one).</em>
 
-    <p><b>Writing Metatags on the Fly</b></p>
+    <p><b>Writing Meta Variables on the Fly</b></p>
 
-    <p>Metatags can be written on the fly. For example, text formatting can be set from the command line.</p>
+    <p>Meta variables are simply variables that pertain to a metafile. For instance, the text formatting can be manipulated from the command line.</p>
     <pre>
-nb [-b blogdir] --tag FORMAT --tag-text "markdown" --makepage somefile.txt somefile.html
+nb [-b blogdir] --var FORMAT --set-var "markdown" make-page somefile.txt somefile.html
     
 </pre>
+
+    <p>Currently, only one meta variable may be specified at a time.</p>
 
     <p><b>Set a Default Weblog Directory</b></p>
 

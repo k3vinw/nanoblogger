@@ -1,7 +1,8 @@
 # NanoBlogger Atom Feed Plugin
+# synopsis: nb -q feed -t 1 -u
 
 # concatenate modification variables
-FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
+FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
@@ -36,7 +37,7 @@ else
 	RESTORE_SORTARGS=
 fi
 
-if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
+if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *) [ 1 = false ];; esac; then
 	set_baseurl "$BLOG_URL/"
 
 	# escape special characters to help create valid xml feeds
@@ -52,6 +53,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL/$NB_AtomFile"
+	[ ! -z "$NB_AtomCatTitle" ] &&
+		NB_AtomTitle="$template_catarchives $NB_AtomCatTitle | $NB_AtomTitle"
 	[ ! -z "$NB_AtomCatLink" ] &&
 		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_AtomCatFile"
 
@@ -99,7 +102,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		Atom_EntryCategory=; cat_title=
-		> "$SCRATCH_FILE".atomfeed-category
+		> "$SCRATCH_FILE".atomfeed-cat
 		atomentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 		atomentry_catids="${atomentry_wcatids##*\>}"
 		[ "$atomentry_wcatids" = "$atomentry_catids" ] &&
@@ -108,12 +111,12 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 			cat_title=`nb_print "$NB_DATA_DIR"/cat_"$atomentry_catdb.$NB_DBTYPE" 1`
 			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			if [ ! -z "$cat_title" ]; then
-				cat >> "$SCRATCH_FILE".atomfeed-category <<-EOF
+				cat >> "$SCRATCH_FILE".atomfeed-cat <<-EOF
 					<category term="$cat_title" />
 				EOF
 			fi
 		done
-		Atom_EntryCategory=$(< "$SCRATCH_FILE".atomfeed-category)
+		Atom_EntryCategory=$(< "$SCRATCH_FILE".atomfeed-cat)
 		if [ "$ENTRY_EXCERPTS" = 1 ] && [ ! -z "$NB_EntryExcerpt" ]; then
 			#Atom_EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			Atom_EntryExcerpt="$NB_EntryExcerpt"
@@ -144,15 +147,15 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 	NB_AtomEntries=$(< "$SCRATCH_FILE".atomfeed)
 	}
 
-	# generate category feed entries
+	# generate cat feed entries
 	build_atom_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 ]; then
+	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$ATOM_CATFEEDS" = 1; then
 		db_categories=(${CAT_LIST[@]})
 		if [ ! -z "${db_categories[*]}" ]; then
 			for cat_db in ${db_categories[@]}; do
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					set_catlink "$cat_db"
-					NB_AtomTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
+					NB_AtomCatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
 					NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
 					NB_AtomCatLink="$category_link"
 					nb_msg "$plugins_action $category_dir atom $NB_AtomVer feed ..."
