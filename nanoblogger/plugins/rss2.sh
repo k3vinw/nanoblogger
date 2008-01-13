@@ -44,7 +44,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 		sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 		}
 
-	NB_RSS2Title=`echo "$BLOG_TITLE" |esc_chars`
+	BLOG_FEED_TITLE=`echo "$BLOG_TITLE" |esc_chars`
 	NB_RSS2Author=`echo "$BLOG_AUTHOR" |esc_chars`
 
 	# make rss feed
@@ -52,10 +52,13 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL"
+	NB_RSS2Title="$BLOG_FEED_TITLE"
 	[ ! -z "$NB_RSS2CatTitle" ] &&
-		NB_RSS2Title="$template_catarchives $NB_RSS2CatTitle | $NB_RSS2Title"
-	[ ! -z "$NB_RSS2CatLink" ] &&
+		NB_RSS2Title="$template_catarchives $NB_RSS2CatTitle | $BLOG_FEED_TITLE"
+	if [ ! -z "$NB_RSS2CatLink" ]; then 
+		NB_RSS2File="$ARCHIVES_DIR/$NB_RSS2CatFile"
 		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
+	fi
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
@@ -64,9 +67,11 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 		 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		 xmlns:dc="http://purl.org/dc/elements/1.1/"
 		 xmlns:admin="http://webns.net/mvcb/"
+		 xmlns:atom="http://www.w3.org/2005/Atom"
 		>
 		<channel>
 			<title>$NB_RSS2Title</title>
+			<atom:link href="${BASE_URL}$NB_RSS2File" rel="self" type="application/rss+xml" />
 			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
 			<dc:language>$BLOG_FEED_LANG</dc:language>
@@ -81,6 +86,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 	# load makepage tidy plugin
 	[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
 		. "$PLUGINS_DIR"/makepage/tidy.sh
+	NB_RSS2Title=
 	}
 
 	# generate feed entries
@@ -124,6 +130,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 		cat >> "$SCRATCH_FILE".rss2feed <<-EOF
 			<item>
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
+				<guid>${NB_RSS2ArchivesPath}$NB_EntryPermalink</guid>
 				<title>$NB_RSS2EntryTitle</title>
 				<dc:date>$NB_RSS2EntryTime${BLOG_TZD}</dc:date>
 				<dc:creator>$NB_RSS2EntryAuthor</dc:creator>

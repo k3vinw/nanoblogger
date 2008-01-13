@@ -45,7 +45,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 		sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 		}
 
-	NB_AtomTitle=`echo "$BLOG_TITLE" |esc_chars`
+	BLOG_FEED_TITLE=`echo "$BLOG_TITLE" |esc_chars`
 	NB_AtomAuthor=`echo "$BLOG_AUTHOR" |esc_chars`
 
 	# make atom feed
@@ -53,8 +53,9 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL/$NB_AtomFile"
+	NB_RSS2Title="$BLOG_FEED_TITLE"
 	[ ! -z "$NB_AtomCatTitle" ] &&
-		NB_AtomTitle="$template_catarchives $NB_AtomCatTitle | $NB_AtomTitle"
+		NB_AtomTitle="$template_catarchives $NB_AtomCatTitle | $BLOG_FEED_TITLE"
 	[ ! -z "$NB_AtomCatLink" ] &&
 		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_AtomCatFile"
 
@@ -83,6 +84,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 	# load makepage tidy plugin
 	[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
 		. "$PLUGINS_DIR"/makepage/tidy.sh
+	NB_AtomTitle=
 	}
 
 	# generate feed entries
@@ -137,7 +139,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *
 				$Atom_EntryCategory
 				<content type="xhtml">
 					<div xmlns="http://www.w3.org/1999/xhtml">
-						<![CDATA[$Atom_EntryExcerpt]]>
+						$Atom_EntryExcerpt
 					</div>
 				</content>
 

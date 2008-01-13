@@ -56,7 +56,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
-		if [ "$CAT_LINKS" = 1 ];then
+		if [ "$CATEGORY_LINKS" = 1 ];then
 			# Command to help filter order of categories
 			: ${CATLINKS_FILTERCMD:=sort}
 			>"$SCRATCH_FILE".cat_links

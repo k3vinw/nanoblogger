@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-01-12T02:44:18-05:00
+# Last modified: 2008-01-13T01:47:30-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -473,8 +473,8 @@ init_update(){
 		rm -f "$BLOG_DIR/.nb_newblogdir"
 	fi
 	# for clean build remove all generated files
-	if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] && [ -z "$cat_num" ]; then
-		NB_QUERY=all
+	if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] &&
+		[ -z "$cat_num" ] && [ -z "$NB_UPDATE" ]; then
 		nb_msg "$buildweblog_all"
 		# confirm removal of any previously generated files
 		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
@@ -550,8 +550,8 @@ init_main(){
 	}
 nb_msg "$buildweblog_files"
 case "$NB_QUERY" in
-	tag|tag[a-z]|cat) 	[ -z "$cat_num" ] && NB_QUERY=all; init_update;
-			init_plugins; build_catarchives; init_main
+	tag|tag[a-z]|cat) 	[ -z "$cat_num" ] && NB_UPDATE=$NB_QUERY; NB_QUERY=all;
+			init_update; init_plugins; build_catarchives; init_main
 		;;
 	main) 		init_update; init_plugins; init_main
 		;;
