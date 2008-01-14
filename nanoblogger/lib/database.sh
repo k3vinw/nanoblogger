@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-01-11T00:11:14-05:00
+# Last modified: 2008-01-13T21:50:10-05:00
 
 # index related categories by id
 index_catids(){
@@ -7,6 +7,7 @@ indexcat_item="$1"
 indexcat_list=($2)
 [ -z "${indexcat_list[*]}" ] &&
 	indexcat_list=(`for it_db in "$NB_DATA_DIR"/cat_*.$NB_DBTYPE; do echo ${it_db//*\/}; done`)
+[ "$indexcat_list" = "cat_*.$NB_DBTYPE" ] && indexcat_list=
 cat_ids=; cat_idnum=
 for indexcat_db in ${indexcat_list[@]}; do
 	CATDB_RESULTS=($(< "$NB_DATA_DIR/$indexcat_db"))

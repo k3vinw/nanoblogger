@@ -81,7 +81,7 @@ BLOGPAGE_SRCFILE="$BLOG_DIR/$ARTICLE_DIR/$article_srcfile"
 BLOGPAGE_OUTFILE="$BLOG_DIR/$ARTICLE_DIR/$article_file"
 case "$NB_QUERY" in
 		all|article|article[a-z])
-			[ -z "$cat_num" ] && rm -f "$BLOGPAGE_OUTFILE"
+			[ -z "$cat_num" ] && ! [[ "$NB_UPDATE" == *arch ]] && rm -f "$BLOGPAGE_OUTFILE"
 		;;
 		*) :
 		;;
@@ -109,6 +109,7 @@ for line in ${article_lines[@]}; do
 done
 }
 
+NB_ArticleLinks="$articles_nolist"
 > "$ARTICLE_PLUGIN_OUTFILE"
 set_articleconf
 for articles_pass in 1 2; do
@@ -129,6 +130,9 @@ for articles_pass in 1 2; do
 					<div class="side">
 						$NB_ArticleLinksHTML
 					</div>
+				EOF
+				cat > "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
+					$NB_ArticleLinksHTML
 				EOF
 				NB_ArticleLinks=$(< "$ARTICLE_PLUGIN_OUTFILE")
 			else

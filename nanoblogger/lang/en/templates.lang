@@ -26,13 +26,13 @@ template_syndicate="Syndicate"
 template_syndicate_main="Site"
 template_status="Weblog status"
 template_powered="powered by &#36;EDITOR, bash, cat, grep, sed, and"
+articles_nolist="0"
+categories_nolist="0"
 
-# misc. weblog links
+# miscellaneous
 template_archives="Archives"
 template_main="Main"
 template_catarchives="Filed under:"
-
-# dynamic template messages
 template_articles="Articles"
 # depecrated template_browsecat here for transitional purposes
 template_browsecat="Browse by category"

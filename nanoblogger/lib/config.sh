@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-01-12T01:48:54-05:00
+# Last modified: 2008-01-13T20:30:37-05:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -173,10 +173,14 @@ fi
 # override configuration's interactive mode
 [ ! -z "$USR_INTERACTIVE" ] &&
 	BLOG_INTERACTIVE="$USR_INTERACTIVE"
+# default for showing permanent links
+: ${SHOW_PERMALINKS:=1}
+# deprecated PERMALINKS here for transitional purposes only
+: ${PERMALINKS:=$SHOW_PERMALINKS}
 # default for showing category links
-: ${CATEGORY_LINKS:=1}
+: ${SHOW_CATLINKS:=1}
 # depecrated CATEGORY_LINKS here for tansitional purposes only
-CATEGORY_LINKS="$CATEGORY_LINKS"
+: ${CATEGORY_LINKS:=$SHOW_CATLINKS}
 # default for category feeds - leave unset
 : ${CATEGORY_FEEDS:=}
 # default for friendly links
@@ -192,7 +196,7 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	MAX_MONTHPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; METADATA_MARKER=; \
 	METADATA_CLOSEVAR=; METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
 	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
-	USR_PLUGINSDIR=; CATEGORY_LINKS=; CATEGORY_FEEDS=; FRIENDLY_LINKS=; \
+	USR_PLUGINSDIR=; SHOW_CATLINKS=; CATEGORY_FEEDS=; FRIENDLY_LINKS=; \
 	MAX_TITLEWIDTH=;
 }
 

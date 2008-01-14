@@ -1,7 +1,7 @@
 # NanoBlogger Category Links Plugin
 # Entry Plugin to find related categories and generate links for them
 
-if [ "$CATEGORY_LINKS" = 1 ]; then
+if [ "$SHOW_CATLINKS" = 1 ]; then
 	# Command to help filter order of categories
 	: ${CATLINKS_FILTERCMD:=sort}
 	>"$SCRATCH_FILE".cat_links

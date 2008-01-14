@@ -7,6 +7,10 @@
 # $NB_Calendar
 # </div>
 
+# skip this plugin when month archives are disabled
+[ "$MONTH_ARCHIVES" != 1 ] &&
+	continue
+
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE"
 : ${CAL_CMD:=cal}
 

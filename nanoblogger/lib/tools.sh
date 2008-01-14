@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-01-11T17:52:17-05:00
+# Last modified: 2008-01-13T22:12:40-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -649,6 +649,7 @@ WRITE_ENTRY_FILE="$1"
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
+mkdir -p `dirname "$WRITE_ENTRY_FILE"`
 write_template > "$WRITE_ENTRY_FILE"
 write_var "$USR_METAVAR" "$USR_VARVALUE" "$WRITE_ENTRY_FILE"
 }
@@ -757,6 +758,7 @@ load_plugins page/format "$MKPAGE_FORMAT"
 # Set NB_Entries for backwards compatibility
 NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
 load_template "$MKPAGE_TEMPLATE"
+mkdir -p `dirname "$MKPAGE_OUTFILE"`
 write_template > "$MKPAGE_OUTFILE"
 nb_msg "$MKPAGE_OUTFILE"
 load_plugins makepage

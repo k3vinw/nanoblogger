@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-01-13T01:47:30-05:00
+# Last modified: 2008-01-13T22:08:42-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -171,16 +171,20 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
-			[ ! -z "$TEMPLATE_DATA" ] &&
+			if [ ! -z "$TEMPLATE_DATA" ]; then
+				mkdir -p `dirname "$PARTS_FILE"`
 				write_template >> "$PARTS_FILE"
+			fi
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"
 			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE"
 			set_entrylink "$entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
-			[ ! -z "$TEMPLATE_DATA" ] &&
+			if [ ! -z "$TEMPLATE_DATA" ]; then
+				mkdir -p `dirname "$PARTS_FILE"`
 				write_template >> "$PARTS_FILE"
+			fi
 		fi
 	fi
 done
@@ -330,41 +334,45 @@ query_db "$yearn"
 
 # build daily archives
 build_dayarchive(){
-export CACHE_TYPE=day
-query_db "$day"
-if [ ! -z "${DB_RESULTS[*]}" ]; then
-	set_daylink "$day"
-	set_daynavlinks "$day"
-	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$day_file"
-	make_archive "$day" nocat "$DAYENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$day_file"
-	NB_ArchiveTitle="$day_dir"
-	dayn=`echo "$day" |cut -c9-10`
-	load_plugins archive/day
-	make_page "$BLOG_DIR/$PARTS_DIR/$day_file" "$NB_TEMPLATE_DIR/$DAY_TEMPLATE" \
-	"$BLOG_DIR/$ARCHIVES_DIR/$day_file"
+if [ "$DAY_ARCHIVES" = 1 ]; then
+	export CACHE_TYPE=day
+	query_db "$day"
+	if [ ! -z "${DB_RESULTS[*]}" ]; then
+		set_daylink "$day"
+		set_daynavlinks "$day"
+		set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$day_file"
+		make_archive "$day" nocat "$DAYENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$day_file"
+		NB_ArchiveTitle="$day_dir"
+		dayn=`echo "$day" |cut -c9-10`
+		load_plugins archive/day
+		make_page "$BLOG_DIR/$PARTS_DIR/$day_file" "$NB_TEMPLATE_DIR/$DAY_TEMPLATE" \
+		"$BLOG_DIR/$ARCHIVES_DIR/$day_file"
+	fi
 fi
 }
 
 # build monthly archives
 build_montharchive(){
-export CACHE_TYPE=month
-query_db "$month"
-if [ ! -z "${DB_RESULTS[*]}" ]; then
-	LOOPMONTH_LIST=(${DB_RESULTS[*]})
-	[ "$NB_QUERY" != all ] &&
-		LOOPMONTH_LIST=(`for update_entry in ${UPDATE_LIST[@]}; do \
-			for month_entry in ${DB_RESULTS[@]}; do echo $month_entry; done \
-				|grep "$update_entry"; done`)
-	set_monthlink "$month"
-	set_monthnavlinks "$month"
-	set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
-	make_archive "$month" nocat "$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
-	NB_ArchiveTitle="$month"
-	load_plugins archive/month
-	paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
-		"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"
-	[ "$DAY_ARCHIVES" = 1 ] &&
-		loop_day "${LOOPMONTH_LIST[*]}" build_dayarchive
+if [ "$MONTH_ARCHIVES" = 1 ]; then
+	export CACHE_TYPE=month
+	query_db "$month"
+	if [ ! -z "${DB_RESULTS[*]}" ]; then
+		LOOPMONTH_LIST=(${DB_RESULTS[*]})
+		[ "$NB_QUERY" != all ] &&
+			LOOPMONTH_LIST=(`for update_entry in ${UPDATE_LIST[@]}; do \
+				for month_entry in ${DB_RESULTS[@]}; do echo $month_entry; done \
+					|grep "$update_entry"; done`)
+		set_monthlink "$month"
+		set_monthnavlinks "$month"
+		set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$month_file"
+		make_archive "$month" nocat "$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$PARTS_DIR/$month_file"
+		NB_ArchiveTitle="$month"
+		load_plugins archive/month
+		paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
+			"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"
+		[ "$DAY_ARCHIVES" = 1 ] &&
+			loop_day "${LOOPMONTH_LIST[*]}" build_dayarchive
+	fi
 fi
 }
 
@@ -473,8 +481,7 @@ init_update(){
 		rm -f "$BLOG_DIR/.nb_newblogdir"
 	fi
 	# for clean build remove all generated files
-	if [ "$UPDATE_WEBLOG" = 1 ] && [ "$NB_QUERY" = all ] &&
-		[ -z "$cat_num" ] && [ -z "$NB_UPDATE" ]; then
+	if [ $NB_QUERY = all ] && [ -z $cat_num ] && ! [[ $NB_UPDATE == *arch ]]; then
 		nb_msg "$buildweblog_all"
 		# confirm removal of any previously generated files
 		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
@@ -501,12 +508,10 @@ init_update(){
 		UPDATE_LIST=(${DB_RESULTS[*]})
 	fi
 	# only update specified categories upon forced updates
-	if [ "$UPDATE_WEBLOG" = 1 ]; then
-		if [ -z "$cat_num" ]; then
-			find_categories "${UPDATE_LIST[*]}"
-		else
-			find_categories
-		fi
+	if [ -z $cat_num ] && ! [[ $NB_UPDATE == *arch ]]; then
+		find_categories "${UPDATE_LIST[*]}"
+	else
+		find_categories
 	fi
 	# update previous entry's nav. links for new entries
 	if [ ! -z "$New_EntryFile" ]; then
@@ -550,7 +555,7 @@ init_main(){
 	}
 nb_msg "$buildweblog_files"
 case "$NB_QUERY" in
-	tag|tag[a-z]|cat) 	[ -z "$cat_num" ] && NB_UPDATE=$NB_QUERY; NB_QUERY=all;
+	tag|tag[a-z]|cat) 	[ -z "$cat_num" ] && NB_UPDATE=catarch; NB_QUERY=all;
 			init_update; init_plugins; build_catarchives; init_main
 		;;
 	main) 		init_update; init_plugins; init_main
@@ -722,28 +727,32 @@ db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # find entry id(s) from specified query
 [ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
 cat_list="$db_catquery"
-if [ ! -z "$cat_num" ] && [ "$delete_num" = cat ]; then
-	nb_msg "$deleteweblog_delcat $cat_num ..."
-	# confirm delete in interactive mode
-	[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-	query_db "$db_query" "${cat_list[*]}"
-	echo "${DB_RESULTS[*]}" > $SCRATCH_FILE
-	for cat_db in ${cat_list[@]}; do
-		Delete_CatDBFile="$cat_db"
-		[ -f "$NB_DATA_DIR/$cat_db" ] && set_catlink "$cat_db"
-		[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
-			rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
-		rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
-	done; cat_num=
-	UPDATE_LIST=($(< "$SCRATCH_FILE"))
-	[ ! -z "${UPDATE_LIST[*]}" ] &&
-		find_categories "${UPDATE_LIST[*]}"
-	nb_msg "$querydb_update"
-	for oldcat_dbitem in ${UPDATE_LIST[*]}; do
-		update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
-	done
-	resort_db "$NB_DATA_DIR/master.db"
-	build_weblog; exit 0
+if [ ! -z "$cat_num" ]; then
+	case "$delete_num" in
+		tag|cat)
+			nb_msg "$deleteweblog_delcat $cat_num ..."
+			# confirm delete in interactive mode
+			[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
+			query_db "$db_query" "${cat_list[*]}"
+			echo "${DB_RESULTS[*]}" > $SCRATCH_FILE
+			for cat_db in ${cat_list[@]}; do
+				Delete_CatDBFile="$cat_db"
+				[ -f "$NB_DATA_DIR/$cat_db" ] && set_catlink "$cat_db"
+				[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
+					rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
+				rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
+			done; cat_num=
+			UPDATE_LIST=($(< "$SCRATCH_FILE"))
+			[ ! -z "${UPDATE_LIST[*]}" ] &&
+				find_categories "${UPDATE_LIST[*]}"
+			nb_msg "$querydb_update"
+			for oldcat_dbitem in ${UPDATE_LIST[*]}; do
+				update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
+			done
+			resort_db "$NB_DATA_DIR/master.db"
+			build_weblog; exit 0
+		;;
+	esac
 fi
 # deletes entries
 NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
@@ -965,9 +974,13 @@ if [ ! -d "$BLOG_DIR" ]; then
 	for weblog_emptydir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
 		[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
 	done
-	# ... but prompt for configuration.
-	echo "$addweblog_askconf [Y/n]"
-	read -p "$NB_PROMPT" choice
+	# ... prompt for configuration, unless interactive mode is 0
+	if [ "$BLOG_INTERACTIVE" = 0 ]; then
+		choice=n
+	else
+		echo "$addweblog_askconf [Y/n]"
+		read -p "$NB_PROMPT" choice
+	fi
 	case $choice in
 	[Yy]|"")
 		nb_msg "$addweblog_confaction"

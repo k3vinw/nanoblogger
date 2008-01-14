@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2008-01-12T02:16:12-05:00
+# Last modified: 2008-01-13T21:36:41-05:00
 
 # <div class="sidetitle">
 # Links
@@ -110,6 +110,7 @@ done
 
 build_catlinks |$CATLINKS_FILTERCMD |sed -e 's/<!-- .* -->//' > "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE"
 NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE")
+[ -z "$NB_CategoryLinks" ] && NB_CategoryLinks="$categories_nolist"
 
 # create links to feeds
 if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 -a "$RSS2_CATFEEDS" = 1 ]; then
@@ -177,17 +178,18 @@ fi
 NB_YearLinks=$(< "$BLOG_DIR/$PARTS_DIR/year_links.$NB_FILETYPE")
 
 # create monthly archive links
-if [ "$ALL_MONTHLINKS" = 1 ]; then
-	query_db all
-else
-	query_db all nocat limit $entry_tally 1
+if [ "$MONTH_ARCHIVES" = 1 ]; then
+	if [ "$ALL_MONTHLINKS" = 1 ]; then
+		query_db all
+	else
+		query_db all nocat limit $entry_tally 1
+	fi
+	loop_archive "${DB_RESULTS[*]}" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
+	# monthly archives continued
+	if [ $ALL_MONTHLINKS != 1 ] && [ $MAX_MONTHLINKS -lt $total_nmonths ]; then
+		cat >> "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE" <<-EOF
+			<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
+		EOF
+	fi
+	NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
 fi
-loop_archive "${DB_RESULTS[*]}" months make_monthlink |sort $SORT_ARGS > "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE"
-# monthly archives continued
-if [ $ALL_MONTHLINKS != 1 ] && [ $MAX_MONTHLINKS -lt $total_nmonths ]; then
-	cat >> "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE" <<-EOF
-		<a href="${ARCHIVES_PATH}$NB_INDEX">$NB_NextPage</a>
-	EOF
-fi
-NB_MonthLinks=$(< "$BLOG_DIR/$PARTS_DIR/month_links.$NB_FILETYPE")
-

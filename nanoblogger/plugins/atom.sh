@@ -37,7 +37,10 @@ else
 	RESTORE_SORTARGS=
 fi
 
-if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in all) :;; feed|feed[a-z]) :;; *) [ 1 = false ];; esac; then
+if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
+				all) ! [[ "$NB_UPDATE" == *arch ]];; \
+				feed|feed[a-z]) :;; *) [ 1 = false ];; \
+				esac; then
 	set_baseurl "$BLOG_URL/"
 
 	# escape special characters to help create valid xml feeds

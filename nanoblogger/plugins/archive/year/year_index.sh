@@ -56,7 +56,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		NB_EntryID=`set_entryid $entry`
 		set_entrylink "$entry"
 		set_monthlink "$month"
-		if [ "$CATEGORY_LINKS" = 1 ];then
+		if [ "$SHOW_CATLINKS" = 1 ];then
 			# Command to help filter order of categories
 			: ${CATLINKS_FILTERCMD:=sort}
 			>"$SCRATCH_FILE".cat_links
@@ -74,8 +74,13 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 			NB_EntryCategories=$(< "$SCRATCH_FILE.cat_links")
 			NB_EntryCategories="${NB_EntryCategories%%,}"
 		fi
+		if [ "$MONTH_ARCHIVES" = 1 ]; then
+			yearindex_monthlink='<a href="'${ARCHIVES_PATH}$NB_ArchiveMonthLink'">'$month'</a>'
+		else
+			yearindex_monthlink="$month"
+		fi
 		cat <<-EOF
-			<a href="${ARCHIVES_PATH}$NB_ArchiveMonthLink">$month</a>
+			$yearindex_monthlink
 			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories")<br />
 		EOF
@@ -103,21 +108,22 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 
 	[ -z "${YEAR_DB_RESULTS[*]}" ] && query_db years
 	set_yearnavlinks "$yearn"
-	loop_archive "${DB_RESULTS[*]}" months make_monthlink |sort $SORT_ARGS \
-		> "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE"
-	NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE")
+	if [ "$MONTH_ARCHIVES" = 1 ]; then
+		loop_archive "${DB_RESULTS[*]}" months make_monthlink |sort $SORT_ARGS \
+			> "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE"
+		NB_ArchiveMonthLinks=$(< "$SCRATCH_FILE.$yearn-month_links.$NB_FILETYPE")
+		yearindex_monthbrowse='<a id="date"></a><strong>'$template_browsedate'</strong>'
+	fi
 
 	# make NB_ArchiveLinks placeholder
 	mkdir -p `dirname "$BLOG_DIR/$PARTS_DIR/$yearn/archive_links.$NB_FILETYPE"`
 	cat > "$BLOG_DIR"/"$PARTS_DIR"/"$yearn"/archive_links.$NB_FILETYPE <<-EOF
-		<a id="date"></a>
-		<strong>$template_browsedate</strong>
+		$yearindex_monthbrowse
 		<div>
 			$NB_ArchiveMonthLinks
 		</div>
 		<br />
-		<a id="entry"></a>
-		<strong>$template_browseentry</strong>
+		<a id="entry"></a><strong>$template_browseentry</strong>
 		<div>
 			$NB_ArchiveEntryLinks
 		</div>
