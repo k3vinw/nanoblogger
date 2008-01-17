@@ -4,6 +4,6 @@
 
 # plugins - generic messages
 plugins_action="generating"
-plugins_loadaction="loading"
-plugins_textformataction="formatting text - $plugins_loadaction"
+plugins_loadaction="loading .."
+plugins_entryfilteraction="filtering text .."
 

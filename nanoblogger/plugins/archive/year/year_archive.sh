@@ -8,7 +8,7 @@ YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
 	# set previous and next links for given year
 	set_yearnavlinks(){
-	yearnavlinks_var=`echo "$1" |sed -e '/\// s//\-/g'`
+	yearnavlinks_var=${1//[\/]/-}
 	year_id=
 	[ ! -z "$yearnavlinks_var" ] &&
 		year_id=`lookup_id "$yearnavlinks_var" "${YEAR_DB_RESULTS[*]}"`
@@ -27,7 +27,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		[ $prev_yearid -ge 0 ] &&
 			prev_year=${YEAR_DB_RESULTS[$prev_yearid]}
 		if [ ! -z "$prev_year" ]; then
-			prev_year_dir=`echo $prev_year |sed -e '/[-]/ s//\//g'`
+			prev_year_dir=${prev_year//[-]//}
 			prev_year_file="$prev_year_dir/$NB_INDEXFILE"
 			NB_PrevArchiveYearLink="$prev_year_dir/$NB_INDEX"
 		fi
@@ -35,7 +35,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		[ $next_yearid -ge 0 ] &&
 			next_year=${YEAR_DB_RESULTS[$next_yearid]}
 		if [ ! -z "$next_year" ]; then
-			next_year_dir=`echo $next_year |sed -e '/[-]/ s//\//g'`
+			next_year_dir=${next_year//[-]//}
 			next_year_file="$next_year_dir/$NB_INDEXFILE"
 			NB_NextArchiveYearLink="$next_year_dir/$NB_INDEX"
 		fi
@@ -53,7 +53,7 @@ if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all
 		read_metadata TITLE "$NB_DATA_DIR/$entry"
 		NB_ArchiveEntryTitle="$METADATA"
 		[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
-		NB_EntryID=`set_entryid $entry`
+		NB_EntryID=$x_id${entrylink_var//[\/]/-}
 		set_entrylink "$entry"
 		set_monthlink "$month"
 		if [ "$SHOW_CATLINKS" = 1 ];then

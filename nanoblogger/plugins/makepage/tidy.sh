@@ -45,9 +45,8 @@ if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
 		tidylog_restarted=1
 	fi
 	# detect file's suffix
-	SED_VAR=`echo "$BLOG_DIR" |sed -e '/[\/\]/ s//\\\\\//g'`
-	SUFFIX_VAR=`echo "$MKPAGE_OUTFILE" |sed -e '/'$SED_VAR'/ s///g' |cut -d"." -f 2`
-	if [ "$SUFFIX_VAR" = "$NB_FILETYPE" ]; then
+	TIDY_SUFFIX_VAR="${MKPAGE_OUTFILE##*.}"
+	if [ "$TIDY_SUFFIX_VAR" = "$NB_FILETYPE" ]; then
 		nb_msg "tidy validating $MKPAGE_OUTFILE ..."
 		cat >> "$TIDY_LOGFILE" <<-EOF
 		
@@ -57,7 +56,7 @@ if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
 		$TIDY_CMD $TIDY_HTML_ARGS -m $MKPAGE_OUTFILE >> "$TIDY_LOGFILE" 2>&1
 		tidy_info
 	fi
-	if [ "$SUFFIX_VAR" = "$NB_SYND_FILETYPE" ]; then
+	if [ "$TIDY_SUFFIX_VAR" = "$NB_SYND_FILETYPE" ]; then
 		nb_msg "tidy validating $MKPAGE_OUTFILE ..."
 		cat >> "$TIDY_LOGFILE" <<-EOF
 

@@ -4,10 +4,10 @@
 # sample code for templates, based off the default stylesheet
 #
 # <div class="sidetitle">
-# Recent Entries/Older Entries
+# Recent Entries/Alternate Entries
 # </div>
 # <div class="side">
-# $NB_Recent_Entries/$NB_Older_Entries
+# $NB_Recent_Entries/$NB_Alterate_Entries
 # </div>
 
 # set how many entries to list
@@ -16,7 +16,7 @@
 : ${RECENTLIST_QUERYMODE:=max}
 
 PLUGIN_OUTFILE1="$BLOG_DIR/$PARTS_DIR/recent_entries.$NB_FILETYPE"
-PLUGIN_OUTFILE2="$BLOG_DIR/$PARTS_DIR/older_entries.$NB_FILETYPE"
+PLUGIN_OUTFILE2="$BLOG_DIR/$PARTS_DIR/alternate_entries.$NB_FILETYPE"
 
 # always sort in reverse chronological order so recent entries
 # stay near the top of the list
@@ -30,17 +30,21 @@ nb_msg "$plugins_action recent entries links ..."
 set_baseurl "./"
 
 get_entries(){
-RECENTLIST_MODE="$1"
-[ "$RECENTLIST_MODE" = "new" ] && query_db "$RECENTLIST_QUERYMODE" nocat limit "$RECENTLIST_ENTRIES" "" "$RECENTLIST_SORTARGS"
-if [ "$RECENTLIST_MODE" = "old" ]; then
-	XRECENTLIST_OFFSET="$RECENTLIST_ENTRIES"
-	let XRECENTLIST_ENTRIES=${RECENTLIST_ENTRIES}+$RECENTLIST_ENTRIES
-	query_db "$RECENTLIST_QUERYMODE" nocat limit "$XRECENTLIST_ENTRIES" "$XRECENTLIST_OFFSET" "$RECENTLIST_SORTARGS"
-fi
-for entry in ${DB_RESULTS[*]}; do
+case "$1" in
+	new)
+		query_db "$RECENTLIST_QUERYMODE" nocat limit "$RECENTLIST_ENTRIES" "" "$RECENTLIST_SORTARGS"
+		;;
+	alt)
+		let XRECENTLIST_OFFSET=${RECENTLIST_ENTRIES}+1
+		XRECENTLIST_ENTRIES=$RECENTLIST_ENTRIES
+		query_db "$RECENTLIST_QUERYMODE" nocat limit "$XRECENTLIST_ENTRIES" "$XRECENTLIST_OFFSET" "$RECENTLIST_SORTARGS"
+		;;
+esac
+RECENTLIST_DBRESULTS=(${DB_RESULTS[*]})
+for entry in ${RECENTLIST_DBRESULTS[*]}; do
 	read_metadata TITLE "$NB_DATA_DIR/$entry"
 	link_title="$METADATA"
-	NB_EntryID=`set_entryid $entry`
+	NB_EntryID=$x_id${entrylink_var//[\/]/-}
 	[ -z "$link_title" ] && link_title="$notitle"
 	set_entrylink "$entry"
 	echo '<a href="'${ARCHIVES_PATH}$NB_EntryPermalink'">'$link_title'</a><br />'
@@ -50,6 +54,7 @@ done
 get_entries new > "$PLUGIN_OUTFILE1"
 NB_RecentEntries=$(< "$PLUGIN_OUTFILE1")
 
-get_entries old > "$PLUGIN_OUTFILE2"
-NB_OlderEntries=$(< "$PLUGIN_OUTFILE2")
+# uncomment to create alternate entry listing
+#get_entries alt > "$PLUGIN_OUTFILE2"
+#NB_AlternateEntries=$(< "$PLUGIN_OUTFILE2")
 

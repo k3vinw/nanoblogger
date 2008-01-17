@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-01-13T22:12:40-05:00
+# Last modified: 2008-01-16T02:48:19-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -188,9 +188,9 @@ fi
 }
 
 # transliterate text into a suitable form for web links
-translit_text(){ translittext_var="$1"; ttchar_limit="$MAX_TITLEWIDTH"
+translit_text(){ translittext_var="$1"; ttchar_limit=${MAX_TITLEWIDTH}
 nonascii="${translittext_var//[a-zA-Z0-9_-]/}" # isolate all non-printable/non-ascii characters
-echo "$translittext_var" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g; s/[$nonascii ]/_/g" |cut -c1-$ttchar_limit |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
+echo "${translittext_var:0:$ttchar_limit}" |sed -e "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/; s/[\`\~\!\@\#\$\%\^\*\(\)\+\=\{\}\|\\\;\:\'\"\,\<\>\/\?]//g; s/ [\&] / and /g; s/^[ ]//g; s/[ ]$//g; s/[\.]/_/g; s/\[//g; s/\]//g; s/ /_/g; s/[$nonascii ]/_/g" |sed -e '/[\_\-]*$/ s///g; /[\_\-]$/ s///g'
 }
 
 # set base url based on parameters
@@ -345,7 +345,7 @@ fi
 
 # generate entry's anchor/id
 set_entryid(){
-echo "$x_id$1" |sed -e '/[\/]/ s//-/g'
+echo "$x_id${1//[\/]/-}"
 }
 
 # use instead of translit_text to avoid file/URL collissions
@@ -357,7 +357,7 @@ case "$altlink_type" in
 		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
 			read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
 		altentry_linktitle=`translit_text "$METADATA"`
-		alte_day=`echo "$altlink_var" |cut -c1-10`
+		alte_day=${alte_day:0:10}
 		query_db "$alte_day"
 		ALTLINK_LIST=(${DB_RESULTS[*]})
 		for alte in ${ALTLINK_LIST[*]}; do
@@ -432,23 +432,23 @@ entrylink_var="$1"
 link_type="$2"
 if [ "$ENTRY_ARCHIVES" = 1 ] && [ "$link_type" != altlink ]; then
 	entrylink_var="${entrylink_var//-//}"
-	#entry_dir=`echo "$entrylink_var" |cut -d"." -f 1 |cut -c1-10`
-	entry_dir=`echo "${entrylink_var%%\.*}" |cut -c1-10`
+	entry_dir=${entrylink_var%%\.*}
+	entry_dir=${entry_dir:0:10}
 	entry_linktitle=`set_smartlinktitle "${entrylink_var//\//-}" entry`
 	permalink_file="$entry_dir/$entry_linktitle/$NB_INDEXFILE"
 	NB_EntryPermalink="$entry_dir/$entry_linktitle/$NB_INDEX"
 
-	month=`echo "$entrylink_var" |cut -c1-7`
+	month=${entrylink_var:0:7}
 	set_monthlink "$month"
-	day=`echo "$entrylink_var" |cut -c1-10`
+	day=${entrylink_var:0:10}
 	set_daylink "$day"
 else
-	month=`echo "$entrylink_var" |cut -c1-7`
+	month=${entrylink_var:0:7}
 	set_monthlink "$month"
-	entrylink_id=`set_entryid $entrylink_var`
+	entrylink_id=$x_id${entrylink_var//[\/]/-}
 	NB_EntryPermalink="$NB_ArchiveMonthLink#$entrylink_id"
 	if [ "$DAY_ARCHIVES" = 1 ]; then
-		day=`echo "$entrylink_var" |cut -c1-10`
+		day=${entrylink_var:0:10}
 		set_daylink "$day"
 		NB_EntryPermalink="$NB_ArchiveDayLink#$entrylink_id"
 	fi
@@ -459,26 +459,32 @@ fi
 set_entrynavlinks(){
 entrynavlinks_type="$1"
 entrynavlinks_entry=`echo "$2" |grep '^[0-9].*'`
-if [ "$entrynavlinks_type" = prev ]; then
-	prev_entry=; NB_PrevEntryPermalink=
-	prev_entry="$entrynavlinks_entry"
-fi
-if [ "$entrynavlinks_type" = next ]; then
-	next_entry=; NB_NextEntryPermalink=
-	next_entry="$entrynavlinks_entry"
-fi
+case "$entrynavlinks_type" in
+	prev)
+		prev_entry=; NB_PrevEntryPermalink=
+		prev_entry="$entrynavlinks_entry"
+		;;
+	next)
+		next_entry=; NB_NextEntryPermalink=
+		next_entry="$entrynavlinks_entry"
+		;;
+esac
 if [ ! -z "$prev_entry" ]; then
 	# Nijel: support for named permalinks
-	prev_entrylink_var=`echo $prev_entry |sed -e '/[-]/ s//\//g'`
-	prev_entry_dir=`echo "$prev_entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	prev_entrylink_var=${prev_entry//[-]//}
+	prev_entry_file="${prev_entrylink_var##*.}"
+	prev_entry_dir=${prev_entrylink_var%%\.*}
+	prev_entry_dir=${prev_entry_dir:0:10}
 	prev_entry_linktitle=`set_smartlinktitle "$prev_entry" entry`
 	prev_permalink_file="$prev_entry_dir/$prev_entry_linktitle/$NB_INDEXFILE"
 	NB_PrevEntryPermalink="$prev_entry_dir/$prev_entry_linktitle/$NB_INDEX"
 fi
 if [ ! -z "$next_entry" ]; then
 	# Nijel: support for named permalinks
-	next_entrylink_var=`echo $next_entry |sed -e '/[-]/ s//\//g'`
-	next_entry_dir=`echo "$next_entrylink_var" |cut -d"." -f 1 |cut -c1-10`
+	next_entrylink_var=${next_entry//[-]//}
+	next_entry_file="${next_entrylink_var##*.}"
+	next_entry_dir=${next_entrylink_var%%\.*}
+	next_entry_dir=${next_entry_dir:0:10}
 	next_entry_linktitle=`set_smartlinktitle "$next_entry" entry`
 	next_permalink_file="$next_entry_dir/$next_entry_linktitle/$NB_INDEXFILE"
 	NB_NextEntryPermalink="$next_entry_dir/$next_entry_linktitle/$NB_INDEX"
@@ -662,8 +668,9 @@ ENTRY_CACHETYPE="$3"
 : ${ENTRY_PLUGINSLIST:=entry entry/mod entry/format}
 : ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
-	entry_day=`echo "$entry" |cut -c9-10`
-	entry_time=`filter_timestamp "$entry" |cut -c12-19`
+	entry_day=${entry:8:2}
+	entry_time=`filter_timestamp "$entry"`
+	entry_time=${entry_time:11:8}
 	if [ -z "$ENTRY_CACHETYPE" ]; then
 		if [ ! -z "$CACHE_TYPE" ]; then
 			ENTRY_CACHETYPE="$CACHE_TYPE"
@@ -672,11 +679,11 @@ if [ -f "$ENTRY_FILE" ]; then
 		fi
 	fi
 	if [ "$ENTRY_DATATYPE" != ALL ] || [ "$ENTRY_DATATYPE" = NOBODY ]; then
-		NB_EntryID=`set_entryid $entry`
+		NB_EntryID=$x_id${entry//[\/]/-}
 		load_metadata "$ENTRY_DATATYPE" "$ENTRY_FILE"
 		load_plugins entry
 	else
-		NB_EntryID=`set_entryid $entry`
+		NB_EntryID=$x_id${entry//[\/]/-}
 		load_metadata NOBODY "$ENTRY_FILE"
 		# use cache when entry data unchanged
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then

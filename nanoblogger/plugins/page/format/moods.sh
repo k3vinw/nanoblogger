@@ -33,7 +33,7 @@ if [ -d "$MOODS_DIR" ]; then
 	fi
 	}
 
-	nb_msg "$plugins_textformataction `basename $nb_plugin` ..."
+	nb_msg "$plugins_entryfilteraction `basename $nb_plugin` ..."
 	load_moods
 fi
 

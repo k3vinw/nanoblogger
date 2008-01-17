@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-01-13T21:50:10-05:00
+# Last modified: 2008-01-14T02:31:13-05:00
 
 # index related categories by id
 index_catids(){
@@ -29,9 +29,9 @@ oldcat_idnum=; cat_idnum=
 
 # rebuild main database from scratch
 rebuild_maindb(){
-	DB_YYYY=`echo "$db_query" |cut -c1-4`
-	DB_MM=`echo "$db_query" |cut -c6-7`
-	DB_DD=`echo "$db_query" |cut -c9-10`
+	DB_YYYY=${db_query:0:4}
+	DB_MM=${db_query:5:2}
+	DB_DD=${db_query:8:2}
 	: ${DB_YYYY:=[0-9][0-9][0-9][0-9]}
 	: ${DB_MM:=[0-9][0-9]}
 	: ${DB_DD:=[0-9][0-9]}

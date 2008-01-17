@@ -1,12 +1,13 @@
 # Module for configuration file management
-# Last modified: 2008-01-13T20:30:37-05:00
+# Last modified: 2008-01-14T02:25:07-05:00
 
 # --- WARNING ---
 # config variables that must always load
 
 # automatically set time zone using GNU specific, 'date +%z'
-tzd_mm=`date +%z |cut -c4-5`
-AUTO_TZD=`date +%z |sed 's/..$/\:'$tzd_mm'/'`
+tzd_hhmm=`date +%z`
+tzd_hh=${tzd_hhmm:0:3}; tzd_mm=${tzd_hhmm:3:5}
+AUTO_TZD=${tzd_hh}:${tzd_mm}
 # ---
 
 # loads global config

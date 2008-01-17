@@ -1,0 +1,5 @@
+<a id="$NB_EntryID"></a>
+$([ "$DAY_ARCHIVES" = 1 ] && echo '<a href="'${ARCHIVES_PATH}$NB_ArchiveDayLink'#'$NB_EntryID'">'$day'</a> -')
+<a class="link" href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_EntryTitle</a>
+$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories")
+<br />
