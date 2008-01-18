@@ -74,7 +74,7 @@ Examples:
 	nb -b ~/public_html/weblog add
 
  create new "examples" tag
-	nb -b ~/public_html/weblog --title new --author examples add
+	nb -b ~/public_html/weblog tag new --title examples add
 
  create new entry using nothing but command line options
 	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add

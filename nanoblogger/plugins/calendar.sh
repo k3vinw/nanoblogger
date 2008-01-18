@@ -20,22 +20,26 @@ PLUGIN_CALENDAR=1
 	cal_year=`date +%Y`
 [ -z "$cal_month" ] &&
 	cal_month=`date +%m`
-curr_month=$cal_year.$cal_month
+query_cal=$cal_year.$cal_month
 [ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS "$cal_month" "$cal_year"`
 [ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS "$cal_month" "$cal_year"`
-CAL_HEAD=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; /[ ]*$/ s///g; 1q'`
+CAL_HEAD=`echo "$CALENDAR" |sed 1q`
+CAL_HEAD=${CAL_HEAD//[ ][ ]/}; CAL_HEAD=${CAL_HEAD%%[ ][ ]}; CAL_HEAD=${CAL_HEAD##[ ][ ]}
 WEEK_DAYS=(`echo "$CALENDAR" |sed -n 2p`)
 DAYS=`echo "$CALENDAR" |sed 1,2d`
 NUM_DAY_LINES=(`echo "$DAYS" |grep -n "[0-9]" |cut -d":" -f 1`)
 nb_msg "$plugins_action weblog calendar for $CAL_HEAD ..."
 
-query_db "$cal_month"
+
+[ -z "$BASE_URL" ] || [ "$BASE_URL" = "$BLOG_URL" ] &&
+	set_baseurl "./"
+query_db "$query_cal"
 CALMONTH_LIST=(${DB_RESULTS[*]})
 
 echo '<table border="0" cellspacing="4" cellpadding="0" summary="Calendar">' > "$cal_file"
-if [ "$MONTH_ARCHIVES" = 1 ] && [ "${#DB_RESULTS[*]}" -gt 0 ]; then
+if [ "$MONTH_ARCHIVES" = 1 ] && [ "${#CALMONTH_LIST[*]}" -gt 0 ]; then
 	# create link to month's archive
-	set_monthlink ${curr_month//\./-}
+	set_monthlink ${query_cal//\./-}
 	echo '<caption class="calendarhead"><a href="'${BASE_URL}$ARCHIVES_DIR/$NB_ArchiveMonthLink'">'$CAL_HEAD'</a></caption>' >> "$cal_file"
 else
 	echo '<caption class="calendarhead">'$CAL_HEAD'</caption>' >> "$cal_file"

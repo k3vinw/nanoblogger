@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-01-14T02:31:13-05:00
+# Last modified: 2008-01-18T00:27:40-05:00
 
 # index related categories by id
 index_catids(){
@@ -233,13 +233,15 @@ else
 	done
 fi
 }
+# initialize arrays
+DB_RESULTS=()
 case "$db_query" in
 	a|any|all) db_query=; query_data;;
 	# create master reference db
-	master) db_query=; MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
-	years) db_query=; YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`);;
-	months) db_query=; MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`);;
-	days) db_query=; DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`);;
+	master) db_query=; MASTER_DB_RESULTS=(); MASTER_DB_RESULTS=($(< "$NB_DATA_DIR/master.$NB_DBTYPE"));;
+	years) db_query=; YEAR_DB_RESULTS=(); YEAR_DB_RESULTS=(`list_db |cut -c1-4 |filter_query`);;
+	months) db_query=; MONTH_DB_RESULTS=(); MONTH_DB_RESULTS=(`list_db |cut -c1-7 |filter_query`);;
+	days) db_query=; DAY_DB_RESULTS=(); DAY_DB_RESULTS=(`list_db |cut -c1-10 |filter_query`);;
 	max) db_setlimit=limit; db_query=; query_data;;
 	rebuild) rebuild_database;;
 	*) query_data;;
