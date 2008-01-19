@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-01-18T00:10:46-05:00
+# Last modified: 2008-01-19T17:05:59-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -420,12 +420,10 @@ if [ -f "$ENTRY_FILE" ]; then
 		load_plugins entry
 	else
 		NB_EntryID=$x_id${entry//[\/]/-}
-		load_metadata NOBODY "$ENTRY_FILE"
 		# use cache when entry data unchanged
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
-			read_metadata "BODY,$METADATA_CLOSEVAR" "$ENTRY_FILE"
-			NB_EntryBody="$METADATA"
+			load_metadata ALL "$ENTRY_FILE"
 			for entry_pluginsdir in $ENTRY_PLUGINSLIST; do
 				if [ "$entry_pluginsdir" = "entry/format" ]; then
 					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
@@ -645,11 +643,13 @@ Edit_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
 New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
 # abort if we don't have a valid timestamp
 [ ! -z "$EntryDate_TimeStamp" ] && [ -z "$New_EntryTimeStamp" ] &&
-	die "TIMESTAMP != 'YYYY-MM-DD HH:MM:SS'"
+	die "$novalid_entrytime"
 if [ ! -z "$New_EntryTimeStamp" ]; then
 	[ ! -f "$SCRATCH_FILE.mod-catdbs" ] &&
 		> "$SCRATCH_FILE.mod-catdbs"
 	New_EntryDateFile="$New_EntryTimeStamp.$NB_DATATYPE"
+	# abort if a possible conflict arises
+	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] && die "$invalid_entrytime"
 	if [ -f "$NB_DATA_DIR/$EntryDate_File" ] && [ "$EntryDate_File" != "$New_EntryDateFile" ]; then
 		Old_EntryFile="$EntryDate_File"
 		mv "$NB_DATA_DIR/$Old_EntryFile" "$NB_DATA_DIR/$New_EntryDateFile"

@@ -78,6 +78,8 @@ confirmaction_ask="are you sure?"
 # misc. validation errors
 novalid_entryid="must specify a valid entry id."
 invalid_entryid="invalid entry id(s):"
+novalid_entrytime="must specify a valide TIMESTAMP - 'YYYY-MM-DD HH:MM:SS'"
+invalid_entrytime="invalid entry TIMESTAMP or conflict"
 
 # edit_weblog
 editweblog_onecat="only one tag can be specified when editing a title!"

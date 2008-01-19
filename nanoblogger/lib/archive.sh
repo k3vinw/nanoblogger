@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-01-18T04:10:31-05:00
+# Last modified: 2008-01-19T16:11:35-05:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -130,19 +130,23 @@ case "$altlink_type" in
 	entry)
 		[ -f "$NB_DATA_DIR/$altlink_var" ] &&
 			read_metadata TITLE "$NB_DATA_DIR/$altlink_var"
+		smartlink_metatitle="$METADATA"
 		altentry_linktitle=`translit_text "$METADATA"`
-		alte_day=${alte_day:0:10}
+		# search for similar titles that fall on same day
+		alte_day=${altlink_var:0:10}
 		query_db "$alte_day"
 		ALTLINK_LIST=(${DB_RESULTS[*]})
-		for alte in ${ALTLINK_LIST[*]}; do
-			[ -f "$NB_DATA_DIR/$alte" ] &&
-				read_metadata TITLE "$NB_DATA_DIR/$alte"
-			alte_linktitle=`translit_text "$METADATA"`
-			# entry title failsafe
-			[ -z "$alte_linktitle" ] &&
-				alte_linktitle=`translit_text "$notitle"`
-			echo "$alte:$alte_linktitle"
-		done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
+		if [ "${#ALTLINK_LIST}" -gt 1 ]; then
+			for alte in ${ALTLINK_LIST[*]}; do
+				[ -f "$NB_DATA_DIR/$alte" ] &&
+					read_metadata TITLE "$NB_DATA_DIR/$alte"
+				alte_linktitle=`translit_text "$METADATA"`
+				# entry title failsafe
+				[ -z "$alte_linktitle" ] &&
+					alte_linktitle=`translit_text "$notitle"`
+				echo "$alte:$alte_linktitle"
+			done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
+		fi
 		link_match="$altentry_linktitle"
 		alte_backup=${altlink_var//-//}; alte_backup=${alte_backup//T//T}
 		alte_backup=${alte_backup%%.*}; altlink_backup="${alte_backup//*\/}"
@@ -161,7 +165,7 @@ case "$altlink_type" in
 			[ -z "$altt_linktitle" ] &&
 				altt_linktitle=`translit_text "$notitle"`
 			echo "$altt:$altt_linktitle"
-		done |sort -ru > "$SCRATCH_FILE".altlinks
+		done |sort $SORT_ARGS > "$SCRATCH_FILE".altlinks
 		link_match="$altcat_linktitle"
 		altlink_backup=${altlink_var%%\.*}
 		;;
@@ -325,7 +329,7 @@ db_setlimit="$5"
 db_limit="$6"
 db_offset="$7"
 query_db "$query_type" "$db_catquery" "$db_setlimit" "$db_limit" "$db_offset"
-ARCHIVE_LIST=(${DB_RESULTS[@]})
+ARCHIVE_LIST=(); ARCHIVE_LIST=(${DB_RESULTS[@]})
 mkdir -p `dirname "$PARTS_FILE"`
 > "$PARTS_FILE"
 # fallback to default entry template
@@ -353,7 +357,7 @@ fi
 		build_pagelist(){
 		if [ ! -z "$page_num" ]; then
 			[ -z "$PAGE_LIST" ] && PAGE_LIST="page$page_num"
-			[ "$PAGE_LIST" != "$OLD_PAGELIST" ] && PAGE_LIST="$OLD_PAGELIST page$page_num"
+			[ "$PAGE_LIST" != "$OLD_PAGELIST" ] && PAGE_LIST="${OLD_PAGELIST//page$page_num/} page$page_num"
 			OLD_PAGELIST="$PAGE_LIST"
 		fi
 		}
@@ -363,11 +367,10 @@ fi
 			if [ ! -z "$PAGEMOD_VAR" ] || [ "$NB_QUERY" = all ] || [ "$page_catquery" = nocat ]; then
 				build_pagelist
 			else
-				page_match=`echo "${DB_RESULTS[*]}" |grep "$page_entry"`
-				[ ! -z "$page_match" ] && build_pagelist
+				[[ ${DB_RESULTS[*]} == *$page_entry* ]] && build_pagelist
 			fi
 		done
-		PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done |sort -u`
+		PAGE_LIST=`for page_n in $PAGE_LIST; do echo "$page_n"; done`
 	}
 	page_bynumber(){
 	set_baseurl "" "${page_dir}${page_filedir}$page_file"
@@ -379,8 +382,8 @@ fi
 query_db "$page_query" "$page_catquery"
 total_items=${#DB_RESULTS[*]}
 if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
-	get_pages(){ y=0; while [ "$y" -lt "$total_items" ]; do
-		let y=${page_items}+$y; echo $y; done |grep -c "."; }
+	get_pages(){ y=0; page_totals=($(while [ "$y" -lt "$total_items" ]; do \
+		let y=${page_items}+$y; echo $y; done)); echo ${#page_totals[*]}; }
 	total_pages=`get_pages`; page_totals=0
 	# cleanup numbered page(s)
 	if [ "$NB_QUERY" = all ]; then
@@ -390,7 +393,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 		nb_msg "$paginate_action ($page_items/$total_items) ..."
 	fi
 	page_limit=0; page_offset=1; page_num=0
-	while [ "$page_totals" -lt "$total_items" ]; do
+	while [ "$page_num" -lt "$total_pages" ]; do
 		let page_totals=${page_items}+$page_totals
 		let page_offset=${page_offset}+$page_limit
 		# if page items overflow, use difference to set new limit
@@ -405,7 +408,7 @@ if [ "$total_items" -gt "$page_items" ] && [ "$page_items" != 0 ]; then
 		let next_num=${page_num}+1
 		arch_file="$page_file"
 		arch_link="./$NB_INDEX"
-		arch_name="${page_file##*.}"
+		arch_name="${page_file%%\.*}"
 		prev_page=`chg_suffix "$arch_name-page$prev_num".no`
 		next_page=`chg_suffix "$arch_name-page$next_num".no`
 		[ "$page_num" -gt 1 ] &&
@@ -474,11 +477,11 @@ looparch_list=($1)
 looparch_type="$2"
 looparch_exec="$3"
 # set instructions to execute based on $looparch_type
-if [ "$looparch_type" = years ]; then
-	looparchexec_years="$looparch_exec"
-elif [ "$looparch_type" = months ]; then
-	looparchexec_months="$looparch_exec"
-fi
+case $looparch_type in
+	years) looparchexec_years="$looparch_exec";;
+	months) looparchexec_months="$looparch_exec";;
+esac
+ARCHIVE_MASTER=(); ARCHIVE_YEARS=()
 ARCHIVE_MASTER=(${looparch_list[*]})
 ARCHIVE_YEARS=(`for db_item in ${ARCHIVE_MASTER[@]}; do echo $db_item; done |cut -c1-4 |sort $SORT_ARGS`)
 for yearn in ${ARCHIVE_YEARS[@]}; do
@@ -493,9 +496,10 @@ for yearn in ${ARCHIVE_YEARS[@]}; do
 				month="$yearn-$monthn"
 				query_db "$month"
 				# execute instructions for each month
-				[ ! -z "${DB_RESULTS[*]}" ] &&
+				if [ ! -z "${DB_RESULTS[*]}" ]; then
 					[ ! -z "$looparchexec_months" ] &&
 						$looparchexec_months
+				fi
 			done
 		done
 	fi
@@ -504,6 +508,7 @@ done
 
 # generate the archives
 build_archives(){
+LOOP_LIST=()
 load_plugins archive
 nb_msg "$buildarchives_action"
 # build/update the category archives
@@ -513,9 +518,7 @@ if [ "$NB_QUERY" = all ]; then
 	LOOP_LIST=(${UPDATE_LIST[*]})
 
 	# plugins for yearly archives
-	query_db "$yearn"
-	[ ! -z "${DB_RESULTS[*]}" ] &&
-		load_plugins archive/year
+	load_plugins archive/year
 	# plugins month and day archives
 	[ "$MONTH_ARCHIVES" = 1 ] &&
 		load_plugins archive/month
@@ -525,11 +528,9 @@ if [ "$NB_QUERY" = all ]; then
 		build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 else
 	# update relateive month archives
-	LOOP_LIST=`for moditem in ${UPDATE_LIST[@]}; do echo $moditem; done |sort $SORT_ARGS`
+	LOOP_LIST=(`for moditem in ${UPDATE_LIST[@]}; do echo $moditem; done |sort $SORT_ARGS`)
 	# plugins for yearly archives
-	query_db "$yearn"
-	[ ! -z "${DB_RESULTS[*]}" ] &&
-		load_plugins archive/year
+	load_plugins archive/year
 	# plugins month and day archives
 	[ "$MONTH_ARCHIVES" = 1 ] &&
 		load_plugins archive/month

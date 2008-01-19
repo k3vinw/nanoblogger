@@ -4,6 +4,7 @@
 YEARIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
 
 build_yeararchive(){
+	query_db "$yearn"
 	YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 	# check for weblog modifications
 	if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
@@ -51,18 +52,24 @@ build_yeararchive(){
 		ARCHENTRY_LIST=${DB_RESULTS[*]}
 		NB_ArchiveEntryLinks=$(
 		for entry in ${ARCHENTRY_LIST[*]}; do
-			read_metadata TITLE "$NB_DATA_DIR/$entry"
-			NB_ArchiveEntryTitle="$METADATA"
 			[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
 			NB_EntryID=$x_id${entrylink_var//[\/]/-}
 			set_entrylink "$entry"
+			# 1st try to get title from set_entrylink instance of read_metadata
+			NB_ArchiveEntryTitle="$smartlink_metatitle"
+			if [ -z "$NB_ArchiveEntryTitle" ]; then
+				read_metadata TITLE "$NB_DATA_DIR/$entry"
+				NB_ArchiveEntryTitle="$METADATA"
+			fi
 			set_monthlink "$month"
 			if [ "$SHOW_CATLINKS" = 1 ];then
 				# Command to help filter order of categories
 				: ${CATLINKS_FILTERCMD:=sort}
 				>"$SCRATCH_FILE".cat_links
 				entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
-				entry_catids=(`print_cat "$entry_wcatids"`)
+				entry_catids=${entry_wcatids##*\>}
+				[ "$entry_wcatids" = "$entry_catids" ] &&
+					entry_catids=
 				for entry_catnum in ${entry_catids//\,/ }; do
 					cat_title=`nb_print "$NB_DATA_DIR"/cat_"$entry_catnum.$NB_DBTYPE" 1`
 					set_catlink cat_"$entry_catnum.$NB_DBTYPE"
@@ -95,7 +102,8 @@ build_yeararchive(){
 		if [ "$CAL_VAR" = "1" ]; then
 			[ ! -z "$DATE_LOCALE" ] && CALENDAR=`LC_ALL="$DATE_LOCALE" $CAL_CMD $CAL_ARGS $monthn $yearn`
 			[ -z "$DATE_LOCALE" ] && CALENDAR=`$CAL_CMD $CAL_ARGS $monthn $yearn`
-			NB_ArchiveMonthTitle=`echo "$CALENDAR" |sed -e '/^[ ]*/ s///g; 1q'`
+			CAL_HEAD=`echo "$CALENDAR" |sed 1q`
+			CAL_HEAD=${CAL_HEAD//[ ][ ]/}; NB_ArchiveMonthTitle=${CAL_HEAD%%[ ][ ]}; NB_ArchiveMonthTitle=${CAL_HEAD##[ ][ ]}
 		else
 			NB_ArchiveMonthTitle="$month"
 		fi

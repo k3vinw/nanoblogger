@@ -42,8 +42,12 @@ case "$1" in
 esac
 RECENTLIST_DBRESULTS=(${DB_RESULTS[*]})
 for entry in ${RECENTLIST_DBRESULTS[*]}; do
-	read_metadata TITLE "$NB_DATA_DIR/$entry"
-	link_title="$METADATA"
+	# 1st try to get title from set_entrylink instance of read_metadata
+	link_title="$smartlink_metatitle"
+	if [ -z "$link_title" ]; then
+		read_metadata TITLE "$NB_DATA_DIR/$entry"
+		link_title="$METADATA"
+	fi
 	NB_EntryID=$x_id${entrylink_var//[\/]/-}
 	[ -z "$link_title" ] && link_title="$notitle"
 	set_entrylink "$entry"

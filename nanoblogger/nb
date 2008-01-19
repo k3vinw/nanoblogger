@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-01-17T22:46:22-05:00
+# Last modified: 2008-01-19T18:11:18-05:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -582,9 +582,8 @@ db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 explode_list(){
 EXPLODE_RESULTS=($1)
 list_entryid=0
-id=0
 total_items=${#EXPLODE_RESULTS[*]}
-while [ "$id" -lt "$total_items" ]; do
+for id in ${!EXPLODE_RESULTS[@]}; do
 	let list_entryid=${list_entryid}+1
 	entry=${EXPLODE_RESULTS[$id]%%>[0-9]*}
 	entry_cat=${EXPLODE_RESULTS[$id]##*\>}
@@ -601,12 +600,10 @@ done
 case "$db_query" in
 	tag|tag[a-z]|cat) [ -z "${db_categories[*]}" ] && die "$listweblog_nocat"
 			nb_msg "$header_ID, $header_Title"
-			id=0
-			cat_total=${#db_categories[*]}
-			while [ "$id" -le "$cat_total" ]; do
+			for id in ${!db_categories[@]}; do
+				let id=${id}+1
 				[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
 				echo " $id, `nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE 1`"
-				let id=${id}+1
 			done; exit 0;;
 esac
 list_entries(){
@@ -670,9 +667,8 @@ check_config
 # create a new category
 if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
-		query_db; id=0
-		cat_total=`echo "$db_categories" |grep -c "[\.]$NB_DBTYPE"`
-		while [ "$id" != "$cat_total" ] || [ "$cat_total" = "0" ]; do
+		query_db
+		for id in ${!db_categories[@]}; do
 			let id=${id}+1
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
 				nb_msg "$addweblog_newcat id: $id ..."
@@ -687,7 +683,8 @@ if [ ! -z "$cat_num" ]; then
 				cat_num="$id"; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 				cat_total="$id"
 			else
-				let cat_total=${cat_total}+1
+				let id=${id}+1
+				db_categories=(${db_categories[*]} cat_$id.$NB_DBTYPE)
 			fi
 		done
 		newcat_title=`nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`
