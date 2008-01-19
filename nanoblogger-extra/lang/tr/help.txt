@@ -1,0 +1,88 @@
+NanoBlogger - Uçbirim weblog motoru.
+Sürüm $VERSION, Kevin Wood <n1xt3r@fastmail.fm>
+
+Kullanım:
+ $BASENAME [-b blog_dir] [options]
+
+Seçenekler:
+ -a, --add				yeni bir kayıt, bölüm ya da weblog
+					yarat (dizin).
+ -b, --blogdir <directory>		weblog dizinini belirt.
+ -B, --body <text>			bunun yerine artık '-T' or '--text'
+ 					kullanın.
+ -c, --category	<ID,cat>		bölüm belirt ('--add',
+					'--delete', '--edit', '--list',
+					'--update', ve '--update-cache' için).
+ --cfgfile <file>			farklı bir ayar dosyası belirt.
+ --configure				weblog'u ayarla ('--update' için).
+ --datadir <directory>			weblog'un veri dizinini belirt.
+ -d, --delete <ID,cat>			kayıt ya da bölüm sil.
+ -D, --desc <text>			tanımı ayarla ('--add',
+ 					'--draft', '--makefile' ve
+ 					'--makepage' için).
+ -e, --edit <ID,cat>			kayıt ya da bölümü düzenle.
+ -E, --draft <file> 			meta-dosya yarat ya da düzenle.
+ -f, --file <file> 			kayıt olarak eklenecek meta-dosyayı
+ 					belirt ('--add' için).
+ -h, --help				bu yardım iletisini göster.
+ -i, --interactive <1=on/0=off> 	etkileşimli kipi değiştir ('--add',
+ 					'--delete', '--preview', '--publish',
+ 					ve '--update' için).
+ -l, --list <all,cat,DATE,max>		kayıt ya da bölümleri listele 
+ 					varsayılan: max).
+ --manual				kılavuzu göster.
+ -m, --move <ID>			kaydı verilen bölüme taşı
+					('--category' için).
+ -M, --makepage <file1> <file2> 	(file1) meta-dosyasını kullanarak 
+					(file1) sayfasını yarat.
+ --makefile <file> 			yeni meta-dosya oluştur.
+ -n, --author <text>			yazarı ayarla ('--add',
+					'--draft', '--makefile' ve
+ 					'--makepage' için).
+ --plugindir <directory> 		weblog'un eklenti dizinini belirt.					
+ -p, --preview				weblog önizleme komutunu çalıştır.
+ -P, --publish				weblog baskı komutunu çalıştır.
+ -q, --query <DATE>			çalıştırılacak sorguyu belirt ('--edit'
+ 					ve '--delete' için).
+ --template <file>			şablon olarak yüklenecek dosyayı belirt
+ 					('--draft', '--makepage' ve
+ 					'--makefile' için).
+ --template-dir <directory>		weblog'un şablon dizinini belirt.
+ -t, --title <text>			başlığı ayarla ('--add',
+					'--category', '--draft',
+ 					'--makefile' ve '--makepage' için).
+ --tag <TAG> 	 	 		etiketi ayarla (for '--add', '--draft',
+					'--edit', '--makefile' ve
+ 					 '--makepage' için).
+ --tag-text <text> 			etiketin metnini ayarla ('--tag' için).
+ -T, --text <text> 			metni ayarla ('--add',
+					'--draft', '--makefile' ve
+ 					'--makepage' için).
+ -U, --update-cache <all,DATE,max,expired>
+ 					verilen önbellek verisini silerek
+ 					weblog önbelleğinin temizlenmesini sağla
+ 					(varsayılan: 'expired').
+ -u, --update <all,DATE,main,max> 	weblog dosyalarının güncellenmesini
+ 					sağla (varsayılan: 'max').
+ -v, --verbose <1=on/0=off>		gevezelik seviyesini ayarla.
+ -V, --version				sürüm bilgisini göster.
+
+ -c,-d,-e,-m seçenekleri 1,2,3 diye virgülle ayrılan çoklu numaraları
+         destekler.
+ 
+ --list and --update tarihe göre de bulur (kayıt numarasından bağımsız).
+ tarih = YYYY-MM-DD, YYYY-MM, YYYY
+
+Örnekler:
+
+ weblog dizinini belirterek yeni bir kayıt eklemek
+	nb -b ~/public_html/weblog -a
+
+ Yeni bir kayıt oluşturup adını "Haberler" koymak
+	nb -b ~/public_html/weblog -t "Haberler" -c new -a
+
+ Tamamen komut satırından yeni bir kayıt eklemek
+	nb -b ~/public_html/weblog -n 'ismim' -t 'Başlık' -T 'Metin!' -a
+
+Daha fazla bilgi için:
+ URL: http://nanoblogger.sourceforge.net
