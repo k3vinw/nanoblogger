@@ -58,8 +58,9 @@ Options:
  --template <file>			specify file to load as template (for
  					'draft', 'make-page' and 'make-file').
  --template-dir <directory>		specify weblog's template directory.
- --var <VARIABLE>  	 		define meta-variable (for '-a', '-E',
- 					'-e', '--make-file' and '-M').
+ --var <VARIABLE>  	 		define meta-variable (for 'add',
+ 					'draft', 'edit', 'make-file' and
+					'make-page').
  --set-var <input>  			set meta-variable (for '--var').
  --version				display version information.
 

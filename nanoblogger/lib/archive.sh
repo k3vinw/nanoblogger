@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-01-19T16:11:35-05:00
+# Last modified: 2008-01-24T01:08:10-05:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -514,30 +514,19 @@ nb_msg "$buildarchives_action"
 # build/update the category archives
 build_catarchives
 if [ "$NB_QUERY" = all ]; then
-	# build the monthly archives
 	LOOP_LIST=(${UPDATE_LIST[*]})
-
-	# plugins for yearly archives
-	load_plugins archive/year
-	# plugins month and day archives
-	[ "$MONTH_ARCHIVES" = 1 ] &&
-		load_plugins archive/month
-	# build the entry archives
-	export CACHE_TYPE=entry
-	[ "$ENTRY_ARCHIVES" = 1 ] &&
-		build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 else
-	# update relateive month archives
+	# remove duplicate entries in update list and sort into chronological order
 	LOOP_LIST=(`for moditem in ${UPDATE_LIST[@]}; do echo $moditem; done |sort $SORT_ARGS`)
-	# plugins for yearly archives
-	load_plugins archive/year
-	# plugins month and day archives
-	[ "$MONTH_ARCHIVES" = 1 ] &&
-		load_plugins archive/month
-	# update relative entry archives
-	export CACHE_TYPE=entry
-	[ "$ENTRY_ARCHIVES" = 1 ] &&
-		build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 fi
+# plugins for yearly archives
+load_plugins archive/year
+# plugins month and day archives
+[ "$MONTH_ARCHIVES" = 1 ] &&
+	load_plugins archive/month
+# build entry archives
+export CACHE_TYPE=entry
+[ "$ENTRY_ARCHIVES" = 1 ] &&
+	build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 }
 
