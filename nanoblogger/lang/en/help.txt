@@ -1,5 +1,8 @@
 NanoBlogger - Command line weblog engine.
-Version $VERSION, by Kevin Wood <n1xt3r@fastmail.fm>
+Version $VERSION, Copyright (C) 2008 Kevin Wood <un1xt3r-at-fastmail-dot-fm>
+
+NanoBlogger comes with ABSOLUTELY NO WARRANTY; see version 2 of the GNU General
+Public License for further details
 
 Usage:
  $BASENAME [-b blog_dir] [options] <action>

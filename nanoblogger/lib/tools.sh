@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-01-24T01:24:03-05:00
+# Last modified: 2008-01-24T01:40:02-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -90,7 +90,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 	for browser in $BROWSER_LIST; do
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
-		nb_msg "$nbbrowser_running $browser_cmd '$BROWSER_URL' ..."
+		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
 		$browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done

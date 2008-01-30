@@ -29,9 +29,7 @@ WEEK_DAYS=(`echo "$CALENDAR" |sed -n 2p`)
 DAYS=`echo "$CALENDAR" |sed 1,2d`
 NUM_DAY_LINES=(`echo "$DAYS" |grep -n "[0-9]" |cut -d":" -f 1`)
 nb_msg "$plugins_action weblog calendar for $CAL_HEAD ..."
-
-
-[ "$PLUGINS_DIR" = main ] &&
+[[ "$cal_file" = "$BLOG_DIR/$PARTS_DIR/cal.$NB_FILETYPE" ]] &&
 	set_baseurl "./"
 query_db "$query_cal"
 CALMONTH_LIST=(${DB_RESULTS[*]})
