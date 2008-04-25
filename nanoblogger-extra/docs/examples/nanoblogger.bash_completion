@@ -55,6 +55,10 @@ _nanoblogger()
 			COMPREPLY=( $( compgen -W "all article tag main max expired feed" -- $cur ) )
 			return 0
 			;;
+	tag)
+			COMPREPLY=( $( compgen -W "new" -- $cur ) )
+			return 0
+			;;
     esac
 
     if [[ "$cur" == -* ]]; then

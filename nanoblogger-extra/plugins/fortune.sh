@@ -19,7 +19,7 @@ if $FORTUNE_CMD > "$PLUGIN_OUTFILE" 2>&1; then
 	nb_msg "$plugins_action fortune ..."
 	echo '<div class="fortune">' > "$PLUGIN_OUTFILE"
 	$FORTUNE_CMD ${FORTUNE_FILE} \
-		|sed -e '/[\<]/ s//\&#60;/g; /[\>]/ s//\&#62;/g; /^$/ s//<br \/>/g; /$/ s//<br \/>/g; /[\$]/ s//\\$/g' \
+		|sed -e '/[\<]/ s//\&#60;/g; /[\>]/ s//\&#62;/g; /^$/ s//<br \/>/g; /$/ s//<br \/>/g; /[\$]/ s//\$/g' \
 		>> "$PLUGIN_OUTFILE"
 	echo '</div>' >> "$PLUGIN_OUTFILE"
 	NB_Fortune=$(< "$PLUGIN_OUTFILE")

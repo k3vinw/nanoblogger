@@ -1,102 +1,98 @@
-# NanoBlogger French language definitions
-# Translation: Julie Wojcicki <chili-nb@ssji.net>
-# Revised by: denis BERNARD <deber@users.sourceforge.net>
-# Help
-# lang/fr/help.txt
+# First translator: Julie Wojcicki <chili-nb@ssji.net>
+NanoBlogger - Moteur de blog pour la ligne de commande
 
-NanoBlogger - Moteur de blog pour console.
-Version $VERSION, par Kevin Wood <n1xt3r@fastmail.fm>
+Version $VERSION, Copyright (C) 2008 Kevin Wood <un1xt3r-at-fastmail-dot-fm>
+traduction : Denis Bernard <deber@users.sourceforge.net>
+
+NanoBlogger comes with ABSOLUTELY NO WARRANTY; see version 2 of the GNU General
+Public License for further details
 
 Usage:
- $BASENAME [-b blog_dir] [options]
+ $BASENAME [-b blog_dir] [options] <action>
 
-Options:
- -a, --add				crée une nouvelle entrée, catégorie ou
-					un blog (répertoire).
- -b, --blogdir <directory>		spécifie le répertoire du blog.
- -c, --category	<ID,cat>		spécifie la catégorie (pour '--add',
-					'--delete', '--edit', '--list',
-					'--update', et '--update-cache').
- --cfgfile <file>			spécifie un fichier de configuration
+Actions :
+ add					- crée une nouvelle entrée, tag ou
+					  un blog (répertoire).
+ configure				- configure le blog (pour 'update').
+ delete <ID,tag>			- supprime une entrée, un tag ou détague
+					  une entrée.
+ draft <file> 				- édite ou crée un métafichier.
+ edit <ID,tag>				- édite une entrée ou un tag.
+ list					- liste les entrées ou les tags
+					  (pour 'query' et 'tag', par défaut :
+					  'max').
+ make-page <file1> <file2> 		- crée une nouvelle page de blog
+					  (fichier2) depuis le métafichier
+					  (fichier1).
+ tag-entry <ID>				- tag l'entrée (pour 'tag')
+ tag-list 				- liste les tags (pareil que :
+					  'query tag list')
+ manual					- affiche le manuel.
+ make-file <file> 			- crée un nouveau métafichier.
+ preview				- lance la commande d'aperçu du blog.
+ publish				- lance la commande de publication du
+					  blog.
+ query <all,tag,DATE,main,max, 		- spécifie une requête (pour 'edit',
+	expired>			  'delete', 'list', 'tag-entry' et
+					  'update-cache').
+ tag <ID,new> 				- spécifie le tag (pour 'add', 'delete',
+                                          'edit', 'list', 'update' et
+					  'update-cache').
+ file <file> 				- spécifie le métafichier à importer
+					  comme entrée (pour 'add').
+ update-cache 				- force la mise à jour du cache (pour
+					  'query', par défaut : 'expired').
+ update 				- force la mise à jour du blog (pour
+					  'query', par défaut : 'max').
+
+Options :
+ -b, --blog-dir <directory>		spécifie le répertoire du blog.
+ -f, --force 				force la mise à jour du cache. (synonyme
+					de 'update-cache').
+ -h,--help				affiche ce message d'aide.
+ -i, --interactive <1=on/0=off> 	bascule en mode interactif (pour 'add',
+ 					'delete', 'preview', 'publish' et
+					'update').
+ -v, --verbose <1=on/0=off>		bascule en mode verbeux.
+ --conf-file <file>			spécifie un fichier de configuration
 					alternatif.
- --configure				configure le blog (pour '--update').
- --datadir <directory>			spécifie le répertoire "data" du blog.
- -d, --delete <ID,cat>			supprime une entrée ou une catégorie.
- -D, --desc <text>			met le texte descriptif (pour '--add',
- 					'--draft', '--makefile' et
-					'--makepage').
- -e, --edit <ID,cat>			édite une entrée ou une catégorie.
- -E, --draft <file> 			édite ou crée un métafichier.
- -f, --file <file> 			spécifier un métafichier à importer
-					comme entrée (pour '--add').
- -h, --help				affiche ce message d'aide.
- -i, --interactive <1=on/0=off> 	passe en mode interactif (pour '--add',
- 					'--delete', '--preview', '--publish',
- 					et '--update').
- -l, --list <all,cat,DATE,max>		liste les entrées ou les catégories
-					(par défaut, max).
- --manual				affiche le manuel.
- -m, --move <ID>			affecte une catégorie spécifique à une
-					entrée (pour '--category').
- -M, --makepage <file1> <file2> 	crée une nouvelle page de blog
-					(fichier2) depuis le métafichier
-					(fichier1).
- --makefile <file> 			crée un nouveau métafichier.
- -n, --author <text>			met le nom de l'auteur (pour '--add',
-					'--draft', '--makefile' et
- 					'--makepage').
- --plugindir <directory> 		spécifie le répertoire "plugin" du blog.
- -p, --preview				lance l'aperçu du blog.
- -P, --publish				lance une commande pour la publication du
-					blog.
- -q, --query <all,DATE,max>		spécifie une requête (pour '--edit' et
- 					'--delete').
+ --desc <text>				met le texte descriptif (pour 'add',
+ 					'draft', 'make-file' et 'make-page').
+ --data-dir <directory>			spécifie le répertoire [data] du blog
+ --title <text> 			assigne le titre (pour 'add', 'tag',
+					'draft', 'make-file' et 'make-page').
+ --author <text>			assigne le nom de l'auteur (pour 'add',
+					'draft', 'make-file' et 'make-page').
+ --plugin-dir <directory> 		spécifie le répertoire [plugin] du blog.
+ --text <text> 				écrit le corps du texte (pour 'add',
+					'draft', 'make-file' et 'make-page').
  --template <file>			spécifie le fichier à charger comme
-					"template" (pour '--draft',
-					'--makepage' et '--makefile').
- --template-dir <directory>		spécifie le répertoire "template" du blog.
- -t, --title <text>			met le titre (pour '--add',
-					'--category', '--draft',
- 					'--makefile' et '--makepage').
- --tag <TAG> 	 	 		spécifie la balise (pour '--add',
-					'--draft', '--edit', '--makefile' et
- 					 '--makepage').
- --tag-text <text> 			écrit la balise (pour '--tag').
- -T, --text <text> 			écrit le texte de "body" (pour '--add',
-					'--draft', '--makefile' et
- 					'--makepage').
- -U, --update-cache <all,DATE,max,
- expired> 				force la mise à jour du cache du blog
-					en enlevant les données mises en cache
-					suivant la spécification (par défaut,
- 					'expired').
- -u, --update <all,DATE,main,max>	force la mise à jour des données des
-					fichiers du blog suivant la
-					spécification (par défaut, 'max').
- -v, --verbose <1=on/0=off>		bascule le niveau de verbosité.
- -V, --version				affiche la version.
+					gabarit (pour 'draft', 'make-page' et
+					'make-file').
+ --template-dir <directory>		spécifie le répertoire [template] du
+					blog.
+ --var <VARIABLE>  	 		définit la méta-variable (pour 'add',
+ 					'draft', 'edit', 'make-file' et
+					'make-page').
+ --set-var <input>  			assigne la méta-variable (pour '--var').
+ --version				affiche la version.
 
- -c,-d,-e,-m	acceptent plusieurs numéros d'ID séparés par
-		des virgules (par ex. 1,2,3).
+ tag, delete, edit et tag-entry acceptent plusieurs numéros séparés par des
+ virgules (par ex. 1,2,3).
  
- --list et --update	peuvent sélectionner les entrées par
-			date (indépendamment des ids des entrées).
+ DATE = CCYY-MM-DD, CCYY-MM, CCYY (ou plage : DATE1,DATE2)
 
- DATE = CCYY-MM-DD, CCYY-MM, CCYY (ou plage = DATE1,DATE2)
+Exemples :
+ 
+ spécifier le répertoire du blog à créer ou ajouter une nouvelle entrée :
+	nb -b ~/public_html/mon_blog add
 
-Exemples:
+ créer un nouveau tag "exemples" :
+	nb -b ~/public_html/mon_blog tag new --title exemples add
 
- spécifier le répertoire du blog à créer ou bien pour ajouter une nouvelle
- entrée :
-	nb -b ~/public_html/blog -a
-
- créer une nouvelle catégorie dont le titre est "Nouvelles" :
-	nb -b ~/public_html/blog -t "Nouvelles" -c new  -a
-
- créer une nouvelle entrée en utilisant seulement les options de la ligne de
- commande !
-	nb -b ~/public_html/blog -n 'mon_nom' -t 'Titre' -T 'Texte!' -a
+ créer une nouvelle entrée avec les seules options de la ligne de commande :
+	nb -b ~/public_html/mon_blog --author 'mon_nom'
+				     --title 'mon_titre' --text 'Le texte !' add
 
 Plus d'info :
  URL: http://nanoblogger.sourceforge.net
-
