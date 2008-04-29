@@ -9,9 +9,9 @@
 
 # sample code for templates, based off the default stylesheet
 #
-# $NB_Article_Links
+# $NB_ArticleLinks
 
-# set BASE_URL for links to $ARTICLE_DIR
+# se BASE_URL for links to $ARTICLE_DIR
 set_baseurl "./"
 
 # space seperated list of sub-directories inside $BLOG_DIR, where articles are located
@@ -131,12 +131,9 @@ for articles_pass in 1 2; do
 						$NB_ArticleLinksHTML
 					</div>
 				EOF
-				cat > "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
-					$NB_ArticleLinksHTML
-				EOF
 				NB_ArticleLinks=$(< "$ARTICLE_PLUGIN_OUTFILE")
 			else
-				[ -d "$BLOG_DIR/$ARTICLE_DIR" ] && nb_msg "$plugins_action articles for $BLOG_DIR/$ARTICLE_DIR ..."
+				[ -d "$BLOG_DIR/$ARTICLE_DIR" ] && nb_msg "$plugins_action $template_articles: $BLOG_DIR/$ARTICLE_DIR ..."
 				cycle_articles_for create_article
 			fi
 		fi

@@ -1,4 +1,3 @@
-* fix articles broken multiple sections functionality.
 * replace remaining references to categories with tags or combine in less
   confusing manner.
 * allow mutliple meta-variables to be defined from command line
