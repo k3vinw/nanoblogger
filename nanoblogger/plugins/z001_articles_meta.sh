@@ -57,8 +57,12 @@ article_link="$article_dir/$NB_INDEX"
 addalist_name(){
 NB_ArticlesListTitle=
 # Reads alternate title for list from $ARTICLES_TITLE_FILE (1st line).
-[ -f "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE" ] &&
+if [ -f "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE" ]; then
 	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE 1`
+else
+	basename "$BLOG_DIR/$ARTICLE_DIR" > "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE"
+	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE 1`
+fi
 [ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ARTICLE_DIR"
 # fallback to our language definition for list's title
 [ ! -z "$template_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
