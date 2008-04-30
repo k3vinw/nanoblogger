@@ -199,6 +199,12 @@ pre {
 	margin-bottom:25px;
 }
 
+.articleshead {
+	color:#003366;
+	text-transform:lowercase;
+	font-weight:bold;
+	}
+
 .calendar {
 	color:#003366;
 	padding:2px;

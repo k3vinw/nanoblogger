@@ -68,7 +68,7 @@ fi
 [ ! -z "$template_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
 	NB_ArticlesListTitle="$template_articles"
 cat >> "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
-	<div class="sidetitle">
+	<div class="articleshead">
 		$NB_ArticlesListTitle
 	</div>
 EOF
@@ -131,7 +131,7 @@ for articles_pass in 1 2; do
 				NB_ArticleLinksHTML=`$ARTICLE_FILTERCMD "$ARTICLE_PLUGIN_OUTFILE"`
 				cat > "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
 					$NB_ArticlesListTitleHTML
-					<div class="side">
+					<div class="articles">
 						$NB_ArticleLinksHTML
 					</div>
 				EOF

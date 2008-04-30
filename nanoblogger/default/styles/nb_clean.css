@@ -200,6 +200,12 @@ pre {
 	margin-bottom:25px;
 }
 
+.articleshead {
+	color: #666600;
+	text-transform:lowercase;
+	font-weight:bold;
+	}
+
 .calendar {
 	font-family: "Times New Roman", Times, serif;
 	color: #666;
