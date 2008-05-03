@@ -12,9 +12,10 @@ template_postedby="Geschrieben von"
 # only here for compat. with early 3.3 rc's
 permanentlink_title="$template_permlink"
 categorylinks_title="$template_catlinks"
+# Nicht mehr verwendte Texte
+catlinks_title="$categorylinks_title"
 commentslink_title="$template_cmtlink"
 
-# PLEASE TRANSLATE
 # weblog main messages
 template_archiveindex="Archiv Index"
 template_category="Kategorien"
@@ -26,14 +27,15 @@ template_syndicate="Zusammenfassung"
 template_syndicate_main="Seite"
 template_status="Weblog Status"
 template_powered="Erstellt mit &#36;EDITOR, bash, cat, grep, sed, and"
+articles_nolist="0"
+categories_nolist="0"
 
 # misc. weblog links
 template_archives="Archive"
 template_main="Übersicht"
-template_untitled="Ohne Titel"
-
-# dynamic template messages
+template_catarchives="Gespeichert unter:"
 template_articles="Artikel"
+# Nicht mehr verwendte Texte
 template_browsecat="Sortiert nach Kategorie"
 template_browsedate="Sortiert nach Datum"
 template_browseentry="Sortiert nach Eintrag"

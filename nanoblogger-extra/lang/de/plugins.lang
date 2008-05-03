@@ -5,6 +5,5 @@
 
 # plugins - generic messages
 plugins_action="Generiere"
-plugins_loadaction="Lade"
-plugins_textformataction="Formatiere Text - $plugins_loadaction"
-
+plugins_loadaction="Lade .."
+plugins_entryfilteraction="Filtere text .."

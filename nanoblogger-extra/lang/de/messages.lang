@@ -59,6 +59,7 @@ buildweblog_cache="Cache wird aufgeräumt ..."
 importfile_nofile="existiert nicht!"
 
 # nb_browser
+nbbrowser_running="läuft:"
 nbbrowser_nobrowser="keine der Datenbanksuchroutinen in $NB_BROWSER bearbeitet!"
 
 # nb_draft
@@ -79,6 +80,8 @@ confirmaction_ask="Sind Sie sicher?"
 # misc. validation errors
 novalid_entryid="Es muss eine gültige Eintrags-ID angegeben werden."
 invalid_entryid="Ungültige Eintrags-ID(s):"
+novalid_entrytime="Es muss ein gültiger Zeitstempel spezifiziert werden - 'YYYY-MM-DD HH:MM:SS'"
+invalid_entrytime="Ungültiger Zeitstempel für den Eintrag oder ein Konflikt"
 
 # edit_weblog
 editweblog_onecat="Es kann nur eine Kategorie angegeben werden, wenn der Titel bearbeitet werden soll!"
@@ -139,6 +142,5 @@ publish_asknow="Soll der Weblog jetzt veröffentlicht werden?"
 # misc.
 notitle="Kein Titel"
 nowritedir="Es gibt keine Schreibrechte für das Verzeichnis! Auf Wiedersehen."
-filterdate_failed="Die Filterung nach Datum ist fehlgeschlagen, verwende Zeitstempel stattdessen."
 samefilename="Der Dateiname existiert bereits!"
-
+filterdate_failed="Die Filterung nach Datum ist fehlgeschlagen, verwende Zeitstempel stattdessen."
