@@ -6,4 +6,4 @@
 plugins_action="oluşturuluyor"
 plugins_loadaction="yükleniyor"
 plugins_textformataction="metin biçimleniyor - $plugins_loadaction"
-
+plugins_entryfilteraction="metin filtreleniyor .."

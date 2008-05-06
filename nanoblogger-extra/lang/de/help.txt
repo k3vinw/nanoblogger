@@ -11,60 +11,60 @@ Benutzung:
 Aktionen:
  add					- erzeugt einen neuen Eintrag, Kategorie, oder Weblog
 					(Verzeichnis).
- configure				- Konfiguriere Weblog (für 'update').
- delete <ID,tag>			- löscht einen Eintrag, ein Tag, oder
+ configure				- Konfiguriere Weblog (fÃ¼r 'update').
+ delete <ID,tag>			- lÃ¶scht einen Eintrag, ein Tag, oder
 					  entfernt ein Tag von einem Eintrag.
  draft <file>    			- Editiert oder erzeugt eine Metadatei.
  edit <ID,tag>			        - Editiert einen Eintrag oder eine Kategorie.
- list					- Zeigt Einträge oder Tags an (für
+ list					- Zeigt EintrÃ¤ge oder Tags an (fÃ¼r
 					  'query' und 'tag' ist max Standard).
  makepage <file1> <file2>		- Erzeugt eine neue Weblog Seite (file2) aus
 					  Metafile (file1).
- tag-entry <ID>				- Eintrag taggen (für 'tag')
+ tag-entry <ID>				- Eintrag taggen (fÃ¼r 'tag')
  tag-list				- Alle Tags anzeigen (identisch mit 'query tag list')
  manual	          			- Zeigt das Handbuch an.
  make-file <file>			- Erzeugt eine neue Meta-Datei
  preview				- Startet das Kommando zur Vorschau des Weblog
  publish				- Startet das Kommando zur
-					  Veröffentlichung des Weblog
- query <all,tag,DATE,main,max,		- Spezifiziert und startet eine Abfrage (für 'edit',
+					  VerÃ¶ffentlichung des Weblog
+ query <all,tag,DATE,main,max,		- Spezifiziert und startet eine Abfrage (fÃ¼r 'edit',
  	expired>			  'delete', 'list', 'tag-entry',
 					  'update', und 'update-cache').
- tag <ID,new> 	 	 		- Spezifiziert ein TAG (für 'add', 'delete',
+ tag <ID,new> 	 	 		- Spezifiziert ein TAG (fÃ¼r 'add', 'delete',
 					  'edit', 'list', 'update', und
 					  'update-cache').
  file <file>				- Spezifiziert ein Metafile zum
-					  Importieren als Eintrag (für 'add').
+					  Importieren als Eintrag (fÃ¼r 'add').
  update-cache				- Erzwingt eine Aktualisierung des Cache 
-					  (für 'query', Standardwert ist 'expired').
+					  (fÃ¼r 'query', Standardwert ist 'expired').
  update					- Erzwingt eine Aktualisierung der Weblog-Dateien
-					  (für 'query', Standardwert ist 'max').
+					  (fÃ¼r 'query', Standardwert ist 'max').
 
 Optionen:
  -b, --blogdir <Verzeichnis>		spezifiziert das Weblog Verzeichnis.
  -f, --force				Erzwingt eine Aktualisierung des Cache
 					  (identisch mit 'update-cache')
  -h, --help				Zeigt diese Meldung an.
- -i, --interactive <1=an/0=aus>		startet interaktiv (für 'add', 'delete',
+ -i, --interactive <1=an/0=aus>		startet interaktiv (fÃ¼r 'add', 'delete',
  					'preview', 'publish', und 'update').
  -v, --verbose <1=an/0=aus>		Umschalten zwischen langen und kurzen Meldungen.
  --conf-file <file>			Spezifiziert eine alternative Konfigurationsdatei.
- --desc <text>				setzt den  Beschreibungstext (für 'add',
+ --desc <text>				setzt den  Beschreibungstext (fÃ¼r 'add',
  					'draft', 'make-file' und 'makepage').
  --data-dir <Verzeichnis>		Spezifiziert das Datenverzeichnis des Weblog.
- --title <text>				Setzt den Titel (für 'add', 'draft',
+ --title <text>				Setzt den Titel (fÃ¼r 'add', 'draft',
  					'make-file' und 'make-page').
- --author <text>			Setzt den Text für Autor (für 'add',
+ --author <text>			Setzt den Text fÃ¼r Autor (fÃ¼r 'add',
 					'draft', 'make-file' und 'make-page').
  --plugin-dir <Verzeichnis> 		Spezifiziert das Plugin Verzeichnis des Weblog.
- --text <text>				Setzt Text des Body (für 'add',	'draft',
+ --text <text>				Setzt Text des Body (fÃ¼r 'add',	'draft',
 					'make-file' und 'make-page'). 
- --template <file>			Spezifiert file to load as template (für
+ --template <file>			Spezifiert file to load as template (fÃ¼r
  					'draft', 'make-page' und 'make-file').
  --template-dir <Verzeichnis>		Spezifiziert das Weblog Template-Verzeichnis.
- --var <VARIABLE>  	 		Definiert eine Meta-Variable (für '-a', '-E',
+ --var <VARIABLE>  	 		Definiert eine Meta-Variable (fÃ¼r '-a', '-E',
  					'-e', '--make-file' und '-M').
- --set-var <input>  			Setzt eine Meta-Variable (für '--var').
+ --set-var <input>  			Setzt eine Meta-Variable (fÃ¼r '--var').
  --version				Zeigt die Versionsinformation an.
 
  tag, delete, edit, tag-entry akzeptieren mehrere, durch Komma getrennte IDs (z.B. 1,2,3).
@@ -79,7 +79,7 @@ Beispiele:
  Erzeuge ein neues "Beispiel" Tag
 	nb -b ~/public_html/weblog tag Neu --title Beispiel add
 
- Erzeugt einen neuen Eintrag ausschließlich mit Kommandozeilenoptionen!
+ Erzeugt einen neuen Eintrag ausschlieÃŸlich mit Kommandozeilenoptionen!
 	nb -b ~/public_html/weblog -author 'MeinName' --title 'MeinTitel' --text 'Text!' add
 
 Mehr Informationen unter:

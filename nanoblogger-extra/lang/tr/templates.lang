@@ -41,3 +41,7 @@ template_totalentries="Toplam kayıt sayısı:"
 template_lastentry="Son kayıt:"
 template_lastupdated="Son güncelleme:"
 
+catlinks_title="$categorylinks_title"
+articles_nolist="0"
+categories_nolist="0"
+template_catarchives="Dosyalandığı yer:"

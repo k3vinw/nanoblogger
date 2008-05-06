@@ -4,12 +4,12 @@
 # lang/de/messages.lang
 
 # main
-main_badopts="Ungültige Option:"
+main_badopts="UngÃ¼ltige Option:"
 main_panic="Try '`basename $0` --help' for more information."
 
 # check_arg
 checkarg_badarg="Diese Option erfordert ein Argument!"
-checkarg_help="'`basename $0` --help' fürr mehr Informationen."
+checkarg_help="'`basename $0` --help' fÃ¼rr mehr Informationen."
 
 # check_conf
 checkconf_nobase="Das Basisverzeichnis existiert nicht! Auf Wiedersehen."
@@ -26,14 +26,14 @@ querydb_update="Aktualisiere Hauptdatenbank ..."
 
 # validate category id(s)
 catid_bad="Falsche ID(s)!"
-checkcatid_invalid="Ungültige Kategorie ID(s):"
-checkcatid_novalid="muss eine gültige Kategorie ID sein!"
+checkcatid_invalid="UngÃ¼ltige Kategorie ID(s):"
+checkcatid_novalid="muss eine gÃ¼ltige Kategorie ID sein!"
 
 # validate metadata files
 checkmetatags_notag="Fehlendes Metatag:"
 
 # config_weblog
-configweblog_nomod="Es wurden keine Änderungen gemacht! Auf Wiedersehen."
+configweblog_nomod="Es wurden keine Ã„nderungen gemacht! Auf Wiedersehen."
 
 # load_template
 loadtemplate_nofile="Template Datei existiert nicht! Auf Wiedersehen."
@@ -53,13 +53,13 @@ buildarchives_action="Archive werden generiert ..."
 buildweblog_all="Alle Dateien des Weblog werden aktualisiert! Das kann eine Weile dauern ..."
 buildweblog_files="Weblog Dateien werden generiert ..."
 buildweblog_main="Die Haupt-Index-Seite(n) wird/werden generiert ..."
-buildweblog_cache="Cache wird aufgeräumt ..."
+buildweblog_cache="Cache wird aufgerÃ¤umt ..."
 
 # import_file
 importfile_nofile="existiert nicht!"
 
 # nb_browser
-nbbrowser_running="läuft:"
+nbbrowser_running="lÃ¤uft:"
 nbbrowser_nobrowser="keine der Datenbanksuchroutinen in $NB_BROWSER bearbeitet!"
 
 # nb_draft
@@ -67,35 +67,35 @@ nbdraft_asknew="Die Datei existiert nicht! Soll sie erzeugt werden?"
 
 # nb_edit
 nbedit_nofile="Die Datei existiert nicht!"
-nbedit_prompt="Zum Fortsetzen [enter] drücken:"
+nbedit_prompt="Zum Fortsetzen [enter] drÃ¼cken:"
 nbedit_failed="Die Datei konnte nicht geschrieben werden! Auf Wiedersehen."
 
 # add_entry
-addentry_catinfo="Ausgewählte Kategorie ID(s):"
-addentry_action="Neuen Eintrag hinzufügen..."
+addentry_catinfo="AusgewÃ¤hlte Kategorie ID(s):"
+addentry_action="Neuen Eintrag hinzufÃ¼gen..."
 
 # confirm_action
 confirmaction_ask="Sind Sie sicher?"
 
 # misc. validation errors
-novalid_entryid="Es muss eine gültige Eintrags-ID angegeben werden."
-invalid_entryid="Ungültige Eintrags-ID(s):"
-novalid_entrytime="Es muss ein gültiger Zeitstempel spezifiziert werden - 'YYYY-MM-DD HH:MM:SS'"
-invalid_entrytime="Ungültiger Zeitstempel für den Eintrag oder ein Konflikt"
+novalid_entryid="Es muss eine gÃ¼ltige Eintrags-ID angegeben werden."
+invalid_entryid="UngÃ¼ltige Eintrags-ID(s):"
+novalid_entrytime="Es muss ein gÃ¼ltiger Zeitstempel spezifiziert werden - 'YYYY-MM-DD HH:MM:SS'"
+invalid_entrytime="UngÃ¼ltiger Zeitstempel fÃ¼r den Eintrag oder ein Konflikt"
 
 # edit_weblog
 editweblog_onecat="Es kann nur eine Kategorie angegeben werden, wenn der Titel bearbeitet werden soll!"
-editweblog_title="Der Titel wird geändert in:"
-editweblog_catinfo="Ausgewählte Kategorie ID(s):"
-editweblog_nomod="Es wurden keine Änderungen gemacht! Auf Wiedersehen."
-editweblog_action="Geänderte Weblogeinträge werden bearbeitet ..."
-editweblog_noaction="Es wurden keine Änderungen gemacht! Auf Wiedersehen."
+editweblog_title="Der Titel wird geÃ¤ndert in:"
+editweblog_catinfo="AusgewÃ¤hlte Kategorie ID(s):"
+editweblog_nomod="Es wurden keine Ã„nderungen gemacht! Auf Wiedersehen."
+editweblog_action="GeÃ¤nderte WeblogeintrÃ¤ge werden bearbeitet ..."
+editweblog_noaction="Es wurden keine Ã„nderungen gemacht! Auf Wiedersehen."
 
 # delete_weblog
-deleteweblog_delcat="Folgende Kategorie ID(s) werden gelöscht:"
-deleteweblog_onecat="Es kann nur eine Kategorie angegeben werden, wenn ein Eintrag aus einer Kategorie gelöscht werden soll!"
-deleteweblog_catinfo="Ausgewählte Kategorie ID(s):"
-deleteweblog_delentry="Löschen von Eintrag ID(s):"
+deleteweblog_delcat="Folgende Kategorie ID(s) werden gelÃ¶scht:"
+deleteweblog_onecat="Es kann nur eine Kategorie angegeben werden, wenn ein Eintrag aus einer Kategorie gelÃ¶scht werden soll!"
+deleteweblog_catinfo="AusgewÃ¤hlte Kategorie ID(s):"
+deleteweblog_delentry="LÃ¶schen von Eintrag ID(s):"
 
 # header attributes
 header_ID="ID"
@@ -109,7 +109,7 @@ listweblog_nomatch="Kein passendes Suchergebnis gefunden! Auf Wiedersehen."
 
 # move_entry
 moveentry_catfirst="Die Kategorie muss vor dem Eintrag angegeben werden!"
-moveentry_catinfo="Ausgewählte Kategorie ID(s):"
+moveentry_catinfo="AusgewÃ¤hlte Kategorie ID(s):"
 moveentry_moventry="Verschiebe Eintrag ID(s):"
 
 # add_weblog
@@ -119,11 +119,11 @@ addweblog_nocreate="Das Erzeugen des Weblog-Verzeichnis ist fehlgeschlagen!"
 addweblog_copyaction="Kopiere Standard-Weblog-Dateien ..."
 addweblog_askconf="Neuen Weblog jetzt konfigurieren?"
 addweblog_confaction="Konfiguriere neuen Weblog ..."
-addweblog_noconf="Der Weblog wurde noch nicht konfiguriert! Mit '`basename $0` -b [blog_dir] --configure -u all' kann er zu einem späteren Zeitpunkt konfiguriert werden."
+addweblog_noconf="Der Weblog wurde noch nicht konfiguriert! Mit '`basename $0` -b [blog_dir] --configure -u all' kann er zu einem spÃ¤teren Zeitpunkt konfiguriert werden."
 addweblog_newcat="Erzeuge neue Kategorie"
 addweblog_titlecat="Titel der neuen Kategorie eingeben"
 addweblog_untitled="Ohne Titel"
-addweblog_madecat="Kategorie Datenbank erzeugt für"
+addweblog_madecat="Kategorie Datenbank erzeugt fÃ¼r"
 addweblog_author="Name des Autors eingeben"
 addweblog_title="Titel eingeben"
 addweblog_desc="Kurzbeschreibung eingeben"
@@ -135,12 +135,12 @@ preview_action="Vorschau des Weblog ..."
 preview_asknow="Soll die Vorschau des Weblog jetzt angezeigt werden?"
 
 # publish_weblog
-publish_nocmd="Kein Kommando zum Veröffentlichen gesetzt! Auf Wiedersehen."
-publish_action="Veröffentliche Weblog ..."
-publish_asknow="Soll der Weblog jetzt veröffentlicht werden?"
+publish_nocmd="Kein Kommando zum VerÃ¶ffentlichen gesetzt! Auf Wiedersehen."
+publish_action="VerÃ¶ffentliche Weblog ..."
+publish_asknow="Soll der Weblog jetzt verÃ¶ffentlicht werden?"
 
 # misc.
 notitle="Kein Titel"
-nowritedir="Es gibt keine Schreibrechte für das Verzeichnis! Auf Wiedersehen."
+nowritedir="Es gibt keine Schreibrechte fÃ¼r das Verzeichnis! Auf Wiedersehen."
 samefilename="Der Dateiname existiert bereits!"
 filterdate_failed="Die Filterung nach Datum ist fehlgeschlagen, verwende Zeitstempel stattdessen."
