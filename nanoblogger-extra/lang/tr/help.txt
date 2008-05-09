@@ -11,10 +11,10 @@ Komutlar:
  add					- Yeni bir yazı, etiket ya da web log
                                           oluştur (dizin).
  configure				- weblog'u yapılandır ('update' için).
- delete <no,etiket>			- yazı ya da etiketi sil, veya yazıdan
+ delete <no,tag>			- yazı ya da etiketi sil, veya yazıdan
                                           etiketi kaldır.
  draft <dosya> 				- meta-dosya düzenle ya da yarat.
- edit <no,etiket>			- yazı ya da etiketi düzenle.
+ edit <no,tag>				- yazı ya da etiketi düzenle.
  list					- yazıları ya da etiketleri listele
                                           ('query' ve 'tag' için, varsayılan 'max').
  make-page <dosya1> <dosya2> 		- meta-dosyadan (dosya1) yeni bir sayfa (dosya2)
@@ -25,7 +25,7 @@ Komutlar:
  make-file <dosya> 			- yeni meta-dosya yarat.
  preview				- weblog'u önizleme komutunu çalıştır.
  publish				- weblog'u yayınlama komutunu çalıştır.
- query <all,etiket,TARİH,main,max,	- çalıştırılacak sorguyu belirt ('edit',
+ query <all,tag,TARİH,main,max,		- çalıştırılacak sorguyu belirt ('edit',
         expired> 			  'delete', 'list', 'tag-entry',
 					  'update' ve 'update-cache' için).
  tag <no,yeni> 				- etiketi belirt ('add', 'delete',
