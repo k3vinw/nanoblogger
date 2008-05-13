@@ -52,7 +52,6 @@ build_yeararchive(){
 		ARCHENTRY_LIST=${DB_RESULTS[*]}
 		NB_ArchiveEntryLinks=$(
 		for entry in ${ARCHENTRY_LIST[*]}; do
-			[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
 			NB_EntryID=$x_id${entrylink_var//[\/]/-}
 			set_entrylink "$entry"
 			# 1st try to get title from set_entrylink instance of read_metadata
@@ -61,6 +60,7 @@ build_yeararchive(){
 				read_metadata TITLE "$NB_DATA_DIR/$entry"
 				NB_ArchiveEntryTitle="$METADATA"
 			fi
+			[ -z "$NB_ArchiveEntryTitle" ] && NB_ArchiveEntryTitle="$notitle"
 			set_monthlink "$month"
 			if [ "$SHOW_CATLINKS" = 1 ];then
 				# Command to help filter order of categories
