@@ -78,8 +78,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 	EOF
 	nb_msg "$MKPAGE_OUTFILE"
 	# load makepage tidy plugin
-	[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
-		. "$PLUGINS_DIR"/makepage/tidy.sh
+	load_plugins makepage/tidy.sh
 	}
 
 	# generate feed entries
