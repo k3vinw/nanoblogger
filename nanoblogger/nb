@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-03T15:10:45-04:00
+# Last modified: 2008-05-14T12:15:33-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -68,8 +68,14 @@ PLUGINS_LIST=( ${@:1} )
 	}
 # determine the plugin direcory
 [ ! -z "$PLUGIN_DIR" ] && PLUGIN_DIR="/$1"
-# cleanup any trailing "/" in $USR_PLUGINSDIR
+# cleanup any trailing slashes in $USR_PLUGINSDIR
 USR_PLUGINSDIR=${USR_PLUGINSDIR%%\/}
+# allow loading plugins individually
+if [ -f "${USR_PLUGINSDIR}${PLUGIN_DIR}" ] || [ -f "${PLUGINS_DIR}${PLUGIN_DIR}" ]; then
+	PLUGIN_BASEFILE="${PLUGIN_DIR##*\/}"
+	PLUGIN_BASEDIR="${PLUGIN_DIR//\/${PLUGIN_BASEFILE}/}"
+	PLUGIN_DIR="$PLUGIN_BASEDIR"
+fi
 # determine the plugins directory list
 if [ -d "${USR_PLUGINSDIR}${PLUGIN_DIR}" ] && [ -d "${PLUGINS_DIR}${PLUGIN_DIR}" ]; then
 	if [ "${PLUGINS_DIR}" != "${USR_PLUGINSDIR}" ]; then
@@ -101,15 +107,26 @@ for plugin_path in $PLUGINSDIR_LIST; do
 			add_plugin_script "$nb_plugin"
 		done
 	fi
+	# or just add individual plugin
+	if [ ! -z "$PLUGIN_BASEFILE" ]; then
+		add_plugin_script "$plugin_path/$PLUGIN_BASEDIR/$PLUGIN_BASEFILE"
+	fi
 done
+PLUGIN_BASEFILE=
 # load user and main plugins in alpha-numeric order (0-9, A-z)
 for nb_plugin in ${plugin_scripts[@]}; do
 	#nb_msg "loading ..$nb_plugin ..."
 	# allow user plugins to override main plugins
+	nbpl_prefix=${nb_plugin%%\.sh}
 	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
+	# ignore all plugins w/o .sh suffix and skip to next
+	elif [ -f "${USR_PLUGINSDIR}/${nbpl_prefix}"* ] && [ ! -f "${USR_PLUGINSDIR}/${nb_plugin}" ]; then
+		break
 	elif [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
+	elif [ -f "${PLUGINS_DIR}/${nbpl_prefix}"* ] && [ ! -f "${PLUGINS_DIR}/${nb_plugin}" ]; then
+		break
 	elif [ -f "${PLUGINS_DIR}/$nb_plugin" ]; then
 		. "${PLUGINS_DIR}/$nb_plugin"
 	fi

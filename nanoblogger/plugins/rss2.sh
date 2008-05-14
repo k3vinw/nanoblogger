@@ -87,8 +87,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 	EOF
 	nb_msg "$MKPAGE_OUTFILE"
 	# load makepage tidy plugin
-	[ -f "$PLUGINS_DIR"/makepage/tidy.sh ] &&
-		. "$PLUGINS_DIR"/makepage/tidy.sh
+	load_plugins makepage/tidy.sh
 	NB_RSS2Title=
 	}
 
