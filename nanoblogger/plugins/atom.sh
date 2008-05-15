@@ -56,7 +56,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
 	BLOG_FEED_URL="$BLOG_URL/$NB_AtomFile"
-	NB_RSS2Title="$BLOG_FEED_TITLE"
+	NB_AtomTitle="$BLOG_FEED_TITLE"
 	[ ! -z "$NB_AtomCatTitle" ] &&
 		NB_AtomTitle="$template_catarchives $NB_AtomCatTitle | $BLOG_FEED_TITLE"
 	[ ! -z "$NB_AtomCatLink" ] &&

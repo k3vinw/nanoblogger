@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-01-24T01:08:10-05:00
+# Last modified: 2008-05-15T16:35:53-04:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -300,10 +300,6 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
-			if [ ! -z "$TEMPLATE_DATA" ]; then
-				mkdir -p `dirname "$PARTS_FILE"`
-				write_template >> "$PARTS_FILE"
-			fi
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"

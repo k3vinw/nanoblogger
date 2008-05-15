@@ -1,3 +1,4 @@
+* call rebuild_database() when chronological order is changed
 * replace remaining references to categories with tags or combine in less
   confusing manner.
 * allow mutliple meta-variables to be defined from command line

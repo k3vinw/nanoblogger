@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-14T12:15:33-04:00
+# Last modified: 2008-05-14T16:48:01-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -28,7 +28,7 @@ NB_LIB_DIR="${NB_BASE_DIR}/lib"
 . ${NB_LIB_DIR}/archive.sh
 # --
 
-# insure a sane configuration, do or die!
+# ensure a sane configuration - do or die!
 check_config(){
 load_config
 [ ! -d "$NB_BASE_DIR" ] &&
