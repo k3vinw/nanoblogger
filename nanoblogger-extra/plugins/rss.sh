@@ -3,13 +3,18 @@
 # concatenate modification variables
 FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_TITLE"
 
+# set URL for syndication feed
+[ ! -z "$BLOG_URL" ] &&
+	: ${BLOG_FEED_URL:=$BLOG_URL}
+
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
 ENTRY_EXCERPTS=0
 
 # limit number of items to include in feed
-: ${FEED_ITEMS:=10}
-: ${RSS_ITEMS:=$FEED_ITEMS}
+: ${BLOG_FEED_ITEMS:=$FEED_ITEMS}
+: ${BLOG_FEED_ITEMS:=10}
+: ${RSS_ITEMS:=$BLOG_FEED_ITEMS}
 # build rss feeds for categories (0/1 = off/on)
 : ${RSS_CATFEEDS:=0}
 
@@ -21,12 +26,17 @@ NB_RSSVer="1.0"
 NB_RSSModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
 # set link to archives
-NB_RSSArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
+NB_RSSArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
 
 # backwards support for deprecated BLOG_LANG
 : ${BLOG_FEED_LANG:=$BLOG_LANG}
 
-if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
+				all) ! [[ "$NB_UPDATE" == *arch ]];; \
+				feed|feed[a-z]) :;; *) [ 1 = false ];; \
+				esac; then
+
+	# support relative links for the entries
 	set_baseurl "$BLOG_URL/"
 
 # escape special characters to help create valid xml feeds
@@ -34,16 +44,21 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		sed -e '/[\&][ ]/ s//\&amp; /g; /[\"]/ s//\&quot;/g'
 		}
 
-	NB_RSSTitle=`echo "$BLOG_TITLE" |esc_chars`
+	BLOG_FEED_TITLE=`echo "$BLOG_TITLE" |esc_chars`
 	NB_RSSAuthor=`echo "$BLOG_AUTHOR" |esc_chars`
 
 # make rss feed
 	make_rssfeed(){
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
-	BLOG_FEED_URL="$BLOG_URL"
-	[ ! -z "$NB_RSSLink" ] && [ "$db_catquery" != nocat ] &&
-		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSSLink"
+	BLOG_FEED_URLFILE="$BLOG_FEED_URL/$NB_RSSFile"
+	NB_RSSTitle="$BLOG_FEED_TITLE"
+	[ ! -z "$NB_RSSCatTitle" ] &&
+		NB_RSSTitle="$template_catarchives $NB_RSSCatTitle | $BLOG_FEED_TITLE"
+	if [ ! -z "$NB_RSSCatLink" ]; then
+		NB_RSSFile="$ARCHIVES_DIR/$NB_RSSCatFile"
+		BLOG_FEED_URL="$BLOG_FEED_URL/$ARCHIVES_DIR/$NB_RSSLink"
+	fi
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
@@ -59,7 +74,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 		 xmlns:content="http://purl.org/rss/1.0/modules/content/"
 		 xmlns:admin="http://webns.net/mvcb/"
 		>
-		<channel rdf:about="$BLOG_URL">
+		<channel rdf:about="$BLOG_FEED_URLFILE">
 			<title>$NB_RSSTitle</title>
 			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
@@ -137,16 +152,15 @@ if [ ! -z "$FEEDMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
 
 	# generate category feed entries
 	build_rss_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || [ "$RSS_CATFEEDS" = 1 ]; then
+	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$RSS_CATFEEDS" = 1 ; then
 		db_categories=(${CAT_LIST[*]})
 		if [ ! -z "${db_categories[*]}" ]; then
 			for cat_db in ${db_categories[@]}; do
 				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
 					set_catlink "$cat_db"
-					NB_RSSTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
+					NB_RSSCatTitle=`sed 1q "$NB_DATA_DIR/$cat_db" |esc_chars`
 					NB_RSSCatFile=`chg_suffix "$category_file" $NB_SYND_FILETYPE`
-					NB_RSSFile=`chg_suffix "$category_file" $NB_FILETYPE`
-					NB_RSSLink="$category_link"
+					NB_RSSCatLink="$category_link"
 					nb_msg "$plugins_action rss $NB_RSSVer feed for category ..."
 					build_rssfeed "$cat_db"
 					make_rssfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_RSSCatFile"
