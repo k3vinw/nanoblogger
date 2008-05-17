@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-01-14T02:25:07-05:00
+# Last modified: 2008-05-16T02:45:47-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -105,6 +105,8 @@ fi
 [ -z "$NB_EDITOR" ] && [ ! -z "$EDITOR" ] &&
 	NB_EDITOR="$EDITOR"
 : ${NB_EDITOR:=vi}
+# default file creation mask
+[ -z "$NB_UMASK" ] && NB_UMASK=`umask`
 # default to txt for datatype suffix
 : ${NB_DATATYPE:=txt}
 # default to db for database suffix
@@ -192,20 +194,25 @@ fi
 
 # deconfigure, clear some auto-default variables
 deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
-	NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
+	NB_UMASK=; NB_DATATYPE=; NB_DBTYPE=; NB_FILETYPE=; NB_SYND_FILETYPE=; BLOG_TZD=; \
 	QUERY_MODE=; MAX_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_CATPAGE_ENTRIES=; \
 	MAX_MONTHPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; METADATA_MARKER=; \
 	METADATA_CLOSEVAR=; METADATA_CLOSETAG=; PAGE_FORMAT=; ENTRY_FORMAT=; BLOG_CACHEMNG=; \
 	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
 	USR_PLUGINSDIR=; SHOW_CATLINKS=; CATEGORY_FEEDS=; FRIENDLY_LINKS=; \
-	MAX_TITLEWIDTH=;
+	MAX_TITLEWIDTH=; BLOG_FEED_LANG=; BLOG_FEED_LOGO=
 }
 
 # edit $BLOG_CONF
 config_weblog(){
+PREV_CHRONORDER="$CHRON_ORDER"
 nb_edit "$BLOG_CONF"
 # check if file's been modified since opened
 [ ! -N "$BLOG_CONF" ] && die "$configweblog_nomod"
 deconfig; load_config
+# set flag to resort databases if chronological order has changed
+# NOTE: rendered ineffective outside configure action
+[ "$PREV_CHRONORDER" != "$CHRON_ORDER" ] &&
+	RESORT_DATABASE=1
 }
 

@@ -1,8 +1,8 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.4 Copyright 2007 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-14T16:48:01-04:00
+# Last modified: 2008-05-17T02:00:00-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -49,6 +49,8 @@ load_config
 SCRATCH_FILE="$NB_TEMP_DIR/nb_scratch$$"
 NB_TEMP_FILES="$NB_TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 trap "rm -fr $NB_TEMP_FILES; exit" 0 1 2 3 15
+# activate custom file creation mask
+[ ! -z "$NB_UMASK" ] && umask $NB_UMASK
 }
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR
@@ -275,7 +277,9 @@ if [ -f "$NB_EditFile" ]; then
 	New_TimeStamp="$METADATA"
 fi
 New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
-write_entry "$NB_DATA_DIR/$New_EntryFile"
+# save all custom modications to new entry's data file
+[ -f "$NB_EditFile" ] &&
+	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
 # use specified timestamp as entry's new date
 chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 [ ! -z "$New_EntryDateFile" ] &&
@@ -742,6 +746,9 @@ if [ -z "$NB_EntryBody" ]; then
 	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 	# write current metadata to temp file and edit
 	write_entry "$NB_EditFile"; nb_edit -p "$NB_EditFile"
+	# preserve custom meta variable and data
+	read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
+	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 	# validate metafile
 	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 		"$NB_EditFile"
@@ -852,6 +859,7 @@ done
 # post-processing for all command line args
 if [ "$CONFIG_WEBLOG" = 1 ]; then
 	check_config; config_weblog
+	[ "$RESORT_DATABASE" = 1 ] && resort_database
 fi
 if [ "$ADD_WEBLOG" = 1 ]; then
 	add_weblog

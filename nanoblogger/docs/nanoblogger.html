@@ -145,7 +145,7 @@
       <tr>
         <td>6.</td>
 
-        <td><a href="#s.6">Managing Entries and Categories (Tags)</a></td>
+        <td><a href="#s.6">Managing Entries and Tags (Categories)</a></td>
       </tr>
 
       <tr>
@@ -163,37 +163,43 @@
       <tr>
         <td>9.</td>
 
-        <td><a href="#s.9">Writing Plugins</a></td>
+        <td><a href="#s.9">Configuring Plugins</a></td>
       </tr>
 
       <tr>
         <td>10.</td>
 
-        <td><a href="#s.10">Publishing</a></td>
+        <td><a href="#s.10">Writing Plugins</a></td>
       </tr>
 
       <tr>
         <td>11.</td>
 
-        <td><a href="#s.11">Adding Support for Comments</a></td>
+        <td><a href="#s.11">Publishing</a></td>
       </tr>
 
       <tr>
         <td>12.</td>
 
-        <td><a href="#s.12">Importing Entries</a></td>
+        <td><a href="#s.12">Adding Support for Comments</a></td>
       </tr>
 
       <tr>
         <td>13.</td>
 
-        <td><a href="#s.13">Tips and Tricks</a></td>
+        <td><a href="#s.13">Importing Entries</a></td>
       </tr>
 
       <tr>
         <td>14.</td>
 
-        <td><a href="#s.14">Credits</a></td>
+        <td><a href="#s.14">Tips and Tricks</a></td>
+      </tr>
+
+      <tr>
+        <td>15.</td>
+
+        <td><a href="#s.15">Credits</a></td>
       </tr>
     </table>
   </div>
@@ -206,7 +212,7 @@
     <p><b>Synopsis</b></p>
     <pre>
  
-nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>]
+nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>] &lt;<span class="underline">actions</span>&gt;
         
 </pre>
 
@@ -304,7 +310,7 @@ nb --blog-dir [myblog_dir] configure query all update
 
     <p><b>Setting the Date Format for New Entries</b></p>
 
-    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, useful for specifying time in UTC. Please note that these settings have <strong>no effect</strong> on previous entries and that if you use UTC, beware of race conditions which can occur because the entry's filename will be out of synch. The solution is to also change <em>DB_DATEARGS</em> to equal <em>DATE_ARGS</em>, so that the two reflect the same date and time. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
+    <p><em>DATE_FORMAT</em> specifies the date format to use for new entries. The default is to use the output from the <em>date</em> command. You can also specify the locale to be used for date command (see the variable <em>DATE_LOCALE</em>). You can specify additional command line arguments with <em>DATE_ARGS</em>, useful for specifying time in UTC. Please note that these settings have <strong>no effect</strong> on previous entries and that if you use UTC, beware of race conditions which can occur because the entry's filename will be out of sync. The solution is to also change <em>DB_DATEARGS</em> to equal <em>DATE_ARGS</em>, so that the two reflect the same date and time. Read the man pages of the date command to see how to customize the format of the date command's output.</p>
 
     <p>Examples:</p>
     <pre>
@@ -313,9 +319,9 @@ DATE_LOCALE="$LANG"
 DATE_ARGS="-u"   
 </pre>
 
-    <p><b>Setting the Timezone for Syndication Feeds</b></p>
+    <p><b>Setting the Timezone</b></p>
 
-    <p><em>BLOG_TZD</em> sets the timezone for your weblog's syndication feeds. The default is to set this automatically using, <code>"%z"</code>, a non-standard extension of the date command. If the date command on your system doesn't support this, you'll have to set this manually.</p>
+    <p><em>BLOG_TZD</em> sets the timezone for your weblog entries. The default is to set this automatically using, <code>"%z"</code>, a non-standard extension of the date command. If the date command on your system doesn't support this, you'll have to set this manually.</p>
 
     <p>Example:</p>
     <pre>
@@ -347,7 +353,7 @@ BLOG_MIMETYPE="text/html"
 
     <p><b>Setting the Web Address</b></p>
 
-    <p><em>BLOG_URL</em> should be set as the full URL to your weblog excluding the index file and any preceding "/". This setting is required for absolute links and syndication feeds.</p>
+    <p><em>BLOG_URL</em> should be set as the full URL to your weblog excluding the index file and any preceding "/".</p>
 
     <p>Example:</p>
     <pre>
@@ -361,7 +367,7 @@ BLOG_URL="http://my-site.com/weblog"
 
     <p>Example:</p>
     <pre>
-BLOG_CSS="styles/nb_rusted.css"
+BLOG_CSS="styles/nb_clean.css"
 </pre>
 
     <p><b>Setting the Favorite Icon</b></p>
@@ -399,24 +405,40 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>ENTRY_FORMAT</em> specifies the default text formatting to use for an entry. Defaults to "raw".</p>
 
-    <p><b>Toggling the Building of Entry Archives</b></p>
+    <p><b>Toggling Creation of Entry Archives</b></p>
 
-    <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the building of entry archives and reconfigures the links of the entries to point to their own archive page. Note that this will increase the rebuild time since more pages will have to be generated.</p>
+    <p>Setting <em>ENTRY_ARCHIVES</em> to equal "1", enables the creation of entry archives and reconfigures the links of the entries to point to their own archive page.</p>
 
-    <p><b>Special Category Archiving Preferences</b></p>
+    <p><b>Toggling Creation of Month Archives</b></p>
 
-    <p><em>CATARCH_DATATYPE</em> determines the set of data to load for the category archives. There's two types of data that can be specified, "ALL" or "NOBODY".</p>
+    <p>Setting <em>MONTH_ARCHIVES</em> to equal "1", enables the creation of month archives.</p>
+
+    <p><b>Toggling Creation of Day Archives</b></p>
+
+    <p>Setting <em>DAY_ARCHIVES</em> to equal "1", enables the creation of day archives and reconfigures the links of the entries to point to their own archive page when <em>$ENTRY_ARCHIVES</em> is not enabled.</p>
+
+    <p><b>Special Archiving Preferences</b></p>
+
+    <p><em>CATARCH_DATATYPE</em> determines the set of metadata to load for the category archives.</p>
+
+    <p><em>MONTHARCH_DATATYPE</em> determines the set of metadata to load for the month archives.</p>
+
+    <p><em>DAYARCH_DATATYPE</em> determines the set of metadata to load for the day archives.</p>
+
+    <p>There's two types of data that can be specified, "ALL" or "NOBODY":</p>
     <pre>
 ALL = full entry metadata (slow and bigger cache)
 NOBODY = all except entry's BODY metadata (faster and smaller cache)
     
 </pre>
 
-    <p><span class="warning">IMPORTANT</span>: Please edit <a href="#s.7">category_entry.htm</a> accordingly.</p>
+    <p><span class="warning">IMPORTANT</span>: Please edit (or create) <a href="#s.7">category_entry.htm</a>, month_entry.htm, and day_entry.htm accordingly.</p>
 
     <p><b>Setting the Chronological Order</b></p>
 
     <p><em>CHRON_ORDER</em> specifies the chronological order of the weblog's archive - 0/1 = normal/reverse. Defaults to "1", reverse order.</p>
+
+    <p><span class="warning">WARNING</span>: If you don't use the "configure" action to change this, the databases won't get resorted to reflect the new chronological order.</p>
 
     <p><b>Setting Actions for Previewing and Publishing</b></p>
 
@@ -442,7 +464,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Changing the Temp Directory</b></p>
 
-    <p><em>NB_TEMP_DIR</em> specifies the location to temporarily store data. The default is "/tmp", but may be changed on a per-weblog basis to a more private vicinity as an added security precaution on multiuser systems.</p>
+    <p><em>NB_TEMP_DIR</em> specifies the location to temporarily store data. The default is "/tmp", but may be changed on a per-weblog basis to a more private vicinity as an added security precaution on multi-user systems.</p>
 
     <p><b>Changing the Default Query Mode</b></p>
 
@@ -464,7 +486,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><em>PLUGINS_DIR</em> specifies the directory location of global plugins. Global plugins effect all weblogs. The default is set to <em>$NB_BASE_DIR/plugins</em>.</p>
 
-    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins only effect the specified weblog. Global plugins may be overriden by user plugins on an individual basis. For example, if you copy raw.sh into "$BLOG_DIR/plugins/entry/format/", your copy will be used instead of the global raw.sh. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
+    <p><em>USR_PLUGINSDIR</em> specifies the directory location of the user plugins. User plugins only effect the specified weblog. Global plugins may be overridden by user plugins on an individual basis. For example, if you copy raw.sh into "$BLOG_DIR/plugins/entry/format/", your copy will be used instead of the global raw.sh. The default is set to <em>$BLOG_DIR/plugins</em>.</p>
 
     <p><b>Global Configuration</b></p>
 
@@ -494,7 +516,7 @@ NB_LANG="es"
   </div>
 
   <div id="mgmt">
-    <h2><a id="s.6" name="s.6">6. Managing Entries and Categories (Tags)</a></h2>Commands to manage entries and tags.
+    <h2><a id="s.6" name="s.6">6. Managing Entries and Tags (Categories)</a></h2>Commands to manage entries and tags.
 
     <h3>Managing Entries</h3>
 
@@ -605,7 +627,7 @@ nb [-b blog_dir] tag 1 delete 1
 
     <p><b>Changing Entry's Date</b></p>
 
-    <p>Specifying a new entry's date using the TIMESTAMP metavar:</p>
+    <p>Specifying a new entry's date using the TIMESTAMP meta-tag:</p>
     <pre>
 nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add
     
@@ -621,6 +643,8 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit 2
 </pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
 
     <h3>Managing Tags</h3>
+
+    <p>Also known as categories.</p>
 
     <p><b>Tag ID's</b></p>
 
@@ -683,7 +707,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
       <table border="0" cellspacing="4" cellpadding="2" summary="templates">
         <caption>
-          Special characters that, when placed in templates, are interpretated by the shell if not escaped:
+          Special characters that, when placed in templates, are interpreted by the shell if not escaped:
         </caption>
 
         <tr>
@@ -761,7 +785,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">makepage.htm</td>
 
-          <td align="left">default template used by makepage option</td>
+          <td align="left">default template used by make-page action</td>
         </tr>
 
         <tr>
@@ -785,7 +809,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">category_entry.htm</td>
 
-          <td align="left">controls structure of the category entries</td>
+          <td align="left">controls structure and content of the category entries</td>
         </tr>
 
         <tr>
@@ -809,13 +833,39 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">entry.metadata</td>
 
-          <td align="left">controls the format of the entry's metafile</td>
+          <td align="left">controls the format of the entry's meta-file</td>
         </tr>
 
         <tr>
           <td align="left">file.metadata</td>
 
-          <td align="left">controls the format of a metafile</td>
+          <td align="left">controls the format of a meta-file</td>
+        </tr>
+      </table>
+
+      <p><b>Special Templates</b></p>
+
+      <table border="0" cellspacing="4" cellpadding="2" summary="templates">
+        <caption>
+          The weblog's appearance may be further controlled by the following templates:
+        </caption>
+
+        <tr>
+          <th align="left">templates</th>
+
+          <th align="left">description</th>
+        </tr>
+
+        <tr>
+          <td align="left">month_entry.htm</td>
+
+          <td align="left">controls the structure and content of the month entries</td>
+        </tr>
+
+        <tr>
+          <td align="left">day_entry.htm</td>
+
+          <td align="left">controls the structure and content of the day entries</td>
         </tr>
       </table>
     </div>
@@ -829,31 +879,31 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
     <div>
       <p><b>Regular Plugins: plugins</b></p>
 
-      <p>Regular plugins are initialized unconditionally.</p>
+      <p>Regular plugins are initialized unconditionally after a requested update.</p>
 
       <p><b>Archive Plugins: plugins/archive</b></p>
 
-      <p>Archive plugins are initialized when the archives are updated.</p>
+      <p>Archive plugins are initialized when the archives are to be updated.</p>
 
       <p><b>Category Archive Plugins: plugins/archive/category</b></p>
 
-      <p>Category Archive plugins are initialized for each category archive that is updated.</p>
+      <p>Category Archive plugins are initialized for each category archive that is to be updated.</p>
 
       <p><b>Day Archive Plugins: plugins/archive/day</b></p>
 
-      <p>Day Archive plugins are initialized for each day archive that is updated.</p>
+      <p>Day Archive plugins are initialized for each day archive that is to be updated.</p>
 
       <p><b>Month Archive Plugins: plugins/archive/month</b></p>
 
-      <p>Month Archive plugins are initialized for each month archive that is updated.</p>
+      <p>Month Archive plugins are initialized for each month archive that is to be updated.</p>
 
       <p><b>Year Archive Plugins: plugins/archive/year</b></p>
 
-      <p>Year Archive plugins are initialized for each year archive that is updated.</p>
+      <p>Year Archive plugins are initialized for each year archive that is to be updated.</p>
 
       <p><b>Entry Plugins: plugins/entry</b></p>
 
-      <p>Entry plugins are initialized unconditionally for each entry that is updated.</p>
+      <p>Entry plugins are initialized unconditionally for each entry that is to be updated.</p>
 
       <p><b>Entry Modify Plugins: plugins/entry/mod</b></p>
 
@@ -861,23 +911,23 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
       <p><b>Entry Formatting Plugins: plugins/entry/format</b></p>
 
-      <p>Entry Formatting plugins are initialized for each modified entry based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
+      <p>Entry Formatting plugins are initialized for each modified entry based on the FORMAT meta-tag field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
 
       <p><b>Page Plugins: plugins/page</b></p>
 
-      <p>Page plugins are initialized unconditionally before each page that is updated.</p>
+      <p>Page plugins are initialized unconditionally before each page that is to be updated.</p>
 
       <p><b>Page Formatting Plugins: plugins/page/format</b></p>
 
-      <p>Page Formatting plugins are initialized for each page that is updated based on the FORMAT metadata field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
+      <p>Page Formatting plugins are initialized for each page that is to be updated based on the FORMAT meta-tag field. More than one format may be specified using space or commas as a separator, but special care should be taken in the order they get specified.</p>
 
       <p><b>Make Page Plugins: plugins/makepage</b></p>
 
-      <p>Make Page plugins are initialized after each page that is updated.</p>
+      <p>Make Page plugins are initialized after each page that is to be updated.</p>
 
       <p><b>Post Plugins: plugins/post</b></p>
 
-      <p>Post plugins are initialized unconditionally for post-weblog related tasks.</p><em>Most plugins will operate on their own conditions once they've been initialized.</em>
+      <p>Post plugins are initialized unconditionally for post-weblog related tasks.</p>Note: <em>Most plugins will operate on their own conditions once they've been initialized, in other words, no longer unconditionally.</em>
     </div>
 
     <div class="tables">
@@ -939,7 +989,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">articles_meta.sh*</td>
 
-          <td align="left">generates articles from metafiles in the "articles" directory</td>
+          <td align="left">generates articles from meta-files in the "articles" directory</td>
 
           <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
 
@@ -965,7 +1015,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">adds an atom feed</td>
 
-          <td align="left">FEED_ITEMS, ATOM_ITEMS, ATOM_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, ATOM_ITEMS, ATOM_CATFEEDS, ATOM_FEED_LANG</td>
 
           <td align="left">$NB_AtomVer, $NB_AtomFile, index-atom.$NB_SYND_FILETYPE</td>
 
@@ -1169,7 +1219,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">adds rss 2.0 feeds</td>
 
-          <td align="left">FEED_ITEMS, RSS2_ITEMS, RSS2_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, RSS2_ITEMS, RSS2_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
 
@@ -1181,7 +1231,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">adds rss 1.0 feeds</td>
 
-          <td align="left">FEED_ITEMS, RSS_ITEMS, RSS_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, RSS_ITEMS, RSS_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
 
@@ -1221,8 +1271,118 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
     </div>
   </div>
 
+  <div id="configuring.plugins">
+    <h2><a id="s.9" name="s.9">9. Configuring Plugins</a></h2>
+
+    <p>Settings for plugins are stored and set in your weblog's blog.conf.</p>
+
+    <p><b>Configuring Syndication Plugins</b></p>
+
+    <p>Syndicating your weblog is achieved through NanoBlogger's plugins. Please note, a complete and Internet accessible URL is required for proper syndication. This can be achieved by setting <em>BLOG_FEED_URL</em>. It is also wise to ensure a correct timezone setting for your syndication feeds. For this, please refer to <em>BLOG_TZD</em> in <a href="#s.5">Settings and Configuration</a>.</p>
+
+    <p><em>BLOG_FEED_URL</em> sets the URL for syndication feeds. Defaults to "$BLOG_URL", only if it's already set.</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_URL="http://www.example.com/johndoe/weblog"
+
+</pre>
+
+    <p><em>BLOG_FEED_LANG</em> sets the language used in your syndication feeds.</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_LANG="en-us"
+
+</pre>
+
+    <p><em>ATOM_FEED_LANG</em> is required to set the language for Atom syndication feeds, since the format differs from RSS.</p>
+
+    <p>Example:</p>
+    <pre>
+ATOM_FEED_LANG="en"
+
+</pre>
+
+    <p><em>BLOG_FEED_ITEMS</em> sets the maximum number of entries to include in your syndication feeds. Defaults to "10". For exporting purposes you may want to increase this to the maximum number of entries found in your weblog.</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_ITEMS="10"
+</pre>
+
+    <p><em>BLOG_FEED_CSS</em> sets the stylesheet used for your syndication feeds (path should be relative).</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_CSS="styles/feed.css"
+
+</pre>
+
+    <p><em>BLOG_FEED_ICON</em> sets an icon for your syndication feeds (path should be relative).</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_ICON="images/feedicon.png"
+
+</pre>
+
+    <p><em>BLOG_FEED_LOGO</em> sets a logo for your syndication feeds (path should be relative).</p>
+
+    <p>Example:</p>
+    <pre>
+BLOG_FEED_LOGO="images/feedlogo.png"
+
+</pre>
+
+    <p><span class="warning">NOTE</span>: In the RSS 2.0 syndication plugin, the logo will be used when the icon is not set.</p>
+
+    <p><b>Enabling Syndication Support for Categories</b></p>
+
+    <p>There are three ways to enable per-category syndication feeds:</p>
+
+    <ol>
+      <li><em>CATEGORY_FEEDS</em> toggles all supported methods of category syndication. Defaults to "0" - disabled.</li>
+
+      <li><em>ATOM_CATFEEDS</em> toggles per-category Atom syndication. Defaults to "0" - disabled.</li>
+
+      <li><em>RSS2_CATFEEDS</em> toggles per-category RSS 2.0 syndication. Defaults to "0" - disabled.</li>
+    </ol>
+
+    <p><b>Creating Podcasts</b></p>
+
+    <p>There's a special meta-tag called, ENCLOSURE which is used to set an entry's enclosure data for each entry. The ENCLOSURE meta-tag should contain two different sets of data separated by a single space. The local media file and the media type (e.g. audio/mpeg).</p>
+
+    <p>Example:</p>
+    <pre>
+ENCLOSURE: mp3s/mypodcast.mp3 audio/mpeg
+
+</pre>
+
+    <p>The media file should be from a relative path which can be found from within <em>$BLOG_DIR</em>. The system command "du -b" is required to acquire the media file's length to complete the enclosure data. The "du" command should be included on most systems where Bash is supported, but there's no guarantee the syntax will be the same. Auto-detecting the media type is not supported, it must be determined and set manually. Enclosures are supported for both the Atom and RSS2 syndication plugins.</p>
+
+    <p><b>Configuring Syntax Checking and Reformatting</b></p>
+
+    <p>The Tidy plugin provides syntax checking and reformatting. These kind of tools can be both your friend and your enemy, meaning they can sometimes hide (fix) your mistakes too well. A log is kept in your weblog's directory, so you can review any errors or changes recorded by Tidy.</p>
+
+    <p>There are two Tidy configuration variables. One for HTML and one for XML (syndication plugins). As noted in <a href="#s.5">Settings and Configuration</a>, Tidy has a tendency to rewrite whatever you set in <em>$BLOG_CHARSET</em>. So beware.</p>
+
+    <p><em>TIDY_HTML_ARGS</em> sets the command arguments for the tidy command.</p>
+
+    <p><em>TIDY_XML_ARGS</em> set the command arguments for the tidy command when verifying XML of syndication feeds.</p>
+
+    <p>Examples:</p>
+    <pre>
+TIDY_HTML_ARGS="-asxhtml -n -utf8"
+TIDY_XML_ARGS="-xml -n -utf8 -wrap 0"
+
+</pre>
+
+    <p>More advanced configuration including customizations can be achieved through user plugins.</p>
+  </div>
+
   <div id="writing.plugins">
-    <h2><a id="s.9" name="s.9">9. Writing Plugins</a></h2>
+    <h2><a id="s.10" name="s.10">10. Writing Plugins</a></h2>
 
     <h3>Tools for Developing Plugins</h3>
 
@@ -1503,7 +1663,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$META_FILE</td>
 
-          <td align="left">example: "write_metadata UPDATED "`date`" $metafile"</td>
+          <td align="left">example: "write_metadata UPDATED "`date`" $meta-file"</td>
         </tr>
 
         <tr>
@@ -1527,7 +1687,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$WRITEMETAVAR_FILE</td>
 
-          <td align="left">example: write_var MODTIME "$(date)" $metafile</td>
+          <td align="left">example: write_var MODTIME "$(date)" $meta-file</td>
         </tr>
 
         <tr>
@@ -1569,7 +1729,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">weblog_page</td>
 
-          <td align="left">creates weblog page from metafile</td>
+          <td align="left">creates weblog page from meta-file</td>
 
           <td align="left">BLOGPAGE_SRCFILE=$1, BLOGPAGE_TEMPLATE=$2, $BLOGPAGE_OUTFILE=$3</td>
 
@@ -1582,7 +1742,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
   </div>
 
   <div id="publish">
-    <h2><a id="s.10" name="s.10">10. Publishing</a></h2>
+    <h2><a id="s.11" name="s.11">11. Publishing</a></h2>
 
     <p><b>Setting the Publish Command</b></p>
 
@@ -1617,15 +1777,15 @@ mput *
   </div>
 
   <div id="comments">
-    <h2><a id="s.11" name="s.11">11. Adding Support for Comments</a></h2>
+    <h2><a id="s.12" name="s.12">12. Adding Support for Comments</a></h2>
 
-    <p>Comment services and add-on's: NanoBlogger Comments[1], CGIComment[2], blogkomm[3], JS-Kit[4], and Haloscan.com[5].</p>
+    <p>Comment services and add-on's: NanoBlogger Comments, CGIComment, blogkomm[1], JS-Kit[2], and Haloscan.com[3].</p>
 
     <p>Choose one and follow the included install instructions.</p>
   </div>
 
   <div id="entries.import">
-    <h2><a id="s.12" name="s.12">12. Importing Entries</a></h2>
+    <h2><a id="s.13" name="s.13">13. Importing Entries</a></h2>
 
     <p>In order to import entries, data must first be converted to the NanoBlogger format.</p>
 
@@ -1641,7 +1801,7 @@ CCYY-MM-DDTHH_MM_SS.txt
         
 </pre>
 
-    <p>The format of an entry is made up of metadata variables. Most of the metadata variables are of the format VAR: VALUE, then a carriage return that separates one variable from the next. The order of the metadata variables are insignificant. The <em>BODY</em> variable is special and needs to be terminated by the <em>END-----</em> marker. By default the content of the BODY variable must contain valid HTML with all entities properly escaped.</p>Example of an entry's format:
+    <p>The format of an entry is made up of meta-tags . Most of the meta-tags are of the format VAR: VALUE, then a carriage return that separates one meta-tag from the next. The order of the meta-tags are insignificant. The <em>BODY</em> variable is special and needs to be terminated by the <em>END-----</em> marker. By default the content of the BODY variable must contain valid HTML with all entities properly escaped.</p>Example of an entry's format:
     <pre>
 TITLE: A New Entry
 AUTHOR: foo
@@ -1661,8 +1821,8 @@ END-----
 
     <p>Steps to converting entries:</p>
     <pre>
-1. Convert each entry so they each contain the following metadata: TITLE, AUTHOR, DATE, DESC, FORMAT, BODY
-2. The BODY metadata must be terminated by "END-----".
+1. Convert each entry so they each contain the following meta-tags: TITLE, AUTHOR, DATE, DESC, FORMAT, BODY
+2. The BODY meta-tag must be terminated by "END-----".
 3. Rename each entry's file name to it's corresponding date and time.
         
 </pre>
@@ -1680,28 +1840,28 @@ nb [-b blog_dir] --force query all update
   </div>
 
   <div id="tips">
-    <h2><a id="s.13" name="s.13">13. Tips and Tricks</a></h2>
+    <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
 
-    <p><b>Useful Editor's Commands</b></p>Create a new metafile:
+    <p><b>Useful Editor's Commands</b></p>Create a new meta-file:
     <pre>
 nb [-b blogdir] make-file somefile.txt
-</pre>Import the metafile as a new weblog entry:
+</pre>Import the meta-file as a new weblog entry:
     <pre>
 nb [-b blogdir] file somefile.txt add
-</pre>or export the metafile as a new weblog page:
+</pre>or export the meta-file as a new weblog page:
     <pre>
 nb [-b blogdir] make-page somefile.txt somefile.html
 </pre><em>Please note that these tasks are easier when the editor supports a sub-shell or when you can suspend your editor from the active shell (assuming there is one).</em>
 
-    <p><b>Writing Meta Variables on the Fly</b></p>
+    <p><b>Writing Meta Tags on the Fly</b></p>
 
-    <p>Meta variables are simply variables that pertain to a metafile. For instance, the text formatting can be manipulated from the command line.</p>
+    <p>Meta-tags are simply the tags that pertain to a meta-file. For instance, the text formatting can be manipulated from the command line.</p>
     <pre>
 nb [-b blogdir] --var FORMAT --set-var "markdown" make-page somefile.txt somefile.html
     
 </pre>
 
-    <p>Currently, only one meta variable may be specified at a time.</p>
+    <p>Currently, only one meta-tag may be specified at a time.</p>
 
     <p><b>Set a Default Weblog Directory</b></p>
 
@@ -1769,17 +1929,14 @@ php?&gt;
   </div>
 
   <div id="credits">
-    <h2><a id="s.14" name="s.14">14. Credits</a></h2>
+    <h2><a id="s.15" name="s.15">15. Credits</a></h2>
 
-    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger[6], for the inspiration of this project. Special acknowledgement goes to Ted Walther's Diary[7], which inspired Bowie to create MicroBlogger. Finally, thanks to everyone who's ever contributed a patch or feature request - see the ChangeLog.</p>
+    <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger, for the inspiration of this project. Special acknowledgment goes to Ted Walther's Diary[4], which inspired Bowie to create MicroBlogger. Finally, thanks to everyone who's ever contributed a patch or feature request - see the ChangeLog.</p>
 
-    <p><a href="http://nhw.pl/blg/articles/nbcom/">1. http://nhw.pl/blg/articles/nbcom/</a><br />
-    <a href="http://freshmeat.net/projects/cgicomment">2. http://freshmeat.net/projects/cgicomment</a><br />
-    <a href="http://blogkomm.com">3. http://blogkomm.com</a><br />
-    <a href="http://js-kit.com">4. http://js-kit.com</a><br />
-    <a href="http://www.haloscan.com">5. http://www.haloscan.com</a><br />
-    <a href="http://freshmeat.net/projects/microblogger">6. http://freshmeat.net/projects/microblogger</a><br />
-    <a href="http://reactor-core.org/~djw/diary/">7. http://reactor-core.org/~djw/diary/</a><br /></p>
+    <p><a href="http://blogkomm.com">1. http://blogkomm.com</a><br />
+    <a href="http://js-kit.com">2. http://js-kit.com</a><br />
+    <a href="http://www.haloscan.com">3. http://www.haloscan.com</a><br />
+    <a href="http://reactor-core.org/~djw/diary/">4. http://reactor-core.org/~djw/diary/</a><br /></p>
 
     <div class="copyright">
       <span>Copyright © 2003-2008 Kevin Wood. All Rights Reserved.</span>

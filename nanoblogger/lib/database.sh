@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-01-18T00:27:40-05:00
+# Last modified: 2008-05-15T22:38:01-04:00
 
 # index related categories by id
 index_catids(){
@@ -91,6 +91,14 @@ if [ -f "$catdb_file" ]; then
 	sed 1d "$catdb_file" |sort "$db_order" >> "$catdb_file".tmp
 	mv "$catdb_file".tmp "$catdb_file"
 fi
+}
+
+# resort all the databases
+resort_database(){
+db_query=; resort_db "$NB_DATA_DIR/master.$NB_DBTYPE"
+for cat_db in ${db_categories[*]}; do
+	resort_catdb "$NB_DATA_DIR/$cat_db"
+done
 }
 
 # update entry and it's related categories for main database

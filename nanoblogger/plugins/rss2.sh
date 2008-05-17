@@ -1,18 +1,29 @@
 # NanoBlogger RSS 2.0 Feed Plugin
-# synopsis: nb -q feed -t 1 -u
+# synopsis: nb query feed [tag N] update
 
 # concatenate modification variables
 FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
+
+# set URL for syndication feed
+[ ! -z "$BLOG_URL" ] &&
+	: ${BLOG_FEED_URL:=$BLOG_URL}
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
 : ${ENTRY_EXCERPTS:=0}
 
 # limit number of items to include in feed
-: ${FEED_ITEMS:=10}
-: ${RSS2_ITEMS:=$FEED_ITEMS}
+# backwards support for deprecated FEED_ITEMS
+: ${BLOG_FEED_ITEMS:=$FEED_ITEMS}
+: ${BLOG_FEED_ITEMS:=10}
+: ${RSS2_ITEMS:=$BLOG_FEED_ITEMS}
 # build rss2 feeds for categories (0/1 = off/on)
 : ${RSS2_CATFEEDS:=0}
+
+# RSS 2.0 CSS support
+if [ -f "$BLOG_DIR/styles/feed.css" ] && [ -z "$BLOG_FEED_CSS" ]; then
+	BLOG_FEED_CSS="styles/feed.css"
+fi
 
 # output filename of rss feed
 NB_RSS2File="rss.$NB_SYND_FILETYPE"
@@ -22,7 +33,7 @@ NB_RSS2Ver="2.0"
 NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
 
 # set link to archives
-NB_RSS2ArchivesPath="$BLOG_URL/$ARCHIVES_DIR/"
+NB_RSS2ArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
 
 # backwards support for deprecated BLOG_LANG
 : ${BLOG_FEED_LANG:=$BLOG_LANG}
@@ -40,6 +51,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				feed|feed[a-z]) :;; *) [ 1 = false ];; \
 				esac; then
 	
+	# support relative links for the entries
 	set_baseurl "$BLOG_URL/"
 
 	# escape special characters to help create valid xml feeds
@@ -54,18 +66,24 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 	make_rssfeed(){
 	MKPAGE_OUTFILE="$1"
 	mkdir -p `dirname "$MKPAGE_OUTFILE"`
-	BLOG_FEED_URL="$BLOG_URL"
+	BLOG_FEED_URLFILE="$BLOG_FEED_URL/$NB_RSS2File"
 	NB_RSS2Title="$BLOG_FEED_TITLE"
 	[ ! -z "$NB_RSS2CatTitle" ] &&
 		NB_RSS2Title="$template_catarchives $NB_RSS2CatTitle | $BLOG_FEED_TITLE"
 	if [ ! -z "$NB_RSS2CatLink" ]; then 
 		NB_RSS2File="$ARCHIVES_DIR/$NB_RSS2CatFile"
-		BLOG_FEED_URL="$BLOG_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
+		BLOG_FEED_URLFILE="$BLOG_FEED_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
+	fi
+	# RSS 2.0 support for icons/logos
+	# use syndication logo for when no icon is set
+	: ${BLOG_FEED_ICON:=$BLOG_FEED_LOGO}
+	if [ ! -z "$BLOG_FEED_ICON" ]; then
+		NB_RSS2Logo='<image><link>'$BLOG_FEED_URL'</link><url>'$BLOG_FEED_URL'/'$BLOG_FEED_ICON'</url><title>'$NB_RSS2Title'</title></image>'
 	fi
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
 		<?xml version="1.0" encoding="$BLOG_CHARSET"?>
-        <?xml-stylesheet type="text/css" href="${BASE_URL}styles/feed.css"?>
+        <?xml-stylesheet type="text/css" href="${BASE_URL}$BLOG_FEED_CSS"?>
 		<rss version="2.0"
 		 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		 xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -74,13 +92,14 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		>
 		<channel>
 			<title>$NB_RSS2Title</title>
-			<atom:link href="${BASE_URL}$NB_RSS2File" rel="self" type="application/rss+xml" />
+			<atom:link href="$BLOG_FEED_URLFILE" rel="self" type="application/rss+xml" />
 			<link>$BLOG_FEED_URL</link>
 			<description>$BLOG_DESCRIPTION</description>
 			<dc:language>$BLOG_FEED_LANG</dc:language>
 			<dc:creator>$NB_RSS2Author</dc:creator>
 			<dc:date>$NB_RSS2ModDate</dc:date>
 			<admin:generatorAgent rdf:resource="http://nanoblogger.sourceforge.net" />
+			$NB_RSS2Logo
 			$NB_RSS2Entries
 		</channel>
 		</rss>
@@ -106,6 +125,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
+		# support for RSS 2.0 enclosures (requires 'du' system command for determing length)
+		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_RSS2EntryEnclosure="$METADATA"
 		rss2entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 		rss2entry_catids="${rss2entry_wcatids##*\>}"
 		[ "$rss2entry_wcatids" = "$rss2entry_catids" ] &&
@@ -129,6 +150,17 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		fi
 		# for escaped text/html only
 		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
+		# dissect ENCLOSURE metadata
+		if [ ! -z "$NB_RSS2EntryEnclosure" ]; then
+			Enclosure_File=`echo "$NB_RSS2EntryEnclosure" |cut -d' ' -f 1`
+			Enclosure_Type=`echo "$NB_RSS2EntryEnclosure" |cut -d' ' -f 2`
+			[ -z "$Enclosure_Type" ] || [ "$Enclosure_Type" = "$Enclosure_File" ] &&
+				Enclosure_Type="audio/mpeg"
+			if [ -f "$BLOG_DIR/$Enclosure_File" ]; then
+				Enclosure_Length=`du -b "$BLOG_DIR/$Enclosure_File" |sed -e '/[[:space:]].*$/ s///g'`
+				NB_RSS2EntryEnclosure='<enclosure url="'$BLOG_FEED_URL/$Enclosure_File'" length="'$Enclosure_Length'" type="'$Enclosure_Type'" />'
+			fi
+		fi
 		cat >> "$SCRATCH_FILE".rss2feed <<-EOF
 			<item>
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
@@ -138,6 +170,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				<dc:creator>$NB_RSS2EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
 				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
+				$NB_RSS2EntryEnclosure
 			</item>
 		EOF
 	done

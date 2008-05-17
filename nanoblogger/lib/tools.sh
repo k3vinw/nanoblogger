@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-01-24T01:40:02-05:00
+# Last modified: 2008-05-17T01:29:31-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -342,7 +342,7 @@ WRITE_MVAR="$1"
 WRITE_MVARVALUE="$2"
 WRITEMETAVAR_FILE="$3"
 [ ! -z "$USR_METAVAR" ] && WRITE_MVAR="$USR_METAVAR"
-[ ! -z "$USR_VARVALUE" ] && WRITE_MVARVALUE="$USR_VARVALUE"
+[ ! -z "$USR_SETVAR" ] && WRITE_MVARVALUE="$USR_SETVAR"
 if [ ! -z "$WRITE_MVAR" ]; then
 	write_metadata "$WRITE_MVAR" "$WRITE_MVARVALUE" \
 		"$WRITEMETAVAR_FILE"
@@ -375,13 +375,13 @@ case $METADATA_TYPE in
 		read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
 		NB_EntryTitle="$NB_MetaTitle";;
 	ALL)
-		load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
-		load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
-		load_metadata FORMAT "$METADATA_FILE"; load_metadata BODY "$METADATA_FILE";;
+		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT BODY; do
+			load_metadata $LMDATATYPE "$METADATA_FILE"
+		done;;
 	NOBODY)
-		load_metadata AUTHOR "$METADATA_FILE"; load_metadata TITLE "$METADATA_FILE"
-		load_metadata DATE "$METADATA_FILE"; load_metadata DESC "$METADATA_FILE"
-		load_metadata FORMAT "$METADATA_FILE";;
+		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT; do
+			load_metadata $LMDATATYPE "$METADATA_FILE"
+		done;;
 	*)
 		load_metadata ALL "$METADATA_FILE";;
 esac
@@ -396,7 +396,7 @@ WRITE_ENTRY_FILE="$1"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 mkdir -p `dirname "$WRITE_ENTRY_FILE"`
 write_template > "$WRITE_ENTRY_FILE"
-write_var "$USR_METAVAR" "$USR_VARVALUE" "$WRITE_ENTRY_FILE"
+write_var "$USR_METAVAR" "$USR_SETVAR" "$WRITE_ENTRY_FILE"
 }
 
 # load entry from it's metadata file
@@ -468,7 +468,7 @@ fi
 meta_timestamp
 load_template "$WRITE_META_TEMPLATE"
 write_template > "$WRITE_META_FILE"
-write_var "$USR_METAVAR" "$USR_VARVALUE" "$WRITE_META_FILE"
+write_var "$USR_METAVAR" "$USR_SETVAR" "$WRITE_META_FILE"
 }
 
 # create weblog page from text (parts) files
@@ -516,7 +516,7 @@ BLOGPAGE_TEMPLATE="$2"
 BLOGPAGE_OUTFILE="$3"
 [ ! -z "$USR_TEMPLATE" ] && BLOGPAGE_TEMPLATE="$USR_TEMPLATE"
 if [ -f "$BLOGPAGE_SRCFILE" ]; then
-	write_var "$USR_METAVAR" "$USR_VARVALUE" "$BLOGPAGE_SRCFILE"
+	write_var "$USR_METAVAR" "$USR_SETVAR" "$BLOGPAGE_SRCFILE"
 	load_metadata ALL "$BLOGPAGE_SRCFILE"
 	[ ! -z "$USR_AUTHOR" ] && NB_MetaAuthor="$USR_AUTHOR"
 	[ -z "$NB_MetaAuthor" ] && NB_MetaAuthor="$BLOG_AUTHOR"
@@ -640,7 +640,7 @@ EntryDate_File="$1"
 EntryDate_TimeStamp="$2"
 # read timestamp from command line
 [ "$USR_METAVAR" = TIMESTAMP ] &&
-	EntryDate_TimeStamp="$USR_VARVALUE"
+	EntryDate_TimeStamp="$USR_SETVAR"
 # validate timestamp format
 Edit_EntryTimeStamp=`refilter_timestamp "$EntryDate_TimeStamp"`
 New_EntryTimeStamp=`validate_timestamp "$Edit_EntryTimeStamp"`
