@@ -36,8 +36,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				feed|feed[a-z]) :;; *) [ 1 = false ];; \
 				esac; then
 
-	# support relative links for the entries
-	set_baseurl "$BLOG_URL/"
+	# transform relative links for the entries
+	set_baseurl "$BLOG_FEED_URL/"
 
 # escape special characters to help create valid xml feeds
 	esc_chars(){
@@ -57,7 +57,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		NB_RSSTitle="$template_catarchives $NB_RSSCatTitle | $BLOG_FEED_TITLE"
 	if [ ! -z "$NB_RSSCatLink" ]; then
 		NB_RSSFile="$ARCHIVES_DIR/$NB_RSSCatFile"
-		BLOG_FEED_URL="$BLOG_FEED_URL/$ARCHIVES_DIR/$NB_RSSLink"
+		BLOG_FEED_URL="$BLOG_FEED_URL/$NB_RSSFile"
 	fi
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
