@@ -54,8 +54,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				feed|feed[a-z]) :;; *) [ 1 = false ];; \
 				esac; then
 
-	# support relative links for the entries
-	set_baseurl "$BLOG_URL/"
+	# transform relative links for the entries
+	set_baseurl "$BLOG_FEED_URL/"
 
 	# escape special characters to help create valid xml feeds
 	esc_chars(){

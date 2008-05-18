@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-05-17T01:29:31-04:00
+# Last modified: 2008-05-18T01:15:44-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -186,7 +186,7 @@ if [ -f "$IMPORT_FILE" ]; then
 		"$IMPORT_FILE"
 	load_metadata ALL "$IMPORT_FILE"
 else
-	nb_msg "'$IMPORT_FILE' $importfile_nofile"
+	die "'$IMPORT_FILE' $importfile_nofile"
 fi
 }
 

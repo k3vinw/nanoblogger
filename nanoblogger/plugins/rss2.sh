@@ -51,8 +51,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				feed|feed[a-z]) :;; *) [ 1 = false ];; \
 				esac; then
 	
-	# support relative links for the entries
-	set_baseurl "$BLOG_URL/"
+	# transform relative links for the entries
+	set_baseurl "$BLOG_FEED_URL/"
 
 	# escape special characters to help create valid xml feeds
 	esc_chars(){
@@ -72,7 +72,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		NB_RSS2Title="$template_catarchives $NB_RSS2CatTitle | $BLOG_FEED_TITLE"
 	if [ ! -z "$NB_RSS2CatLink" ]; then 
 		NB_RSS2File="$ARCHIVES_DIR/$NB_RSS2CatFile"
-		BLOG_FEED_URLFILE="$BLOG_FEED_URL/$ARCHIVES_DIR/$NB_RSS2CatLink"
+		BLOG_FEED_URLFILE="$BLOG_FEED_URL/$NB_RSS2File"
 	fi
 	# RSS 2.0 support for icons/logos
 	# use syndication logo for when no icon is set

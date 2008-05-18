@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-17T02:00:00-04:00
+# Last modified: 2008-05-18T01:15:35-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -277,9 +277,16 @@ if [ -f "$NB_EditFile" ]; then
 	New_TimeStamp="$METADATA"
 fi
 New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
-# save all custom modications to new entry's data file
+# dump all data from imported file to entry's data file
+if [ -f "$IMPORT_FILE" ] && [ ! -f "$NB_EditFile" ]; then
+	cat "$IMPORT_FILE" > "$NB_DATA_DIR/$New_EntryFile"
+fi
+# dump all custom modications from edit file to new entry's data file
 [ -f "$NB_EditFile" ] &&
 	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
+# record new date onto entry's data file
+[ -f "$NB_DATA_DIR/$New_EntryFile" ] &&
+	write_var DATE "$NB_EntryDate" "$NB_DATA_DIR/$New_EntryFile"
 # use specified timestamp as entry's new date
 chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 [ ! -z "$New_EntryDateFile" ] &&

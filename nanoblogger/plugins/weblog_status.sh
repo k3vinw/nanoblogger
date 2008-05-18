@@ -27,9 +27,12 @@ fi
 TOTAL_CATEGORIES=`for catdbs in "$NB_DATA_DIR"/cat_*."$NB_DBTYPE"; do echo $catdbs; done |grep -c "."`
 TOTAL_ENTRIES=`grep -c "." "$NB_DATA_DIR/master.$NB_DBTYPE"`
 LAST_ENTRY=`nb_print "$NB_DATA_DIR/master.$NB_DBTYPE" 1 |cut -d">" -f 1`
-[ ! -z "$LAST_ENTRY" ] &&
+if [ -f "$NB_DATA_DIR/$LAST_ENTRY" ]; then
 	read_metadata DATE "$NB_DATA_DIR/$LAST_ENTRY"
-LAST_ENTRY_TIME="$METADATA"
+	LAST_ENTRY_TIME="$METADATA"
+else
+	LAST_ENTRY_TIME=""
+fi
 LAST_UPDATED=`filter_dateformat "$DATE_FORMAT"`
 
 NB_BlogStatus=$(< "$WEBLOG_STATUSTEMPLATE")
