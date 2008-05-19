@@ -52,7 +52,7 @@ buildarchives_action="generating archives ..."
 buildweblog_all="updating all weblog files! this may take a while ..."
 buildweblog_files="generating weblog files ..."
 buildweblog_main="generating main index page(s) ..."
-buildweblog_cache="cleaning up cache ..."
+buildweblog_cache="expiring cache data ..."
 
 # import_file
 importfile_nofile="doesn't exist!"

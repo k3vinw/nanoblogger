@@ -11,23 +11,23 @@
 #
 # $NB_ArticleLinks
 
-# se BASE_URL for links to $ARTICLE_DIR
+# set BASE_URL for links to $ATCLSECTION_DIR
 set_baseurl "./"
 
 # space seperated list of sub-directories inside $BLOG_DIR, where articles are located
 set_articleconf(){
-# e.g. ARTICLE_DIRS="articles stories poems long\ name\ with\ spaces"
-: ${ARTICLE_DIRS:=articles}
-: ${ARTICLE_SUFFIX:=txt}
-: ${ARTICLE_TEMPLATE:=$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE}
-: ${ARTICLE_FILTERCMD:=sort}
+# e.g. ARTICLES_DIR="articles stories poems long\ name\ with\ spaces"
+: ${ARTICLES_DIR:=articles}
+: ${ARTICLES_SUFFIX:=txt}
+: ${ARTICLES_TEMPLATE:=$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE}
+: ${ARTICLES_FILTERCMD:=sort}
 : ${ARTICLES_TITLE_FILE:=.articles_title.txt}
-: ${ARTICLE_FORMAT:=$PAGE_FORMAT}
+: ${ARTICLES_FORMAT:=$PAGE_FORMAT}
 }
 
 # reset basic configs to allow for multiple article configs
 reset_articleconf(){
-ARTICLE_SUFFIX=; ARTICLE_TEMPLATE=; ARTICLE_FORMAT=
+ARTICLES_SUFFIX=; ARTICLES_TEMPLATE=; ARTICLES_FORMAT=
 set_articleconf
 }
 
@@ -35,8 +35,8 @@ ARTICLE_PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/article_links.$NB_FILETYPE"
 
 set_articlelink(){
 articlelink_var="$1"
-#article_title=`sed 1q "$BLOG_DIR/$ARTICLE_DIR/$articlelink_var"`
-read_metadata TITLE "$BLOG_DIR/$ARTICLE_DIR/$articlelink_var"
+#article_title=`sed 1q "$BLOG_DIR/$ATCLSECTION_DIR/$articlelink_var"`
+read_metadata TITLE "$BLOG_DIR/$ATCLSECTION_DIR/$articlelink_var"
 if [ -z "$METADATA" ]; then
 	article_title="$notitle"
 else
@@ -57,32 +57,33 @@ article_link="$article_dir/$NB_INDEX"
 addalist_name(){
 NB_ArticlesListTitle=
 # Reads alternate title for list from $ARTICLES_TITLE_FILE (1st line).
-if [ -f "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE" ]; then
-	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE 1`
-else
-	basename "$BLOG_DIR/$ARTICLE_DIR" > "$BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE"
-	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ARTICLE_DIR/$ARTICLES_TITLE_FILE 1`
+[ -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ] &&
+	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE 1`
+# let template_articles define root of articles directory until
+# alternate title is created, else create a header for the list
+if [ "$ATCLSECTION_DIR" != `echo "$ARTICLES_DIR" |cut -d" " -f 1` ] || [ ! -z "$NB_ArticlesListTitle" ]; then
+	if [ ! -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ]; then
+		basename "$BLOG_DIR/$ATCLSECTION_DIR" > "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE"
+		NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE 1`
+	fi
+	[ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ATCLSECTION_DIR"
+	cat >> "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
+		<div class="articlesheader">
+			$NB_ArticlesListTitle
+		</div>
+	EOF
 fi
-[ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ARTICLE_DIR"
-# fallback to our language definition for list's title
-[ ! -z "$template_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
-	NB_ArticlesListTitle="$template_articles"
-cat >> "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
-	<div class="articleshead">
-		$NB_ArticlesListTitle
-	</div>
-EOF
 NB_ArticlesListTitleHTML=$(< "$ARTICLE_PLUGIN_OUTFILE")
 > "$ARTICLE_PLUGIN_OUTFILE"
 }
 
 add_articlelink(){
-	echo '<!--'$BLOGPAGE_TITLE'--><a href="'${BASE_URL}$ARTICLE_DIR/$article_link'">'$BLOGPAGE_TITLE'</a><br />' >> "$ARTICLE_PLUGIN_OUTFILE"
+	echo '<!--'$BLOGPAGE_TITLE'--><a href="'${BASE_URL}$ATCLSECTION_DIR/$article_link'">'$BLOGPAGE_TITLE'</a><br />' >> "$ARTICLE_PLUGIN_OUTFILE"
 	}
 
 create_article(){
-BLOGPAGE_SRCFILE="$BLOG_DIR/$ARTICLE_DIR/$article_srcfile"
-BLOGPAGE_OUTFILE="$BLOG_DIR/$ARTICLE_DIR/$article_file"
+BLOGPAGE_SRCFILE="$BLOG_DIR/$ATCLSECTION_DIR/$article_srcfile"
+BLOGPAGE_OUTFILE="$BLOG_DIR/$ATCLSECTION_DIR/$article_file"
 case "$NB_QUERY" in
 		all|article|article[a-z])
 			[ -z "$cat_num" ] && ! [[ "$NB_UPDATE" == *arch ]] && rm -f "$BLOGPAGE_OUTFILE"
@@ -92,20 +93,20 @@ case "$NB_QUERY" in
 esac
 if [ "$BLOGPAGE_SRCFILE" -nt "$BLOGPAGE_OUTFILE" ]; then
 	# set text formatting for page content
-	BLOGPAGE_FORMAT="$ARTICLE_FORMAT"
-	weblog_page "$BLOGPAGE_SRCFILE" "$ARTICLE_TEMPLATE" "$BLOGPAGE_OUTFILE"
+	BLOGPAGE_FORMAT="$ARTICLES_FORMAT"
+	weblog_page "$BLOGPAGE_SRCFILE" "$ARTICLES_TEMPLATE" "$BLOGPAGE_OUTFILE"
 fi
 }
 
 cycle_articles_for(){
 build_part="$1"
-build_list=`cd "$BLOG_DIR/$ARTICLE_DIR"; for articles in *.$ARTICLE_SUFFIX; do echo "$articles"; done`
-[ "$build_list" = "*.$ARTICLE_SUFFIX" ] && build_list=
+build_list=`cd "$BLOG_DIR/$ATCLSECTION_DIR"; for articles in *.$ARTICLES_SUFFIX; do echo "$articles"; done`
+[ "$build_list" = "*.$ARTICLES_SUFFIX" ] && build_list=
 article_lines=`echo "$build_list" |grep -n "." |cut -c1-2 |sed -e '/[\:\]/ s///g'`
 for line in ${article_lines[@]}; do
 	article_line=`echo "$build_list" |sed -n "$line"p`
 	article_srcfile=`echo "$article_line"`
-	if [ -f "$BLOG_DIR/$ARTICLE_DIR/$article_srcfile" ]; then
+	if [ -f "$BLOG_DIR/$ATCLSECTION_DIR/$article_srcfile" ]; then
 		set_articlelink "$article_srcfile"
 		BLOGPAGE_TITLE="$article_title"
 		"$build_part"
@@ -117,10 +118,10 @@ NB_ArticleLinks="$articles_nolist"
 > "$ARTICLE_PLUGIN_OUTFILE"
 set_articleconf
 for articles_pass in 1 2; do
-	for ARTICLE_DIR in ${ARTICLE_DIRS[@]}; do
-		if [ -d "$BLOG_DIR/$ARTICLE_DIR" ]; then
+	for ATCLSECTION_DIR in ${ARTICLES_DIR[@]}; do
+		if [ -d "$BLOG_DIR/$ATCLSECTION_DIR" ]; then
 			# load articles config file
-			ARTICLE_CONF="$BLOG_DIR/$ARTICLE_DIR/article.conf"
+			ARTICLE_CONF="$BLOG_DIR/$ATCLSECTION_DIR/article.conf"
 			if [ -f "$ARTICLE_CONF" ]; then
 				reset_articleconf
 				. "$ARTICLE_CONF"
@@ -128,7 +129,7 @@ for articles_pass in 1 2; do
 			if [ "$articles_pass" -lt 2 ]; then
 				addalist_name
 				cycle_articles_for add_articlelink
-				NB_ArticleLinksHTML=`$ARTICLE_FILTERCMD "$ARTICLE_PLUGIN_OUTFILE"`
+				NB_ArticleLinksHTML=`$ARTICLES_FILTERCMD "$ARTICLE_PLUGIN_OUTFILE"`
 				cat > "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
 					$NB_ArticlesListTitleHTML
 					<div class="articles">
@@ -137,7 +138,8 @@ for articles_pass in 1 2; do
 				EOF
 				NB_ArticleLinks=$(< "$ARTICLE_PLUGIN_OUTFILE")
 			else
-				[ -d "$BLOG_DIR/$ARTICLE_DIR" ] && nb_msg "$plugins_action $template_articles: $BLOG_DIR/$ARTICLE_DIR ..."
+				[ -d "$BLOG_DIR/$ATCLSECTION_DIR" ] &&
+					nb_msg "$plugins_action $template_articles: $BLOG_DIR/$ATCLSECTION_DIR ..."
 				cycle_articles_for create_article
 			fi
 		fi

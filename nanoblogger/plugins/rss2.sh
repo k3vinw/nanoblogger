@@ -179,7 +179,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 
 	# generate category feed entries
 	build_rss_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$RSS2_CATFEEDS" = 1; then
+	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$RSS2_CATFEEDS" = 1 ; then
 		db_categories=(${CAT_LIST[@]})
 		if [ ! -z "${db_categories[*]}" ]; then
 			for cat_db in ${db_categories[@]}; do

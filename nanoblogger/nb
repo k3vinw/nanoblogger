@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-18T01:15:35-04:00
+# Last modified: 2008-05-19T14:20:56-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -117,17 +117,17 @@ done
 PLUGIN_BASEFILE=
 # load user and main plugins in alpha-numeric order (0-9, A-z)
 for nb_plugin in ${plugin_scripts[@]}; do
-	#nb_msg "loading ..$nb_plugin ..."
+	#nb_msg "loading ../$nb_plugin ..."
 	# allow user plugins to override main plugins
-	nbpl_prefix=${nb_plugin%%\.sh}
+	nbpl_prefix=${nb_plugin%%.sh}
 	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
 	# ignore all plugins w/o .sh suffix and skip to next
-	elif [ -f "${USR_PLUGINSDIR}/${nbpl_prefix}"* ] && [ ! -f "${USR_PLUGINSDIR}/${nb_plugin}" ]; then
+	elif [ -f "${USR_PLUGINSDIR}/${nbpl_prefix}".* ] && [ ! -f "${USR_PLUGINSDIR}/${nb_plugin}" ]; then
 		break
 	elif [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
-	elif [ -f "${PLUGINS_DIR}/${nbpl_prefix}"* ] && [ ! -f "${PLUGINS_DIR}/${nb_plugin}" ]; then
+	elif [ -f "${PLUGINS_DIR}/${nbpl_prefix}".* ] && [ ! -f "${PLUGINS_DIR}/${nb_plugin}" ]; then
 		break
 	elif [ -f "${PLUGINS_DIR}/$nb_plugin" ]; then
 		. "${PLUGINS_DIR}/$nb_plugin"
