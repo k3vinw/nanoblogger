@@ -159,6 +159,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			if [ -f "$BLOG_DIR/$Enclosure_File" ]; then
 				Enclosure_Length=`du -b "$BLOG_DIR/$Enclosure_File" |sed -e '/[[:space:]].*$/ s///g'`
 				NB_RSS2EntryEnclosure='<enclosure url="'$BLOG_FEED_URL/$Enclosure_File'" length="'$Enclosure_Length'" type="'$Enclosure_Type'" />'
+			else
+				NB_RSS2EntryEnclosure=
 			fi
 		fi
 		cat >> "$SCRATCH_FILE".rss2feed <<-EOF

@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-05-18T01:15:44-04:00
+# Last modified: 2008-05-21T21:26:21-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -323,15 +323,26 @@ if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
 			$METADATA
 			$MVAR_CLOSE
 		EOF
-	else
-		if [ -f "$META_FILE" ]; then
+	elif [ -f "$META_FILE" ]; then
+		METAVAR_MATCH=`grep "^$1[\:][^*].*" "$META_FILE"`
+		# first, try replacing meta-tag, preserving structure
+		if [ ! -z "$METAVAR_MATCH" ]; then
+			METADATA_ALL=`sed -e '/^'$1'[^*].*/ s//'$1': \$NB_MetaOther/g' "$META_FILE"`
+			cat > "$META_FILE" <<-EOF
+				$METADATA_ALL
+			EOF
+			NB_MetaOther="$METADATA"
+			load_template "$META_FILE"
+			write_template > "$META_FILE"
+		else
+			# second, try stacking new/modified meta-tag on top, disregarding structure,
+			# while preserving data
 			META_OTHER=`sed -e '/^'$1'[\:]/d' "$META_FILE"`
+			cat > "$META_FILE" <<-EOF
+				$1: $METADATA
+				$META_OTHER
+			EOF
 		fi
-		# prepend modified or new single line vars
-		cat > "$META_FILE" <<-EOF
-			$1: $METADATA
-			$META_OTHER
-		EOF
 	fi
 fi
 }

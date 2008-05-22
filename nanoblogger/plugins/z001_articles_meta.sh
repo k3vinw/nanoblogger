@@ -60,7 +60,7 @@ NB_ArticlesListTitle=
 [ -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ] &&
 	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE 1`
 # let template_articles define root of articles directory until
-# alternate title is created, else create a header for the list
+# alternate title is created, else create a subtitle for the list
 if [ "$ATCLSECTION_DIR" != `echo "$ARTICLES_DIR" |cut -d" " -f 1` ] || [ ! -z "$NB_ArticlesListTitle" ]; then
 	if [ ! -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ]; then
 		basename "$BLOG_DIR/$ATCLSECTION_DIR" > "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE"
@@ -68,7 +68,7 @@ if [ "$ATCLSECTION_DIR" != `echo "$ARTICLES_DIR" |cut -d" " -f 1` ] || [ ! -z "$
 	fi
 	[ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ATCLSECTION_DIR"
 	cat >> "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
-		<div class="articlesheader">
+		<div class="articleshead">
 			$NB_ArticlesListTitle
 		</div>
 	EOF

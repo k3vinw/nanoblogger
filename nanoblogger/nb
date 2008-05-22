@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-19T14:20:56-04:00
+# Last modified: 2008-05-21T21:28:23-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -277,14 +277,16 @@ if [ -f "$NB_EditFile" ]; then
 	New_TimeStamp="$METADATA"
 fi
 New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
-# dump all data from imported file to entry's data file
-if [ -f "$IMPORT_FILE" ] && [ ! -f "$NB_EditFile" ]; then
-	cat "$IMPORT_FILE" > "$NB_DATA_DIR/$New_EntryFile"
-fi
 # dump all custom modications from edit file to new entry's data file
 [ -f "$NB_EditFile" ] &&
 	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
-# record new date onto entry's data file
+# create entry's data file from imported file
+if [ ! -z "$USR_ADDFILE" ] && [ -f "$IMPORT_FILE" ]; then
+	cat "$IMPORT_FILE" > "$NB_DATA_DIR/$New_EntryFile"
+	# save any user metadata along with imported file
+	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$New_EntryFile"
+fi
+# save date metadata to entry's data file
 [ -f "$NB_DATA_DIR/$New_EntryFile" ] &&
 	write_var DATE "$NB_EntryDate" "$NB_DATA_DIR/$New_EntryFile"
 # use specified timestamp as entry's new date
@@ -745,25 +747,6 @@ if [ -z "$NB_EntryTitle" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
 fi
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 [ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
-if [ -z "$NB_EntryBody" ]; then
-	nb_msg "$addweblog_editnew"
-	# new entry temp file for editing
-	NB_EditFile="$BLOG_DIR/nb_edit-newentry-`nb_timestamp`.$NB_DATATYPE"
-	# write any user metadata
-	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
-	# write current metadata to temp file and edit
-	write_entry "$NB_EditFile"; nb_edit -p "$NB_EditFile"
-	# preserve custom meta variable and data
-	read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
-	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
-	# validate metafile
-	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-		"$NB_EditFile"
-	# load all new entry metadata from temp file
-	if [ -f "$NB_EditFile" ]; then
-		load_metadata ALL "$NB_EditFile"
-	fi
-fi
 [ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 # prompt for description
 if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
@@ -773,6 +756,22 @@ if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
 fi
 # set a default entry format
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
+# create new temp file for prepping the entry's data file
+NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
+# save any user metadata to temp file
+write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"fi
+# save current metadata to temp file
+write_entry "$NB_EditFile"
+if [ -z "$NB_EntryBody" ]; then
+	nb_msg "$addweblog_editnew"
+	nb_edit -p "$NB_EditFile"
+	# preserve custom meta variable and data
+	read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
+	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
+	# validate metafile
+	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
+		"$NB_EditFile"
+fi
 # reload configuration and add new entry
 check_config
 add_entry

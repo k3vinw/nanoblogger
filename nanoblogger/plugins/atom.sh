@@ -166,6 +166,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			if [ -f "$BLOG_DIR/$Enclosure_File" ]; then
 				Enclosure_Length=`du -b "$BLOG_DIR/$Enclosure_File" |sed -e '/[[:space:]].*$/ s///g'`
 				Atom_EntryEnclosure='<link rel="enclosure" type="'$Enclosure_Type'" length="'$Enclosure_Length'" href="'$BLOG_FEED_URL/$Enclosure_File'" />'
+			else
+				Atom_EntryEnclosure=
 			fi
 		fi
 		cat >> "$SCRATCH_FILE".atomfeed <<-EOF
