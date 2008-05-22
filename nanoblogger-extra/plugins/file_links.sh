@@ -1,8 +1,11 @@
 # NanoBlogger File Links plugin
 
 # How it works:
-# Looks for files that match *.$FILELINK_SUFFIX in multiple directories
+# Looks for files that match *.$FILELINKS_SUFFIX in multiple directories
 # and automagically creates a nice index of links for them.
+# 
+# Useless? You decide.
+#
 # Reads alternate title for list from $FILELINKS_TITLE_FILE (1st line).
 # Adds links to NB_FileLinks.
 
@@ -17,17 +20,17 @@
 
 # space seperated list of sub-directories inside $BLOG_DIR, where files are located
 set_filelinksconf(){
-# e.g. FILELINK_DIRS="files stories poems long\ name\ with\ spaces"
-: ${FILELINK_DIRS:=downloads}
-: ${FILELINK_SUFFIX:=*}
-: ${FILELINK_TEMPLATE:=$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE}
-: ${FILELINK_FILTERCMD:=sort}
+# e.g. FILELINKS_DIR="files stories poems long\ name\ with\ spaces"
+: ${FILELINKS_DIR:=downloads}
+: ${FILELINKS_SUFFIX:=*}
+: ${FILELINKS_TEMPLATE:=$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE}
+: ${FILELINKS_FILTERCMD:=sort}
 : ${FILELINKS_TITLE_FILE=:.filelinks_title.txt}
 }
 
 # reset basic configs to allow for multiple filelinks.configs
 reset_filelinksconf(){
-FILELINK_SUFFIX=; FILELINK_TEMPLATE=
+FILELINKS_SUFFIX=; FILELINKS_TEMPLATE=
 set_filelinksconf
 }
 
@@ -54,15 +57,15 @@ create_filelinksindex(){
 MKPAGE_TITLE="$FILELINK_DIR"
 BLOGPAGE_SRCFILE="$SCRATCH_FILE.filelinks"
 BLOGPAGE_OUTFILE="$BLOG_DIR/$FILELINK_DIR/index.$NB_FILETYPE"
-weblog_page "$BLOGPAGE_SRCFILE" "$FILELINK_TEMPLATE" "$BLOGPAGE_OUTFILE"
+weblog_page "$BLOGPAGE_SRCFILE" "$FILELINKS_TEMPLATE" "$BLOGPAGE_OUTFILE"
 }
 
 cycle_filelinks_for(){
 build_part="$1"
 cd "$BLOG_DIR/$FILELINK_DIR"
 # small example for including hidden files
-# for filelink_srcfile in .$FILELINK_SUFFIX *.$FILELINK_SUFFIX; do
-for filelink_srcfile in *.$FILELINK_SUFFIX; do
+# for filelink_srcfile in .$FILELINKS_SUFFIX *.$FILELINKS_SUFFIX; do
+for filelink_srcfile in *.$FILELINKS_SUFFIX; do
 	if [ -f "$BLOG_DIR/$FILELINK_DIR/$filelink_srcfile" ] && [ "$filelink_srcfile" != "$NB_INDEX" ]; then
 		FILELINK_TITLE="$filelink_srcfile"
 		filelink="$filelink_srcfile"
@@ -75,7 +78,7 @@ done
 > "$FILELINK_PLUGIN_OUTFILE"
 set_filelinksconf
 for filelinks_pass in 1 2; do
-	for FILELINK_DIR in ${FILELINK_DIRS[@]}; do
+	for FILELINK_DIR in ${FILELINKS_DIR[@]}; do
 		if [ -d "$BLOG_DIR/$FILELINK_DIR" ]; then
 			# load filelinks config file
 			FILELINK_CONF="$BLOG_DIR/$FILELINK_DIR/filelinks.conf"
@@ -95,7 +98,7 @@ for filelinks_pass in 1 2; do
 				nb_msg "$plugins_action file links for $BLOG_DIR/$FILELINK_DIR ..."
 				set_baseurl "../"
 				cycle_filelinks_for add_filelink
-				NB_FileLinksHTML=`$FILELINK_FILTERCMD "$SCRATCH_FILE.filelinks"`
+				NB_FileLinksHTML=`$FILELINKS_FILTERCMD "$SCRATCH_FILE.filelinks"`
 				cat > "$SCRATCH_FILE.filelinks" <<-EOF
 					<div class="filelinks">
 						<ul>

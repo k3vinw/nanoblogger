@@ -9,7 +9,7 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_T
 
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
-ENTRY_EXCERPTS=0
+: ${ENTRY_EXCERPTS:=0}
 
 # limit number of items to include in feed
 : ${BLOG_FEED_ITEMS:=$FEED_ITEMS}
