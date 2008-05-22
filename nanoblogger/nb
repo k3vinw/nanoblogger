@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-21T21:46:56-04:00
+# Last modified: 2008-05-21T23:47:13-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -177,6 +177,8 @@ build_weblog(){
 		nb_msg "$buildweblog_all"
 		# confirm removal of any previously generated files
 		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
+		# use "--force" to rebuild databases
+		[ "$FORCE_UPDATE" = 1 ] && query_db rebuild
 		# use "--force" to clear cached data
 		for update_dir in "$ARCHIVES_DIR" "$PARTS_DIR"; do
 			[ ! -z "$update_dir" ] && [ -d "$BLOG_DIR/$update_dir" ] &&
@@ -759,7 +761,7 @@ fi
 # create new temp file for prepping the entry's data file
 NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
 # save any user metadata to temp file
-write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"fi
+write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 # save current metadata to temp file
 write_entry "$NB_EditFile"
 if [ -z "$NB_EntryBody" ]; then

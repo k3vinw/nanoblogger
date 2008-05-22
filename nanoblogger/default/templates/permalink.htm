@@ -34,14 +34,14 @@ $NB_RSSAltLink
 			<a href="${BASE_URL}$NB_INDEX">$template_main</a> &#62;
 			<a href="${BASE_URL}$ARCHIVES_DIR/$NB_INDEX">$template_archives</a> &#62;
 			<a href="${BASE_URL}$ARCHIVES_DIR/$year/$NB_INDEX">$year</a> &#62;
-			<!-- uncomment next line when month archives are enabled -->
-			<!-- <a href="${BASE_URL}$ARCHIVES_DIR/$year/$month/$NB_INDEX">$month</a> &#62; -->
+			<!-- comment out next line when month archives are disabled -->
+			<a href="${BASE_URL}$ARCHIVES_DIR/$year/$month/$NB_INDEX">$month</a> &#62;
 			<!-- uncomment next line when day archives are enabled -->
 			<!-- <a href="${BASE_URL}$ARCHIVES_DIR/$year/$month/$day/$NB_INDEX">$day</a> &#62; -->
 			<br />
 $([ ! -z "$prev_entry" ] && echo '<a href="'${ARCHIVES_PATH}$NB_PrevEntryPermalink'">'$NB_PrevPage'</a>')
-			<!-- comment out next line when month or day archives are enabled -->
-			$month/$day
+			<!-- uncomment next line when month or day archives are disabled -->
+			<!-- $month/$day -->
 			$entry_time
 $([ ! -z "$next_entry" ] && echo '<a href="'${ARCHIVES_PATH}$NB_NextEntryPermalink'">'$NB_NextPage'</a>')
 		</div>
