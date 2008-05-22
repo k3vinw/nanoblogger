@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-21T21:28:23-04:00
+# Last modified: 2008-05-21T21:46:56-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -281,7 +281,7 @@ New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
 [ -f "$NB_EditFile" ] &&
 	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
 # create entry's data file from imported file
-if [ ! -z "$USR_ADDFILE" ] && [ -f "$IMPORT_FILE" ]; then
+if [ ! -z "$IMPORT_FILE" ] || [ -f "$IMPORT_FILE" ]; then
 	cat "$IMPORT_FILE" > "$NB_DATA_DIR/$New_EntryFile"
 	# save any user metadata along with imported file
 	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$New_EntryFile"
