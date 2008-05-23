@@ -1276,9 +1276,11 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
     <p>Settings for plugins are stored and set in your weblog's blog.conf.</p>
 
-    <p><b>Configuring Syndication Plugins</b></p>
+    <h3>Configuring Syndication Plugins</h3>
 
-    <p>Syndicating your weblog is achieved through NanoBlogger's plugins. Please note, a complete and Internet accessible URL is required for proper syndication. This can be achieved by setting <em>BLOG_FEED_URL</em>. It is also wise to ensure a correct timezone setting for your syndication feeds. For this, please refer to <em>BLOG_TZD</em> in <a href="#s.5">Settings and Configuration</a>.</p>
+    <p>Syndicating your weblog is achieved through NanoBlogger's plugins. Please note, a complete and Internet accessible URL is required for proper syndication. This can be set using <em>BLOG_FEED_URL</em>. It is also wise to ensure a correct timezone setting for your syndication feeds. For this, please refer to <em>BLOG_TZD</em> in <a href="#s.5">Settings and Configuration</a>.</p>
+
+    <p><b>Setting the Web Address</b></p>
 
     <p><em>BLOG_FEED_URL</em> sets the URL for syndication feeds. Defaults to "$BLOG_URL", only if it's already set.</p>
 
@@ -1288,7 +1290,11 @@ BLOG_FEED_URL="http://www.example.com/johndoe/weblog"
 
 </pre>
 
+    <p><b>Setting the Time Zone</b></p>
+
     <p><em>BLOG_FEED_TZD</em> sets the timezone used for syndication feeds. Defaults to "$BLOG_TZD".</p>
+
+    <p><b>Setting the Lanuage</b></p>
 
     <p><em>BLOG_FEED_LANG</em> sets the language used in your syndication feeds.</p>
 
@@ -1298,13 +1304,17 @@ BLOG_FEED_LANG="en-us"
 
 </pre>
 
-    <p><em>ATOM_FEED_LANG</em> is required to set the language for Atom syndication feeds, since the language code differs from the RSS standard.</p>
+    <p><em>ATOM_FEED_LANG</em> sets the language for Atom syndication feeds.</p>
 
     <p>Example:</p>
     <pre>
 ATOM_FEED_LANG="en"
 
 </pre>
+
+    <p><span class="warning">NOTE</span>: The language code for Atom syndication feeds is different from the RSS standard.</p>
+
+    <p><b>Setting the Maximum Number of Items to Syndicate</b></p>
 
     <p><em>BLOG_FEED_ITEMS</em> sets the maximum number of entries to include in your syndication feeds, independent of <em>MAX_ENTRIES</em>. Defaults to "10". For exporting purposes you may want to set this to "-1" to include all the existing weblog's entries.</p>
 
@@ -1313,13 +1323,17 @@ ATOM_FEED_LANG="en"
 BLOG_FEED_ITEMS="10"
 </pre>
 
-    <p><em>BLOG_FEED_CSS</em> sets the stylesheet used for your syndication feeds (path should be relative).</p>
+    <p><b>Support for Style Sheets</b></p>
+
+    <p><em>BLOG_FEED_CSS</em> sets the style sheet used for your syndication feeds (path should be relative).</p>
 
     <p>Example:</p>
     <pre>
 BLOG_FEED_CSS="styles/feed.css"
 
 </pre>
+
+    <p><b>Support for Icons &amp; Logos</b></p>
 
     <p><em>BLOG_FEED_ICON</em> sets an icon for your syndication feeds (path should be relative).</p>
 
@@ -1339,7 +1353,7 @@ BLOG_FEED_LOGO="images/feedlogo.png"
 
     <p><span class="warning">NOTE</span>: In the RSS 2.0 syndication plugin, the logo will be used when the icon is not set.</p>
 
-    <p><b>Enabling Syndication Support for Categories</b></p>
+    <p><b>Support for Syndicated Categories</b></p>
 
     <p>There are three ways to enable per-category syndication feeds:</p>
 
@@ -1351,7 +1365,7 @@ BLOG_FEED_LOGO="images/feedlogo.png"
       <li><em>RSS2_CATFEEDS</em> toggles per-category RSS 2.0 syndication. Defaults to "0" - disabled.</li>
     </ol>
 
-    <p><b>Creating Podcasts</b></p>
+    <p><b>Support for Creating Podcasts</b></p>
 
     <p>There's a special meta-tag called, ENCLOSURE which is used to set an entry's enclosure data for each entry. The ENCLOSURE meta-tag should contain two different sets of data separated by a single space. The local media file and the media type (e.g. audio/mpeg).</p>
 
@@ -1363,7 +1377,7 @@ ENCLOSURE: mp3s/mypodcast.mp3 audio/mpeg
 
     <p>The media file should be from a relative path which can be found from within <em>$BLOG_DIR</em>. The system command "du -b" is required to acquire the media file's length to complete the enclosure data. The "du" command should be included on most systems where Bash is supported, but there's no guarantee the syntax will be the same. Auto-detecting the media type is not supported, it must be determined and set manually. Enclosures are supported for both the Atom and RSS2 syndication plugins.</p>
 
-    <p><b>Configuring Syntax Checking and Reformatting</b></p>
+    <h3>Syntax Checking &amp; Reformatting</h3>
 
     <p>The Tidy plugin provides syntax checking and reformatting. These kind of tools can be both your friend and your enemy, meaning they can sometimes hide (fix) your mistakes too well. A log is kept in your weblog's directory, so you can review any errors or changes recorded by Tidy.</p>
 
