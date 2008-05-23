@@ -12,6 +12,8 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TI
 # (excerpts plugin must be enabled to work)
 : ${ENTRY_EXCERPTS:=0}
 
+# set timezone used for feed
+: ${BLOG_FEED_TZD:=$BLOG_TZD}
 # limit number of items to include in feed
 # backwards support for deprecated FEED_ITEMS
 : ${BLOG_FEED_ITEMS:=$FEED_ITEMS}
@@ -32,7 +34,7 @@ NB_AtomVer="1.0"
 # atom feed unique id (should be IRI as defined by RFC3987)
 NB_AtomID="$BLOG_FEED_URL/"
 
-NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
+NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_FEED_TZD}"`
 
 # set link to the archives
 NB_AtomArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
@@ -126,9 +128,9 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
 		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
-		Atom_EntryDate=`echo "$Atom_EntryTime${BLOG_TZD}"`
+		Atom_EntryDate=`echo "$Atom_EntryTime${BLOG_FEED_TZD}"`
 		# non-portable find command!
-		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_TZD}"`
+		#Atom_EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_FEED_TZD}"`
 		Atom_EntryModDate="$Atom_EntryDate"
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`

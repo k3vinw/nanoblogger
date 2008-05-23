@@ -12,6 +12,8 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TI
 # (excerpts plugin must be enabled to work)
 : ${ENTRY_EXCERPTS:=0}
 
+# set timezone used for feed
+: ${BLOG_FEED_TZD:=$BLOG_TZD}
 # limit number of items to include in feed
 # backwards support for deprecated FEED_ITEMS
 : ${BLOG_FEED_ITEMS:=$FEED_ITEMS}
@@ -30,7 +32,7 @@ NB_RSS2File="rss.$NB_SYND_FILETYPE"
 # rss version
 NB_RSS2Ver="2.0"
 
-NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
+NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_FEED_TZD}"`
 
 # set link to archives
 NB_RSS2ArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
@@ -168,7 +170,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 				<link>${NB_RSS2ArchivesPath}$NB_EntryPermalink</link>
 				<guid isPermaLink="true">${NB_RSS2ArchivesPath}$NB_EntryPermalink</guid>
 				<title>$NB_RSS2EntryTitle</title>
-				<dc:date>$NB_RSS2EntryTime${BLOG_TZD}</dc:date>
+				<dc:date>$NB_RSS2EntryTime${BLOG_FEED_TZD}</dc:date>
 				<dc:creator>$NB_RSS2EntryAuthor</dc:creator>
 				$NB_RSS2EntrySubject
 				<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>

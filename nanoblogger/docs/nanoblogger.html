@@ -468,7 +468,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Changing the Default Query Mode</b></p>
 
-    <p><em>QUERY_MODE</em> specifies the default query mode for listing and managing entries. It also controls how they are displayed on the main page. Defaults to "$MAX_ENTRIES".</p>
+    <p><em>QUERY_MODE</em> specifies the default query mode for listing and managing entries. It also affects entries displayed on the main page. Defaults to "$MAX_ENTRIES", but can be just about any valid query. See the "query" action.</p>
 
     <p><b>Links Configuration</b></p>
 
@@ -1288,6 +1288,8 @@ BLOG_FEED_URL="http://www.example.com/johndoe/weblog"
 
 </pre>
 
+    <p><em>BLOG_FEED_TZD</em> sets the timezone used for syndication feeds. Defaults to "$BLOG_TZD".</p>
+
     <p><em>BLOG_FEED_LANG</em> sets the language used in your syndication feeds.</p>
 
     <p>Example:</p>
@@ -1296,7 +1298,7 @@ BLOG_FEED_LANG="en-us"
 
 </pre>
 
-    <p><em>ATOM_FEED_LANG</em> is required to set the language for Atom syndication feeds, since the format differs from RSS.</p>
+    <p><em>ATOM_FEED_LANG</em> is required to set the language for Atom syndication feeds, since the language code differs from the RSS standard.</p>
 
     <p>Example:</p>
     <pre>
@@ -1304,7 +1306,7 @@ ATOM_FEED_LANG="en"
 
 </pre>
 
-    <p><em>BLOG_FEED_ITEMS</em> sets the maximum number of entries to include in your syndication feeds. Defaults to "10". For exporting purposes you may want to increase this to the maximum number of entries found in your weblog.</p>
+    <p><em>BLOG_FEED_ITEMS</em> sets the maximum number of entries to include in your syndication feeds, independent of <em>MAX_ENTRIES</em>. Defaults to "10". For exporting purposes you may want to set this to "-1" to include all the existing weblog's entries.</p>
 
     <p>Example:</p>
     <pre>
