@@ -7,6 +7,8 @@ FEEDMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Move_EntryFile$USR_T
 [ ! -z "$BLOG_URL" ] &&
 	: ${BLOG_FEED_URL:=$BLOG_URL}
 
+# set timezone used for feed
+: ${BLOG_FEED_TZD:=$BLOG_TZD}
 # use entry excerpts from entry excerpts plugin
 # (excerpts plugin must be enabled to work)
 : ${ENTRY_EXCERPTS:=0}
@@ -23,7 +25,7 @@ NB_RSSFile="index.$NB_SYND_FILETYPE"
 # rss feed version
 NB_RSSVer="1.0"
 
-NB_RSSModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_TZD}"`
+NB_RSSModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_FEED_TZD}"`
 
 # set link to archives
 NB_RSSArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
@@ -110,7 +112,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		set_entrylink "$entry"
 		echo '<rdf:li rdf:resource="'${NB_RSSArchivesPath}$NB_EntryPermalink'" />' >> "$RSS_SEQFILE"
 		# non-portable find command!
-		#NB_RSSEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_TZD}"`
+		#NB_RSSEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_FEED_TZD}"`
 		NB_RSSEntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSSEntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSSEntrySubject=; cat_title=; oldcat_title=
@@ -139,7 +141,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			<item rdf:about="${NB_RSSArchivesPath}$NB_EntryPermalink">
 				<link>${NB_RSSArchivesPath}$NB_EntryPermalink</link>
 				<title>$NB_RSSEntryTitle</title>
-				<dc:date>$NB_RSSEntryTime${BLOG_TZD}</dc:date>
+				<dc:date>$NB_RSSEntryTime${BLOG_FEED_TZD}</dc:date>
 				<dc:creator>$NB_RSSEntryAuthor</dc:creator>
 				$NB_RSSEntrySubject
 				<description><![CDATA[$NB_RSSEntryExcerpt]]></description>
