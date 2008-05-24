@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-23T20:24:23-04:00
+# Last modified: 2008-05-24T03:06:14-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -28,9 +28,16 @@ NB_LIB_DIR="${NB_BASE_DIR}/lib"
 . ${NB_LIB_DIR}/archive.sh
 # --
 
+load_lang(){
+for lang_def in ${NB_LANG_DIR}/${NB_LANG}/*.lang; do
+	. "$lang_def"
+done
+}
+
 # ensure a sane configuration - do or die!
 check_config(){
 load_config
+load_lang
 [ ! -d "$NB_BASE_DIR" ] &&
 	die "`basename $0`: '$NB_BASE_DIR' - $checkconf_nobase."
 [ -z "$BLOG_DIR" ] && die "$checkconf_noblog"
@@ -51,6 +58,19 @@ NB_TEMP_FILES="$NB_TEMP_DIR/nb_entry$$.* $SCRATCH_FILE*"
 trap "rm -fr $NB_TEMP_FILES; exit" 0 1 2 3 15
 # activate custom file creation mask
 [ ! -z "$NB_UMASK" ] && umask $NB_UMASK
+}
+
+# edit $BLOG_CONF
+config_weblog(){
+PREV_CHRONORDER="$CHRON_ORDER"
+nb_edit "$BLOG_CONF"
+# check if file's been modified since opened
+[ ! -N "$BLOG_CONF" ] && die "$configweblog_nomod"
+deconfig; load_config
+# set flag to resort databases if chronological order has changed
+# NOTE: rendered ineffective outside configure action
+[ "$PREV_CHRONORDER" != "$CHRON_ORDER" ] &&
+	RESORT_DATABASE=1
 }
 
 # load specified plugins (defaults to all) from $PLUGINS_DIR
@@ -797,10 +817,6 @@ EOF
 
 # load global config
 load_globals
-# load all language definitions
-for lang_def in ${NB_LANG_DIR}/${NB_LANG}/*.lang; do
-	. "$lang_def"
-done
 
 [ $# -lt 1 ] && show_help
 check_arg(){

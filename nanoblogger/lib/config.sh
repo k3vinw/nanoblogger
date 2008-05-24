@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-05-24T02:29:44-04:00
+# Last modified: 2008-05-24T02:56:50-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -89,6 +89,8 @@ x_id="$BLOG_ENTRYID_TAG"
 [ -z "$NB_BROWSER" ] && [ ! -z "$BROWSER" ] &&
 	NB_BROWSER="$BROWSER"
 : ${NB_BROWSER:=lynx}
+# export NB_BROWSER for the benefit of other components
+export NB_BROWSER
 # smart defaults for date locale
 if [ -n "$LC_ALL" ]; then
 	: ${DATE_LOCALE:=$LC_ALL}
@@ -101,7 +103,7 @@ fi
 : ${DATE_CMD:=date}
 # default data file date format
 : ${DB_DATEFORMAT:="%Y-%m-%dT%H_%M_%S"}
-# default to $EDITOR then vi for editor
+# default to $EDITOR first then vi
 [ -z "$NB_EDITOR" ] && [ ! -z "$EDITOR" ] &&
 	NB_EDITOR="$EDITOR"
 : ${NB_EDITOR:=vi}
@@ -203,18 +205,5 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; PARTS_DIR=; BLOG_AUTHOR=; PLUGINS_DIR=; \
 	MAX_CACHE_ENTRIES=; SORT_ARGS=; SHOW_INDEXFILE=; CHRON_ORDER=; \
 	USR_PLUGINSDIR=; SHOW_CATLINKS=; CATEGORY_FEEDS=; FRIENDLY_LINKS=; \
 	MAX_TITLEWIDTH=; BLOG_FEED_LANG=; BLOG_FEED_LOGO=
-}
-
-# edit $BLOG_CONF
-config_weblog(){
-PREV_CHRONORDER="$CHRON_ORDER"
-nb_edit "$BLOG_CONF"
-# check if file's been modified since opened
-[ ! -N "$BLOG_CONF" ] && die "$configweblog_nomod"
-deconfig; load_config
-# set flag to resort databases if chronological order has changed
-# NOTE: rendered ineffective outside configure action
-[ "$PREV_CHRONORDER" != "$CHRON_ORDER" ] &&
-	RESORT_DATABASE=1
 }
 
