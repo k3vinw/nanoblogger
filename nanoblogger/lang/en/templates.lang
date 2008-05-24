@@ -25,7 +25,7 @@ template_rentries="Recent entries"
 template_syndicate="Syndicate"
 template_syndicate_main="Site"
 template_status="Weblog status"
-template_powered="powered by $EDITOR, bash, cat, grep, sed, and"
+template_powered="powered by $NB_EDITOR, bash, cat, grep, sed, and"
 articles_nolist="0"
 categories_nolist="0"
 
