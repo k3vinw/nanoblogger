@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-21T23:47:13-04:00
+# Last modified: 2008-05-23T20:24:23-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -734,28 +734,29 @@ fi
 # add new entry from metafile
 if [ ! -z "$USR_ADDFILE" ]; then
 	import_file "$USR_ADDFILE"
+else
+	# read user specified attributes for entry (interactively)
+	if [ -z "$USR_AUTHOR" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
+		echo "$addweblog_author [$BLOG_AUTHOR]"
+		read -p "$NB_PROMPT" NB_EntryAuthor
+	fi
+	if [ -z "$USR_TITLE" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
+		echo "$addweblog_title"
+		read -p "$NB_PROMPT" NB_EntryTitle
+	fi
+	[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
+	[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
+	# prompt for description interactively
+	if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
+		[ "$BLOG_INTERACTIVE" = 1 ]; then
+			echo "$addweblog_desc"
+			read -p "$NB_PROMPT" NB_EntryDescription
+	fi
 fi
-# read user specified attributes for entry (interactively)
 [ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
 [ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
-if [ -z "$NB_EntryAuthor" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-	echo "$addweblog_author [$BLOG_AUTHOR]"
-	read -p "$NB_PROMPT" NB_EntryAuthor
-fi
 [ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
-if [ -z "$NB_EntryTitle" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-	echo "$addweblog_title"
-	read -p "$NB_PROMPT" NB_EntryTitle
-fi
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
-[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
-# prompt for description
-if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
-	[ "$BLOG_INTERACTIVE" = 1 ]; then
-		echo "$addweblog_desc"
-		read -p "$NB_PROMPT" NB_EntryDescription
-fi
 # set a default entry format
 [ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 # create new temp file for prepping the entry's data file
