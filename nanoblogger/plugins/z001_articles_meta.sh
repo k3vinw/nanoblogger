@@ -59,7 +59,7 @@ NB_ArticlesListTitle=
 # Reads alternate title for list from $ARTICLES_TITLE_FILE (1st line).
 [ -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ] &&
 	NB_ArticlesListTitle=`nb_print $BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE 1`
-# let template_articles define root of articles directory until
+# let ARTCLSECTION_DIR define root of articles directory until
 # alternate title is created, else create a subtitle for the list
 if [ "$ATCLSECTION_DIR" != `echo "$ARTICLES_DIR" |cut -d" " -f 1` ] || [ ! -z "$NB_ArticlesListTitle" ]; then
 	if [ ! -f "$BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE" ]; then
@@ -139,7 +139,7 @@ for articles_pass in 1 2; do
 				NB_ArticleLinks=$(< "$ARTICLE_PLUGIN_OUTFILE")
 			else
 				[ -d "$BLOG_DIR/$ATCLSECTION_DIR" ] &&
-					nb_msg "$plugins_action $template_articles: $BLOG_DIR/$ATCLSECTION_DIR ..."
+					nb_msg "$plugins_action $plugins_articles: $BLOG_DIR/$ATCLSECTION_DIR ..."
 				cycle_articles_for create_article
 			fi
 		fi

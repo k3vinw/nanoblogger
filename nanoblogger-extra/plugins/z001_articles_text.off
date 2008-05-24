@@ -58,7 +58,7 @@ NB_ArticlesListTitle=
 	NB_ArticlesListTitle=`sed 1q $BLOG_DIR/$ATCLSECTION_DIR/$ARTICLES_TITLE_FILE`
 [ -z "$NB_ArticlesListTitle" ] && NB_ArticlesListTitle="$ATCLSECTION_DIR"
 # fallback to our language definition for list's title
-[ ! -z "$template_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
+[ ! -z "$templates_articles" ] && [ -z "$NB_ArticlesListTitle" ] &&
 	NB_ArticlesListTitle="$template_articles"
 cat >> "$ARTICLE_PLUGIN_OUTFILE" <<-EOF
 	<div class="sidetitle">
@@ -126,7 +126,7 @@ for articles_pass in 1 2; do
 				EOF
 				NB_ArticleLinks=$(< "$ARTICLE_PLUGIN_OUTFILE")
 			else
-				[ -d "$BLOG_DIR/$ATCLSECTION_DIR" ] && nb_msg "$plugins_action articles - '$BLOG_DIR/$ATCLSECTION_DIR' ..."
+				[ -d "$BLOG_DIR/$ATCLSECTION_DIR" ] && nb_msg "$plugins_action $plugins_articles: $BLOG_DIR/$ATCLSECTION_DIR ..."
 				cycle_articles_for create_article
 			fi
 		fi

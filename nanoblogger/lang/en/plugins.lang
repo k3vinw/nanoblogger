@@ -6,4 +6,5 @@
 plugins_action="generating"
 plugins_loadaction="loading ..."
 plugins_entryfilteraction="filtering text:"
+plugins_articles="articles"
 
