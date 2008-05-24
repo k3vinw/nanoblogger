@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-05-16T02:45:47-04:00
+# Last modified: 2008-05-24T02:29:44-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -105,6 +105,8 @@ fi
 [ -z "$NB_EDITOR" ] && [ ! -z "$EDITOR" ] &&
 	NB_EDITOR="$EDITOR"
 : ${NB_EDITOR:=vi}
+# export NB_EDITOR for the benefit of other components
+export NB_EDITOR
 # default file creation mask
 [ -z "$NB_UMASK" ] && NB_UMASK=`umask`
 # default to txt for datatype suffix
