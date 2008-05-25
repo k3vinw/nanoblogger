@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-24T03:06:14-04:00
+# Last modified: 2008-05-25T00:56:44-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -28,9 +28,12 @@ NB_LIB_DIR="${NB_BASE_DIR}/lib"
 . ${NB_LIB_DIR}/archive.sh
 # --
 
+# load specified or default language
 load_lang(){
-for lang_def in ${NB_LANG_DIR}/${NB_LANG}/*.lang; do
-	. "$lang_def"
+LOADLANG_DIR="$1"
+[ -z "$1" ] && LOADLANG_DIR="$NB_LANG"
+for lang_file in ${NB_LANG_DIR}/${LOADLANG_DIR}/*.lang; do
+	. "$lang_file"
 done
 }
 
@@ -815,8 +818,9 @@ sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /^[\#]/d
 EOF
 }
 
-# load global config
+# load minimal configuration data required to operate
 load_globals
+load_lang
 
 [ $# -lt 1 ] && show_help
 check_arg(){
