@@ -1,5 +1,8 @@
 # NanoBlogger Plugin that creates a master archive index
 
+# command used to filter order of category links
+: ${CATLINKS_FILTERCMD:=sort}
+
 # concatenate modification variables
 MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Move_EntryFile$USR_TITLE"
 
