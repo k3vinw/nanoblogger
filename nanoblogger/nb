@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-25T00:56:44-04:00
+# Last modified: 2008-05-27T00:24:14-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -118,7 +118,12 @@ plugin_scripts=()
 for plugin_path in $PLUGINSDIR_LIST; do
 	# break out of loop on bogus plugin path with last error value
 	[ ! -d "$plugin_path" ] && return
-	# were plugin names specified?
+	# add single plugin specified to load then drop out of loop
+	if [ ! -z "$PLUGIN_BASEFILE" ]; then
+		add_plugin_script "$plugin_path/$PLUGIN_BASEFILE"
+		break
+	fi
+	# was more than one plugin name defined?
 	PLUGINLIST_DEFINED=`echo "${PLUGINS_LIST[*]}" |grep -c '.[ ].'`
 	if [ "$PLUGINLIST_DEFINED" != 0 ] ; then
 		# yes, so we add them in order specified (removing any commas)
@@ -127,14 +132,10 @@ for plugin_path in $PLUGINSDIR_LIST; do
 			add_plugin_script "$nb_plugin"
 		done
 	else
-		# no specified plugins, so get them all
+		# no plugins specified, so get them all
 		for nb_plugin in "$plugin_path"/*.sh ; do
 			add_plugin_script "$nb_plugin"
 		done
-	fi
-	# or just add individual plugin
-	if [ ! -z "$PLUGIN_BASEFILE" ]; then
-		add_plugin_script "$plugin_path/$PLUGIN_BASEDIR/$PLUGIN_BASEFILE"
 	fi
 done
 PLUGIN_BASEFILE=
@@ -143,14 +144,16 @@ for nb_plugin in ${plugin_scripts[@]}; do
 	#nb_msg "loading ../$nb_plugin ..."
 	# allow user plugins to override main plugins
 	nbpl_prefix=${nb_plugin%%.sh}
+	nbpl_glob=`echo "${PLUGINS_DIR}/${nbpl_prefix}".*`
+	nbupl_glob=`echo "${USR_PLUGINSDIR}/${nbpl_prefix}".*`
 	if [ -f "${PLUGINS_DIR}/$nb_plugin" ] && [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
-	# ignore all plugins w/o .sh suffix and skip to next
-	elif [ -f "${USR_PLUGINSDIR}/${nbpl_prefix}".* ] && [ ! -f "${USR_PLUGINSDIR}/${nb_plugin}" ]; then
+	# ignore all plugins w/o .sh suffix skipping to next in list
+	elif [ -f "$nbupl_glob" ] && [ ! -f "${USR_PLUGINSDIR}/${nb_plugin}" ]; then
 		break
 	elif [ -f "${USR_PLUGINSDIR}/$nb_plugin" ]; then
 		. "${USR_PLUGINSDIR}/$nb_plugin"
-	elif [ -f "${PLUGINS_DIR}/${nbpl_prefix}".* ] && [ ! -f "${PLUGINS_DIR}/${nb_plugin}" ]; then
+	elif [ -f "$nbpl_glob" ] && [ ! -f "${PLUGINS_DIR}/${nb_plugin}" ]; then
 		break
 	elif [ -f "${PLUGINS_DIR}/$nb_plugin" ]; then
 		. "${PLUGINS_DIR}/$nb_plugin"

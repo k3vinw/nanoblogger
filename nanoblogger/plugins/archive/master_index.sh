@@ -2,6 +2,9 @@
 # in conjunction with the yearly archive indexes created
 # by archive/year/year_index.sh plugin
 
+# command used to filter order of category links
+: ${CATLINKS_FILTERCMD:=sort}
+
 # concatenate modification variables
 MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Cat_EntryFile$USR_TITLE"
 MASTERIMOD_QUERY=`echo "$NB_QUERY" |grep "^[0-9].*"`
