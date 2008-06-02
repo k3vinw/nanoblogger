@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-30T09:33:18-04:00
+# Last modified: 2008-06-02T14:00:51-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -30,11 +30,22 @@ NB_LIB_DIR="${NB_BASE_DIR}/lib"
 
 # load specified or default language
 load_lang(){
-LOADLANG_DIR="$1"
-[ -z "$1" ] && LOADLANG_DIR="$NB_LANG"
-for lang_file in ${NB_LANG_DIR}/${LOADLANG_DIR}/*.lang; do
+LOADLANG_CODE="$1"
+[ -z "$1" ] && LOADLANG_CODE="$NB_LANG"
+# always fallback to english
+if [ ! -d "${NB_LANG_DIR}/${LOADLANG_CODE}" ]; then
+	LOADLANG_CODE=en; NB_LANG=en
+fi
+for lang_file in ${NB_LANG_DIR}/${LOADLANG_CODE}/*.lang; do
 	. "$lang_file"
 done
+# configure language for docs
+if [ -f "$NB_DOC_DIR/nanoblogger_$LOADLANG_CODE.html" ]; then
+	NB_DOC_FILE="$NB_DOC_DIR/nanoblogger_$LOADLANG_CODE.html"
+elif [ "$LOADLANG_CODE" = en ]; then
+		# allow for non-existant nanoblogger_en.html
+		NB_DOC_FILE="$NB_DOC_DIR/nanoblogger.html"
+fi
 }
 
 # ensure a sane configuration - do or die!
@@ -851,7 +862,7 @@ while [ $# -gt 0 ]; do
 		make-page)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
-		manual)			load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"; exit 0;;
+		manual)			load_config; load_lang; nb_browser "$NB_DOC_FILE"; exit 0;;
 		tag|-c)			check_arg "$2"; cat_num="$2"; shift;;
 		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
 		tag-list) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
