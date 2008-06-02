@@ -5,6 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
+
+  <meta name="generator" content="HTML Tidy for MkLinux (vers 6 November 2007), see www.w3.org" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   <title>Manuel utilisateur NanoBlogger</title><style type="text/css">
@@ -108,7 +110,7 @@ li {
     <h2>by <a href="mailto:n1xt3r{-at-symbol-}fastmail.fm">n1xt3r</a> (Kevin Wood) </h2>
 
 <h2>Traduit par <a  href="mailto:deber@users.sourceforge.net">Denis Bernard</a>  </h2>
-    <p><em>Le guide officiel du moteur de blog NanoBlogger<br/>Traduction de nanoblogger.html (du 14 janvier 2008, SVN 508)</em></p>
+    <p><em>Le guide officiel du moteur de blog NanoBlogger<br/>Traduction de nanoblogger.html (du 27 mai 2008, SVN 552)</em></p>
  </div>
 
   <div id="toc">
@@ -148,7 +150,7 @@ li {
       <tr>
         <td>6.</td>
 
-        <td><a href="#s.6">Gestion des entrées et catégories (Tags)</a></td>
+        <td><a href="#s.6">Gestion des entrées et tags (catégories)</a></td>
       </tr>
 
       <tr>
@@ -166,38 +168,42 @@ li {
       <tr>
         <td>9.</td>
 
-        <td><a href="#s.9">Écriture des plugins</a></td>
+        <td><a href="#s.9">Configuration des plugins</a></td>
       </tr>
 
       <tr>
         <td>10.</td>
 
-        <td><a href="#s.10">Publication</a></td>
+        <td><a href="#s.10">Écriture des plugins</a></td>
       </tr>
 
       <tr>
         <td>11.</td>
 
-        <td><a href="#s.11">Ajout du support des commentaires</a></td>
+        <td><a href="#s.11">Publication</a></td>
       </tr>
 
       <tr>
         <td>12.</td>
 
-        <td><a href="#s.12">Importation des entrées</a></td>
+        <td><a href="#s.12">Ajout du support des commentaires</a></td>
       </tr>
 
       <tr>
         <td>13.</td>
 
-        <td><a href="#s.13">Trucs et astuces </a></td>
+        <td><a href="#s.13">Importation des entrées</a></td>
       </tr>
 
       <tr>
         <td>14.</td>
 
-        <td><a href="#s.14">Crédits</a></td>
+        <td><a href="#s.14">Trucs et astuces</a></td>
       </tr>
+       <tr>
+       <td>15.</td>
+         <td><a href="#s.15">Crédits</a></td>
+       </tr>	
     </table>
   </div>
 
@@ -209,9 +215,7 @@ NanoBlogger est un petit moteur de blog écrit en Bash pour la commande en ligne
   <div id="synopsis">
     <p><b>Synopsis</b></p>
     <pre>
- 
-nb [<span class="underline">-b blog_drep</span>] [<span class="underline">options</span>]
-        
+nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>] &lt;<span class="underline">actions</span>&gt;
 </pre>
 
     <h2><a id="s.2" name="s.2">2. Fonctionnalités</a></h2>
@@ -265,7 +269,7 @@ nb [<span class="underline">-b blog_drep</span>] [<span class="underline">option
     </ul>
   </div>
 
-  <h2><a id="s.3" name="s.3">3. Dépendances</a></h2><p>Programmes:</p>
+  <h2><a id="s.3" name="s.3">3. Dépendances</a></h2><p>Programmes :</p>
 
   <p>Bash (au moins v2.05), cat, cp, cut, dirname, date*, grep, mkdir, mv, rm, sed, sort</p>
 
@@ -320,11 +324,11 @@ DATE_LOCALE="$LANG"
 DATE_ARGS="-u"   
 </pre>
 
-    <p><b>Définir le fuseau horaire des flux de syndication</b></p>
+    <p><b>Définir le fuseau horaire</b></p>
 
-    <p><em>BLOG_TZD</em> détermine le fuseau horaire des flux de syndication de votre blog. Par défaut, c'est fait automatiquement en utilisant <code>"%z"</code>, une extension hors standard de la commande date. Si la commande "date" de votre système ne la supporte pas, vous aurez à le spécifier.
+    <p><em>BLOG_TZD</em> détermine le fuseau horaire des entrées de votre blog. Par défaut, c'est fait automatiquement en utilisant <code>"%z"</code>, une extension hors standard de la commande date. Si la commande "date" de votre système ne la supporte pas, vous aurez à le spécifier.
       </p>
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
 BLOG_TZD="-0:500"
    
@@ -333,7 +337,7 @@ BLOG_TZD="-0:500"
     <p><b>Définir l'encodage</b></p>
     <p><em>BLOG_CHARSET</em> mentionne le type d'encodage des caractères à employer pour votre blog.</p>
 
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
 BLOG_CHARSET="iso-8859-1"
 
@@ -344,7 +348,7 @@ BLOG_CHARSET="iso-8859-1"
     <p><b>Définir le type mime</b></p>
     <p><em>BLOG_MIMETYPE</em> donne le type mime à être employé pour votre blog.</p>
 
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
 BLOG_MIMETYPE="text/html"
    
@@ -352,9 +356,9 @@ BLOG_MIMETYPE="text/html"
 
     <p><b>Définir l'adresse Web</b></p>
 
-    <p><em>BLOG_URL</em> devrait être rempli en mettant l'URL complète du blog, à l'exclusion du fichier d'entrée et le "/"  le précédent. Cette disposition est obligatoire pour les liens en chemin absolu et les flux de syndication.</p>
+    <p><em>BLOG_URL</em> devrait être mis comme étant l'URL complète du blog, en excluant le fichier index et "/"  le précédent. </p>
 
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
 BLOG_URL="http://mon-site.com/blog"
    
@@ -364,9 +368,9 @@ BLOG_URL="http://mon-site.com/blog"
 
     <p><em>BLOG_CSS</em> indique la feuille de style à être appelée pour votre blog. Les feuilles de style sont placées dans le répertoire <em>styles</em>.</p>
 
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
-BLOG_CSS="styles/nb_rusted.css"
+ BLOG_CSS="styles/nb_clean.css"
 </pre>
 
 
@@ -374,7 +378,7 @@ BLOG_CSS="styles/nb_rusted.css"
 
     <p><em>BLOG_ICON</em> indique le favicon à être appelé par votre blog. Les favicons sont placés dans le répertoire <em>images</em>.</p>
 
-    <p>Exemple:</p>
+    <p>Exemple :</p>
     <pre>
 BLOG_ICON="images/favicon.ico"
 </pre>
@@ -405,26 +409,29 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>ENTRY_FORMAT</em> spécifie le format de texte par défaut pour une entrée. Par défaut : "raw".</p>
 
-    <p><b>Activer l'indexation des archives des entrées</b></p>
-
-    <p>Mettre <em>ENTRY_ARCHIVES</em> égal à "1", active l'indexation des archives des entrées et reconfigure les liens des entrées pour pointer directement vers leur propre page d'archive. A noter que ça augmente le temps de compilation puisque plus de pages doivent être construites.
-      </p>
-
-    <p><b>Préférences spéciales pour l'archivage par catégories</b></p>
-
-    <p><em>CATARCH_DATATYPE</em> détermine le jeu des données prises en compte pour le classement des archives par catégorie. Deux types d'options peuvent être spécifiées : "ALL" or "NOBODY".</p>
+   <p><b>Activer la création des archives des entrées</b></p>
+<p>Mettre <em>ENTRY_ARCHIVES</em> égal à "1", active la création des archives des entrées et reconfigure les liens des entrées pointant vers leurs propre page d'archive.</p>
+<p><b>Activer la création des archives mensuelles</b></p>
+<p>Mettre <em>MONTH_ARCHIVES</em> égal à "1", active la création des archives mensuelles.</p>
+<p><b>Activer la création d'archives quotidiennes</b></p>
+<p>Mettre <em>DAY_ARCHIVES</em> égal à "1", activer la création d'archives quotidiennes et reconfigure les leins des entrées pointant vers leur propre page d'archive quand <em>$ENTRY_ARCHIVES</em> n'est pas activé.</p>
+ <p><b>Préférences d'archivage spéciales</b></p>
+<p><em>CATARCH_DATATYPE</em> détermine le jeu de métadonnées à charger pour la catégorie des archives.</p>
+<p><em>MONTHARCH_DATATYPE</em> détermine le jeu de métadonnées à charger pour les archives mensuelles.</p>
+<p><em>DAYARCH_DATATYPE</em> détermine le jeu de métadonnées à charger pour les archives quotidiennes.</p>
+<p>Il y a deux types de données qui peuvent être spécifiées, "ALL" ou "NOBODY":</p>
     <pre>
 ALL = Totalité des métadonnées (lent et plus gros cache).
-NOBODY = Tous, sauf les métadonnées dans le BODY des entrées (plus rapide et plus petit cache).
+NOBODY = Tout, sauf les métadonnées dans le BODY des entrées (plus rapide et plus petit cache).
 
 </pre>
 
-    <p><span class="warning">IMPORTANT</span>: éditer <a href="#s.7">category_entry.htm</a> de façon adéquate.</p>
+    <p><span class="warning">IMPORTANT</span> : Veuillez éditer (ou créer) <a href="#s.7">category_entry.htm</a>, month_entry.htm, and day_entry.htm selon les besoins.</p>
 
     <p><b>Définir  l'ordre chronologique</b></p>
 
     <p><em>CHRON_ORDER</em> spécifie l'ordre chronologique des archives du blog. - 0/1 = normal/inverse. Par défaut mis à "1", ordre inverse.</p>
-
+    <p><span class="warning">WARNING</span> : Si vous n'utilisez pas l'action "configure" pour changer ceci, les bases de données ne pourront pas refléter le nouvel ordre chronologique.</p>
     <p><b>Définir des paramètres de prévisualisation et de publication</b></p>
 
     <p><em>BLOG_PREVIEW_CMD</em> et <em>BLOG_PUBLISH_CMD</em> permet d'inclure une commande personnalisée quand elles sont invoquées par leurs actions respectives <em>preview</em> et <em>publish</em>.</p>
@@ -450,11 +457,11 @@ NOBODY = Tous, sauf les métadonnées dans le BODY des entrées (plus rapide et 
 
     <p><b>Changer le répertoire "Temp"</b></p>
 
-    <p><em>NB_TEMP_DIR</em> spécifie l'emplacement du stockage temporaire des fichiers. Par défaut c'est "/tmp", mais il peut en être affecté un à chaque blog, pour une meilleure confidentialité et une sécurité accrue dans un environnement multiutilisateur.</p>
+    <p><em>NB_TEMP_DIR</em> spécifie l'emplacement du stockage temporaire des fichiers. Par défaut c'est "/tmp", mais il peut en être affecté un à chaque blog, pour une meilleure confidentialité et une sécurité accrue dans un environnement multi-utilisateur.</p>
 
     <p><b>Changer le critère du mode de requête</b></p>
 
-    <p><em>QUERY_MODE</em> specifie le mode de requête pour lister et gérer les entrées. Il contrôle aussi comment elles sont affichées sur la page principale. Par défaut : "$MAX_ENTRIES".</p>
+    <p><em>QUERY_MODE</em> specifie le mode de requête pour lister et gérer les entrées. Il affecte aussi les entrées affichées sur la page principale. Par défaut : "$MAX_ENTRIES", mais peut être juste celui de n'importe quelle requête.</p>
 
     <p><b>Configuration des liens</b></p>
 
@@ -482,7 +489,7 @@ NOBODY = Tous, sauf les métadonnées dans le BODY des entrées (plus rapide et 
 
     <p><em>NB_LANG</em> est un paramètre global pour la langue à utiliser. Par défaut c'est "en" pour l'anglais. Tous les paramètres linguistiques devraient être formatés suivant la norme ISO 639-2.</p>
 
-    <p>Exemple pour l'espagnol:</p>
+    <p>Exemple pour l'espagnol :</p>
     <pre>
 NB_LANG="es"
     
@@ -502,7 +509,7 @@ NB_LANG="es"
   </div>
 
   <div id="mgmt">
-    <h2><a id="s.6" name="s.6">6. Gestion des entrées et des catégories (tags)</a></h2>Commandes pour la gestion des entrées et des tags.
+    <h2><a id="s.6" name="s.6">6. Gestion des entrées et des tags (catégories)</a></h2>Commandes pour la gestion des entrées et des tags.
 
     <h3>Gestion des entrées</h3>
 
@@ -614,7 +621,7 @@ nb [-b blog_rep] tag 1 delete 1
 
     <p><b>Changer la date des entrées</b></p>
 
-    <p>Spécifier la date d'une nouvelle entrée en utilisant la métavariable TIMESTAMP :</p>
+    <p>Spécifier la date d'une nouvelle entrée en utilisant le méta-tag TIMESTAMP :</p>
     <pre>
 nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add
     
@@ -630,6 +637,7 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit 2
 </pre><em>La commande "date" doit supporter l'option  "<code>-d</code>" pour suivre le format donné par "<code>$DATE_FORMAT</code>".</em>
 
     <h3>Gestion des tags</h3>
+<p>Également connus comme catégories.</p>
 
     <p><b>Le numéro de tag</b></p>
 
@@ -772,7 +780,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">makepage.htm</td>
 
-          <td align="left">template utilisé par défaut par l'option "makepage"</td>
+          <td align="left">template utilisé par défaut par l'action "make-page"</td>
         </tr>
 
         <tr>
@@ -794,12 +802,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         </tr>
 
         <tr>
-          <td align="left">category_entry.htm</td>
-
-          <td align="left">contrôle la structure de la catégorie des entrées</td>
-        </tr>
-
-        <tr>
+          
           <td align="left">permalink_entry.htm</td>
 
           <td align="left">contrôle la structure du contenu des entrées en archivage individuel</td>
@@ -820,13 +823,36 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">entry.metadata</td>
 
-          <td align="left">contrôle le format du métafichier des entrées</td>
+          <td align="left">contrôle le format du méta-fichier des entrées</td>
         </tr>
 
         <tr>
           <td align="left">file.metadata</td>
 
-          <td align="left">contrôle le format d'un métafichier</td>
+          <td align="left">contrôle le format d'un méta-fichier</td>
+     </tr>
+    </table>
+       <p><b>Templates spéciaux</b></p>
+
+    <table border="0" cellspacing="4" cellpadding="2" summary="templates">
+       <caption>
+        L'apparence du blog peut en outre être contrôlée par les templates suivants :
+       </caption>
+         <tr>
+           <th align="left">templates</th>
+           <th align="left">description</th>
+         </tr>
+         <tr>
+         <td align="left">category_entry.htm</td>
+         <td align="left">contrôle la structure et le contenu de la catégorie des entrées</td>
+        </tr>
+        <tr>
+           <td align="left">month_entry.htm</td>
+           <td align="left">contrôle la structure et le contenu des entrées mensuelles</td>
+        </tr>
+         <tr>
+           <td align="left">day_entry.htm</td>
+           <td align="left">contrôle la structure et le contenu des entrées journalières</td>
         </tr>
       </table>
     </div>
@@ -840,57 +866,57 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
     <div>
       <p><b>Plugins ordinaires : plugins</b></p>
 
-      <p>Les plugins ordinaires sont initiés inconditionnellement.</p>
+      <p>Les plugins ordinaires sont initialisés inconditionnellement après une requête de mise à jour.</p>
 
       <p><b>Plugins d'archivage : plugins/archive</b></p>
 
-      <p>Les plugins d'archivage sont initiés à la mise à jour des archives.</p>
+      <p>Les plugins d'archivage sont inititialisés quand les archives sont à mettre à jour.</p>
 
       <p><b>Plugins d'archives "catégorie" : plugins/archive/category</b></p>
 
-      <p>Les plugings d'archivage "catégorie" sont initiés à la mise à jour pour chaque catégorie d'archive.</p>
+      <p>Les plugings d'archivage "catégorie" sont inititialisés pour chaque catégorie d'archive qui soit à mettre àjour.</p>
 
       <p><b>Plugins d'archives "jour" : plugins/archive/day</b></p>
 
-      <p>Les plugins d'archives "jour" sont initiés à la mise à jour de chaque archive journalière.</p>
+      <p>Les plugins d'archives "jour" sont inititialisés pour chaque archive journalière qui soit à mettre à jour.</p>
 
       <p><b>Plugins d'archives "mois" : plugins/archive/month</b></p>
 
-      <p>Les plugins d'archive "mois" sont initiés à la mise à jour de chaque archive mensuelle.</p>
+      <p>Les plugins d'archive "mois" sont initialisés pour chaque archive mensuelle qui soit à mettre à jour.</p>
 
       <p><b>Plugins d'archive "année" : plugins/archive/year</b></p>
 
-      <p>Les plugins d'archive "année" sont initiés à la mise à jour de chaque archive annuelle.</p>
+      <p>Les plugins d'archive "année" sont initialisés pour chaque archive annuelle qui soit à mettre à jour.</p>
 
       <p><b>Plugins "entrée" : plugins/entry</b></p>
 
-      <p>Les plugins "entrée" sont initiés inconditionnellement à la mise à jour de chaque entrée.</p>
+      <p>Les plugins "entrée" sont initialisés inconditionnellement pour chaque entrée qui soit à mettre à jour.</p>
 
       <p><b>Plugins de modification d'entrée : plugins/entry/mod</b></p>
 
-      <p>Les plugins "modification d'entrée" sont initiés à la modification de chaque entrée.</p>
+      <p>Les plugins "modification d'entrée" sont initialisés pour chaque entrée qui soit à mettre à jour.</p>
 
       <p><b>Plugins de formatage des entrées : plugins/entry/format</b></p>
 
-      <p>Les plugins de formatage des entrées sont initiés pour chaque entrée modifiée sur la base du champ de la métadonnée FORMAT. Plus d'un format peut être spécifié avec un espace ou une virgule comme séparateur; mais en étant prudent quant à leur ordre. </p>
+      <p>Les plugins de formatage des entrées sont initialisés pour chaque entrée modifiée sur la base du champ du méta-tag FORMAT. Plus d'un format peut être spécifié avec un espace ou une virgule comme séparateur; mais en étant prudent quant à leur ordre. </p>
 
       <p><b>Plugins "page" : plugins/page</b></p>
 
-      <p>Les plugins 'page" sont initiés inconditionnellement avant la mise à jour de chaque page.</p>
+      <p>Les plugins "page" sont initialisés inconditionnellement avant la mise à jour de chaque page.</p>
 
-      <p><b>Plugins de formatage des pages" : plugins/page/format</b></p>
+      <p><b>Plugins de formatage des pages : plugins/page/format</b></p>
 
       <p>
-          Les plugins de formatage des pages sont initiés à la mise à jour de chaque page sur la base du champ de la métadonnée FORMAT. Plus d'un format peut être spécifié avec un espace ou une virgule comme séparateur, mais en étant prudent quant à leur ordre.
+          Les plugins de formatage des pages sont initialisés à la mise à jour de chaque page sur la base du champ de la méta-donnée FORMAT. Plus d'un format peut être spécifié avec un espace ou une virgule comme séparateur, mais en étant prudent quant à leur ordre.
         </p>
 
       <p><b>Plugins de fabrication des pages : plugins/makepage</b></p>
 
-      <p>Les plugins de fabrication des pages sont initiés à la mise à jour de chaque page.</p>
+      <p>Les plugins de fabrication des pages sont initialisés pour chaque page qui soit à mettre à jour.</p>
 
       <p><b>Plugins de publication : plugins/post</b></p>
 
-      <p>Les plugins "post" sont initiés inconditionnellement par les tâches relatives aux publications du blog.</p><em>Beaucoup de ces plugins fonctionneront suivant leurs propres règles une fois qu'ils auront été initiés.</em>
+      <p>Les plugins "post" sont initialisés inconditionnellement par les tâches relatives aux publications du blog.</p><em>Beaucoup de ces plugins fonctionneront suivant leurs propres règles une fois qu'ils auront été initialisés, autrement dit, plus inconditionnellement.</em>
     </div>
 
     <div class="tables">
@@ -952,13 +978,13 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">articles_meta.sh*</td>
 
-          <td align="left">génère les articles à partir des métafichiers dans le répertoire "articles"</td>
+          <td align="left">génère les articles à partir des méta-fichiers dans le répertoire "articles"</td>
 
-          <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
+          <td align="left">ARTICLES_DIR, ARTICLES_FORMAT</td>           
 
           <td align="left">$NB_ArticleLinks</td>
 
-          <td align="left">requiert le template "makepage.htm", ce plugin doit être le dernier à être initié</td>
+          <td align="left">requiert le template "makepage.htm", ce plugin doit être le dernier à être initialisé</td>
         </tr>
 
         <tr>
@@ -966,11 +992,11 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">génère les articles à partir des fichiers texte dans le répertoire "articles"</td>
 
-          <td align="left">ARTICLE_DIRS, ARTICLE_FORMAT</td>
+          <td align="left">ARTICLES_DIR, ARTICLES_FORMAT</td>
 
           <td align="left">$NB_ArticleLinks</td>
 
-          <td align="left">requiert le template "makepage.htm", ce plugin doit être le dernier à être initié</td>
+          <td align="left">requiert le template "makepage.htm", ce plugin doit être le dernier à être initialisé</td>
         </tr>
 
         <tr>
@@ -978,7 +1004,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">ajoute un flux "atom"</td>
 
-          <td align="left">FEED_ITEMS, ATOM_ITEMS, ATOM_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, ATOM_ITEMS, ATOM_CATFEEDS, ATOM_FEED_LANG</td>
 
           <td align="left">$NB_AtomVer, $NB_AtomFile, index-atom.$NB_SYND_FILETYPE</td>
 
@@ -1182,7 +1208,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">ajoute les flux rss 2.0</td>
 
-          <td align="left">FEED_ITEMS, RSS2_ITEMS, RSS2_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, RSS2_ITEMS, RSS2_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSS2File, index-rss.$NB_SYND_FILETYPE</td>
 
@@ -1194,7 +1220,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">ajoute les flux rss 1.0</td>
 
-          <td align="left">FEED_ITEMS, RSS_ITEMS, RSS_CATFEEDS, BLOG_FEED_LANG</td>
+          <td align="left">BLOG_FEED_ITEMS, RSS_ITEMS, RSS_CATFEEDS, BLOG_FEED_LANG</td>
 
           <td align="left">$NB_RSSFile, index.$NB_SYND_FILETYPE</td>
 
@@ -1233,9 +1259,120 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
       </div>
     </div>
   </div>
+  <div id="configuring.plugins">
+     <h2><a id="s.9" name="s.9">9. Configuration des plugins</a></h2>
+
+     <p>Les configurations des plugins sont contenues et faites dans le "blog.conf" de votre blog.</p>
+
+     <h3>Configuration des plugins de syndication</h3>
+
+     <p>La syndication de votre blog est effectuée par les plugins de NanoBlogger. Veuillez noter qu'une adresse Internet complète et accessible est requise pour avoir une syndication correcte. Ce qui est fait en renseignant <em>BLOG_FEED_URL</em>. C'est mieux aussi de mettre le bon fuseau horaire pour vos flux de syndication. Pour ça, veuillez vous référer à <em>BLOG_TZD</em> dans <a href="#s.5">Installation et configuration</a>.</p>
+     <p><b>Mettre l'adresse Web</b></p>
+
+     <p><em>BLOG_FEED_URL</em> Met l'URL des flux de syndication. Par défaut "$BLOG_URL", seulement s'il a déjà été mis.</p>
+
+     <p>Exemple :</p>
+     <pre>
+      BLOG_FEED_URL="http://www.example.com/johndoe/weblog"
+
+      </pre>
+      <p><b>Mettre le fuseau horaire</b></p>
+      <p><em>BLOG_FEED_TZD</em>met le fuseau horaire utilisé pour les flux de syndication. Par défaut "$BLOG_TZD".</p>
+
+     <p><b>Mettre la langue</b></p>
+     <p><em>BLOG_FEED_LANG</em> met la langue utilisée par les flux de syndication.</p>
+
+     <p>Exemple :</p>
+     <pre>
+         BLOG_FEED_LANG="en-us"
+     </pre>
+     <p><em>ATOM_FEED_LANG</em> met la langue utilisée par le flux de syndication Atom.</p>
+     <p>Exemple :</p>
+     <pre>
+         ATOM_FEED_LANG="en"
+
+     </pre>
+ 
+     <p><span class="warning">NOTE</span>: Le code langage pour les flux de syndication Atom est différent de celui du standard RSS.</p>
+     <p><b>Mettre le nombre maximum d'entrées à syndiquer</b></p>
+
+     <p><em>BLOG_FEED_ITEMS</em> met le nombre maximum d'entrées à inclure dans vos flux de syndication, indépendemment de <em>$MAX_ENTRIES</em>. Par défaut mis à "10". Pour des possibilités d'exportation, vous pourriez vouloir le mettre à "-1" pour inclure toutes les entrées existantes de votre blog.</p>
+     <p>Exemple :</p>
+     <pre>
+      BLOG_FEED_ITEMS="10"
+     </pre>
+     <p><b>Support des feuilles de style</b></p>
+     <p><em>BLOG_FEED_CSS</em> met la feuille de style employée pour vos flux de syndication (le chemin devrait être relatif).</p>
+
+     <p>Exemple :</p>
+     <pre>
+     BLOG_FEED_CSS="styles/feed.css"
+
+     </pre>
+     <p><b>Support des icônes &amp; logos</b></p>
+     <p><em>BLOG_FEED_ICON</em> met une icône pour vos flux de syndication (le chemin devrait être relatif).</p>
+
+     <p>Exemple :</p>
+     <pre>
+      BLOG_FEED_ICON="images/feedicon.png"
+
+     </pre>
+
+     <p><em>BLOG_FEED_LOGO</em> met un logo à vos flux de syndication (le chemin devrait être relatif).</p>
+
+     <p>Exemple :</p>
+     <pre>
+     BLOG_FEED_LOGO="images/feedlogo.png"
+
+     </pre>
+
+     <p><span class="warning">NOTE</span>: Dans le plugin de syndition RSS 2.0, the logo sera employé quand l'icône ne sera pas définie.</p>
+
+     <p><b>Support de la syndication des catégories</b></p>
+
+     <p>Il y a trois manières d'activer la syndication par catégorie :</p>
+
+     <ol>
+       <li><em>CATEGORY_FEEDS</em> activer toutes les méthodes supportées de syndication de catégorie. Par défaut "0" - désactivé.</li>
+
+       <li><em>ATOM_CATFEEDS</em> activer les flux Atom par catégorie. Par défaut "0" - désactivé.</li>
+
+       <li><em>RSS2_CATFEEDS</em> activer les flux RSS 2.0 par catégorie. Par défaut "0" - désactivé.</li>
+     </ol>
+
+     <p><b>Support pour la création des podcasts</b></p>
+
+     <p>Il y a un méta-tag appelé ENCLOSURE qui est employé pour mettre une donnée d'entrée "enclosure" pour chaque entrée. Le méta-tag ENCLOSURE devrait contenir deux jeux différents de données séparés par un simple espace. Le fichier média et le type de média (par ex. audio/mpeg).</p>
+     <p>Exemple :</p>
+     <pre>
+     ENCLOSURE: mp3s/mypodcast.mp3 audio/mpeg
+
+     </pre>
+
+     <p>Le fichier média devrait être en un chemin relatif qui peut être trouvé dans <em>$BLOG_DIR</em>. La commande système "du -b" est requise pour obtenir la longueur du fichier média nécessaire à  la donnée "enclosure". La commande "du" devrait être présente sur bien des systèmes où Bash est supporté, mais il n'y pas de garantie que la syntaxe soit la même et cela doit être vérifié manuellement. Les "enclosures" sont supportés tant pour les plugins des flux de syndication Atom que RSS2.</p>
+
+     <p><b>Vérification &amp; correction syntaxique</b></p>
+
+     <p>Le plugin Tidy apporte la vérification et la correction syntaxique. Cette sorte d'outil peut être tout autant votre meilleur ami ou votre pire ennemi, au sens qu'il peut trop bien dissimuler (corriger) vos erreurs. Un fichier log est tenu dans le répertoire de votre blog; ainsi vous pouvez vérifier toute erreur ou changement enregistré par Tidy.</p>
+
+     <p>Il y a deux variables de configuration de Tidy. Une pour le HTML et l'autre pour le XML (plugins de syndication). Comme indiqué dans <a href="#s.5"> Installation et configuration</a>, Tidy a  tendance à ré-écrire quoique vous ayez mis à  <em>$BLOG_CHARSET</em>. Alors, attention.</p>
+
+     <p><em>TIDY_HTML_ARGS</em> met les arguments de la commande pour Tidy.</p>
+
+     <p><em>TIDY_XML_ARGS</em> met les arguments de la commande pour Tidy lors de la vérification le XML des flux de syndication.</p>
+
+     <p>Exemples :</p>
+     <pre>
+     TIDY_HTML_ARGS="-asxhtml -n -utf8"
+     TIDY_XML_ARGS="-xml -n -utf8 -wrap 0"
+
+     </pre>
+
+     <p>Plus de configurations avancées incluant des personnalisations peuvent être faites à travers les plugins utilisateur.</p>
+   </div>
 
   <div id="writing.plugins">
-    <h2><a id="s.9" name="s.9">9. Écriture des plugins</a></h2>
+    <h2><a id="s.10" name="s.10">10. Écriture des plugins</a></h2>
 
     <h3>Outils pour le développement des plugins</h3>
 
@@ -1362,7 +1499,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$DB_RESULTS</td>
 
-          <td align="left">exemple (extrait les entrées de 1 à 10): "query_db all nocat limit 10 1"</td>
+          <td align="left">exemple (extrait les entrées de 1 à 10) : "query_db all nocat limit 10 1"</td>
         </tr>
 
         <tr>
@@ -1518,7 +1655,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$META_FILE</td>
 
-          <td align="left">exemple : "write_metadata UPDATED "`date`" $metafile"</td>
+          <td align="left">exemple : "write_metadata UPDATED "`date`" $meta-file"</td>
         </tr>
 
         <tr>
@@ -1542,7 +1679,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$WRITEMETAVAR_FILE</td>
 
-          <td align="left">exemple : write_var MODTIME "$(date)"</td>
+          <td align="left">exemple : write_var MODTIME "$(date)" $meta-file</td>
         </tr>
 
         <tr>
@@ -1584,7 +1721,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">weblog_page</td>
 
-          <td align="left">crée la page du blog à partir du métafichier</td>
+          <td align="left">crée la page du blog à partir du méta-fichier</td>
 
           <td align="left">BLOGPAGE_SRCFILE=$1, BLOGPAGE_TEMPLATE=$2, $BLOGPAGE_OUTFILE=$3</td>
 
@@ -1597,7 +1734,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
   </div>
 
   <div id="publish">
-    <h2><a id="s.10" name="s.10">10. Publication</a></h2>
+    <h2><a id="s.11" name="s.11">11. Publication</a></h2>
 
     <p><b>Configurer la commande de publication</b></p>
 
@@ -1608,7 +1745,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
     <p>FTP, SSH (scp, sftp, etc.), RSYNC ou WebDAV, sont toutes les méthodes qui peuvent être utilisées pour la publication du blog.</p>
 
-    <p><b>exemple</b>: publier automatiquement avec ftp et .netrc.</p>blog.conf:
+    <p><b>exemple</b> : publier automatiquement avec ftp et .netrc.</p>blog.conf:
     <pre>
 BLOG_PUBLISH_CMD="ftp exemple.weblog.com"
  
@@ -1633,15 +1770,15 @@ mput *
   </div>
 
   <div id="comments">
-    <h2><a id="s.11" name="s.11">11. Ajout du support des commentaires</a></h2>
+    <h2><a id="s.12" name="s.12">12. Ajout du support des commentaires</a></h2>
 
-    <p>Services de commentaire et add-on's : NanoBlogger Comments[1], CGIComment[2], blogkomm[3], JS-Kit[4], et Haloscan.com[5].</p>
+    <p>Services de commentaire et add-on's :NanoBlogger Comments, CGIComment, blogkomm[1], JS-Kit[2], and Haloscan.com[3].</p>
 
     <p>Choisissez l'un d'eux et suivez leurs instructions d'installation.</p>
   </div>
 
   <div id="entries.import">
-    <h2><a id="s.12" name="s.12">12. Importation des entrées</a></h2>
+    <h2><a id="s.13" name="s.13">13. Importation des entrées</a></h2>
 
     <p>En premier lieu pour importer des entrées, les données doivent d'abord être converties au format de NanoBlogger.</p>
 
@@ -1659,7 +1796,7 @@ CCYY-MM-DDTHH_MM_SS.txt
 </pre>
 
     <p>
-        Le format d'une entrée est fait de variables de métadonnées. Beaucoup de ces variables de métadonnées sont du format "VAR: VALUE" suivi d'un retour chariot qui la sépare de la suivante. L'ordre des variables de métadonnées n'est pas significatif. La variable <em>BODY</em> est particulière et doit être fermée par la marque <em>END-----</em>. Par défaut, le contenu de la variable BODY doit contenir du code HTML valide avec toutes les entités correctement protégées.</p> Exemple de format d'une entrée :
+        Le format d'une entrée est fait de méta-tags. Beaucoup de ces méta-tags sont du format "VAR: VALUE" suivi d'un retour chariot qui le sépare du suivant. L'ordre des méta-tags n'est pas significatif. La variable <em>BODY</em> est particulière et doit être fermée par la marque <em>END-----</em>. Par défaut, le contenu de la variable BODY doit contenir du code HTML valide avec toutes les entités correctement protégées.</p> Exemple de format d'une entrée :
     <pre>
 TITLE: Une nouvelle entrée
 AUTHOR: toto
@@ -1679,8 +1816,8 @@ END-----
 
     <p>Étapes de conversion des entrées :</p>
     <pre>
-1. Convertir chaque entrée pour qu'elle contienne les métadonnées suivantes : TITLE, AUTHOR, DATE, DESC, FORMAT, BODY
-2. La métadonnée BODY doit se terminer par "END-----".
+1. Convertir chaque entrée pour qu'elle contienne les méta-tags suivants : TITLE, AUTHOR, DATE, DESC, FORMAT, BODY
+2. Le méta-tag BODY doit se terminer par "END-----".
 3. Renommer chaque fichier des entrées avec la date et l'heure correspondantes.
         
 </pre>
@@ -1698,31 +1835,31 @@ nb [-b blog_rep] --force query all update
   </div>
 
   <div id="tips">
-    <h2><a id="s.13" name="s.13">13. Trucs et astuces</a></h2>
+    <h2><a id="s.14" name="s.14">14. Trucs et astuces</a></h2>
 
-    <p><b>Commandes d'édition pratiques</b></p>Créer un nouveau métafichier :
+    <p><b>Commandes d'édition pratiques</b></p>Créer un nouveau méta-fichier :
     <pre>
 nb [-b blog_rep] make-file unfichier.txt
 </pre>
-      Importer le métafichier comme nouvelle entrée de blog : 
+      Importer le méta-fichier comme nouvelle entrée de blog : 
       <pre>
 nb [-b blog_rep] file unfichier.txt add
 </pre>
-      ou exporter le métafichier comme nouvelle page de blog : 
+      ou exporter le méta-fichier comme nouvelle page de blog : 
       <pre>
 nb [-b blog_rep] --makepage unfichier.txt unfichier.html
 </pre><em>À noter que ces tâches sont plus faciles quand l'éditeur supporte un sub-shell ou quand vous pouvez suspendre votre éditeur du shell actif (en supposant qu'il y en ait un).</em>
 
-    <p><b>Écriture des métavariables à la volée</b></p>
+    <p><b>Écriture des méta-tags au vol</b></p>
 
     <p>
-        Les métavariables sont simplement des variables qui englobent des métafichiers. Ainsi le formatage du texte peut être fait à partir de la ligne de commande :
+        Les méta-tags sont simplement des tags qui englobent des méta-fichiers. Ainsi le formatage du texte peut être fait à partir de la ligne de commande :
       </p>
     <pre>
 nb [-b blogdir] --var FORMAT --set-var "markdown" make-page untexte.txt untexte.html
     
 </pre>
-<p>Actuellement, une seule métavariable ne peut être spécifiée qu'à la fois.</p>
+<p>Actuellement, un seul méta-tag ne peut être spécifié qu'à la fois.</p>
 
     <p><b>Définir un répertoire de blog par défaut</b></p>
 
@@ -1736,7 +1873,7 @@ BLOG_DIR="/chemin/vers/blog"
 
     <p>Vous pouvez souhaiter désactiver les plugins globaux ou bien tous.</p>
 
-    <p>Pour désactiver les plugins globaux, éditer <em>blog.conf</em> et changer <em>PLUGINS_DIR</em> d'un répertoire préexistant :</p>
+    <p>Pour désactiver les plugins globaux, éditer <em>blog.conf</em> et changer <em>PLUGINS_DIR</em> d'un répertoire pré-existant :</p>
 <pre>
 PLUGINS_DIR="$BLOG_DIR/plugins"
 </pre>
@@ -1792,19 +1929,16 @@ php?&gt;
   </div>
 
   <div id="credits">
-    <h2><a id="s.14" name="s.14">14. Crédits</a></h2>
+    <h2><a id="s.15" name="s.15">15. Crédits</a></h2>
 
     <p>
-        Remerciements à Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran pour toutes les contributions et suggestions. Remerciements à Bowie J. Poag, l'auteur de MicroBlogger[6], pour l'inspiration de ce projet. Reconnaissance particulière au "Ted Walther's Diary"[7], qui inspira à Bowie la création de MicroBlogger. Enfin, merci à ceux ayant contribué à un patch ou une demande de fonctionnalité. Voir le ChangeLog.
+        Remerciements à Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran pour toutes les contributions et suggestions. Remerciements à Bowie J. Poag, l'auteur de MicroBlogger, pour l'inspiration de ce projet. Reconnaissance particulière au "Ted Walther's Diary"[4], qui inspira à Bowie la création de MicroBlogger. Enfin, merci à ceux ayant contribué à un patch ou une demande de fonctionnalité. Voir le ChangeLog.
       </p>
 
-    <p><a href="http://nhw.pl/blg/articles/nbcom/">1. http://nhw.pl/blg/articles/nbcom/</a><br />
-    <a href="http://freshmeat.net/projects/cgicomment">2. http://freshmeat.net/projects/cgicomment</a><br />
-    <a href="http://blogkomm.com">3. http://blogkomm.com</a><br />
-    <a href="http://js-kit.com">4. http://js-kit.com</a><br />
-    <a href="http://www.haloscan.com">5. http://www.haloscan.com</a><br />
-    <a href="http://freshmeat.net/projects/microblogger">6. http://freshmeat.net/projects/microblogger</a><br />
-    <a href="http://reactor-core.org/~djw/diary/">7. http://reactor-core.org/~djw/diary/</a><br /></p>
+<p><a href="http://blogkomm.com">1. http://blogkomm.com</a><br />
+ <a href="http://js-kit.com">2. http://js-kit.com</a><br />
+<a href="http://www.haloscan.com">3. http://www.haloscan.com</a><br />
+<a href="http://reactor-core.org/~djw/diary/">4. http://reactor-core.org/~djw/diary/</a><br /></p>
 
     <div class="copyright">
       <span>Copyright © 2003-2008 Kevin Wood. Tous droits réservés.<br/>
