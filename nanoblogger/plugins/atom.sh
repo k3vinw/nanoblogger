@@ -135,7 +135,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		# support for Atom 1.0 enclosures (requires 'du' system command for determing length)
-		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; Atom_EntryEnclosure="$METADATA"
+		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_AtomTempEnclosure="$METADATA"
 		Atom_EntryCategory=; cat_title=
 		> "$SCRATCH_FILE".atomfeed-cat
 		atomentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
@@ -159,17 +159,16 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			#Atom_EntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
 			Atom_EntryExcerpt="$NB_EntryBody"
 		fi
+		Atom_EntryEnclosure=; # initialize variable
 		# dissect ENCLOSURE metadata
-		if [ ! -z "$Atom_EntryEnclosure" ]; then
-			Enclosure_File=`echo "$Atom_EntryEnclosure" |cut -d' ' -f 1`
-			Enclosure_Type=`echo "$Atom_EntryEnclosure" |cut -d' ' -f 2`
+		if [ ! -z "$NB_AtomTempEnclosure" ]; then
+			Enclosure_File=`echo "$NB_AtomTempEnclosure" |cut -d' ' -f 1`
+			Enclosure_Type=`echo "$NB_AtomTempEnclosure" |cut -d' ' -f 2`
 			[ -z "$Enclosure_Type" ] || [ "$Enclosure_Type" = "$Enclosure_File" ] &&
 				Enclosure_Type="audio/mpeg"
 			if [ -f "$BLOG_DIR/$Enclosure_File" ]; then
 				Enclosure_Length=`du -b "$BLOG_DIR/$Enclosure_File" |sed -e '/[[:space:]].*$/ s///g'`
 				Atom_EntryEnclosure='<link rel="enclosure" type="'$Enclosure_Type'" length="'$Enclosure_Length'" href="'$BLOG_FEED_URL/$Enclosure_File'" />'
-			else
-				Atom_EntryEnclosure=
 			fi
 		fi
 		cat >> "$SCRATCH_FILE".atomfeed <<-EOF

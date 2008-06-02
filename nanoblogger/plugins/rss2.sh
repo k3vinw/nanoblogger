@@ -128,7 +128,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
 		# support for RSS 2.0 enclosures (requires 'du' system command for determing length)
-		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_RSS2EntryEnclosure="$METADATA"
+		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_RSS2TempEnclosure="$METADATA"
 		rss2entry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 		rss2entry_catids="${rss2entry_wcatids##*\>}"
 		[ "$rss2entry_wcatids" = "$rss2entry_catids" ] &&
@@ -152,17 +152,16 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		fi
 		# for escaped text/html only
 		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>
+		NB_RSS2EntryEnclosure=; # initialize variable
 		# dissect ENCLOSURE metadata
-		if [ ! -z "$NB_RSS2EntryEnclosure" ]; then
-			Enclosure_File=`echo "$NB_RSS2EntryEnclosure" |cut -d' ' -f 1`
-			Enclosure_Type=`echo "$NB_RSS2EntryEnclosure" |cut -d' ' -f 2`
+		if [ ! -z "$NB_RSS2TempEnclosure" ]; then
+			Enclosure_File=`echo "$NB_RSS2TempEnclosure" |cut -d' ' -f 1`
+			Enclosure_Type=`echo "$NB_RSS2TempEnclosure" |cut -d' ' -f 2`
 			[ -z "$Enclosure_Type" ] || [ "$Enclosure_Type" = "$Enclosure_File" ] &&
 				Enclosure_Type="audio/mpeg"
 			if [ -f "$BLOG_DIR/$Enclosure_File" ]; then
 				Enclosure_Length=`du -b "$BLOG_DIR/$Enclosure_File" |sed -e '/[[:space:]].*$/ s///g'`
 				NB_RSS2EntryEnclosure='<enclosure url="'$BLOG_FEED_URL/$Enclosure_File'" length="'$Enclosure_Length'" type="'$Enclosure_Type'" />'
-			else
-				NB_RSS2EntryEnclosure=
 			fi
 		fi
 		cat >> "$SCRATCH_FILE".rss2feed <<-EOF

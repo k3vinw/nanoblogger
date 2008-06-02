@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-05-27T00:24:14-04:00
+# Last modified: 2008-05-30T09:33:18-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -839,7 +839,7 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -a,-d,-e,-l,-q only here for backwards compability purposes
+	# -a,-c,-d,-e,-l,-m,-q,-u only here for backwards compability purposes
 	case "$1" in
 		add|-a) 		ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
@@ -853,12 +853,12 @@ while [ $# -gt 0 ]; do
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
 		manual)			load_config; nb_browser "$NB_DOC_DIR/nanoblogger.html"; exit 0;;
 		tag|-c)			check_arg "$2"; cat_num="$2"; shift;;
-		tag-entry)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
+		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
 		tag-list) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
 		publish)		PUBLISH_WEBLOG=1;;
 		preview)		PREVIEW_WEBLOG=1;;
 		query|-q)		NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
-		update)			UPDATE_WEBLOG=1;;
+		update|-u)		UPDATE_WEBLOG=1;;
 		update-cache) 		UPDATECACHE_WEBLOG=1;;
 		--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
 		--conf-file)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
