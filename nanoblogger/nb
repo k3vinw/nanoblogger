@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-02T14:00:51-04:00
+# Last modified: 2008-06-04T01:03:30-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -179,12 +179,12 @@ if [ -f "$TEMPLATE_FILE" ]; then
 	# prefix lines with an X
 	TEMPLATE=`sed -e '/^/ s//X: /' < "$TEMPLATE_FILE"`
 	# remove X's and source variables into a temp file
-	cat > "$SCRATCH_FILE" <<-EOF
+	cat > "$SCRATCH_FILE".template <<-EOF
 		sed -e '/^X:[ ]/ s///' <<TMPL
 			$TEMPLATE
 		TMPL
 	EOF
-	TEMPLATE_DATA=`. "$SCRATCH_FILE"`
+	TEMPLATE_DATA=`. "$SCRATCH_FILE".template`
 else
 	die "'$TEMPLATE_FILE' - $loadtemplate_nofile"
 fi
@@ -391,7 +391,7 @@ for entry_id in $NUMVAR; do
 	Edit_EntryFile=${ENTRY_LIST[$entry_id]}
 	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "$invalid_entryid $edit_num"
 done
-> "$SCRATCH_FILE"
+> "$SCRATCH_FILE".edit_weblog
 # for chg_entrydate
 [ ! -z "$cat_num" ] && nb_msg "$editweblog_catinfo $cat_num"
 for entry_id in $NUMVAR; do
@@ -414,7 +414,7 @@ for entry_id in $NUMVAR; do
 		Edit_EntryFile="$New_EntryDateFile"
 	# add timestamp modified entries to update list
 	if [ ! -z "$Old_EntryFile" ]; then
-		echo "$Old_EntryFile" >> "$SCRATCH_FILE"
+		echo "$Old_EntryFile" >> "$SCRATCH_FILE".edit_weblog
 		nb_msg "$querydb_update"
 		find_categories "$Old_EntryFile"
 		for olde_catdb in ${CAT_LIST[*]}; do
@@ -438,10 +438,10 @@ for entry_id in $NUMVAR; do
 		set_entrynavlinks prev "$before_entry"
 		set_entrynavlinks next "$after_entry"
 		[ ! -z "$prev_entry" ] &&
-			echo "$prev_entry" >> "$SCRATCH_FILE"
+			echo "$prev_entry" >> "$SCRATCH_FILE".edit_weblog
 		[ ! -z "$next_entry" ] &&
-			echo "$next_entry" >> "$SCRATCH_FILE"
-		echo "$Edit_EntryFile" >> "$SCRATCH_FILE"
+			echo "$next_entry" >> "$SCRATCH_FILE".edit_weblog
+		echo "$Edit_EntryFile" >> "$SCRATCH_FILE".edit_weblog
 		# remove old cache data for clean build
 		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
 		# remove old entry archive directory
@@ -451,7 +451,7 @@ for entry_id in $NUMVAR; do
 			rm -fr "$Delete_EntryArchiveDir"
 	fi
 done
-NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE".edit_weblog`)
 if [ ! -z "${UPDATE_LIST[*]}" ]; then
 	nb_msg "$editweblog_action"
 	find_categories "${UPDATE_LIST[*]}"
