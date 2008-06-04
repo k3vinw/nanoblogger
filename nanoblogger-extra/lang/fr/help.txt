@@ -16,19 +16,19 @@ Actions :
  configure				- configure le blog (pour 'update').
  delete <ID,tag>			- supprime une entrée, un tag ou détague
 					  une entrée.
- draft <file> 				- édite ou crée un métafichier.
+ draft <FILE> 				- édite ou crée un métafichier.
  edit <ID,tag>				- édite une entrée ou un tag.
  list					- liste les entrées ou les tags
 					  (pour 'query' et 'tag', par défaut :
 					  'max').
- make-page <file1> <file2> 		- crée une nouvelle page de blog
+ make-page <FILE1> <FILE2> 		- crée une nouvelle page de blog
 					  (fichier2) depuis le métafichier
 					  (fichier1).
  tag-entry <ID>				- tag l'entrée (pour 'tag')
  tag-list 				- liste les tags (pareil que :
 					  'query tag list')
  manual					- affiche le manuel.
- make-file <file> 			- crée un nouveau métafichier.
+ make-file <FILE> 			- crée un nouveau métafichier.
  preview				- lance la commande d'aperçu du blog.
  publish				- lance la commande de publication du
 					  blog.
@@ -38,7 +38,7 @@ Actions :
  tag <ID,new> 				- spécifie le tag (pour 'add', 'delete',
                                           'edit', 'list', 'update' et
 					  'update-cache').
- file <file> 				- spécifie le métafichier à importer
+ file <FILE> 				- spécifie le métafichier à importer
 					  comme entrée (pour 'add').
  update-cache 				- force la mise à jour du cache (pour
 					  'query', par défaut : 'expired').
@@ -46,7 +46,7 @@ Actions :
 					  'query', par défaut : 'max').
 
 Options :
- -b, --blog-dir <directory>		spécifie le répertoire du blog.
+ -b, --blog-dir <DIRECTORY>		spécifie le répertoire du blog.
  -f, --force 				force la mise à jour du cache. (synonyme
 					de 'update-cache').
  -h,--help				affiche ce message d'aide.
@@ -54,27 +54,27 @@ Options :
  					'delete', 'preview', 'publish' et
 					'update').
  -v, --verbose <1=on/0=off>		bascule en mode verbeux.
- --conf-file <file>			spécifie un fichier de configuration
+ --conf-file <FILE>			spécifie un fichier de configuration
 					alternatif.
  --desc <text>				met le texte descriptif (pour 'add',
  					'draft', 'make-file' et 'make-page').
- --data-dir <directory>			spécifie le répertoire [data] du blog
- --title <text> 			assigne le titre (pour 'add', 'tag',
+ --data-dir <DIRECTORY>			spécifie le répertoire [data] du blog
+ --title <TEXT> 			assigne le titre (pour 'add', 'tag',
 					'draft', 'make-file' et 'make-page').
- --author <text>			assigne le nom de l'auteur (pour 'add',
+ --author <TEXT>			assigne le nom de l'auteur (pour 'add',
 					'draft', 'make-file' et 'make-page').
- --plugin-dir <directory> 		spécifie le répertoire [plugin] du blog.
+ --plugin-dir <DIRECTORY> 		spécifie le répertoire [plugin] du blog.
  --text <text> 				écrit le corps du texte (pour 'add',
 					'draft', 'make-file' et 'make-page').
- --template <file>			spécifie le fichier à charger comme
+ --template <FILE>			spécifie le fichier à charger comme
 					gabarit (pour 'draft', 'make-page' et
 					'make-file').
- --template-dir <directory>		spécifie le répertoire [template] du
+ --template-dir <DIRECTORY>		spécifie le répertoire [template] du
 					blog.
  --var <VARIABLE>  	 		définit la méta-variable (pour 'add',
  					'draft', 'edit', 'make-file' et
 					'make-page').
- --set-var <input>  			assigne la méta-variable (pour '--var').
+ --set-var <INPUT>  			assigne la méta-variable (pour '--var').
  --version				affiche la version.
 
  tag, delete, edit et tag-entry acceptent plusieurs numéros séparés par des

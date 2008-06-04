@@ -4,6 +4,7 @@
 # lang/fr/plugins.lang
 
 # plugins - generic messages
-plugins_action="génération"
+plugins_action="génération de"
 plugins_loadaction="chargement ..."
-plugins_entryfilteraction="formatage du texte ..."
+plugins_entryfilteraction="formatage du texte :"
+plugins_articles="articles"

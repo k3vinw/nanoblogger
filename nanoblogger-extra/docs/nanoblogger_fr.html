@@ -315,7 +315,7 @@ nb --blog-dir [monblog_rep] configure query all update
     <p><b>Définir le format des dates des nouvelles entrées</b></p>
 
 
-    <p><em>DATE_FORMAT</em> spécifie le format de datation d'une nouvelle entrée. Par défaut, c'est celui de la commande <em>date</em>. Vous pouvez spécifier la localisation pour la commande "date" (voir la variable <em>DATE_LOCALE</em>). Vous pouvez aussi spécifier des arguments supplémentaires à la ligne de commande avec <em>DATE_ARGS</em>, pratique pour exprimer le temps en UTC. Veuillez noter que ces paramètres n'ont <strong>pas d'effet</strong> sur les précédentes entrées et si vous employez UTC, attention aux conditions de concurrence qui pourrait advenir, car les noms de fichier des entrées pourraient être hors synchronisation. La solution est aussi de changer <em>DB_DATEARGS</em> à l'identique de <em>DATE_ARGS</em>, ainsi ces deux là renverront la même date et heure. Lire les pages "man" de la command "date" pour voir comment personnaliser le format de sortie de la commande "date".
+    <p><em>DATE_FORMAT</em> spécifie le format de datation d'une nouvelle entrée. Par défaut, c'est celui de la commande <em>date</em>. Vous pouvez spécifier la localisation pour la commande "date" (voir la variable <em>DATE_LOCALE</em>). Vous pouvez aussi spécifier des arguments supplémentaires à la ligne de commande avec <em>DATE_ARGS</em>, pratique pour exprimer le temps en UTC. Veuillez noter que ces paramètres n'ont <strong>pas d'effet</strong> sur les précédentes entrées et si vous employez UTC, attention aux conditions de concurrence qui pourraient advenir, car les noms de fichier des entrées pourraient être hors synchronisation. La solution est aussi de changer <em>DB_DATEARGS</em> à l'identique de <em>DATE_ARGS</em>, ainsi ces deux là renverront la même date et heure. Lire les pages "man" de la command "date" pour voir comment personnaliser le format de sortie de la commande "date".
       </p>
     <p>Exemples:</p>
     <pre>
@@ -393,15 +393,15 @@ BLOG_ICON="images/favicon.ico"
 
     <p><b>Définir le nombre maximal d'entrées à mettre sur la page principale</b></p>
 
-    <p><em>MAX_ENTRIES</em> met le nombre maximal d'entrées qui seront affichés en page(s) principale(s). Par défaut : 10.</p>
+    <p><em>MAX_ENTRIES</em> met le nombre maximal d'entrées qui seront affichées en page(s) principale(s). Par défaut : 10.</p>
 
-    <p><b>Définir le nombre maximal d'entrées affichés sur chaque page.</b></p>
+    <p><b>Définir le nombre maximal d'entrées affichées sur chaque page.</b></p>
 
     <p><em>MAX_PAGE_ENTRIES</em> met le nombre maximal d'entrées affichées par page. Par défaut : "$MAX_ENTRIES". C'est par défaut celui de la pagination des archives et autres pages de ce genre.</p>
 
     <p><em>MAX_CATPAGE_ENTRIES</em> met le nombre maximal d'entrées affichées pour chaque page d'archive "catégorie". Par défaut : "$MAX_PAGE_ENTRIES". Une page archive "catégorie" sera scindée en plusieurs si le nombre d'entrées est plus grand que <em>$MAX_CATPAGE_ENTRIES</em>.</p>
 
-    <p><em>MAX_MONTHPAGE_ENTRIES</em> met le nombre maximal d'entrées affichés par page d'archive "mois". Par défaut :"$MAX_PAGE_ENTRIES". Une page d'archive "mois" sera scindée en plusieurs si le nombre d'entrées est plus grand que <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
+    <p><em>MAX_MONTHPAGE_ENTRIES</em> met le nombre maximal d'entrées affichées par page d'archive "mois". Par défaut :"$MAX_PAGE_ENTRIES". Une page d'archive "mois" sera scindée en plusieurs si le nombre d'entrées est plus grand que <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
 
     <p><em>MAX_MAINPAGE_ENTRIES</em> met le nombre maximal d'entrées à afficher pour chaque page principale. Par défaut : "$MAX_PAGE_ENTRIES". La page principale sera scindée si <em>$MAX_MAINPAGE_ENTRIES</em> est moindre que <em>$MAX_ENTRIES</em>.</p>
 
@@ -672,7 +672,7 @@ nb [-b blog_dir] tag 1 delete tag
 
     <h3>Gestion avancée</h3>
  
-    <p>Employer l'action "query" pour manipuler la liste des entrées avec lesquelles on doit agir. Premièrement, vérifier votre requête par la combinaison des actions "query" avec "list" pour voir quel(s) numéro(s) y correspond(ent). Ensuite, le faire depuis cette requête en combinant l'action "query" avec l'une des actions "edit", "delete", "tag-entry" ou "update"; en employant le numéro(s) d'entrée en accord d'avec la précédente requête.</p>
+    <p>Employer l'action "query" pour manipuler la liste des entrées avec lesquelles on doit agir. Premièrement, vérifier votre requête par la combinaison des actions "query" avec "list" pour voir quel(s) numéro(s) y correspond(ent). Ensuite, le faire depuis cette requête en combinant l'action "query" avec l'une des actions "edit", "delete", "tag-entry" ou "update"; en employant le(s) numéro(s) d'entrée en accord d'avec la précédente requête.</p>
 
     <p>Éditer les entrées avec "query" :</p>
     <pre>
@@ -874,7 +874,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
       <p><b>Plugins d'archives "catégorie" : plugins/archive/category</b></p>
 
-      <p>Les plugings d'archivage "catégorie" sont inititialisés pour chaque catégorie d'archive qui soit à mettre àjour.</p>
+      <p>Les plugins d'archivage "catégorie" sont inititialisés pour chaque catégorie d'archive qui soit à mettre àjour.</p>
 
       <p><b>Plugins d'archives "jour" : plugins/archive/day</b></p>
 
@@ -1044,7 +1044,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
           <td align="left">$NB_EntryExcerpt</td>
 
-          <td align="left">fini après la première détection d'un double retour à la ligne (ligne vide)</td>
+          <td align="left">finit après la première détection d'un double retour à la ligne (ligne vide)</td>
         </tr>
 
         <tr>
@@ -1156,9 +1156,9 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         </tr>
 
         <tr>
-          <td align="left">page/format/autobr.sh</td>
+	  <td align="left">page/format/autobr.sh</td>
 
-          <td align="left">converti les lignes vides en balises HTML pour former un paragraphe</td>
+          <td align="left">convertit les lignes vides en balises HTML pour former un paragraphe</td>
 
           <td align="left">néant</td>
 
@@ -1182,7 +1182,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
         <tr>
           <td align="left">page/format/moods.sh</td>
 
-          <td align="left">converti les variables "mood" en icônes "smiley"</td>
+          <td align="left">convertit les variables "mood" en icônes "smiley"</td>
 
           <td align="left">MOODS_URL</td>
 
@@ -1326,7 +1326,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
 
      </pre>
 
-     <p><span class="warning">NOTE</span>: Dans le plugin de syndition RSS 2.0, the logo sera employé quand l'icône ne sera pas définie.</p>
+     <p><span class="warning">NOTE</span>: Dans le plugin de syndication RSS 2.0, le logo sera employé quand l'icône ne sera pas définie.</p>
 
      <p><b>Support de la syndication des catégories</b></p>
 
@@ -1884,7 +1884,7 @@ PLUGINS_DIR="$BLOG_DIR/plugins"
  USR_PLUGINSDIR="$BLOG_DIR/no-plugins"
 
 </pre>
-     <p>Comme noté plus haut, les plugins peuvent être désactivivés individuellement en changeant leur suffixe en autre chose que ".sh".</p>
+     <p>Comme noté plus haut, les plugins peuvent être désactivés individuellement en changeant leur suffixe en autre chose que ".sh".</p>
      
     <p><b>Ajout d'un script shell à vos templates</b></p>
 
@@ -1909,7 +1909,7 @@ $(&lt; "$BLOG_DIR/intro.txt")
     <p>Beaucoup de parties du blog sont stockées et construites dans le répertoire <em>parts</em>. Disons que vous avez déjà un site Web avec vos scripts "côté serveur" maison, mais que vous aimeriez y ajouter une nouvelle section de news. C'est là que le fichier "parts/index.html" convient. Il contient les plus récentes entrées; ainsi ajouter une section news/diary/blog consiste à ajouter du code pour inclure "parts/index.html" dans la page.
       </p>
 
-    <p>Des personnes astucieuses combinent la sortie de page statique de NanoBlogger avec du PHP ou du Perl. Par exemple, supposons que vous aimez avoir quelques liens dans la barre latérale, comme les entrées récentes : utilisant PHP, mettez votre <em>NB_FILETYPE</em> à "php" et modifiez le template concerné pour y inclure le code PHP qui extrait les données du répertoire "parts". Un des principaux avantages à ça est qu'il n'y a pas à reconstruire l'intégralité des archives du blog, seulement à y conserver les liens courants.
+    <p>Des personnes astucieuses combinent la sortie de page statique de NanoBlogger avec du PHP ou du Perl. Par exemple, supposons que vous aimiez avoir quelques liens dans la barre latérale, comme les entrées récentes : utilisant PHP, mettez votre <em>NB_FILETYPE</em> à "php" et modifiez le template concerné pour y inclure le code PHP qui extrait les données du répertoire "parts". Un des principaux avantages à ça est qu'il n'y a pas à reconstruire l'intégralité des archives du blog, seulement à y conserver les liens courants.
       </p>
 
     <p><b>Encapsuler d'autres variables dans les templates</b></p>
@@ -1939,6 +1939,11 @@ php?&gt;
  <a href="http://js-kit.com">2. http://js-kit.com</a><br />
 <a href="http://www.haloscan.com">3. http://www.haloscan.com</a><br />
 <a href="http://reactor-core.org/~djw/diary/">4. http://reactor-core.org/~djw/diary/</a><br /></p>
+	<h3>Crédits pour la traduction française</h3>
+<dl>
+<dt>Relecture (mise en français ) :</dt>
+<dd>Hubert Lombard (version 554)</dd>
+</dl>
 
     <div class="copyright">
       <span>Copyright © 2003-2008 Kevin Wood. Tous droits réservés.<br/>
