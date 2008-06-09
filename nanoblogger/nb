@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-04T01:03:30-04:00
+# Last modified: 2008-06-06T02:32:51-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -50,7 +50,7 @@ fi
 
 # ensure a sane configuration - do or die!
 check_config(){
-load_config
+deconfig; load_config
 load_lang
 [ ! -d "$NB_BASE_DIR" ] &&
 	die "`basename $0`: '$NB_BASE_DIR' - $checkconf_nobase."
@@ -200,7 +200,7 @@ EOF
 # build the weblog
 build_weblog(){
 	init_update(){
-	# add welcome message with category id 1 (NanoBlogger Help) to new weblogs
+	# add welcome message with category id 1 (nanoblogger-help) to new weblogs
 	if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
 		# force full update
 		NB_QUERY=all
@@ -371,7 +371,7 @@ if [ ! -z "$cat_num" ]; then
 				UPDATE_LIST=(`sort -u "$NB_DATA_DIR/$db_catquery"`)
 				find_categories "${UPDATE_LIST[*]}"
 				resort_categories
-				build_weblog; exit 0
+				build_weblog; exit
 			else
 				die "$editweblog_nomod"
 			fi
@@ -492,7 +492,7 @@ if [ ! -z "$cat_num" ]; then
 				update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
 			done
 			resort_db "$NB_DATA_DIR/master.db"
-			build_weblog; exit 0
+			build_weblog; exit
 		;;
 	esac
 fi
@@ -677,7 +677,7 @@ case "$db_query" in
 				let id=${id}+1
 				[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
 				echo " $id, `nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE 1`"
-			done; exit 0;;
+			done; exit;;
 esac
 list_entries(){
 	[ -z "$db_query" ] && db_query="$QUERY_MODE"
@@ -729,11 +729,11 @@ if [ ! -d "$BLOG_DIR" ]; then
 		nb_msg "$addweblog_confaction"
 		nb_edit "$BLOG_DIR"/blog.conf
 		check_config; build_weblog
-		exit 0;;
+		exit;;
 	[Nn])
 		check_config; build_weblog
 		nb_msg "$addweblog_noconf"
-		exit 0;;
+		exit;;
 	esac
 fi
 check_config
@@ -762,7 +762,7 @@ if [ ! -z "$cat_num" ]; then
 			fi
 		done
 		newcat_title=`nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`
-		nb_msg "$addweblog_madecat '$newcat_title'."; exit 0
+		nb_msg "$addweblog_madecat '$newcat_title'."; exit
 	else
 		# validate categories
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
@@ -862,7 +862,7 @@ while [ $# -gt 0 ]; do
 		make-page)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
-		manual)			load_config; load_lang; nb_browser "$NB_DOC_FILE"; exit 0;;
+		manual)			load_config; load_lang; nb_browser "$NB_DOC_FILE"; exit;;
 		tag|-c)			check_arg "$2"; cat_num="$2"; shift;;
 		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
 		tag-list) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
@@ -882,10 +882,10 @@ while [ $# -gt 0 ]; do
 		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;
 		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;
 		--var)			check_arg "$2"; USR_METAVAR="$2"; shift;;
-		--version)		echo "NanoBlogger $VERSION"; exit 0;;
+		--version)		echo "NanoBlogger $VERSION"; exit;;
 		-b|--blog-dir)		check_arg "$2"; USR_BLOGDIR="$2"; shift;;
 		-f|--force) 		FORCE_UPDATE=1; UPDATECACHE_WEBLOG=1;;
-		-h|--help|help)		show_help; exit 0;;
+		-h|--help|help)		show_help; exit;;
 		-i|--interactive) 	check_arg "$2"; USR_INTERACTIVE="$2"; shift;;
 		-v|--verbose)		check_arg "$2"; VERBOSE="$2"; shift;;
 		--)			shift; break;;

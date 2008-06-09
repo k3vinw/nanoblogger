@@ -4,13 +4,13 @@
 */
 
 body {
-	font: 12px/1.5 "Times New Roman", Times, serif;
+	font: 12px/1.5 verdana, arial, sans-serif;
 	background:#FFF;
 	margin:0;
 	padding:0;
 }
 
-a 		{ color: #003366; text-decoration: none; }
+a 		{ color: #003365; text-decoration: none; }
 a:link		{ color: #003366; text-decoration: none; }
 a:visited	{ color: #003366; text-decoration: none; }
 a:active	{ color: #999999;  }
@@ -20,6 +20,7 @@ h1 {
 	margin-top: 25px;
 	margin-bottom: -0.25em;
 	padding-top: 10px;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:x-large;
 	}
 
@@ -28,7 +29,7 @@ h2 {
 	margin-bottom: 1.5em;
 	padding: 0;
 	text-align: center;
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size: large;
 	font-weight: bold;
 	}
@@ -71,7 +72,7 @@ pre {
 	margin:0;
 	padding:0;
 	margin-top:0;
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	background-color: #FFF;
 	color: #333;
 	font-size:large;
@@ -93,6 +94,7 @@ pre {
 #banner a:visited,
 #banner a:active,
 #banner a:hover {
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:x-large;
 	color: #333;
 	text-decoration:none;
@@ -100,6 +102,7 @@ pre {
 
 .description {
 	color: #333;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:small;
 	font-weight:bold;
 	text-transform:lowercase;
@@ -109,7 +112,7 @@ pre {
 #content {
 	margin:0;
 	padding:0;
-	margin-left:215px;
+	margin-left:210px;
 	background-color:#FFF;
 }
 
@@ -123,7 +126,7 @@ pre {
 	margin:0;
 	padding:0;
 	float:left;
-	width:199px;
+	width:204px;
 	background-color:#FFF;
 	border:1px solid #FFF;
 	border-right: 1px dotted #999;
@@ -148,14 +151,14 @@ pre {
 .archives {
 	margin:0;
 	padding:0;
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#333;
 	font-size:small;
 	font-weight: normal;
 	padding:15px;
 }
 .blogbody {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#333;
 	font-size:small;
 	font-weight:normal;
@@ -172,14 +175,14 @@ pre {
 }
 
 .title {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:medium;
 	color: #666;
 	margin-bottom:15px;
 }
 
 #menu, .menu {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:small;
 	margin-top:25px;
 	margin-bottom:25px;
@@ -187,7 +190,7 @@ pre {
 }
 
 .date {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:large;
 	color: #333;
 	border-bottom:1px solid #999;
@@ -198,6 +201,7 @@ pre {
 }
 
 .posted {
+	font-family: verdana, arial, sans-serif;
 	font-size:x-small;
 	color:#000000;
 	margin-bottom:25px;
@@ -205,15 +209,16 @@ pre {
 
 .articleshead {
 	color: #666600;
-	text-transform:lowercase;
+	font-family: verdana, arial, sans-serif;
 	font-weight:bold;
+	text-transform:uppercase;
 	}
 
 .calendar {
-	font-family: "Times New Roman", Times, serif;
 	color: #666;
 	padding:2px;
 	text-align:center;
+	font-family: verdana, arial, sans-serif;
 	font-size:x-small;
 	font-weight:normal;
 	}
@@ -258,11 +263,11 @@ pre {
 }
 
 .side {
+	color:#333;
 	margin:0;
 	padding:0;
 	padding:2px 15px 2px 15px;
-	font-family: "Times New Roman", Times, serif;
-	color:#333;
+	font-family: verdana, arial, sans-serif;
 	font-size:x-small;
 	font-weight:normal;
 	line-height:150%;
@@ -270,6 +275,7 @@ pre {
 
 .sidetitle {
 	color: #666600;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:small;
 	font-weight:normal;
 	padding:2px;
@@ -279,12 +285,12 @@ pre {
 	border-left:15px solid #FFF;
 	border-right:15px solid #FFF;
 	text-align:center;
-	text-transform:lowercase;
+	text-transform:uppercase;
 }
 
 .syndicate {
-	font-family: "Times New Roman", Times, serif;
-	font-size:xx-small;
+	font-family: verdana, arial, sans-serif;
+	font-size:x-small;
 	color:#666;
 	background-color:#EEE;
 	margin-top:10px;
@@ -302,8 +308,8 @@ pre {
 }
 
 .powered {
-	font-family: "Times New Roman", Times, serif;
-	font-size:xx-small;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
+	font-size:x-small;
 	line-height:150%;
 	background-color:#EEE;
 	color:#666;
@@ -314,7 +320,7 @@ pre {
 }
 
 .comments-body {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#666;
 	font-size:small;
 	font-weight: normal;
@@ -325,14 +331,14 @@ pre {
 }
 
 .comments-post {
-	font-family: "Times New Roman", Times, serif;
+	font-family: verdana, arial, sans-serif;
 	color:#666;
 	font-size:x-small;
 	font-weight: normal;
 }
 
 .trackback-url {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#666;
 	font-size:small;
 	font-weight: normal;
@@ -342,7 +348,7 @@ pre {
 }
 
 .trackback-body {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#666;
 	font-size:small;
 	font-weight: normal;
@@ -353,14 +359,14 @@ pre {
 }
 
 .trackback-post {
-	font-family: "Times New Roman", Times, serif;
+	font-family: verdana, arial, sans-serif;
 	color:#666;
 	font-size:x-small;
 	font-weight: normal;
 }
 
 .comments-head {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-size:small;
 	color: #666;
 	border-bottom: 1px solid #999;
@@ -369,7 +375,7 @@ pre {
 }
 
 #banner-commentspop {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	color:#FFF;
 	font-size:large;
 	font-weight: bold;
@@ -383,11 +389,11 @@ pre {
 }
 
 .intro {
-	font-family: "Times New Roman", Times, serif;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	border-bottom: 1px solid #999999;
 	background-color:#FFF;
 	color:#333;
-	font-size:x-small;
+	font-size:small;
 	font-weight: normal;
 	line-height: 140%;
 	padding:10px 10px 0px 10px;
@@ -407,6 +413,7 @@ pre {
 
 .fortune {
 	color: #555;
+	font-family: palatino, georgia, verdana, arial, sans-serif;
 	font-weight: normal;
 	font-style: italic;
 	font-size: x-small;
