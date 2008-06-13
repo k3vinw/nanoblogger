@@ -1,0 +1,76 @@
+#-*- mode: shell-script;-*-
+
+# NanoBlogger completion.
+#
+have nb &&
+_nanoblogger()
+{
+    local cur prev dashoptions special i
+    
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    dashoptions="--author --blog-dir --conf-file --data-dir --desc --draft --force \
+    	     --help --interactive --plugin-dir --set-var --text --title --template \
+	     --template-dir --var --verbose --version"
+
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+	    if [[ ${COMP_WORDS[i]} == @(add|configure|delete|draft|edit|file|list|make-page|make-file|manual|tag|tag-entry|tag-list|preview|publish|query|update|udate-cache) ]]; then
+		    special=${COMP_WORDS[i]}
+	    fi
+    done
+
+    if [[ -n "$special" ]]; then
+	    case $special in
+		# don't complete anything once these options are found
+		@(manual|preview|publish|tag-list))
+				return 0
+				;;
+	    	@(draft|file|make-*))
+				_filedir
+				return 0
+				;;
+	    esac
+    fi
+
+    case "$prev" in
+    	-b|--blog-dir)
+			_filedir
+			return 0
+			;;
+	--conf-file|--data-dir|\
+	--plugin-dir|--template|--template-dir)
+			_filedir
+			return 0
+			;;
+	delete)
+			COMPREPLY=( $( compgen -W "tag" -- $cur ) )
+			return 0
+			;;
+	edit)
+			COMPREPLY=( $( compgen -W "tag" -- $cur ) )
+			return 0
+			;;
+	query)
+			COMPREPLY=( $( compgen -W "all article tag main max expired feed" -- $cur ) )
+			return 0
+			;;
+	tag)
+			COMPREPLY=( $( compgen -W "new" -- $cur ) )
+			return 0
+			;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W "$dashoptions" -- $cur ) )
+    else
+		COMPREPLY=( $( compgen -W 'add configure delete draft edit \
+					   file list make-page make-file manual \
+					   preview publish query tag tag-entry tag-list \
+					   update update-cache' -- $cur ) )
+    fi
+
+    return 0
+
+}
+[ "$have" ] && complete -F _nanoblogger nb
