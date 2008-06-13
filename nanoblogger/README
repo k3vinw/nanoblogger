@@ -1,0 +1,42 @@
+# Last modified: 2007-11-13T13:34:56-05:00
+
+NanoBlogger is a small weblog engine written in Bash for the command
+line. It uses common UNIX tools such as cat, grep, and sed to create
+static HTML content.
+
+Installing NanoBlogger
+----------------------
+1. download gzipped tarball:
+   http://nanoblogger.sourceforge.net/downloads/nanoblogger-xx.tar.gz
+2. decompress gzipped tarball: tar xzfv nanoblogger-xx.tar.gz
+
+Generic Upgrade Instructions
+----------------------------
+
+Follow these three steps:
+
+1. create a new weblog directory using nanoblogger (skip the
+   configuration):
+	nb -b [new-blog-dir] -a
+
+2. copy the old data directory over to the new weblog directory:
+	cp -r [old-blog-dir]/data [new-blog-dir]
+
+3. edit the new blog.conf to your likings and rebuild
+   the weblog:
+	nb -b [new-blog-dir] --configure -q all -u
+
+General Release Notes
+---------------------
+
+If you created your own plugins, please take into account any changes to
+variables, settings, etc., that your plugins may depend on.
+
+Final Notes
+-----------
+
+For more in depth documentation please see nanoblogger.html which
+should've been included with your copy of NanoBlogger.
+
+Project Page: http://nanoblogger.sourceforge.net
+Mailing List: http://groups.yahoo.com/group/nanoblogger
