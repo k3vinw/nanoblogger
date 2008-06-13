@@ -1,3 +1,31 @@
+2008-06-13 06:47  n1xt3r
+
+	* [r561] lib/tools.sh: - Fixes regression caused by attempt to fix
+	  sloppy regex used by sed when
+	  replacing/modifying metadata variables.
+
+2008-06-13 06:19  n1xt3r
+
+	* [r560] ChangeLog, default/templates/category_entry.htm,
+	  lib/tools.sh, nb, plugins/atom.sh, plugins/rss2.sh: - Fixes
+	  importing files as entries so that their non-supported metadata
+	  is
+	  preserved.
+	  - Fixes sloppy regex used by sed when replacing/modifying
+	  metadata
+	  variables.
+	  - Draft function now accepts user metadata variables.
+	  - Changes null entry titles in RSS and Atom feeds to "Untitled"
+	  ($notitle).
+	  - Changes null entry titles in category archives to "Untitled"
+	  ($notitle).
+
+2008-06-12 21:25  n1xt3r
+
+	* [r559] lib/tools.sh: Fixes regression that caused the order of
+	  metadata variables from existing
+	  templates to be ignored.
+
 2008-06-09 17:54  n1xt3r
 
 	* [r558] default/styles/nb_clean.css,

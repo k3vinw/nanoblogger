@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-06-13T02:40:10-04:00
+# Last modified: 2008-06-13T15:51:22-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -325,16 +325,18 @@ if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
 		EOF
 	elif [ -f "$META_FILE" ]; then
 		METAVAR_MATCH=`grep "^$1[\:]" "$META_FILE"`
-		# first, try replacing meta-tag, preserving structure
+		# first, try replacing meta-tag, while preserving structure
 		if [ ! -z "$METAVAR_MATCH" ]; then
-			METADATA_ALL=`sed -e '/^'$1'[\:].*/ s//'$1': \$NB_MetaOther/g' "$META_FILE"`
-			cat > "$META_FILE" <<-EOF
-				$METADATA_ALL
+			METAFILE_HEADER=`sed -e '1,/^'$METADATA_MARKER'/!d; /^'$METADATA_MARKER'/d' "$META_FILE"`
+			METAFILE_CONTENT=`sed -e '/^'$METADATA_MARKER'/,/^'$METADATA_CLOSEVAR'/!d' "$META_FILE"`
+			sed -e '/^'$1'[\:].*/ s//'$1': \$NB_MetaOther/g' > "$META_FILE" <<-EOF
+				$METAFILE_HEADER
 			EOF
 			NB_MetaOther="$METADATA"
-			# expand NB_MetaOther in place
+			# expands all variables in METAFILE_HEADER
 			load_template "$META_FILE"
 			write_template > "$META_FILE"
+			echo "$METAFILE_CONTENT" >> "$META_FILE"
 		else
 			# second, try stacking new/modified meta-tag on top, disregarding structure,
 			# while preserving data
