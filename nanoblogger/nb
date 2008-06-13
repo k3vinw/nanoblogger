@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-13T01:59:49-04:00
+# Last modified: 2008-06-13T19:43:33-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -317,8 +317,18 @@ if [ -f "$NB_EditFile" ]; then
 fi
 New_EntryFile="$NB_MetaTimeStamp.$NB_DATATYPE"
 # dump all custom modications from edit file to new entry's data file
-[ -f "$NB_EditFile" ] &&
+if [ -f "$NB_EditFile" ]; then
 	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
+elif [ -f "$IMPORT_FILE" ]; then
+	# dump all custom modifications from import file to new entry's data file
+	load_metadata HEADERS "$IMPORT_FILE"
+	if [ ! -z "$METADATA_HEADERS" ]; then
+		# expands all variables in METADATA_HEADERS
+		TEMPLATE_DATA="$METADATA_HEADERS"
+		write_template > "$NB_DATA_DIR/$New_EntryFile"
+		echo "$METADATA_CONTENT" >> "$NB_DATA_DIR/$New_EntryFile"
+	fi
+fi
 # save date metadata to entry's data file
 [ -f "$NB_DATA_DIR/$New_EntryFile" ] &&
 	write_var DATE "$NB_EntryDate" "$NB_DATA_DIR/$New_EntryFile"
@@ -796,8 +806,11 @@ NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
 write_entry "$NB_EditFile"
 # save any user metadata including those from imported files
 if [ -f "$IMPORT_FILE" ]; then
-	load_template "$IMPORT_FILE"
-	write_template > "$NB_EditFile"
+	if [ ! -z "$METADATA_HEADERS" ] && [ ! -z "$METADATA_CONTENT" ]; then
+		TEMPLATE_DATA="$METADATA_HEADERS"
+		write_template > "$NB_EditFile"
+		echo "$METADATA_CONTENT" >> "$NB_EditFile"
+	fi
 fi
 write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 if [ -z "$NB_EntryBody" ]; then
