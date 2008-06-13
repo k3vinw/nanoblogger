@@ -126,6 +126,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		#NB_RSS2EntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%Ta, %Td %Tb %TY %TH:%TM:%TS %Tz\n"`
 		NB_RSS2EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSS2EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
+		[ -z "$NB_RSS2EntryTitle" ] && NB_RSS2EntryTitle="$notitle"
 		NB_RSS2EntrySubject=; cat_title=; oldcat_title=
 		# support for RSS 2.0 enclosures (requires 'du' system command for determing length)
 		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_RSS2TempEnclosure="$METADATA"

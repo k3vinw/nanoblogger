@@ -134,6 +134,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		Atom_EntryModDate="$Atom_EntryDate"
 		Atom_EntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		Atom_EntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
+		[ -z "$Atom_EntryTitle" ] && Atom_EntryTitle="$notitle"
 		# support for Atom 1.0 enclosures (requires 'du' system command for determing length)
 		read_metadata ENCLOSURE "$NB_DATA_DIR/$entry"; NB_AtomTempEnclosure="$METADATA"
 		Atom_EntryCategory=; cat_title=
