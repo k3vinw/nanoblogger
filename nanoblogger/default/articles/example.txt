@@ -1,0 +1,31 @@
+TITLE: Example Article
+AUTHOR: n1xt3r
+DATE:
+DESC: example article for nanoblogger
+FORMAT: raw
+-----
+BODY:
+<p>
+This is an example article created with the articles plugin. A simple
+plugin that scans the <em>articles</em> directory for files ending with
+".txt" then checks if the article is new, old, or needs updating and
+generates the article accordingly.
+</p>
+<p>
+New articles can be created using the <code>draft</code> action.
+<pre>
+nb draft [blog_dir]articles/example.txt
+</pre>
+<p>
+The article will be generated the next time the weblog is updated. To
+generate the article sooner you can invoke a forced update.
+<pre>
+nb query main update
+</pre>
+To remove an article simply rename it's suffix to something
+other than ".txt" or remove it from the <em>articles</em> directory.
+</p>
+<p>
+View this article's <a href="../example.txt">metafile</a>.
+</p>
+END-----
