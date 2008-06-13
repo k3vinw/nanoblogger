@@ -115,6 +115,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		#NB_RSSEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_FEED_TZD}"`
 		NB_RSSEntryTitle=`echo "$NB_EntryTitle" |esc_chars`
 		NB_RSSEntryAuthor=`echo "$NB_EntryAuthor" |esc_chars`
+		[ -z "$NB_RSSEntryTitle" ] && NB_RSSEntryTitle="$notitle"
 		NB_RSSEntrySubject=; cat_title=; oldcat_title=
 		rssentry_wcatids=`grep "$entry" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 		rssentry_catids="${rssentry_wcatids##*\>}"
