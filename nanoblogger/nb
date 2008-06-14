@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-13T19:43:33-04:00
+# Last modified: 2008-06-13T20:49:10-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -746,7 +746,7 @@ if [ ! -z "$cat_num" ]; then
 	if [ "$cat_num" = new ]; then
 		query_db
 		id=0; cat_items=${#db_categories[*]}
-		while [ "$id" -lt "$cat_items" ]; do
+		while [ "$id" -lt "$cat_items" ] || [ "$cat_items" = 0 ]; do
 			let id=${id}+1
 			if [ ! -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ]; then
 				nb_msg "$addweblog_newcat id: $id ..."
