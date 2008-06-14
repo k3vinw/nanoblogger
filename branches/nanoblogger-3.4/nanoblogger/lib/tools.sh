@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-06-13T15:51:22-04:00
+# Last modified: 2008-06-13T19:43:41-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -184,7 +184,7 @@ if [ -f "$IMPORT_FILE" ]; then
 	# validate metafile
 	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 		"$IMPORT_FILE"
-	load_metadata ALL "$IMPORT_FILE"
+	load_metadata HEADERS "$IMPORT_FILE"
 else
 	die "'$IMPORT_FILE' $importfile_nofile"
 fi
@@ -306,6 +306,49 @@ else
 fi
 }
 
+# load metadata from file into tangible shell variables
+load_metadata(){
+METADATA_TYPE="$1" # ALL, NOBODY, or valid metadata key
+METADATA_FILE="$2"
+[ ! -f "$METADATA_FILE" ] &&
+	die "'$METADATA_FILE' $importfile_nofile"
+case $METADATA_TYPE in
+	AUTHOR)
+		read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
+		NB_EntryAuthor="$NB_MetaAuthor";;
+	BODY|CONTENT)
+		read_metadata "BODY,$METADATA_CLOSEVAR" "$METADATA_FILE"; NB_MetaBody="$METADATA"
+		NB_EntryBody="$NB_MetaBody";;
+	DATE)
+		read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
+		NB_EntryDate="$NB_MetaDate";;
+	DESC)
+		NB_EntryDescription="$NB_MetaDescription"
+		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
+	FORMAT)
+		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
+		NB_EntryFormat="$NB_MetaFormat";;
+	HEADERS)
+		: ${METADATA_MARKER:=-----}
+		: ${METADATA_CLOSEVAR:=END-----}
+		METADATA_HEADERS=`sed -e '1,/^'$METADATA_MARKER'/!d; /^'$METADATA_MARKER'/d' "$METADATA_FILE"`
+		METADATA_CONTENT=`sed -e '/^'$METADATA_MARKER'/,/^'$METADATA_CLOSEVAR'/!d' "$METADATA_FILE"`;;
+	TITLE)
+		read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
+		NB_EntryTitle="$NB_MetaTitle";;
+	ALL)
+		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT BODY; do
+			load_metadata $LMDATATYPE "$METADATA_FILE"
+		done;;
+	NOBODY)
+		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT; do
+			load_metadata $LMDATATYPE "$METADATA_FILE"
+		done;;
+	*)
+		load_metadata ALL "$METADATA_FILE";;
+esac
+}
+
 # write metadata out to file
 write_metadata(){
 METADATA="$2"
@@ -327,16 +370,17 @@ if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
 		METAVAR_MATCH=`grep "^$1[\:]" "$META_FILE"`
 		# first, try replacing meta-tag, while preserving structure
 		if [ ! -z "$METAVAR_MATCH" ]; then
-			METAFILE_HEADER=`sed -e '1,/^'$METADATA_MARKER'/!d; /^'$METADATA_MARKER'/d' "$META_FILE"`
-			METAFILE_CONTENT=`sed -e '/^'$METADATA_MARKER'/,/^'$METADATA_CLOSEVAR'/!d' "$META_FILE"`
-			sed -e '/^'$1'[\:].*/ s//'$1': \$NB_MetaOther/g' > "$META_FILE" <<-EOF
-				$METAFILE_HEADER
-			EOF
-			NB_MetaOther="$METADATA"
-			# expands all variables in METAFILE_HEADER
-			load_template "$META_FILE"
-			write_template > "$META_FILE"
-			echo "$METAFILE_CONTENT" >> "$META_FILE"
+			load_metadata HEADERS "$META_FILE"
+			if [ ! -z "$METADATA_HEADERS" ]; then
+				sed -e '/^'$1'[\:].*/ s//'$1': \$NB_MetaOther/g' > "$META_FILE" <<-EOF
+					$METADATA_HEADERS
+				EOF
+				NB_MetaOther="$METADATA"
+				# expands all variables in METADATA_HEADERS
+				load_template "$META_FILE"
+				write_template > "$META_FILE"
+				echo "$METADATA_CONTENT" >> "$META_FILE"
+			fi
 		else
 			# second, try stacking new/modified meta-tag on top, disregarding structure,
 			# while preserving data
@@ -361,44 +405,6 @@ if [ ! -z "$WRITE_MVAR" ]; then
 	write_metadata "$WRITE_MVAR" "$WRITE_MVARVALUE" \
 		"$WRITEMETAVAR_FILE"
 fi
-}
-
-# load standard metadata from file into tangible shell variables
-load_metadata(){
-METADATA_TYPE="$1" # ALL, NOBODY, or valid metadata key
-METADATA_FILE="$2"
-[ ! -f "$METADATA_FILE" ] &&
-	die "'$METADATA_FILE' $importfile_nofile"
-case $METADATA_TYPE in
-	AUTHOR)
-		read_metadata AUTHOR "$METADATA_FILE"; NB_MetaAuthor="$METADATA"
-		NB_EntryAuthor="$NB_MetaAuthor";;
-	BODY)
-		read_metadata "BODY,$METADATA_CLOSEVAR" "$METADATA_FILE"; NB_MetaBody="$METADATA"
-		NB_EntryBody="$NB_MetaBody";;
-	DATE)
-		read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
-		NB_EntryDate="$NB_MetaDate";;
-	DESC)
-		NB_EntryDescription="$NB_MetaDescription"
-		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
-	FORMAT)
-		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
-		NB_EntryFormat="$NB_MetaFormat";;
-	TITLE)
-		read_metadata TITLE "$METADATA_FILE"; NB_MetaTitle="$METADATA"
-		NB_EntryTitle="$NB_MetaTitle";;
-	ALL)
-		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT BODY; do
-			load_metadata $LMDATATYPE "$METADATA_FILE"
-		done;;
-	NOBODY)
-		for LMDATATYPE in AUTHOR TITLE DATE DESC FORMAT; do
-			load_metadata $LMDATATYPE "$METADATA_FILE"
-		done;;
-	*)
-		load_metadata ALL "$METADATA_FILE";;
-esac
 }
 
 # write entry's metadata to file
