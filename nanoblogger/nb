@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-13T20:49:10-04:00
+# Last modified: 2008-06-13T23:39:45-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -321,13 +321,7 @@ if [ -f "$NB_EditFile" ]; then
 	cat "$NB_EditFile" > "$NB_DATA_DIR/$New_EntryFile"
 elif [ -f "$IMPORT_FILE" ]; then
 	# dump all custom modifications from import file to new entry's data file
-	load_metadata HEADERS "$IMPORT_FILE"
-	if [ ! -z "$METADATA_HEADERS" ]; then
-		# expands all variables in METADATA_HEADERS
-		TEMPLATE_DATA="$METADATA_HEADERS"
-		write_template > "$NB_DATA_DIR/$New_EntryFile"
-		echo "$METADATA_CONTENT" >> "$NB_DATA_DIR/$New_EntryFile"
-	fi
+	cat "$IMPORT_FILE" > "$NB_DATA_DIR/$New_EntryFile"
 fi
 # save date metadata to entry's data file
 [ -f "$NB_DATA_DIR/$New_EntryFile" ] &&
@@ -804,20 +798,17 @@ fi
 NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
 # save current metadata to temp file
 write_entry "$NB_EditFile"
-# save any user metadata including those from imported files
-if [ -f "$IMPORT_FILE" ]; then
-	if [ ! -z "$METADATA_HEADERS" ] && [ ! -z "$METADATA_CONTENT" ]; then
-		TEMPLATE_DATA="$METADATA_HEADERS"
-		write_template > "$NB_EditFile"
-		echo "$METADATA_CONTENT" >> "$NB_EditFile"
-	fi
+# save user metadata and preserve structure from imported file
+if  [ -f "$IMPORT_FILE" ]; then
+	write_var "$USR_METAVAR" "$USR_SETVAR" "$IMPORT_FILE"
+	cat "$IMPORT_FILE" > "$NB_EditFile"
 fi
-write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 if [ -z "$NB_EntryBody" ]; then
 	nb_msg "$addweblog_editnew"
 	nb_edit -p "$NB_EditFile"
 	# preserve custom meta variable and data
-	read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
+	[ ! -z "$USR_METAVAR" ] &&
+		read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
 	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
 	# validate metafile
 	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
