@@ -1,15 +1,41 @@
+2008-06-14 03:47  n1xt3r
+
+	* [r575] lib/tools.sh, nb: Fix: Stops shell expansion in titles
+	  when saving user metadata to metafile.
+
+2008-06-14 00:51  n1xt3r
+
+	* [r573] nb: Fixes logical bug that prevented adding new tags when
+	  zero existed.
+
+2008-06-13 23:57  n1xt3r
+
+	* [r571] lib/tools.sh, nb: - Fixes regression that broke importing
+	  metadata from file.
+	  - Adds new functionality to load entire header section from
+	  metadata file.
+
+2008-06-13 22:36  n1xt3r
+
+	* [r568] .: Created obligatory trunk directory.
+
+2008-06-13 19:56  n1xt3r
+
+	* [r563] : Limits command line substitution in meta files to header
+	  portion of
+	  metafile when modifying metadata variables through
+	  write_metadata().
+
 2008-06-13 06:47  n1xt3r
 
-	* [r561] lib/tools.sh: - Fixes regression caused by attempt to fix
-	  sloppy regex used by sed when
+	* [r561] : - Fixes regression caused by attempt to fix sloppy regex
+	  used by sed when
 	  replacing/modifying metadata variables.
 
 2008-06-13 06:19  n1xt3r
 
-	* [r560] ChangeLog, default/templates/category_entry.htm,
-	  lib/tools.sh, nb, plugins/atom.sh, plugins/rss2.sh: - Fixes
-	  importing files as entries so that their non-supported metadata
-	  is
+	* [r560] : - Fixes importing files as entries so that their
+	  non-supported metadata is
 	  preserved.
 	  - Fixes sloppy regex used by sed when replacing/modifying
 	  metadata
@@ -22,15 +48,13 @@
 
 2008-06-12 21:25  n1xt3r
 
-	* [r559] lib/tools.sh: Fixes regression that caused the order of
-	  metadata variables from existing
+	* [r559] : Fixes regression that caused the order of metadata
+	  variables from existing
 	  templates to be ignored.
 
 2008-06-09 17:54  n1xt3r
 
-	* [r558] default/styles/nb_clean.css,
-	  default/styles/nb_default.css, lib/config.sh, nb: - Fixes
-	  instances where exit code might become masked.
+	* [r558] : - Fixes instances where exit code might become masked.
 	  - Fixes several instances where configuration changes were not
 	  immediately
 	  registered.
@@ -40,54 +64,53 @@
 
 2008-06-04 18:39  n1xt3r
 
-	* [r557] nb: Fixes non-critical race condition triggered when
+	* [r557] : Fixes non-critical race condition triggered when
 	  changing entry's
 	  timestamp.
 
 2008-06-02 18:11  n1xt3r
 
-	* [r555] nb: Automatically detects and loads user manual for
+	* [r555] : Automatically detects and loads user manual for
 	  preferred language.
 
 2008-06-02 17:34  n1xt3r
 
-	* [r553] nb, plugins/atom.sh, plugins/rss2.sh: - Adds "-u" and "-m"
-	  for sake of backwards compatibility.
+	* [r553] : - Adds "-u" and "-m" for sake of backwards
+	  compatibility.
 	  - Uses less conflicting naming scheme for initial enclosure
 	  metadata
 	  variables in syndication plugins.
 
 2008-05-27 16:44  n1xt3r
 
-	* [r552] docs/nanoblogger.html: Moves "category_entry.htm" into
-	  "Special Templates" for clarity.
+	* [r552] : Moves "category_entry.htm" into "Special Templates" for
+	  clarity.
 
 2008-05-27 04:37  n1xt3r
 
-	* [r550] nb, plugins/archive/master_index.sh: - Fixes bug in
-	  load_plugins() that caused user plugins to be ignored when
+	* [r550] : - Fixes bug in load_plugins() that caused user plugins
+	  to be ignored when
 	  provided as an argument due to a bad path.
 	  - Fixes broken pipe caused by a null variable where a command
 	  should be.
 
 2008-05-25 05:15  n1xt3r
 
-	* [r549] nb: - Fixes regression that failed to load the minimal set
+	* [r549] : - Fixes regression that failed to load the minimal set
 	  of language data
 	  required for displaying early error messages.
 	  - load_lang(): now accepts specified language as input.
 
 2008-05-24 09:26  n1xt3r
 
-	* [r548] lang/en/plugins.lang, plugins/z001_articles_meta.sh: Adds
-	  language definition, plugins_articles for where template_articles
-	  is
+	* [r548] : Adds language definition, plugins_articles for where
+	  template_articles is
 	  insufficient.
 
 2008-05-24 07:17  n1xt3r
 
-	* [r547] lib/config.sh, nb: - loads language data after loading
-	  configuration allowing for possibilty
+	* [r547] : - loads language data after loading configuration
+	  allowing for possibilty
 	  of configuring language per-weblog.
 	  - Fixes bug where specified language data was not be loaded
 	  before error
@@ -95,35 +118,32 @@
 
 2008-05-24 06:30  n1xt3r
 
-	* [r546] lib/config.sh: Exports NB_EDITOR for inclusion in
-	  templates.
+	* [r546] : Exports NB_EDITOR for inclusion in templates.
 
 2008-05-24 06:19  n1xt3r
 
-	* [r545] lang/en/templates.lang: Switches out $EDITOR with more
-	  accurate representation, $NB_EDITOR.
+	* [r545] : Switches out $EDITOR with more accurate representation,
+	  $NB_EDITOR.
 
 2008-05-24 00:32  n1xt3r
 
-	* [r544] nb: Fixes issues with interactive mode when importing
-	  files.
+	* [r544] : Fixes issues with interactive mode when importing files.
 
 2008-05-23 22:58  n1xt3r
 
-	* [r543] docs/nanoblogger.html: Minor change of reference to
-	  configuration variable for consistency.
+	* [r543] : Minor change of reference to configuration variable for
+	  consistency.
 
 2008-05-23 21:57  n1xt3r
 
-	* [r541] docs/nanoblogger.html: Improves formatting and readability
-	  of the "Configuring Plugins" user
+	* [r541] : Improves formatting and readability of the "Configuring
+	  Plugins" user
 	  manual section.
 
 2008-05-23 17:56  n1xt3r
 
-	* [r540] default/blog.conf, default/data/cat_1.db,
-	  docs/nanoblogger.html, plugins/atom.sh, plugins/rss2.sh: - Minor
-	  updates to user manual, including QUERY_MODE and ATOM_FEED_LANG.
+	* [r540] : - Minor updates to user manual, including QUERY_MODE and
+	  ATOM_FEED_LANG.
 	  - Adds BLOG_FEED_TZD for configuring weblog feeds timezone.
 	  - Adds QUERY_MODE, NB_FILETYPE to default blog.conf.
 	  - Changes "NanoBlogger Help" category to lowercase for
@@ -132,22 +152,21 @@
 
 2008-05-22 04:01  n1xt3r
 
-	* [r538] default/templates/permalink.htm, nb: - Using "--force"
-	  upon a complete "update" triggers rebuilding database.
+	* [r538] : - Using "--force" upon a complete "update" triggers
+	  rebuilding database.
 	  - Fixes regressive typo in add_weblog() code.
 	  - Syncs default entry archive's template with settings in default
 	  blog.conf.
 
 2008-05-22 01:49  n1xt3r
 
-	* [r537] nb: Fixes regression that ignored imported files not
+	* [r537] : Fixes regression that ignored imported files not
 	  specified by command line.
 
 2008-05-22 01:41  n1xt3r
 
-	* [r536] lib/tools.sh, nb, plugins/atom.sh, plugins/rss2.sh,
-	  plugins/z001_articles_meta.sh: - Fixes several regressions in
-	  logic when adding new entries (e.g.
+	* [r536] : - Fixes several regressions in logic when adding new
+	  entries (e.g.
 	  ignoring user input).
 	  - Does a better job preserving order of existing metadata
 	  variables when
@@ -157,15 +176,12 @@
 
 2008-05-20 18:26  n1xt3r
 
-	* [r535] docs/nanoblogger.html: - Syncs user doc with latest
-	  changes in articles plugin.
+	* [r535] : - Syncs user doc with latest changes in articles plugin.
 
 2008-05-19 18:39  n1xt3r
 
-	* [r534] default/blog.conf, default/templates/main_index.htm,
-	  lang/en/messages.lang, nb, plugins/rss2.sh,
-	  plugins/z001_articles_meta.sh: - Refactors output of articles
-	  plugin with improved control and better
+	* [r534] : - Refactors output of articles plugin with improved
+	  control and better
 	  integration with templates.
 	  - ARTICLES_DIR replaces ARTICLE_DIRS to improve continuity in
 	  configuration
@@ -177,15 +193,8 @@
 
 2008-05-18 05:37  n1xt3r
 
-	* [r532] default/blog.conf, default/templates/category_archive.htm,
-	  default/templates/day_archive.htm,
-	  default/templates/main_index.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm,
-	  default/templates/year_archive.htm, lib/database.sh,
-	  lib/tools.sh, nb, plugins/atom.sh, plugins/rss2.sh,
-	  plugins/weblog_status.sh: - Fixes regression leading to empty
-	  date metadata when adding new entries.
+	* [r532] : - Fixes regression leading to empty date metadata when
+	  adding new entries.
 	  - Fixes regression leading to relative links in syndication
 	  feeds.
 	  - Fixes bug in weblog status plugin that displayed random data in
@@ -203,12 +212,8 @@
 
 2008-05-17 23:55  n1xt3r
 
-	* [r530] TODO, default/blog.conf, default/styles/nb_clean.css,
-	  default/styles/nb_default.css, docs/nanoblogger.html,
-	  lang/en/plugins.lang, lang/en/templates.lang, lib/config.sh,
-	  lib/database.sh, lib/tools.sh, nb, plugins/atom.sh,
-	  plugins/rss2.sh: - Adds podcast (enclosures) support (Atom 1.0 &
-	  RSS 2.0).
+	* [r530] : - Adds podcast (enclosures) support (Atom 1.0 & RSS
+	  2.0).
 	  - Adds icon support (Atom 1.0 & RSS 2.0 via RSS 2.0 "image").
 	  - Adds logo support (Atom 1.0).
 	  - Adds subtitle support (Atom 1.0).
@@ -242,13 +247,8 @@
 
 2008-05-15 20:53  n1xt3r
 
-	* [r528] TODO, default/blog.conf, default/styles/nb_clean.css,
-	  default/styles/nb_default.css,
-	  default/templates/category_archive.htm,
-	  default/templates/main_index.htm,
-	  default/templates/month_archive.htm, lib/archive.sh, nb,
-	  plugins/atom.sh: - Fix: Implemented more balanced and sensible
-	  presets for default
+	* [r528] : - Fix: Implemented more balanced and sensible presets
+	  for default
 	  blog.conf (Denis Benard).
 	  - Fix: added a few missing configuration directives to blog.conf
 	  (Denis
@@ -263,56 +263,47 @@
 
 2008-05-14 16:30  n1xt3r
 
-	* [r526] nb, plugins/atom.sh, plugins/rss2.sh: - load_plugins():
-	  Adds ability to load individual plugins.
+	* [r526] : - load_plugins(): Adds ability to load individual
+	  plugins.
 	  - load_plugins(): Respects disabled user plugins (without .sh
 	  suffix).
 
 2008-05-13 16:01  n1xt3r
 
-	* [r525] docs/nanoblogger.html,
-	  plugins/archive/year/year_archive.sh: - Fix: No link generated
-	  for untitled entries in yearly achives.
+	* [r525] : - Fix: No link generated for untitled entries in yearly
+	  achives.
 	  - Fix: Incorrect documentation of write_var().
 
 2008-05-09 17:19  n1xt3r
 
-	* [r524] lang/en/help.txt, nb: Visually distinguished static input
-	  from dynamic input for help shown.
+	* [r524] : Visually distinguished static input from dynamic input
+	  for help shown.
 
 2008-04-30 21:28  n1xt3r
 
-	* [r520] default/styles/nb_clean.css,
-	  default/styles/nb_default.css, plugins/z001_articles_meta.sh:
-	  Added CSS classes for articles plugin generated HTML.
+	* [r520] : Added CSS classes for articles plugin generated HTML.
 
 2008-04-30 04:29  n1xt3r
 
-	* [r519] plugins/z001_articles_meta.sh: Automated generation of
-	  articles list title file.
+	* [r519] : Automated generation of articles list title file.
 
 2008-04-29 18:52  n1xt3r
 
-	* [r518] TODO, plugins/z001_articles_meta.sh: Fixes bug that
-	  clobbered articles index listing.
+	* [r518] : Fixes bug that clobbered articles index listing.
 
 2008-04-25 19:16  n1xt3r
 
-	* [r517] TODO: Updated Todo list.
+	* [r517] : Updated Todo list.
 
 2008-01-30 21:11  n1xt3r
 
-	* [r515] COPYING, copyright, lang/en/help.txt, lib/tools.sh,
-	  plugins/calendar.sh: - Implemented some cosmetic suggestions from
-	  GPL-2.
+	* [r515] : - Implemented some cosmetic suggestions from GPL-2.
 	  - Added copyright text.
 	  - Fix: calendar.sh: BASE_URL set incorrectly for main index.
 
 2008-01-24 06:36  n1xt3r
 
-	* [r514] lang/en/help.txt, lang/en/messages.lang, lib/archive.sh,
-	  lib/tools.sh, nb, plugins/calendar.sh: - help.txt: Updates --var
-	  description.
+	* [r514] : - help.txt: Updates --var description.
 	  - calendar.sh: Improves BASE_URL handling.
 	  - nb_browser(): Shows command and address.
 	  - Fix: delete_weblog() broke update process forcing full updates.
@@ -320,17 +311,15 @@
 
 2008-01-22 20:55  n1xt3r
 
-	* [r513] default/templates/month_entry.htm, nb: - Regressed some
-	  code to Bash 2.x compatible state after tests.
+	* [r513] : - Regressed some code to Bash 2.x compatible state after
+	  tests.
 	  - Fix: entry templates for month were inconsistent with default
 	  configuration.
 
 2008-01-19 23:41  n1xt3r
 
-	* [r511] default/blog.conf, lang/en/messages.lang, lib/archive.sh,
-	  lib/tools.sh, nb, plugins/archive/year/year_archive.sh,
-	  plugins/recent_entries.sh: - Fix: set_smartlinktitle(): previous
-	  revisions introduced a bug that
+	* [r511] : - Fix: set_smartlinktitle(): previous revisions
+	  introduced a bug that
 	  caused an unnecessary large amount of recursion.
 	  - Fix: year_archive.sh: previous revisions included all entries
 	  regardless
@@ -349,10 +338,7 @@
 
 2008-01-18 18:30  n1xt3r
 
-	* [r510] lang/en/help.txt, lib/archive.sh, lib/database.sh,
-	  lib/tools.sh, nb, plugins/archive/year/year_archive.sh,
-	  plugins/calendar.sh: - Consolidated archive functions into new
-	  module.
+	* [r510] : - Consolidated archive functions into new module.
 	  - Unified structure of year archive plugin with other new archive
 	  plugins.
 	  - Calendar plugin: make_calendar() improved handling of BASE_URL.
@@ -363,20 +349,8 @@
 
 2008-01-17 05:40  n1xt3r
 
-	* [r509] default/blog.conf, default/templates/main_index.htm,
-	  default/templates/month_entry.htm, lang/en/plugins.lang,
-	  lib/config.sh, lib/database.sh, lib/tools.sh, nb,
-	  plugins/archive/day/cal2daytitle.sh,
-	  plugins/archive/day/day_archive.sh,
-	  plugins/archive/month/month_archive.sh,
-	  plugins/archive/month/month_calendar.sh,
-	  plugins/archive/year/year_archive.sh,
-	  plugins/archive/year/year_index.sh, plugins/calendar.sh,
-	  plugins/entry/format/autobr.sh, plugins/entry/format/markdown.sh,
-	  plugins/makepage/tidy.sh, plugins/page/format/autobr.sh,
-	  plugins/page/format/markdown.sh, plugins/page/format/moods.sh,
-	  plugins/recent_entries.sh: - Month and Day archives functions
-	  implemented as plugins, toggled on/off
+	* [r509] : - Month and Day archives functions implemented as
+	  plugins, toggled on/off
 	  with blog.conf variables.
 	  - New MONTHARCH_DATATYPE and DAYARCH_DATATYPE blog.conf
 	  variables.
@@ -390,17 +364,8 @@
 
 2008-01-14 03:44  n1xt3r
 
-	* [r508] default/blog.conf, default/templates/category_entry.htm,
-	  default/templates/entry.htm, default/templates/main_index.htm,
-	  default/templates/permalink.htm,
-	  default/templates/permalink_entry.htm, docs/nanoblogger.html,
-	  lang/en/messages.lang, lang/en/templates.lang, lib/config.sh,
-	  lib/database.sh, lib/tools.sh, nb, plugins/archive/category,
-	  plugins/archive/year/year_index.sh, plugins/atom.sh,
-	  plugins/calendar.sh, plugins/entry/category_links.sh,
-	  plugins/rss2.sh, plugins/weblog_links.sh,
-	  plugins/z001_articles_meta.sh: - Major updates to templates, lang
-	  files, blog.conf, and archiving process.
+	* [r508] : - Major updates to templates, lang files, blog.conf, and
+	  archiving process.
 	  - New variables MONTH_ARCHIVES and DAY_ARCHIVES for blog.conf
 	  toggle month
 	  and day archives.
@@ -414,33 +379,17 @@
 
 2008-01-13 18:07  n1xt3r
 
-	* [r507] nb, plugins/archive/year/year_index.sh, plugins/atom.sh,
-	  plugins/rss2.sh: Fix: Atom feed corrected, no longer escapes
-	  XHTML.
+	* [r507] : Fix: Atom feed corrected, no longer escapes XHTML.
 	  Fix: RSS feed corrected, added guid to items.
 	  Fix: year_index.sh checks CATEGORY_LINKS again.
 
 2008-01-12 21:30  n1xt3r
 
-	* [r505] TODO: Updated TODO list.
+	* [r505] : Updated TODO list.
 
 2008-01-12 21:27  n1xt3r
 
-	* [r504] TODO, default/articles/example.txt, default/atom.xml,
-	  default/blog.conf, default/cache, default/index.html,
-	  default/index.xml, default/plugins,
-	  default/templates/category_archive.htm,
-	  default/templates/entry.metadata,
-	  default/templates/file.metadata,
-	  default/templates/weblog_status.htm, docs/nanoblogger.html,
-	  lang/en/help.txt, lang/en/messages.lang, lang/en/templates.lang,
-	  lib/config.sh, lib/database.sh, lib/tools.sh, nb,
-	  plugins/archive/master_index.sh,
-	  plugins/archive/year/year_index.sh, plugins/atom.sh,
-	  plugins/entry/category_links.sh, plugins/rss2.sh,
-	  plugins/weblog_links.sh, plugins/z001_articles_meta.sh,
-	  welcome-to-nb.txt: - New command line "actions" replaces many old
-	  options.
+	* [r504] : - New command line "actions" replaces many old options.
 	  - Changes command line references of category and cat to tag.
 	  - New tag-list action as shortcut to "query tag list".
 	  - Updates User Manual to reflect new changes.
@@ -449,90 +398,59 @@
 
 2007-12-19 07:22  n1xt3r
 
-	* [r503] docs/nanoblogger.html, lang/en/help.txt, lib/database.sh,
-	  lib/tools.sh, nb, plugins/archive/master_index.sh,
-	  plugins/archive/year/year_index.sh, plugins/atom.sh,
-	  plugins/entry/category_links.sh, plugins/rss2.sh,
-	  plugins/weblog_links.sh, plugins/weblog_status.sh,
-	  plugins/z001_articles_meta.sh: - adds "-F, --force" option, which
-	  is synonymous with --update-cache.
+	* [r503] : - adds "-F, --force" option, which is synonymous with
+	  --update-cache.
 	  - replaces "sed 1q" with nb_print().
 	  - updates user manual with tips for disabling plugins.
 
 2007-11-14 20:50  n1xt3r
 
-	* [r502] README, default/blog.conf, docs/nanoblogger.html,
-	  lang/en/help.txt, lib/tools.sh, nb, welcome-to-nb.txt: - Changed
-	  default mimetype to more relaxed, "text/html."
+	* [r502] : - Changed default mimetype to more relaxed, "text/html."
 	  - Must use --query option to change queries for --edit, --delete,
 	  --list,
 	  --move, and --update.
 
 2007-07-16 04:44  n1xt3r
 
-	* [r501] default/styles/nb_clean.css,
-	  default/styles/nb_default.css: Backported some CSS enhancements,
-	  including feed icons.
+	* [r501] : Backported some CSS enhancements, including feed icons.
 
 2007-07-16 01:49  n1xt3r
 
-	* [r500] default/styles/nb_clean.css,
-	  default/styles/nb_default.css: - Replaced CSS with correct files.
+	* [r500] : - Replaced CSS with correct files.
 	  - Updated classes for pre and intro.
 
 2007-07-16 01:18  n1xt3r
 
-	* [r499] default/styles/nb_clean.css: Replaced file with correct
-	  one.
+	* [r499] : Replaced file with correct one.
 
 2007-07-16 00:58  n1xt3r
 
-	* [r498] default/styles/nb_clean.css,
-	  default/styles/nb_default.css,
-	  default/templates/category_archive.htm,
-	  default/templates/day_archive.htm,
-	  default/templates/main_index.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm,
-	  default/templates/year_archive.htm: - Fix: previous entry failed
-	  to update when URI changed.
+	* [r498] : - Fix: previous entry failed to update when URI changed.
 	  - Redesigned templates and CSS back to a simple 2 column layout.
 
 2007-07-14 19:05  n1xt3r
 
-	* [r497] default/styles/nb_default.css,
-	  default/styles/nb_rusted.css, default/styles/nb_spring.css,
-	  default/styles/nb_steelblue.css, default/styles/print.css,
-	  default/templates/category_archive.htm,
-	  default/templates/day_archive.htm,
-	  default/templates/main_index.htm, default/templates/makepage.htm,
-	  default/templates/month_archive.htm,
-	  default/templates/permalink.htm,
-	  default/templates/year_archive.htm, lib/tools.sh, nb: - reverted
-	  templates and css to wide style, thanks to Guennadi for contrib.
+	* [r497] : - reverted templates and css to wide style, thanks to
+	  Guennadi for contrib.
 	  - Fix: archive links broken by unicode.
 
 2007-04-20 21:06  n1xt3r
 
-	* [r495] docs/nanoblogger.html, lib/tools.sh,
-	  plugins/archive/year/year_index.sh: - Consolidated lookup_*id
-	  functions into a single function.
+	* [r495] : - Consolidated lookup_*id functions into a single
+	  function.
 	  - Bug fix: broken navigational links.
 
 2007-02-18 23:55  n1xt3r
 
-	* [r490] README, TODO, default/blog.conf, docs/nanoblogger.html,
-	  lib/config.sh, nb, nb.conf: Configurable temp directory.
+	* [r490] : Configurable temp directory.
 
 2007-02-14 07:14  n1xt3r
 
-	* [r489] lib/tools.sh: Fix: query for expired cache could throw
-	  limit offset.
+	* [r489] : Fix: query for expired cache could throw limit offset.
 
 2007-02-14 06:47  n1xt3r
 
-	* [r488] lib/tools.sh, nb: - Fix: useless use of cat in set_*link
-	  functions.
+	* [r488] : - Fix: useless use of cat in set_*link functions.
 	  - Fix: Day archives were not being cached.
 	  - Replaced external use of sed with faster Bash internals where
 	  possible in
@@ -540,39 +458,31 @@
 
 2007-02-14 04:49  n1xt3r
 
-	* [r487] docs/nanoblogger.html, lib/tools.sh, nb,
-	  plugins/archive/year/year_index.sh, plugins/entry/mod/moods.sh,
-	  plugins/page/format/moods.sh, plugins/recent_entries.sh,
-	  plugins/weblog_links.sh: Replaced use of external expr command
-	  with faster, internal let command.
+	* [r487] : Replaced use of external expr command with faster,
+	  internal let command.
 
 2007-02-13 20:05  n1xt3r
 
-	* [r485] docs/nanoblogger.html, lib/database.sh, lib/tools.sh: -
-	  Fix: validation of $db_categories used unreliable form of command
+	* [r485] : - Fix: validation of $db_categories used unreliable form
+	  of command
 	  substitution.
 	  - Fix: write_template example in user manual was wrong.
 
 2007-02-11 19:51  n1xt3r
 
-	* [r483] docs/nanoblogger.html, lib/database.sh, lib/tools.sh, nb:
-	  Fix: $db_categories wasn't being nullified when no categories
-	  existed.
+	* [r483] : Fix: $db_categories wasn't being nullified when no
+	  categories existed.
 
 2007-02-11 07:36  n1xt3r
 
-	* [r482] default/templates/category_entry.htm,
-	  default/templates/permalink_entry.htm, lib/tools.sh, nb: - Fix:
-	  previous commit didn't set metadata files to load.
+	* [r482] : - Fix: previous commit didn't set metadata files to
+	  load.
 	  - New function, write_template writes template data to STDOUT.
 	  - Optimized rest of *_entry.htm templates (removed pipe to sed).
 
 2007-02-11 02:57  n1xt3r
 
-	* [r481] default/blog.conf, docs/nanoblogger.html,
-	  lang/en/help.txt, lib/database.sh, lib/tools.sh, nb,
-	  plugins/atom.sh, plugins/entry/category_links.sh,
-	  plugins/rss2.sh: - Enhanced load_metadata() function.
+	* [r481] : - Enhanced load_metadata() function.
 	  - Faster generation of category archives whenever TITLE is
 	  specified as
 	  metadata type.
@@ -581,34 +491,29 @@
 
 2007-02-07 21:16  n1xt3r
 
-	* [r480] lib/tools.sh, nb: Fix: previous commit caused certain
-	  queries to screw with update process.
+	* [r480] : Fix: previous commit caused certain queries to screw
+	  with update process.
 
 2007-02-05 20:22  n1xt3r
 
-	* [r478] lang/en/help.txt, lib/database.sh, nb: Default query mode
-	  influences all opeartions, now must use --query or
+	* [r478] : Default query mode influences all opeartions, now must
+	  use --query or
 	  blog.conf's QUERY_MODE to change.
 
 2007-02-04 23:12  n1xt3r
 
-	* [r477] lib/database.sh, lib/tools.sh, nb, plugins/atom.sh,
-	  plugins/page/feed_links.sh, plugins/rss2.sh: Minor speed
-	  improvements to atom, rss, feed links plugins, and lib/tools.
+	* [r477] : Minor speed improvements to atom, rss, feed links
+	  plugins, and lib/tools.
 
 2007-02-03 19:23  n1xt3r
 
-	* [r476] lang/en/help.txt, lib/database.sh, nb: - Improved
-	  detection for specified range of dates.
+	* [r476] : - Improved detection for specified range of dates.
 	  - Fix: "cat" was needlessly queried while listing entries.
 
 2007-01-30 19:05  n1xt3r
 
-	* [r475] default/templates/entry.htm, docs/nanoblogger.html,
-	  lang/en/help.txt, lib/database.sh, nb,
-	  plugins/archive/year/year_index.sh,
-	  plugins/entry/category_links.sh, plugins/recent_entries.sh: - New
-	  Benchmarking option that uses internal times command.
+	* [r475] : - New Benchmarking option that uses internal times
+	  command.
 	  - Removed long time, deprecated "-B" and "--body" command line
 	  options.
 	  - Ability to index and re-index category ID's to category
@@ -621,61 +526,58 @@
 
 2007-01-26 01:50  n1xt3r
 
-	* [r474] nb: Fix: last commit would've caused category to be
-	  updated with old entry when
+	* [r474] : Fix: last commit would've caused category to be updated
+	  with old entry when
 	  date was changed.
 
 2007-01-26 01:47  n1xt3r
 
-	* [r473] nb: Improved method of category database modifications.
+	* [r473] : Improved method of category database modifications.
 
 2007-01-25 22:08  n1xt3r
 
-	* [r472] lib/database.sh, lib/tools.sh, nb: Category databases can
-	  store category ID's.
+	* [r472] : Category databases can store category ID's.
 
 2007-01-24 20:41  n1xt3r
 
-	* [r471] lib/database.sh: Replaced duplicate code with it's
-	  equivalent function.
+	* [r471] : Replaced duplicate code with it's equivalent function.
 
 2007-01-24 05:42  n1xt3r
 
-	* [r470] default/styles/feed.css: Added stylesheet for feeds.
-	  Apologies to whoever contributed this I forgot
+	* [r470] : Added stylesheet for feeds. Apologies to whoever
+	  contributed this I forgot
 	  to add it in earlier.
 
 2007-01-22 20:02  n1xt3r
 
-	* [r468] lib/tools.sh, nb, plugins/atom.sh, plugins/rss2.sh:
-	  Implemented $ENTRY_PLUGINSLIST to control set and order of entry
-	  plugins
+	* [r468] : Implemented $ENTRY_PLUGINSLIST to control set and order
+	  of entry plugins
 	  that load for each entry.
 
 2007-01-20 21:53  n1xt3r
 
-	* [r467] TODO, nb: Fix: not all category archives were updated upon
-	  entry removal.
+	* [r467] : Fix: not all category archives were updated upon entry
+	  removal.
 
 2007-01-20 04:03  n1xt3r
 
-	* [r466] lib/tools.sh, nb: Fix: no categories were updated when
-	  update was set to "all."
+	* [r466] : Fix: no categories were updated when update was set to
+	  "all."
 
 2007-01-19 22:32  n1xt3r
 
-	* [r465] TODO, lib/database.sh, nb: Fix: didn't reset ID's in loop
-	  while indexing category ID's in database.
+	* [r465] : Fix: didn't reset ID's in loop while indexing category
+	  ID's in database.
 
 2007-01-19 20:12  n1xt3r
 
-	* [r464] nb: Fix: repetitive update database message under rare
+	* [r464] : Fix: repetitive update database message under rare
 	  circumstances.
 
 2007-01-19 19:44  n1xt3r
 
-	* [r463] TODO, lib/database.sh, lib/tools.sh, nb: - Fix: updating
-	  prev/next entries caused categories to be needlessly
+	* [r463] : - Fix: updating prev/next entries caused categories to
+	  be needlessly
 	  updated.
 	  - Reduced modifications to the main database and category
 	  databases.
@@ -683,24 +585,22 @@
 
 2007-01-17 07:30  n1xt3r
 
-	* [r461] lib/database.sh, nb: Fix: resort_catdb() variables names
-	  all wrong.
+	* [r461] : Fix: resort_catdb() variables names all wrong.
 
 2007-01-17 07:18  n1xt3r
 
-	* [r460] lib/database.sh, nb: - Optimized cache cleanup routines.
+	* [r460] : - Optimized cache cleanup routines.
 	  - Fix: all categories updated regardless when permanently
 	  deleting entry.
 
 2007-01-16 19:31  n1xt3r
 
-	* [r459] default/blog.conf, lib/database.sh, lib/tools.sh, nb: Day
-	  archives are optional, setting $DAY_ARCHIVES from blog.conf.
+	* [r459] : Day archives are optional, setting $DAY_ARCHIVES from
+	  blog.conf.
 
 2007-01-16 07:58  n1xt3r
 
-	* [r458] lib/database.sh, lib/query.sh, lib/tools.sh, nb: - added
-	  more database functionality.
+	* [r458] : - added more database functionality.
 	  - renamed query.sh library to database.sh.
 	  - relative categories are now retrieved directly from main
 	  database.
@@ -708,9 +608,8 @@
 
 2007-01-15 20:15  n1xt3r
 
-	* [r457] TODO, lang/en/messages.lang, lib/query.sh, nb: - Fix:
-	  update list wasn't being propagated upon delete, thus nothing
-	  proper
+	* [r457] : - Fix: update list wasn't being propagated upon delete,
+	  thus nothing proper
 	  was updated.
 	  - Fix: rebuilt entire main database upon any modifications.
 	  - Number of new database tools help manage database more directly
@@ -719,6 +618,6 @@
 
 2007-01-13 23:01  n1xt3r
 
-	* [r456] README, plugins/post/clean_parts.off: Added some verbosity
-	  to the clean parts directory plugin.
+	* [r456] : Added some verbosity to the clean parts directory
+	  plugin.
 
