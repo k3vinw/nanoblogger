@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-06-13T19:43:41-04:00
+# Last modified: 2008-06-13T23:24:02-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -184,6 +184,7 @@ if [ -f "$IMPORT_FILE" ]; then
 	# validate metafile
 	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 		"$IMPORT_FILE"
+	load_metadata ALL "$IMPORT_FILE"
 	load_metadata HEADERS "$IMPORT_FILE"
 else
 	die "'$IMPORT_FILE' $importfile_nofile"
@@ -351,10 +352,10 @@ esac
 
 # write metadata out to file
 write_metadata(){
-METADATA="$2"
+WRITE_MDATA="$2"
 META_FILE="$3"
 MVAR_CLOSE=`echo "$1" |sed -e '/[^ ].*[\,]/ s///'`
-if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
+if [ ! -z "$1" ] && [ ! -z "$WRITE_MDATA" ]; then
 	if [ "$1" != "$MVAR_CLOSE" ] && [ ! -z "$MVAR_CLOSE" ]; then
 		MVAR=`echo "$1" |sed -e '/[\,].*[^ ]$/ s///'`
 		if [ -f "$META_FILE" ]; then
@@ -363,7 +364,7 @@ if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
 		cat > "$META_FILE" <<-EOF
 			$META_OTHER
 			$MVAR:
-			$METADATA
+			$WRITE_MDATA
 			$MVAR_CLOSE
 		EOF
 	elif [ -f "$META_FILE" ]; then
@@ -371,22 +372,31 @@ if [ ! -z "$1" ] && [ ! -z "$METADATA" ]; then
 		# first, try replacing meta-tag, while preserving structure
 		if [ ! -z "$METAVAR_MATCH" ]; then
 			load_metadata HEADERS "$META_FILE"
+			SAVED_METADATACONTENT="$METADATA_CONTENT"
 			if [ ! -z "$METADATA_HEADERS" ]; then
+				# prevent command line substutition and shell variable expansion in titles
+				read_metadata TITLE "$META_FILE"; NB_MetaTitle="$METADATA"
+				if [ ! -z "$METADATA" ]; then
+					sed -e '/^TITLE[\:].*/ s//TITLE: \$NB_MetaTitle/g' > "$META_FILE" <<-EOF
+						$METADATA_HEADERS
+					EOF
+				fi
+				load_metadata HEADERS "$META_FILE"
 				sed -e '/^'$1'[\:].*/ s//'$1': \$NB_MetaOther/g' > "$META_FILE" <<-EOF
 					$METADATA_HEADERS
 				EOF
-				NB_MetaOther="$METADATA"
+				NB_MetaOther="$WRITE_MDATA"
 				# expands all variables in METADATA_HEADERS
 				load_template "$META_FILE"
 				write_template > "$META_FILE"
-				echo "$METADATA_CONTENT" >> "$META_FILE"
+				echo "$SAVED_METADATACONTENT" >> "$META_FILE"
 			fi
 		else
 			# second, try stacking new/modified meta-tag on top, disregarding structure,
 			# while preserving data
 			META_OTHER=`sed -e '/^'$1'[\:]/d' "$META_FILE"`
 			cat > "$META_FILE" <<-EOF
-				$1: $METADATA
+				$1: $WRITE_MDATA
 				$META_OTHER
 			EOF
 		fi
