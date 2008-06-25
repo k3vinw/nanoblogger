@@ -59,7 +59,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 		NB_RSSTitle="$template_catarchives $NB_RSSCatTitle | $BLOG_FEED_TITLE"
 	if [ ! -z "$NB_RSSCatLink" ]; then
 		NB_RSSFile="$ARCHIVES_DIR/$NB_RSSCatFile"
-		BLOG_FEED_URL="$BLOG_FEED_URL/$NB_RSSFile"
+		BLOG_FEED_URLFILE="$BLOG_FEED_URL/$NB_RSSFile"
 	fi
 
 	cat > "$MKPAGE_OUTFILE" <<-EOF
@@ -108,8 +108,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 	> "$RSS_SEQFILE"
 	for entry in ${ARCHIVE_LIST[@]}; do
 		NB_RSSEntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
-		load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
+		load_entry "$NB_DATA_DIR/$entry" ALL
 		echo '<rdf:li rdf:resource="'${NB_RSSArchivesPath}$NB_EntryPermalink'" />' >> "$RSS_SEQFILE"
 		# non-portable find command!
 		#NB_RSSEntryModDate=`find "$NB_DATA_DIR/$entry" -printf "%TY-%Tm-%TdT%TH:%TM:%TS${BLOG_FEED_TZD}"`
@@ -131,7 +131,7 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			cat_title=`echo "${cat_title##\,}" |esc_chars`
 			NB_RSSEntrySubject=`echo '<dc:subject>'$cat_title'</dc:subject>'`
 		fi
-		if [ "$ENTRY_EXCERPTS" = 1 ]; then
+		if [ "$ENTRY_EXCERPTS" = 1 ] && [ ! -z "$NB_EntryExcerpt" ]; then
 			#NB_RSSEntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			NB_RSSEntryExcerpt="$NB_EntryExcerpt"
 		else
