@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-05-15T16:35:53-04:00
+# Last modified: 2008-06-25T19:34:44-04:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -291,8 +291,8 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
 		if [ "$ENTRYARCHIVES_TEMPLATE" = "$PERMALINKENTRY_TEMPLATE" ]; then
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
-			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE" "$CACHE_TYPE"
 			set_entrylink "$entry"
+			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE" "$CACHE_TYPE"
 			year=${month:0:4}
 			month=${month:5:2}
 			day=${entry:8:2}
@@ -303,8 +303,8 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			make_entryarchive
 		else
 			set_baseurl "$BASE_URL"
-			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE"
 			set_entrylink "$entry"
+			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE"
 			load_template "$NB_TEMPLATE_DIR/$ENTRYARCHIVES_TEMPLATE"
 			if [ ! -z "$TEMPLATE_DATA" ]; then
 				mkdir -p `dirname "$PARTS_FILE"`
