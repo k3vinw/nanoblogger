@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-06-13T23:24:02-04:00
+# Last modified: 2008-06-25T21:07:39-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -434,7 +434,7 @@ load_entry(){
 ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
-: ${ENTRY_PLUGINSLIST:=entry entry/mod entry/format}
+: ${ENTRY_PLUGINSLOOP:=entry/mod entry/format entry}
 : ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=${entry:8:2}
@@ -457,7 +457,7 @@ if [ -f "$ENTRY_FILE" ]; then
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 			load_metadata ALL "$ENTRY_FILE"
-			for entry_pluginsdir in $ENTRY_PLUGINSLIST; do
+			for entry_pluginsdir in $ENTRY_PLUGINSLOOP; do
 				if [ "$entry_pluginsdir" = "entry/format" ]; then
 					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 					load_plugins $entry_pluginsdir "$NB_EntryFormat"
