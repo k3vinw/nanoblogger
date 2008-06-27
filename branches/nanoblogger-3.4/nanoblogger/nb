@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-13T23:39:45-04:00
+# Last modified: 2008-06-26T15:01:28-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -348,252 +348,257 @@ resort_db "$NB_DATA_DIR/master.db"
 
 # edit entry or tag by id number
 edit_weblog(){
-# edits categories
-if [ ! -z "$cat_num" ]; then
-	case "$edit_num" in
-		tag|cat)
-			cat_var=`echo "$cat_num" |sed -e '/,/d'`
-			[ -z "$cat_var" ] && die "$editweblog_onecat"
-			db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-			nb_msg "$editweblog_catinfo $cat_num"
-			if [ ! -z "$USR_TITLE" ]; then
-				set_catlink "$db_catquery"
-				[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
-					rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
-
-				new_usrtitle=`translit_text "$USR_TITLE"`
-				nb_msg "$editweblog_title '$new_usrtitle' ..."
-				echo "$new_usrtitle" > "$NB_DATA_DIR/$db_catquery".tmp
-				sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp
-				mv "$NB_DATA_DIR/$db_catquery".tmp "$NB_DATA_DIR/$db_catquery"
-				UPDATE_LIST=(`sort -u "$NB_DATA_DIR/$db_catquery"`)
-				find_categories "${UPDATE_LIST[*]}"
-				resort_categories
-				build_weblog; exit
-			else
-				die "$editweblog_nomod"
-			fi
-		;;
-	esac
-fi
-# edit entries
-NUMVAR=`echo "$edit_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-[ -z "$NUMVAR" ] && die "$novalid_entryid"
-db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-# find entry id(s) from specified query
-[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
-query_db "$db_query" "$db_catquery"; ENTRY_LIST=(${DB_RESULTS[*]})
-for entry_id in $NUMVAR; do
-	# adjust offset by 1 for arrays (1 = 0)
-	((entry_id--))
-	Edit_EntryFile=${ENTRY_LIST[$entry_id]}
-	[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "$invalid_entryid $edit_num"
-done
-> "$SCRATCH_FILE".edit_weblog
-# for chg_entrydate
-[ ! -z "$cat_num" ] && nb_msg "$editweblog_catinfo $cat_num"
-for entry_id in $NUMVAR; do
-	((entry_id--)) # adjust offset by 1 for arrays (1 = 0)
-	Edit_EntryFile=${ENTRY_LIST[$entry_id]}
-	read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
-	OldEdit_EntryTitle="$METADATA"
-	# write any user metadata
-	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$Edit_EntryFile"
-	nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
-	# validate metafile
-	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-		"$NB_DATA_DIR/$Edit_EntryFile"
-	# load user specified timestamp
-	read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
-	New_TimeStamp="$METADATA"
-	# use specified timestamp as entry's new date
-	chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
-	[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
-		Edit_EntryFile="$New_EntryDateFile"
-	# add timestamp modified entries to update list
-	if [ ! -z "$Old_EntryFile" ]; then
-		echo "$Old_EntryFile" >> "$SCRATCH_FILE".edit_weblog
-		nb_msg "$querydb_update"
-		find_categories "$Old_EntryFile"
-		for olde_catdb in ${CAT_LIST[*]}; do
-			delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
+case "$editweblog_type" in
+	entry)
+		# edit entries
+		NUMVAR=`echo "$edit_idsel" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+		[ -z "$NUMVAR" ] && die "$novalid_entryid"
+		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+		# find entry id(s) from specified query
+		[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
+		query_db "$db_query" "$db_catquery"; ENTRY_LIST=(${DB_RESULTS[*]})
+		for entry_id in $NUMVAR; do
+			# adjust offset by 1 for arrays (1 = 0)
+			((entry_id--))
+			Edit_EntryFile=${ENTRY_LIST[$entry_id]}
+			[ ! -f "$NB_DATA_DIR/$Edit_EntryFile" ] && die "$invalid_entryid $edit_idsel"
 		done
-		delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
-		update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
-		update_categories "$Edit_EntryFile"
-		resort_categories
-		resort_db "$NB_DATA_DIR/master.db"
-	fi
-	# use cached version for 'newer than' comparison
-	nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
-	nt_cachefile=${nt_cachefile//[ ]*/}
-	if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
-		read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
-		NewEdit_EntryTitle="$METADATA"
-		# update previous and next entries of modified entry
-		query_db master
-		findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
-		set_entrynavlinks prev "$before_entry"
-		set_entrynavlinks next "$after_entry"
-		[ ! -z "$prev_entry" ] &&
-			echo "$prev_entry" >> "$SCRATCH_FILE".edit_weblog
-		[ ! -z "$next_entry" ] &&
-			echo "$next_entry" >> "$SCRATCH_FILE".edit_weblog
-		echo "$Edit_EntryFile" >> "$SCRATCH_FILE".edit_weblog
-		# remove old cache data for clean build
-		rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
-		# remove old entry archive directory
-		set_entrylink "$Edit_EntryFile"
-		Delete_EntryArchiveDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir/$entry_linkname"
-		[ ! -z "$entry_linkname" ] && [ -d "$Delete_EntryArchiveDir" ] &&
-			rm -fr "$Delete_EntryArchiveDir"
-	fi
-done
-NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE".edit_weblog`)
-if [ ! -z "${UPDATE_LIST[*]}" ]; then
-	nb_msg "$editweblog_action"
-	find_categories "${UPDATE_LIST[*]}"
-	resort_categories
-	build_weblog
-else
-	die "$editweblog_noaction"
-fi
+		> "$SCRATCH_FILE".edit_weblog
+		# for chg_entrydate
+		[ ! -z "$cat_num" ] && nb_msg "$editweblog_catinfo $cat_num"
+		for entry_id in $NUMVAR; do
+			((entry_id--)) # adjust offset by 1 for arrays (1 = 0)
+			Edit_EntryFile=${ENTRY_LIST[$entry_id]}
+			read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
+			OldEdit_EntryTitle="$METADATA"
+			# write any user metadata
+			write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$Edit_EntryFile"
+			nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
+			# validate metafile
+			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
+				"$NB_DATA_DIR/$Edit_EntryFile"
+			# load user specified timestamp
+			read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
+			New_TimeStamp="$METADATA"
+			# use specified timestamp as entry's new date
+			chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
+			[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+				Edit_EntryFile="$New_EntryDateFile"
+			# add timestamp modified entries to update list
+			if [ ! -z "$Old_EntryFile" ]; then
+				echo "$Old_EntryFile" >> "$SCRATCH_FILE".edit_weblog
+				nb_msg "$querydb_update"
+				find_categories "$Old_EntryFile"
+				for olde_catdb in ${CAT_LIST[*]}; do
+					delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
+				done
+				delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
+				update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
+				update_categories "$Edit_EntryFile"
+				resort_categories
+				resort_db "$NB_DATA_DIR/master.db"
+			fi
+			# use cached version for 'newer than' comparison
+			nt_cachefile=`echo "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*`
+			nt_cachefile=${nt_cachefile//[ ]*/}
+			if [ "$NB_DATA_DIR/$Edit_EntryFile" -nt "$nt_cachefile" ]; then
+				read_metadata TITLE "$NB_DATA_DIR/$Edit_EntryFile"
+				NewEdit_EntryTitle="$METADATA"
+				# update previous and next entries of modified entry
+				query_db master
+				findba_entries "$Edit_EntryFile" "${MASTER_DB_RESULTS[*]}"
+				set_entrynavlinks prev "$before_entry"
+				set_entrynavlinks next "$after_entry"
+				[ ! -z "$prev_entry" ] &&
+					echo "$prev_entry" >> "$SCRATCH_FILE".edit_weblog
+				[ ! -z "$next_entry" ] &&
+					echo "$next_entry" >> "$SCRATCH_FILE".edit_weblog
+				echo "$Edit_EntryFile" >> "$SCRATCH_FILE".edit_weblog
+				# remove old cache data for clean build
+				rm -f "$BLOG_DIR/$CACHE_DIR/$Edit_EntryFile".*
+				# remove old entry archive directory
+				set_entrylink "$Edit_EntryFile"
+				Delete_EntryArchiveDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir/$entry_linkname"
+				[ ! -z "$entry_linkname" ] && [ -d "$Delete_EntryArchiveDir" ] &&
+					rm -fr "$Delete_EntryArchiveDir"
+			fi
+		done
+		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE".edit_weblog`)
+		if [ ! -z "${UPDATE_LIST[*]}" ]; then
+			nb_msg "$editweblog_action"
+			find_categories "${UPDATE_LIST[*]}"
+			resort_categories
+			build_weblog
+		else
+			die "$editweblog_noaction"
+		fi
+	;;
+	tag|cat)
+		# edits categories
+		cat_num="$edit_idsel"
+		cat_var=`echo "$cat_num" |sed -e '/,/d'`
+		[ -z "$cat_var" ] && die "$editweblog_onecat"
+		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+		nb_msg "$editweblog_catinfo $cat_num"
+		if [ ! -z "$USR_TITLE" ]; then
+			set_catlink "$db_catquery"
+			[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
+				rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
+
+			new_usrtitle=`translit_text "$USR_TITLE"`
+			nb_msg "$editweblog_title '$new_usrtitle' ..."
+			echo "$new_usrtitle" > "$NB_DATA_DIR/$db_catquery".tmp &&
+			sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp &&
+			mv "$NB_DATA_DIR/$db_catquery".tmp "$NB_DATA_DIR/$db_catquery"
+			UPDATE_LIST=(`sort -u "$NB_DATA_DIR/$db_catquery"`)
+			find_categories "${UPDATE_LIST[*]}"
+			resort_categories
+			build_weblog; exit
+		else
+			die "$editweblog_nomod"
+		fi
+	;;
+esac
 }
 
 # delete entry or category by id number
 delete_weblog(){
-# deletes categories
-db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 # find entry id(s) from specified query
 [ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
+db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 cat_list="$db_catquery"
-if [ ! -z "$cat_num" ]; then
-	case "$delete_num" in
-		tag|cat)
-			nb_msg "$deleteweblog_delcat $cat_num ..."
-			# confirm delete in interactive mode
-			[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-			query_db "$db_query" "${cat_list[*]}"
-			echo "${DB_RESULTS[*]}" > $SCRATCH_FILE
-			for cat_db in ${cat_list[@]}; do
-				Delete_CatDBFile="$cat_db"
-				[ -f "$NB_DATA_DIR/$cat_db" ] && set_catlink "$cat_db"
-				[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
-					rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
-				rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
-			done; cat_num=
-			NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
-			[ ! -z "${UPDATE_LIST[*]}" ] &&
-				find_categories "${UPDATE_LIST[*]}"
-			nb_msg "$querydb_update"
-			for oldcat_dbitem in ${UPDATE_LIST[*]}; do
-				update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
-			done
-			resort_db "$NB_DATA_DIR/master.db"
-			build_weblog; exit
-		;;
-	esac
-fi
-# deletes entries
-NUMVAR=`echo "$delete_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-[ -z "$NUMVAR" ] && die "$novalid_entryid"
-if [ ! -z "$cat_list" ]; then
-	CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
-	[ -z "$CATNUMVAR" ] &&
-		die "$deleteweblog_onecat"
-fi
-[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
-query_db "$db_query" "$cat_list"; ENTRY_LIST=(${DB_RESULTS[*]})
-for entry_id in $NUMVAR; do
-	# adjust offset by 1 for arrays (1 = 0)
-	old_entryid="$entry_id"
-	((entry_id--))
-	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
-	[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_num"
-	read_metadata TITLE "$NB_DATA_DIR/$Delete_EntryFile"; Delete_EntryTitle=`echo "${METADATA:0:25}"`..
-	delete_titles="$delete_titles $old_entryid=$Delete_EntryTitle,"
-done
-delete_titles=`echo "$delete_titles" |sed -e '/^[ ]/ s///; /[\,]$/ s///'`
-[ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"
-nb_msg "$deleteweblog_delentry $delete_num ($delete_titles) ..."
-# confirm delete in interactive mode
-[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
-# initialize master.db
-if [ ! -z "$NB_QUERY" ]; then
-	db_query="$NB_QUERY"
-else
-	db_query=master
-fi
-query_db "$db_query"
-> "$SCRATCH_FILE"; > "$SCRATCH_FILE.x-update"
-nb_msg "$querydb_update"
-for entry_id in $NUMVAR; do
-	# adjust offset by 1 for arrays (1 = 0)
-	((entry_id--))
-	Delete_EntryFile=${ENTRY_LIST[$entry_id]}
-	if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
-		echo "$Delete_EntryFile" >> "$SCRATCH_FILE"
-		if [ ! -z "${cat_list[*]}" ]; then
-			# deletes entry from categories
-			for cat_db in ${cat_list[@]}; do
-				cat_match=`grep -c "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				[ "$cat_match" -ge 1 ] &&
-					echo "$cat_db" >> "$SCRATCH_FILE.x-catdbs"
-				delete_db "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"
-			done
-			update_maindb "$Delete_EntryFile" "$NB_DATA_DIR/master.db"
-		else
-			# permanently deletes entry
-			for cat_db in ${db_categories[@]}; do
-				cat_match=`grep -c "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
-				[ "$cat_match" -ge 1 ] &&
-					echo "$cat_db" >> "$SCRATCH_FILE.x-catdbs"
-				delete_db "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"
-			done
-			set_entrylink "$Delete_EntryFile"
-			Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
-			Delete_EntryArchiveDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir/$entry_linkname"
-			# delete permalink file
-			[ -f "$Delete_PermalinkFile" ] && rm -fr "$Delete_PermalinkFile"
-			# delete permalink directory
-			[ ! -z "$entry_linkname" ] && [ -d "$Delete_EntryArchiveDir" ] &&
-				rm -fr "$Delete_EntryArchiveDir"
-			# delete old cache data
-			rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
-			# update previous and next entries of deleted entry
-			query_db master
-			findba_entries "$Delete_EntryFile" "${MASTER_DB_RESULTS[*]}"
-			set_entrynavlinks prev "$before_entry"
-			set_entrynavlinks next "$after_entry"
-			delete_db "$Delete_EntryFile" "$NB_DATA_DIR/master.db"
-			rm -f "$NB_DATA_DIR/$Delete_EntryFile"
-			echo "$Delete_EntryFile" >> "$SCRATCH_FILE.x-entries"
-			# hide prev and next entries from category updates
-			[ ! -z "$prev_entry" ] &&
-				echo "$prev_entry" >> "$SCRATCH_FILE.x-update"
-			[ ! -z "$next_entry" ] &&
-				echo "$next_entry" >> "$SCRATCH_FILE.x-update"
+case "$delweblog_type" in
+	entry)
+		# deletes entries
+		NUMVAR=`echo "$delete_idsel" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+		[ -z "$NUMVAR" ] && die "$novalid_entryid"
+		if [ ! -z "$cat_list" ]; then
+			CATNUMVAR=`echo "$cat_num" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
+			[ -z "$CATNUMVAR" ] &&
+				die "$deleteweblog_onecat"
 		fi
-	fi
-done
-NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
-# update all categories with removed entries
-[ ! -z "${UPDATE_LIST[*]}" ] &&
-	find_categories "${UPDATE_LIST[*]}"
-[ -f "$SCRATCH_FILE.x-catdbs" ] && CAT_XLIST=(`sort -u "$SCRATCH_FILE.x-catdbs"`)
-[ ! -z "${CAT_XLIST[*]}" ] &&
-	CAT_LIST=(`for xcatdb in ${CAT_LIST[@]} ${CAT_XLIST[@]}; do echo $xcatdb; done |sort -u`)
-# prune all removed entries from update list
-if [ -f "$SCRATCH_FILE.x-entries" ]; then
-	for xentry in $(< "$SCRATCH_FILE.x-entries"); do
-		sed -e '/'$xentry'/d' "$SCRATCH_FILE".x-update > "$SCRATCH_FILE".x-update.new
-		mv "$SCRATCH_FILE".x-update.new "$SCRATCH_FILE".x-update
-	done
-	UPDATE_LIST=(`sort -u "$SCRATCH_FILE.x-update"`)
-fi
-update_categories
-resort_categories
-build_weblog
+		[ ! -z "$NB_QUERY" ] && db_query="$NB_QUERY"
+		query_db "$db_query" "$cat_list"; ENTRY_LIST=(${DB_RESULTS[*]})
+		for entry_id in $NUMVAR; do
+			# adjust offset by 1 for arrays (1 = 0)
+			old_entryid="$entry_id"
+			((entry_id--))
+			Delete_EntryFile=${ENTRY_LIST[$entry_id]}
+			[ ! -f "$NB_DATA_DIR/$Delete_EntryFile" ] && die "$invalid_entryid $delete_idsel"
+			read_metadata TITLE "$NB_DATA_DIR/$Delete_EntryFile"; Delete_EntryTitle=`echo "${METADATA:0:25}"`..
+			delete_titles="$delete_titles $old_entryid=$Delete_EntryTitle,"
+		done
+		delete_titles=`echo "$delete_titles" |sed -e '/^[ ]/ s///; /[\,]$/ s///'`
+		[ ! -z "$cat_num" ] && nb_msg "$deleteweblog_catinfo $cat_num"
+		nb_msg "$deleteweblog_delentry $delete_idsel ($delete_titles) ..."
+		# confirm delete in interactive mode
+		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
+		# initialize master.db
+		if [ ! -z "$NB_QUERY" ]; then
+			db_query="$NB_QUERY"
+		else
+			db_query=master
+		fi
+		query_db "$db_query"
+		> "$SCRATCH_FILE"; > "$SCRATCH_FILE.x-update"
+		nb_msg "$querydb_update"
+		for entry_id in $NUMVAR; do
+			# adjust offset by 1 for arrays (1 = 0)
+			((entry_id--))
+			Delete_EntryFile=${ENTRY_LIST[$entry_id]}
+			if [ -f "$NB_DATA_DIR/$Delete_EntryFile" ]; then
+				echo "$Delete_EntryFile" >> "$SCRATCH_FILE"
+				if [ ! -z "${cat_list[*]}" ]; then
+					# deletes entry from categories
+					for cat_db in ${cat_list[@]}; do
+						cat_match=`grep -c "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
+						[ "$cat_match" -ge 1 ] &&
+							echo "$cat_db" >> "$SCRATCH_FILE.x-catdbs"
+						delete_db "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"
+					done
+					update_maindb "$Delete_EntryFile" "$NB_DATA_DIR/master.db"
+				else
+					# permanently deletes entry
+					for cat_db in ${db_categories[@]}; do
+						cat_match=`grep -c "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"`
+						[ "$cat_match" -ge 1 ] &&
+							echo "$cat_db" >> "$SCRATCH_FILE.x-catdbs"
+						delete_db "$Delete_EntryFile" "$NB_DATA_DIR/$cat_db"
+					done
+					set_entrylink "$Delete_EntryFile"
+					Delete_PermalinkFile="$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
+					Delete_EntryArchiveDir="$BLOG_DIR/$ARCHIVES_DIR/$entry_dir/$entry_linkname"
+					# delete permalink file
+					[ -f "$Delete_PermalinkFile" ] && rm -fr "$Delete_PermalinkFile"
+					# delete permalink directory
+					[ ! -z "$entry_linkname" ] && [ -d "$Delete_EntryArchiveDir" ] &&
+						rm -fr "$Delete_EntryArchiveDir"
+					# delete old cache data
+					rm -f "$BLOG_DIR/$CACHE_DIR/$Delete_EntryFile".*
+					# update previous and next entries of deleted entry
+					query_db master
+					findba_entries "$Delete_EntryFile" "${MASTER_DB_RESULTS[*]}"
+					set_entrynavlinks prev "$before_entry"
+					set_entrynavlinks next "$after_entry"
+					delete_db "$Delete_EntryFile" "$NB_DATA_DIR/master.db"
+					rm -f "$NB_DATA_DIR/$Delete_EntryFile"
+					echo "$Delete_EntryFile" >> "$SCRATCH_FILE.x-entries"
+					# hide prev and next entries from category updates
+					[ ! -z "$prev_entry" ] &&
+						echo "$prev_entry" >> "$SCRATCH_FILE.x-update"
+					[ ! -z "$next_entry" ] &&
+						echo "$next_entry" >> "$SCRATCH_FILE.x-update"
+				fi
+			fi
+		done
+		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+		# update all categories with removed entries
+		[ ! -z "${UPDATE_LIST[*]}" ] &&
+			find_categories "${UPDATE_LIST[*]}"
+		[ -f "$SCRATCH_FILE.x-catdbs" ] && CAT_XLIST=(`sort -u "$SCRATCH_FILE.x-catdbs"`)
+		[ ! -z "${CAT_XLIST[*]}" ] &&
+			CAT_LIST=(`for xcatdb in ${CAT_LIST[@]} ${CAT_XLIST[@]}; do echo $xcatdb; done |sort -u`)
+		# prune all removed entries from update list
+		if [ -f "$SCRATCH_FILE.x-entries" ]; then
+			for xentry in $(< "$SCRATCH_FILE.x-entries"); do
+				sed -e '/'$xentry'/d' "$SCRATCH_FILE".x-update > "$SCRATCH_FILE".x-update.new &&
+				mv "$SCRATCH_FILE".x-update.new "$SCRATCH_FILE".x-update
+			done
+			UPDATE_LIST=(`sort -u "$SCRATCH_FILE.x-update"`)
+		fi
+		update_categories
+		resort_categories
+		build_weblog
+	;;
+	tag|cat)
+		# deletes categories
+		cat_num="$delete_idsel"
+		[ -z "$cat_num" ] && die "$checkcatid_novalid"
+		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+		cat_list="$db_catquery"
+		nb_msg "$deleteweblog_delcat $cat_num ..."
+		# confirm delete in interactive mode
+		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
+		query_db "$db_query" "${cat_list[*]}"
+		echo "${DB_RESULTS[*]}" > $SCRATCH_FILE
+		for cat_db in ${cat_list[@]}; do
+			Delete_CatDBFile="$cat_db"
+			[ -f "$NB_DATA_DIR/$cat_db" ] && set_catlink "$cat_db"
+			[ ! -z "$category_dir" ] && [ -d "$BLOG_DIR/$ARCHIVES_DIR/$category_dir" ] &&
+				rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
+			rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
+		done; cat_num=
+		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+		[ ! -z "${UPDATE_LIST[*]}" ] &&
+			find_categories "${UPDATE_LIST[*]}"
+		nb_msg "$querydb_update"
+		for oldcat_dbitem in ${UPDATE_LIST[*]}; do
+			update_maindb "$oldcat_dbitem" "$NB_DATA_DIR/master.db"
+		done
+		resort_db "$NB_DATA_DIR/master.db"
+		build_weblog; exit
+	;;
+esac
 }
 
 # assign categories to entries
@@ -852,12 +857,14 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -a,-c,-d,-e,-l,-m,-q,-u only here for backwards compability purposes
+	# -a,-c,-l,-m,-q,-u only here for backwards compability purposes
 	case "$1" in
 		add|-a) 		ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
-		edit|-e)		check_arg "$2"; edit_num="$2"; shift; EDIT_WEBLOG=1;;
-		delete|-d)		check_arg "$2"; delete_num="$2"; shift; DELETE_WEBLOG=1;;
+		edit)			check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
+					EDIT_WEBLOG=1;;
+		delete)			check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
+					DELETE_WEBLOG=1;;
 		draft) 			check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		file) 			check_arg "$2"; USR_ADDFILE="$2"; shift;;
 		list|-l)		LIST_WEBLOG=1;;
