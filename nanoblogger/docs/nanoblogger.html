@@ -581,15 +581,15 @@ nb [-b blog_dir] tag 1 query all list
 
     <p>Editing the last entry created:</p>
     <pre>
-nb [-b blog_dir] edit 1
+nb [-b blog_dir] edit entry 1
         
 </pre>Editing an entry by tag:
     <pre>
-nb [-b blog_dir] tag 1 edit 1
+nb [-b blog_dir] tag 1 edit entry 1
         
 </pre>Editing multiple entries:
     <pre>
-nb [-b blog_dir] edit 1,2,3
+nb [-b blog_dir] edit entry 1,2,3
         
 </pre>
 
@@ -613,15 +613,15 @@ nb [-b blog_dir] tag 1 tag-entry 1,2,3
 
     <p>Permanently deleting an entry:</p>
     <pre>
-nb [-b blog_dir] delete 1
+nb [-b blog_dir] delete entry 1
         
 </pre>Permanently deleting multiple entries:
     <pre>
-nb [-b blog_dir] delete 1,2,3
+nb [-b blog_dir] delete entry 1,2,3
         
 </pre>Untagging an entry:
     <pre>
-nb [-b blog_dir] tag 1 delete 1
+nb [-b blog_dir] tag 1 delete entry 1
         
 </pre>
 
@@ -633,11 +633,11 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add
     
 </pre>Changing an old entry's date:
     <pre>
-nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit 2
+nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit entry 2
      
 </pre>Manually changing an entry's date:
     <pre>
-1. nb [-b blog_dir] edit 2
+1. nb [-b blog_dir] edit entry 2
 2. TIMESTAMP: CCYY-MM-DD HH:MM:SS
      
 </pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
@@ -654,11 +654,11 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit 2
 
     <p>Creating a new tag:</p>
     <pre>
-nb [-b blog_dir] tag new add
+nb [-b blog_dir] add tag new
         
 </pre>Setting the title for a new tag:
     <pre>
-nb [-b blog_dir] --title examples tag new add
+nb [-b blog_dir] --title examples add tag new
         
 </pre>Listing available tags:
     <pre>
@@ -670,11 +670,11 @@ nb [-b blog_dir] tag 1 tag-entry 1
 
 </pre>Editing a tag's title:
     <pre>
-nb [-b blog_dir] tag 1 --title example edit tag
+nb [-b blog_dir] --title example edit tag 1
         
 </pre>Deleting a tag:
     <pre>
-nb [-b blog_dir] tag 1 delete tag
+nb [-b blog_dir] delete tag 1
         
 </pre>
 
@@ -685,7 +685,7 @@ nb [-b blog_dir] tag 1 delete tag
     <p>Editing entries by query:</p>
     <pre>
 nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] query [all,CCYY-MM-DD,max] edit 1,2,3
+nb [-b blog_dir] query [all,CCYY-MM-DD,max] edit entry 1,2,3
 </pre>Deleting entries by query:
     <pre>
 nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
@@ -693,7 +693,7 @@ nb [-b blog_dir] query [all,CCYY-MM-DD,max] delete 1,2,3
 </pre>Editing entries by tag and query:
     <pre>
 nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit 1
+nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit entry 1
 </pre>
   </div>
 

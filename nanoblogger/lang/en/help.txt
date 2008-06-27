@@ -11,9 +11,9 @@ Actions:
  add					- create new entry, tag, or weblog
 					  (directory).
  configure				- configure weblog (for 'update').
- delete <ID,tag>			- delete an entry, tag, or un-tag entry.
+ delete <entry,tag> <ID>		- delete an entry, tag, or un-tag entry.
  draft <FILE> 				- edit or create metafile.
- edit <ID,tag>				- edit an entry or tag.
+ edit <entry,tag> <ID>			- edit an entry or tag.
  list					- list entries or tags (for
  					  'query' and 'tag', defaults to
 					  'max').
@@ -78,7 +78,7 @@ Examples:
 	nb -b ~/public_html/weblog add
 
  create new "examples" tag
-	nb -b ~/public_html/weblog tag new --title examples add
+	nb -b ~/public_html/weblog --title examples add tag new
 
  create new entry using nothing but command line options
 	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add
