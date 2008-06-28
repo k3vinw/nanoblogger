@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-26T15:01:28-04:00
+# Last modified: 2008-06-28T06:12:23-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -458,6 +458,7 @@ case "$editweblog_type" in
 			die "$editweblog_nomod"
 		fi
 	;;
+	*) 	die "$main_badopts $editweblog_type";;
 esac
 }
 
@@ -598,6 +599,7 @@ case "$delweblog_type" in
 		resort_db "$NB_DATA_DIR/master.db"
 		build_weblog; exit
 	;;
+	*) 	die "$main_badopts $delweblog_type";;
 esac
 }
 
@@ -861,9 +863,9 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		add|-a) 		ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
-		edit)			check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
+		edit|-e)		check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
 					EDIT_WEBLOG=1;;
-		delete)			check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
+		delete|-d)		check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
 					DELETE_WEBLOG=1;;
 		draft) 			check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		file) 			check_arg "$2"; USR_ADDFILE="$2"; shift;;
