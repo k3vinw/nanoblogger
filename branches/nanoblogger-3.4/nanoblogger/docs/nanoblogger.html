@@ -279,7 +279,7 @@ nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options
 
   <p>To create a new weblog (from your shell prompt):</p>
   <pre>
-nb --blog-dir [myblog_dir] add-new weblog
+nb --blog-dir [myblog_dir] add weblog
         
 </pre>where <em>myblog_dir</em> is a nonexistent directory. This will create a new directory, copy the default files over and finally let you edit the weblog's configuration. Multiple weblogs can be created this way.
 
@@ -534,7 +534,7 @@ nb [-b blog_dir] draft draft.txt
 
     <p>Importing the draft as a new entry:</p>
     <pre>
-nb [-b blog_dir] file draft.txt add-new entry
+nb [-b blog_dir] file draft.txt add entry
     
 </pre>
 
@@ -542,23 +542,23 @@ nb [-b blog_dir] file draft.txt add-new entry
 
     <p>Adding a new entry:</p>
     <pre>
-nb [-b blog_dir] add-new entry
+nb [-b blog_dir] add entry
         
 </pre>Tagging a new entry:
     <pre>
-nb [-b blog_dir] tag 1 add-new entry
+nb [-b blog_dir] tag 1 add entry
 
 </pre>Setting title and author for new entry:
     <pre>
-nb [-b blog_dir] --title "New Entry" --author [entry_author] add-new entry
+nb [-b blog_dir] --title "New Entry" --author [entry_author] add entry
         
 </pre>Setting title, author, and body for new entry:
     <pre>
-nb [-b blog_dir] --title "New Entry" --author [entry_author] --text "This is my message." add-new entry
+nb [-b blog_dir] --title "New Entry" --author [entry_author] --text "This is my message." add entry
         
 </pre>Importing new entry from file:
     <pre>
-nb [-b blog_dir] file draft.txt add-new entry
+nb [-b blog_dir] file draft.txt add entry
 </pre>
 
     <p><b>Listing Entries</b></p>
@@ -629,7 +629,7 @@ nb [-b blog_dir] tag 1 delete entry 1
 
     <p>Specifying a new entry's date using the TIMESTAMP meta-tag:</p>
     <pre>
-nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add-new entry
+nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add entry
     
 </pre>Changing an old entry's date:
     <pre>
@@ -654,11 +654,11 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit entry 2
 
     <p>Creating a new tag:</p>
     <pre>
-nb [-b blog_dir] add-new tag
+nb [-b blog_dir] add tag
         
 </pre>Setting the title for a new tag:
     <pre>
-nb [-b blog_dir] --title examples add-new tag
+nb [-b blog_dir] --title examples add tag
         
 </pre>Listing available tags:
     <pre>
@@ -1863,7 +1863,7 @@ nb [-b blog_dir] --force query all update
 nb [-b blogdir] make-file somefile.txt
 </pre>Import the meta-file as a new weblog entry:
     <pre>
-nb [-b blogdir] file somefile.txt add-new entry
+nb [-b blogdir] file somefile.txt add entry
 </pre>or export the meta-file as a new weblog page:
     <pre>
 nb [-b blogdir] make-page somefile.txt somefile.html

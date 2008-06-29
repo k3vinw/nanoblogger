@@ -8,7 +8,7 @@ Usage:
  $BASENAME [-b blog_dir] [options] <action>
 
 Actions:
- add-new <entry,tag,weblog>		- create new entry, tag, or weblog
+ add <entry,tag,weblog> 		- create new entry, tag, or weblog
 					  (directory).
  configure				- configure weblog (for 'update').
  delete <entry,tag> <ID>		- delete an entry, tag, or un-tag entry.
@@ -26,7 +26,7 @@ Actions:
  preview				- run command to preview weblog.
  publish				- run command to publish weblog.
  query <all,tag,DATE,main,max, 		- specify a query to run (for 'edit',
-        expired> 			  'delete', 'list', 'tag-entry',
+        expired,articles,feeds> 	  'delete', 'list', 'tag-entry',
 					  'update', and 'update-cache').
  tag <ID,new> 				- specify tag (for 'add', 'delete',
  					  'edit', 'list', 'update', and
@@ -67,10 +67,14 @@ Options:
  --set-var <INPUT>  			set meta-variable (for '--var').
  --version				display version information.
 
- tag,delete,edit,tag-entry accepts multiple ID numbers seperated by commas (e.g.
+ tag,delete,edit,tag-entry accepts multiple ID numbers separated by commas (e.g.
  1,2,3).
  
  DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
+
+note: special queries such as "articles" and "feeds" only take effect when a
+      plugin is loaded that can interpret the query and are typically combined
+      with the "update" action.
 
 Examples:
 
