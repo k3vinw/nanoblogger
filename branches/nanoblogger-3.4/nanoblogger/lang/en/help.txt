@@ -8,7 +8,7 @@ Usage:
  $BASENAME [-b blog_dir] [options] <action>
 
 Actions:
- add					- create new entry, tag, or weblog
+ add-new <entry,tag,weblog>		- create new entry, tag, or weblog
 					  (directory).
  configure				- configure weblog (for 'update').
  delete <entry,tag> <ID>		- delete an entry, tag, or un-tag entry.

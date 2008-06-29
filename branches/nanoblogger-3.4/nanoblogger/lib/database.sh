@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-05-18T00:03:57-04:00
+# Last modified: 2008-06-28T19:47:14-04:00
 
 # index related categories by id
 index_catids(){
@@ -155,7 +155,7 @@ rebuild_catdb(){
 catdb_file="$1"
 if [ -f "$catdb_file" ]; then
 	catdb_title=`nb_print "$catdb_file" 1`
-	CATDB_RESULTS=(`nb_print "$catdb_file" 1`)
+	CATDB_RESULTS=(`sed 1d "$catdb_file"`)
 	for rbcatdb_item in ${CATDB_RESULTS[@]}; do
 		update_catdb "$rbcatdb_item" "$catdb_file"
 	done
