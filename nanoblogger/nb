@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-28T06:12:23-04:00
+# Last modified: 2008-06-28T21:17:34-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -333,7 +333,7 @@ chg_entrydate "$New_EntryFile" "$New_TimeStamp"
 # add to specified categories
 if [ ! -z "$cat_num" ]; then
 	for cat_db in $db_catquery; do 
-		update_db "$New_EntryFile" "$NB_DATA_DIR/$cat_db"
+		update_catdb "$New_EntryFile" "$NB_DATA_DIR/$cat_db"
 	done
 fi
 echo "$New_EntryFile" >> "$SCRATCH_FILE".newentry_list
@@ -450,7 +450,7 @@ case "$editweblog_type" in
 			echo "$new_usrtitle" > "$NB_DATA_DIR/$db_catquery".tmp &&
 			sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp &&
 			mv "$NB_DATA_DIR/$db_catquery".tmp "$NB_DATA_DIR/$db_catquery"
-			UPDATE_LIST=(`sort -u "$NB_DATA_DIR/$db_catquery"`)
+			NB_QUERY=""; UPDATE_LIST=(`sed 1d "$NB_DATA_DIR/$db_catquery" |sort -u`)
 			find_categories "${UPDATE_LIST[*]}"
 			resort_categories
 			build_weblog; exit
@@ -635,7 +635,7 @@ for entry_id in $NUMVAR; do
 		echo "$Cat_EntryFile" >> "$SCRATCH_FILE"
 		if [ ! -z "${cat_list[*]}" ]; then
 			for cat_db in ${cat_list[@]}; do
-				update_db "$Cat_EntryFile" "$NB_DATA_DIR/$cat_db"
+				update_catdb "$Cat_EntryFile" "$NB_DATA_DIR/$cat_db"
 			done
 		fi
 		update_maindb "$Cat_EntryFile" "$NB_DATA_DIR/master.db"
@@ -671,6 +671,8 @@ while [ "$id" -lt "$entry_items" ]; do
 	let id=${id}+1
 	entry_cat=; entry_catids=; entry=
 done
+# validate categories
+db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 }
 # lists categories
 case "$db_query" in
@@ -704,47 +706,106 @@ esac
 
 # create a new entry, category or weblog directory
 add_weblog(){
-load_config
-[ -z "$BLOG_DIR" ] && die "$addweblog_noweblog"
-# automatically create new weblog directory ...
-if [ ! -d "$BLOG_DIR" ]; then
-	nb_msg "$addweblog_newblog '$BLOG_DIR' ..."
-	mkdir -p "$BLOG_DIR"
-	[ ! -d "$BLOG_DIR" ] &&
-		die "$addweblog_nocreate"
-	> "$BLOG_DIR/.nb_newblogdir"
-	nb_msg "$addweblog_copyaction"
-	# copy default files and directories
-	for weblog_dir in "$NB_BASE_DIR"/default/*; do
-		cp -R "$weblog_dir" "$BLOG_DIR"
-	done
-	# create some critical empty directories
-	for weblog_emptydir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
-		[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
-	done
-	# ... prompt for configuration, unless interactive mode is 0
-	if [ "$BLOG_INTERACTIVE" = 0 ]; then
-		choice=n
-	else
-		echo "$addweblog_askconf [Y/n]"
-		read -p "$NB_PROMPT" choice
+process_entry(){
+	if [ -z "$USR_ADDFILE" ]; then
+		# read user specified attributes for entry (interactively)
+		if [ -z "$USR_AUTHOR" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
+			echo "$addweblog_author [$BLOG_AUTHOR]"
+			read -p "$NB_PROMPT" NB_EntryAuthor
+		fi
+		if [ -z "$USR_TITLE" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
+			echo "$addweblog_title"
+			read -p "$NB_PROMPT" NB_EntryTitle
+		fi
+		[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
+		[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
+		# prompt for description interactively
+		if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
+			[ "$BLOG_INTERACTIVE" = 1 ]; then
+				echo "$addweblog_desc"
+				read -p "$NB_PROMPT" NB_EntryDescription
+		fi
 	fi
-	case $choice in
-	[Yy]|"")
-		nb_msg "$addweblog_confaction"
-		nb_edit "$BLOG_DIR"/blog.conf
-		check_config; build_weblog
-		exit;;
-	[Nn])
-		check_config; build_weblog
-		nb_msg "$addweblog_noconf"
-		exit;;
-	esac
-fi
-check_config
-# create a new category
-if [ ! -z "$cat_num" ]; then
-	if [ "$cat_num" = new ]; then
+	[ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
+	[ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
+	[ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
+	[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
+	# set a default entry format
+	[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
+	# create new temp file for prepping the entry's data file
+	NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
+	# save current metadata to temp file
+	write_entry "$NB_EditFile"
+	# save user metadata and preserve structure from imported file
+	if  [ -f "$IMPORT_FILE" ]; then
+		write_var "$USR_METAVAR" "$USR_SETVAR" "$IMPORT_FILE"
+		cat "$IMPORT_FILE" > "$NB_EditFile"
+	fi
+	if [ -z "$NB_EntryBody" ]; then
+		nb_msg "$addweblog_editnew"
+		nb_edit -p "$NB_EditFile"
+		# preserve custom meta variable and data
+		[ ! -z "$USR_METAVAR" ] &&
+			read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
+		write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
+		# validate metafile
+		check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
+			"$NB_EditFile"
+	fi
+}
+# process new
+process_new(){
+	add_entry
+	build_weblog
+	# remove editing session file upon success
+	[ $? = 0 ] && [ -f "$NB_EditFile" ] && rm -fr "$NB_EditFile"
+	# prompt for some post-tasks
+	[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
+	[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog
+}
+load_config
+case "$addweblog_type" in
+	weblog)
+		[ -z "$BLOG_DIR" ] && die "$addweblog_noweblog"
+		# create new weblog directory ...
+		if [ ! -d "$BLOG_DIR" ]; then
+			nb_msg "$addweblog_newblog '$BLOG_DIR' ..."
+			mkdir -p "$BLOG_DIR"
+			[ ! -d "$BLOG_DIR" ] &&
+				die "$addweblog_nocreate"
+			> "$BLOG_DIR/.nb_newblogdir"
+			nb_msg "$addweblog_copyaction"
+			# copy default files and directories
+			for weblog_dir in "$NB_BASE_DIR"/default/*; do
+				cp -R "$weblog_dir" "$BLOG_DIR"
+			done
+			# create some critical empty directories
+			for weblog_emptydir in "$ARCHIVES_DIR" "$CACHE_DIR" "$PARTS_DIR"; do
+				[ ! -d "$BLOG_DIR/$weblog_emptydir" ] && mkdir "$BLOG_DIR/$weblog_emptydir"
+			done
+			# ... prompt for configuration, unless interactive mode is 0
+			if [ "$BLOG_INTERACTIVE" = 0 ]; then
+				choice=n
+			else
+				echo "$addweblog_askconf [Y/n]"
+				read -p "$NB_PROMPT" choice
+			fi
+			case $choice in
+			[Yy]|"")
+				nb_msg "$addweblog_confaction"
+				nb_edit "$BLOG_DIR"/blog.conf
+				check_config; build_weblog
+				exit;;
+			[Nn])
+				check_config; build_weblog
+				nb_msg "$addweblog_noconf"
+				exit;;
+			esac
+		fi
+	;;
+	tag|cat)
+		check_config
+		# create a new category
 		query_db
 		id=0; cat_items=${#db_categories[*]}
 		while [ "$id" -lt "$cat_items" ] || [ "$cat_items" = 0 ]; do
@@ -768,68 +829,18 @@ if [ ! -z "$cat_num" ]; then
 		done
 		newcat_title=`nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`
 		nb_msg "$addweblog_madecat '$newcat_title'."; exit
-	else
-		# validate categories
-		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-	fi
-fi
-# add new entry from metafile
-if [ ! -z "$USR_ADDFILE" ]; then
-	import_file "$USR_ADDFILE"
-else
-	# read user specified attributes for entry (interactively)
-	if [ -z "$USR_AUTHOR" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-		echo "$addweblog_author [$BLOG_AUTHOR]"
-		read -p "$NB_PROMPT" NB_EntryAuthor
-	fi
-	if [ -z "$USR_TITLE" ] && [ "$BLOG_INTERACTIVE" = 1 ]; then
-		echo "$addweblog_title"
-		read -p "$NB_PROMPT" NB_EntryTitle
-	fi
-	[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
-	[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
-	# prompt for description interactively
-	if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
-		[ "$BLOG_INTERACTIVE" = 1 ]; then
-			echo "$addweblog_desc"
-			read -p "$NB_PROMPT" NB_EntryDescription
-	fi
-fi
-[ ! -z "$USR_TITLE" ] && NB_EntryTitle="$USR_TITLE"; USR_TITLE=
-[ ! -z "$USR_AUTHOR" ] && NB_EntryAuthor="$USR_AUTHOR"
-[ -z "$NB_EntryAuthor" ] && NB_EntryAuthor="$BLOG_AUTHOR"
-[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-# set a default entry format
-[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-# create new temp file for prepping the entry's data file
-NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
-# save current metadata to temp file
-write_entry "$NB_EditFile"
-# save user metadata and preserve structure from imported file
-if  [ -f "$IMPORT_FILE" ]; then
-	write_var "$USR_METAVAR" "$USR_SETVAR" "$IMPORT_FILE"
-	cat "$IMPORT_FILE" > "$NB_EditFile"
-fi
-if [ -z "$NB_EntryBody" ]; then
-	nb_msg "$addweblog_editnew"
-	nb_edit -p "$NB_EditFile"
-	# preserve custom meta variable and data
-	[ ! -z "$USR_METAVAR" ] &&
-		read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
-	write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
-	# validate metafile
-	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-		"$NB_EditFile"
-fi
-# reload configuration and add new entry
-check_config
-add_entry
-build_weblog
-# remove editing session file upon success
-[ $? = 0 ] && [ -f "$NB_EditFile" ] && rm -fr "$NB_EditFile"
-# prompt for some post-tasks
-[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
-[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog
+	;;
+	entry)
+		check_config
+		# add new entry from metafile
+		[ ! -z "$USR_ADDFILE" ] &&
+			import_file "$USR_ADDFILE"
+		process_entry; process_new
+	;;
+	*)
+		die "$main_badopts $addweblog_type"
+	;;
+esac
 }
 
 show_help(){
@@ -861,7 +872,7 @@ while [ $# -gt 0 ]; do
 	bad_argument=$1
 	# -a,-c,-l,-m,-q,-u only here for backwards compability purposes
 	case "$1" in
-		add|-a) 		ADD_WEBLOG=1;;
+		add-new|add|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
 		edit|-e)		check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
 					EDIT_WEBLOG=1;;

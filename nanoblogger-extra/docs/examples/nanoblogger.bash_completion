@@ -15,7 +15,7 @@ _nanoblogger()
 	     --template-dir --var --verbose --version"
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-	    if [[ ${COMP_WORDS[i]} == @(add|configure|delete|draft|edit|entry|file|list|make-page|make-file|manual|tag|tag-entry|tag-list|preview|publish|query|update|udate-cache) ]]; then
+	    if [[ ${COMP_WORDS[i]} == @(add-new|add|configure|delete|draft|edit|entry|file|list|make-page|make-file|manual|tag|tag-entry|tag-list|preview|publish|query|update|udate-cache) ]]; then
 		    special=${COMP_WORDS[i]}
 	    fi
     done
@@ -43,6 +43,10 @@ _nanoblogger()
 			_filedir
 			return 0
 			;;
+	add-new|add)
+			COMPREPLY=( $( compgen -W "entry tag weblog" -- $cur ) )
+			return 0
+			;;
 	delete)
 			COMPREPLY=( $( compgen -W "entry tag" -- $cur ) )
 			return 0
@@ -64,7 +68,7 @@ _nanoblogger()
     if [[ "$cur" == -* ]]; then
 		COMPREPLY=( $( compgen -W "$dashoptions" -- $cur ) )
     else
-		COMPREPLY=( $( compgen -W 'add configure delete draft edit \
+		COMPREPLY=( $( compgen -W 'add-new add configure delete draft edit \
 					   file list make-page make-file manual \
 					   preview publish query tag tag-entry tag-list \
 					   update update-cache' -- $cur ) )

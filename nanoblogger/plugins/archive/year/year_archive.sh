@@ -7,7 +7,7 @@ build_yeararchive(){
 	query_db "$yearn"
 	YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 	# check for weblog modifications
-	if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
+	if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ] || [ ! -z "$UPDATE_LIST" ]; then
 		# set previous and next links for given year
 		set_yearnavlinks(){
 		yearnavlinks_var=${1//[\/]/-}
