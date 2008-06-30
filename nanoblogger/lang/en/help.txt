@@ -78,14 +78,14 @@ note: special queries such as "articles" and "feeds" only take effect when a
 
 Examples:
 
- specify the weblog directory to create or add new entry
-	nb -b ~/public_html/weblog add
+ create new weblog using specified non-existant directory
+	nb -b ~/public_html/weblog add weblog
 
  create new "examples" tag
-	nb -b ~/public_html/weblog --title examples add tag new
+	nb -b ~/public_html/weblog --title examples add tag
 
  create new entry using nothing but command line options
-	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add
+	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add entry
 
 More info:
  URL: http://nanoblogger.sourceforge.net
