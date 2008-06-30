@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-06-28T19:47:14-04:00
+# Last modified: 2008-06-30T02:16:29-04:00
 
 # index related categories by id
 index_catids(){
@@ -75,7 +75,7 @@ db_file="$1"
 db_order="$2"
 : ${db_order:=$SORT_ARGS}
 if [ -f "$db_file" ]; then
-	sort $db_order "$db_file" > "$db_file".tmp
+	sort $db_order "$db_file" > "$db_file".tmp && \
 	mv "$db_file".tmp "$db_file"
 fi
 }
@@ -87,8 +87,8 @@ db_order="$2"
 : ${db_order:=$SORT_ARGS}
 if [ -f "$catdb_file" ]; then
 	catdb_title=`nb_print "$catdb_file" 1`
-	echo "$catdb_title" > "$catdb_file".tmp
-	sed 1d "$catdb_file" |sort "$db_order" >> "$catdb_file".tmp
+	echo "$catdb_title" > "$catdb_file".tmp && \
+	sed 1d "$catdb_file" |sort "$db_order" >> "$catdb_file".tmp && \
 	mv "$catdb_file".tmp "$catdb_file"
 fi
 }
@@ -106,8 +106,8 @@ update_maindb(){
 db_item="$1"
 db_file="$2"
 if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
-	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" &&
-		mv "$db_file".tmp "$db_file"
+	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" && \
+	mv "$db_file".tmp "$db_file"
 	index_catids "$db_item"
 	[ -f "$NB_DATA_DIR/$db_item" ] &&
 		echo "$db_item$cat_ids" >> "$db_file"
@@ -119,8 +119,8 @@ update_catdb(){
 db_item="$1"
 db_file="$2"
 if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
-	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" &&
-		mv "$db_file".tmp "$db_file"
+	sed -e '/'$db_item'/d' "$db_file" > "$db_file.tmp" && \
+	mv "$db_file".tmp "$db_file"
 	cat_ids=`get_catids "$db_item" "$NB_DATA_DIR/master.$NB_DBTYPE"`
 	[ ! -z "$cat_ids" ] && cat_ids=">$cat_ids"
 	echo "$db_item$cat_ids" >> "$db_file"
@@ -146,8 +146,8 @@ db_file="$2"
 if [ -f "$db_file" ] && [ ! -z "$db_item" ]; then
 	grep_db=`grep "$db_item" "$db_file"`
 	[ ! -z "$grep_db" ] &&
-		sed -e '/'$db_item'/d' "$db_file" > "$db_file".tmp &&
-			mv "$db_file".tmp "$db_file"
+		sed -e '/'$db_item'/d' "$db_file" > "$db_file".tmp && \
+		mv "$db_file".tmp "$db_file"
 fi
 }
 

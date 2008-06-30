@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-28T21:17:34-04:00
+# Last modified: 2008-06-30T04:39:04-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -233,9 +233,12 @@ build_weblog(){
 	query_db days
 	# generate our update list from the query
 	if [ -z "${UPDATE_LIST[*]}" ]; then
+		# reassert any previously specified categories
+		[ ! -z "$cat_num" ] && db_catquery=`cat_id "$cat_num"`
 		# query falls back to default query mode 
 		[ -z "$NB_QUERY" ] && NB_QUERY="$QUERY_MODE"
-		query_db "$NB_QUERY" "$db_catquery"
+		db_query="$NB_QUERY"
+		query_db "$db_query" "$db_catquery"
 		UPDATE_LIST=(${DB_RESULTS[*]})
 	fi
 	# only update specified categories upon forced updates
@@ -286,7 +289,8 @@ build_weblog(){
 	}
 nb_msg "$buildweblog_files"
 case "$NB_QUERY" in
-	tag|tag[a-z]|cat) 	[ -z "$cat_num" ] && NB_UPDATE=catarch; NB_QUERY=all;
+	tag|tag[a-z]|cat)
+			[ -z "$cat_num" ] && NB_UPDATE=catarch; NB_QUERY=all;
 			init_update; init_plugins; build_catarchives; init_main
 		;;
 	main) 		init_update; init_plugins; init_main
@@ -423,7 +427,7 @@ case "$editweblog_type" in
 					rm -fr "$Delete_EntryArchiveDir"
 			fi
 		done
-		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE".edit_weblog`)
+		NB_QUERY=; UPDATE_LIST=(`sort -u "$SCRATCH_FILE".edit_weblog`)
 		if [ ! -z "${UPDATE_LIST[*]}" ]; then
 			nb_msg "$editweblog_action"
 			find_categories "${UPDATE_LIST[*]}"
@@ -435,8 +439,7 @@ case "$editweblog_type" in
 	;;
 	tag|cat)
 		# edits categories
-		cat_num="$edit_idsel"
-		cat_var=`echo "$cat_num" |sed -e '/,/d'`
+		cat_num="$edit_idsel"; cat_var=`echo "$cat_num" |sed -e '/,/d'`
 		[ -z "$cat_var" ] && die "$editweblog_onecat"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 		nb_msg "$editweblog_catinfo $cat_num"
@@ -447,10 +450,10 @@ case "$editweblog_type" in
 
 			new_usrtitle=`translit_text "$USR_TITLE"`
 			nb_msg "$editweblog_title '$new_usrtitle' ..."
-			echo "$new_usrtitle" > "$NB_DATA_DIR/$db_catquery".tmp &&
-			sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp &&
+			echo "$new_usrtitle" > "$NB_DATA_DIR/$db_catquery".tmp && \
+			sed 1d "$NB_DATA_DIR/$db_catquery" >> "$NB_DATA_DIR/$db_catquery".tmp && \
 			mv "$NB_DATA_DIR/$db_catquery".tmp "$NB_DATA_DIR/$db_catquery"
-			NB_QUERY=""; UPDATE_LIST=(`sed 1d "$NB_DATA_DIR/$db_catquery" |sort -u`)
+			NB_QUERY=; UPDATE_LIST=(`sed 1d "$NB_DATA_DIR/$db_catquery" |sort -u`)
 			find_categories "${UPDATE_LIST[*]}"
 			resort_categories
 			build_weblog; exit
@@ -552,7 +555,7 @@ case "$delweblog_type" in
 				fi
 			fi
 		done
-		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+		NB_QUERY=; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
 		# update all categories with removed entries
 		[ ! -z "${UPDATE_LIST[*]}" ] &&
 			find_categories "${UPDATE_LIST[*]}"
@@ -562,7 +565,7 @@ case "$delweblog_type" in
 		# prune all removed entries from update list
 		if [ -f "$SCRATCH_FILE.x-entries" ]; then
 			for xentry in $(< "$SCRATCH_FILE.x-entries"); do
-				sed -e '/'$xentry'/d' "$SCRATCH_FILE".x-update > "$SCRATCH_FILE".x-update.new &&
+				sed -e '/'$xentry'/d' "$SCRATCH_FILE".x-update > "$SCRATCH_FILE".x-update.new && \
 				mv "$SCRATCH_FILE".x-update.new "$SCRATCH_FILE".x-update
 			done
 			UPDATE_LIST=(`sort -u "$SCRATCH_FILE.x-update"`)
@@ -589,7 +592,7 @@ case "$delweblog_type" in
 				rm -fr "$BLOG_DIR/$ARCHIVES_DIR/$category_dir"
 			rm -f "$NB_DATA_DIR/$cat_db" "$BLOG_DIR/$ARCHIVES_DIR"/`chg_suffix "$cat_db"`
 		done; cat_num=
-		NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+		NB_QUERY=; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
 		[ ! -z "${UPDATE_LIST[*]}" ] &&
 			find_categories "${UPDATE_LIST[*]}"
 		nb_msg "$querydb_update"
@@ -641,7 +644,7 @@ for entry_id in $NUMVAR; do
 		update_maindb "$Cat_EntryFile" "$NB_DATA_DIR/master.db"
 	fi
 done
-NB_QUERY=""; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
+NB_QUERY=; UPDATE_LIST=(`sort -u "$SCRATCH_FILE"`)
 [ ! -z "${UPDATE_LIST[*]}" ] &&
 	find_categories "${UPDATE_LIST[*]}"
 update_categories
@@ -671,8 +674,6 @@ while [ "$id" -lt "$entry_items" ]; do
 	let id=${id}+1
 	entry_cat=; entry_catids=; entry=
 done
-# validate categories
-db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 }
 # lists categories
 case "$db_query" in

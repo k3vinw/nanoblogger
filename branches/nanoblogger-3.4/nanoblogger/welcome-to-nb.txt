@@ -8,10 +8,10 @@ BODY:
 <p>Welcome to NanoBlogger, a small weblog engine for the UNIX command line.</p>
 <p><strong>Quick Reference</strong></p>
 <ul>
-<li>create new weblog (directory) ... <code>nb -b [blog_dir] add</code></li>
-<li>create new entry (w/o tag) ... <code>nb add</code></li>
-<li>create new tag ... <code>nb add tag <em>new</em></code></li>
-<li>tag new entry ... <code>nb tag [tag_id] add</code></li>
+<li>create new weblog (directory) ... <code>nb -b [blog_dir] add <em>weblog</em></code></li>
+<li>create new entry (w/o tag) ... <code>nb add <em>entry</em></code></li>
+<li>create new tag ... <code>nb add <em>tag</em></code></li>
+<li>tag new entry ... <code>nb tag [tag_id] add <em>entry</em></code></li>
 <li>list entries ... <code>nb [query &lt;query&gt;] list</code></li>
 <li>list tags ... <code>nb tag-list</code></li>
 <li>list entries by tag ... <code>nb tag [tag_id] [query &lt;query&gt;] list</code></li>
@@ -21,7 +21,7 @@ BODY:
 <li>delete tag ... <code>nb delete <em>tag</em> [tag_id]</code></li>
 <li>delete entry ... <code>nb [query &lt;query&gt;] delete <em>entry</em> [entry_id]</code></li>
 <li>draft entry ... <code>nb draft [draft_file]</code></li>
-<li>import draft as entry ... <code>nb file [draft_file] add</code></li>
+<li>import draft as entry ... <code>nb file [draft_file] add <em>entry</em></code></li>
 <li>force weblog update ... <code>nb query [all|DATE|main|max] update</code></li>
 </ul>
 <p>&lt;query&gt; may equal <code>all,tag,DATE, or max</code> (defaults to max)</p>

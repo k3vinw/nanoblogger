@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-06-25T19:34:44-04:00
+# Last modified: 2008-06-30T04:47:11-04:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -286,6 +286,7 @@ ENTRYARCHIVES_TEMPLATE="$2"
 ENTRYARCHIVES_DATATYPE="$3"
 : ${CACHE_TYPE:=entry}
 for entry in ${ENTRYARCHIVES_LIST[@]}; do
+	entry=${entry%%>*}
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
 		[ -z "$PARTS_FILE" ] &&
 			PARTS_FILE="$BLOG_DIR/$PARTS_DIR/$permalink_file"
@@ -512,8 +513,8 @@ build_catarchives
 if [ "$NB_QUERY" = all ]; then
 	LOOP_LIST=(${UPDATE_LIST[*]})
 else
-	# remove duplicate entries in update list and sort into chronological order
-	LOOP_LIST=(`for moditem in ${UPDATE_LIST[@]}; do echo $moditem; done |sort $SORT_ARGS`)
+	# remove duplicate entries and category indices from update list, then sort into chronological order
+	LOOP_LIST=(`for moditem in ${UPDATE_LIST[@]}; do echo ${moditem%%>*}; done |sort $SORT_ARGS`)
 fi
 # plugins for yearly archives
 load_plugins archive/year
