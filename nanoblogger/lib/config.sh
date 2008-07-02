@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-06-06T08:42:07-04:00
+# Last modified: 2008-07-02T02:13:09-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -54,6 +54,8 @@ export BLOG_DIR
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
 # default location for user plugins
 : ${USR_PLUGINSDIR:=$BLOG_DIR/plugins}
+# default articles suffix
+: ${ARTICLES_SUFFIX:=txt}
 
 # --- WARNING ---
 # changing the following requires manually modifying
@@ -71,6 +73,8 @@ CACHE_DIR="$BLOG_CACHE_DIR"
 PARTS_DIR="$BLOG_PARTS_DIR"
 # default directory to store parts of weblog
 [ -z "$PARTS_DIR" ] && PARTS_DIR=parts
+# default directory to store articles of weblog
+[ -z "$ARTICLES_DIR" ] && ARTICLES_DIR=articles
 
 # letter to prepend to entry's html id tag
 # WARNING: effects permanent links

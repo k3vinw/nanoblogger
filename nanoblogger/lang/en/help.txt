@@ -8,8 +8,8 @@ Usage:
  $BASENAME [-b blog_dir] [options] <action>
 
 Actions:
- add <entry,tag,weblog> 		- create new entry, tag, or weblog
-					  (directory).
+ add <article,entry,tag,weblog> 	- create new article, entry, tag, or
+ 					  weblog (directory).
  configure				- configure weblog (for 'update').
  delete <entry,tag> <ID>		- delete an entry, tag, or un-tag entry.
  draft <FILE> 				- edit or create metafile.
@@ -51,8 +51,8 @@ Options:
  --desc <text>				set text of description (for 'add',
  					'draft', 'make-file' and 'make-page').
  --data-dir <DIRECTORY>			specify weblog's data directory.
- --title <TEXT> 			set title (for 'add', 'tag', 'draft',
- 					'make-file' and 'make-page').
+ --title <TEXT> 			set title (for 'add', 'article', 'tag',
+ 					'draft', 'make-file' and 'make-page').
  --author <TEXT>			set text of author (for 'add', 'draft',
  					'make-file' and 'make-page').
  --plugin-dir <DIRECTORY> 		specify weblog's plugin directory.
@@ -72,9 +72,8 @@ Options:
  
  DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
 
-note: special queries such as "articles" and "feeds" only take effect when a
-      plugin is loaded that can interpret the query and are typically combined
-      with the "update" action.
+note: special queries such as "articles" and "feeds" typically get combined with
+      the update action.
 
 Examples:
 

@@ -9,6 +9,7 @@ BODY:
 <p><strong>Quick Reference</strong></p>
 <ul>
 <li>create new weblog (directory) ... <code>nb -b [blog_dir] add <em>weblog</em></code></li>
+<li>create new article ... <code>nb add <em>article</em></code></li>
 <li>create new entry (w/o tag) ... <code>nb add <em>entry</em></code></li>
 <li>create new tag ... <code>nb add <em>tag</em></code></li>
 <li>tag new entry ... <code>nb tag [tag_id] add <em>entry</em></code></li>
