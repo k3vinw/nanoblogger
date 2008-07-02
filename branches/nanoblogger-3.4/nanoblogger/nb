@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-06-30T04:39:04-04:00
+# Last modified: 2008-07-02T12:08:28-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -734,7 +734,7 @@ process_entry(){
 	# set a default entry format
 	[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
 	# create new temp file for prepping the entry's data file
-	NB_EditFile="$BLOG_DIR/nb_edit-`nb_timestamp`.$NB_DATATYPE"
+	NB_EditFile="$BLOG_DIR/nb_edit-entry-`nb_timestamp`.$NB_DATATYPE"
 	# save current metadata to temp file
 	write_entry "$NB_EditFile"
 	# save user metadata and preserve structure from imported file
@@ -766,8 +766,66 @@ process_new(){
 }
 load_config
 case "$addweblog_type" in
+	article)
+		check_config
+ 		# verify articles directories
+		for articlesection in ${ARTICLES_DIR[@]}; do
+			[ ! -d "$BLOG_DIR/$articlesection" ] &&
+				die "$addweblog_noarticledir"
+		done
+		USR_ARTICLEFILE="$USR_ADDFILE"; NB_ArticleFile=
+		if [ -z "$USR_ARTICLEFILE" ]; then
+			NB_ArticleFile="$BLOG_DIR/nb_edit-article-`nb_timestamp`.$ARTICLES_SUFFIX"
+			USR_ARTICLEFILE="$NB_ArticleFile"
+		fi
+		[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
+		# determine the articles destination
+		article_dirname=`dirname "$USR_ARTICLEFILE"`; article_dir=${ARTICLES_DIR%%[ ]*}
+		article_dirbase=${article_dirname//$BLOG_DIR}; article_dirbase=${article_dirbase//$article_dir}
+		article_dirbase=/${article_dirbase##*\/}; article_dirbase=${article_dirbase%%\/}
+		[ "${article_dirname//$BLOG_DIR}" = "$article_dirname" ] && article_dirbase=
+		article_filename=`chg_suffix "$article_filename" "$ARTICLES_SUFFIX"`
+		if [ -d "$article_dirname" ] && [ ! -f "$USR_ARTICLEFILE" ]; then
+			article_created=1; nb_draft "$USR_ARTICLEFILE"
+		fi
+		[ ! -f "$USR_ARTICLEFILE" ] && die "$addweblog_noarticlesrc"
+		if [ ! -z "$NB_ArticleFile" ]; then
+			read_metadata TITLE "$USR_ARTICLEFILE"
+			if [ ! -z "$METADATA" ]; then
+				article_filename=`translit_text "$METADATA"`.$ARTICLES_SUFFIX
+			else
+				article_filename=`translit_text "$notitle"`.$ARTICLES_SUFFIX
+			fi
+		else
+			article_filename=`basename "$USR_ARTICLEFILE"`
+		fi
+		if [ ! -z "$NB_ArticleFile" ] || [ -d "$article_dirname" ]; then
+			[ -f "$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" ] &&
+				die "'$BLOG_DIR/$article_dir${article_dirbase}/$article_filename' - $samefilename"
+		fi
+		if [ ! -z "$article_dir" ] && [ -d "$BLOG_DIR/$article_dir${article_dirbase}" ]; then
+			if [ ! -f "$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" ]; then
+				cp "$USR_ARTICLEFILE" \
+				"$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" || exit
+				article_copied=1
+			fi
+			[ -f "$NB_ArticleFile" ] && rm -f "$NB_ArticleFile"
+			if [ "$article_created" = 1 ] || [ "$article_copied" = 1 ]; then
+				nb_msg "$addweblog_newarticle"
+				NB_QUERY=main; build_weblog; exit
+			fi
+		fi
+		die "$addweblog_noarticlesrc"
+	;;
+	entry)
+		check_config
+		# add new entry from metafile
+		[ ! -z "$USR_ADDFILE" ] && import_file "$USR_ADDFILE"
+		process_entry; process_new
+	;;
 	weblog)
 		[ -z "$BLOG_DIR" ] && die "$addweblog_noweblog"
+		[ -d "$BLOG_DIR" ] && die "$addweblog_nocreate"
 		# create new weblog directory ...
 		if [ ! -d "$BLOG_DIR" ]; then
 			nb_msg "$addweblog_newblog '$BLOG_DIR' ..."
@@ -831,13 +889,6 @@ case "$addweblog_type" in
 		newcat_title=`nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE`
 		nb_msg "$addweblog_madecat '$newcat_title'."; exit
 	;;
-	entry)
-		check_config
-		# add new entry from metafile
-		[ ! -z "$USR_ADDFILE" ] &&
-			import_file "$USR_ADDFILE"
-		process_entry; process_new
-	;;
 	*)
 		die "$main_badopts $addweblog_type"
 	;;
@@ -873,7 +924,7 @@ while [ $# -gt 0 ]; do
 	bad_argument=$1
 	# -a,-c,-l,-m,-q,-u only here for backwards compability purposes
 	case "$1" in
-		add-new|add|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
+		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
 		edit|-e)		check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
 					EDIT_WEBLOG=1;;

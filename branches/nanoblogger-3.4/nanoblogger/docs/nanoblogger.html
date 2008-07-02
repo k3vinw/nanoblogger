@@ -157,49 +157,55 @@
       <tr>
         <td>8.</td>
 
-        <td><a href="#s.8">About Plugins</a></td>
+        <td><a href="#s.8">Articles and the Articles Plugin</a></td>
       </tr>
 
       <tr>
         <td>9.</td>
 
-        <td><a href="#s.9">Configuring Plugins</a></td>
+        <td><a href="#s.9">About Plugins</a></td>
       </tr>
 
       <tr>
         <td>10.</td>
 
-        <td><a href="#s.10">Writing Plugins</a></td>
+        <td><a href="#s.10">Configuring Plugins</a></td>
       </tr>
 
       <tr>
         <td>11.</td>
 
-        <td><a href="#s.11">Publishing</a></td>
+        <td><a href="#s.11">Writing Plugins</a></td>
       </tr>
 
       <tr>
         <td>12.</td>
 
-        <td><a href="#s.12">Adding Support for Comments</a></td>
+        <td><a href="#s.12">Publishing</a></td>
       </tr>
 
       <tr>
         <td>13.</td>
 
-        <td><a href="#s.13">Importing Entries</a></td>
+        <td><a href="#s.13">Adding Support for Comments</a></td>
       </tr>
 
       <tr>
         <td>14.</td>
 
-        <td><a href="#s.14">Tips and Tricks</a></td>
+        <td><a href="#s.14">Importing Entries</a></td>
       </tr>
 
       <tr>
         <td>15.</td>
 
-        <td><a href="#s.15">Credits</a></td>
+        <td><a href="#s.15">Tips and Tricks</a></td>
+      </tr>
+
+      <tr>
+        <td>16.</td>
+
+        <td><a href="#s.16">Credits</a></td>
       </tr>
     </table>
   </div>
@@ -403,7 +409,7 @@ BLOG_ICON="images/favicon.ico"
 
     <p><b>Setting the Default Text Formatting</b></p>
 
-    <p><em>ENTRY_FORMAT</em> specifies the default text formatting to use for an entry. Defaults to "raw".</p>
+    <p><em>ENTRY_FORMAT</em> specifies the default text formatting to use for new entries. Defaults to "raw".</p>
 
     <p><b>Toggling Creation of Entry Archives</b></p>
 
@@ -871,8 +877,58 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit entry 1
     </div>
   </div>
 
+  <div id="articles.plugin">
+    <h2><a id="s.8" name="s.8">8. Articles and the Articles Plugin</a></h2>
+
+    <p>Articles are independent from the main weblog's archives and they provide a fast and easy way to organize and create additional content for the weblog. Management is almost entirely accomplished through your file manager (or command line). The articles are simply created from meta-files found in the articles directory. Refreshing articles occurs on the next update of the weblog or upon a forced update, whichever occurs first. The generation of the articles listing and content depends on the articles plugin. For more information about the articles plugin, please refer to "*articles_meta.sh" in <a href="#s.9">About Plugins</a>.</p>
+
+    <h3>Configuring Articles</h3>
+
+    <p><b>Setting the Articles Directory</b></p>
+
+    <p><em>ARTICLES_DIR</em> sets the articles directory for your weblog. Defaults to "articles". Multiple articles directories may be specified.</p>
+
+    <p>Example:</p>
+    <pre>
+ARTICLES_DIR="articles articles/misc"
+
+</pre>
+
+    <p><b>Setting the Default Text Formatting for Articles</b></p>
+
+    <p><em>ARTICLES_FORMAT</em> sets the default text formatting for new articles. Defaults to "raw".</p>
+
+    <p><b>Setting the Articles Suffix</b></p>
+
+    <p><em>ARTICLES_SUFFIX</em> sets the suffix to include as an article under the articles directory. Defaults to ".txt".</p>
+
+    <h3>Adding New Articles</h3>
+
+    <p>Creating new articles is made easy with help from the 'add article' command:</p>
+    <pre>
+nb [--title 'Example Article'] [file example.txt] add article
+
+</pre>
+
+    <p>Importing new article into an existing articles sub-directory:</p>
+    <pre>
+nb file [blog_dir/]articles/misc/example.txt add article
+
+</pre>
+
+    <p><b>Manually Refreshing Articles</b></p>
+
+    <p>Manually refreshing articles listing and content:</p>
+    <pre>
+nb query main update
+
+</pre>
+
+    <p>This was just a basic introduction to support for articles. For a more advanced overview, you may wish to refer directly to the source of the articles plugin.</p>
+  </div>
+
   <div id="about.plugins">
-    <h2><a id="s.8" name="s.8">8. About Plugins</a></h2>
+    <h2><a id="s.9" name="s.9">9. About Plugins</a></h2>
 
     <h3>Plugins Framework</h3>
 
@@ -995,19 +1051,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit entry 1
 
           <td align="left">$NB_ArticleLinks</td>
 
-          <td align="left">requires makepage.htm template, plugin must be last to load</td>
-        </tr>
-
-        <tr>
-          <td align="left">articles_text.sh*</td>
-
-          <td align="left">generates articles from text files in the "articles" directory</td>
-
-          <td align="left">ARTICLES_DIR, ARTICLES_FORMAT</td>
-
-          <td align="left">$NB_ArticleLinks</td>
-
-          <td align="left">requires makepage.htm template, plugin must be last to load</td>
+          <td align="left">requires makepage.htm template, plugin should be ordered so that it's loaded last</td>
         </tr>
 
         <tr>
@@ -1272,7 +1316,7 @@ nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit entry 1
   </div>
 
   <div id="configuring.plugins">
-    <h2><a id="s.9" name="s.9">9. Configuring Plugins</a></h2>
+    <h2><a id="s.10" name="s.10">10. Configuring Plugins</a></h2>
 
     <p>Settings for plugins are stored and set in your weblog's blog.conf.</p>
 
@@ -1398,7 +1442,7 @@ TIDY_XML_ARGS="-xml -n -utf8 -wrap 0"
   </div>
 
   <div id="writing.plugins">
-    <h2><a id="s.10" name="s.10">10. Writing Plugins</a></h2>
+    <h2><a id="s.11" name="s.11">11. Writing Plugins</a></h2>
 
     <h3>Tools for Developing Plugins</h3>
 
@@ -1758,7 +1802,7 @@ TIDY_XML_ARGS="-xml -n -utf8 -wrap 0"
   </div>
 
   <div id="publish">
-    <h2><a id="s.11" name="s.11">11. Publishing</a></h2>
+    <h2><a id="s.12" name="s.12">12. Publishing</a></h2>
 
     <p><b>Setting the Publish Command</b></p>
 
@@ -1793,7 +1837,7 @@ mput *
   </div>
 
   <div id="comments">
-    <h2><a id="s.12" name="s.12">12. Adding Support for Comments</a></h2>
+    <h2><a id="s.13" name="s.13">13. Adding Support for Comments</a></h2>
 
     <p>Comment services and add-on's: NanoBlogger Comments, CGIComment, blogkomm[1], JS-Kit[2], and Haloscan.com[3].</p>
 
@@ -1801,7 +1845,7 @@ mput *
   </div>
 
   <div id="entries.import">
-    <h2><a id="s.13" name="s.13">13. Importing Entries</a></h2>
+    <h2><a id="s.14" name="s.14">14. Importing Entries</a></h2>
 
     <p>In order to import entries, data must first be converted to the NanoBlogger format.</p>
 
@@ -1856,7 +1900,7 @@ nb [-b blog_dir] --force query all update
   </div>
 
   <div id="tips">
-    <h2><a id="s.14" name="s.14">14. Tips and Tricks</a></h2>
+    <h2><a id="s.15" name="s.15">14. Tips and Tricks</a></h2>
 
     <p><b>Useful Editor's Commands</b></p>Create a new meta-file:
     <pre>
@@ -1945,7 +1989,7 @@ php?&gt;
   </div>
 
   <div id="credits">
-    <h2><a id="s.15" name="s.15">15. Credits</a></h2>
+    <h2><a id="s.16" name="s.16">16. Credits</a></h2>
 
     <p>Thanks to Adrien "ze" Urban, Paul Drain, Pavel Janik, and O.R.Senthil Kumaran for all the contributions and suggestions. Thanks to Bowie J. Poag, author of MicroBlogger, for the inspiration of this project. Special acknowledgment goes to Ted Walther's Diary[4], which inspired Bowie to create MicroBlogger. Finally, thanks to everyone who's ever contributed a patch or feature request - see the ChangeLog.</p>
 

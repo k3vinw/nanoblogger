@@ -17,6 +17,7 @@ checkconf_nousrconf="weblog config file doesn't exist! goodbye."
 checkconf_noblogdir="weblog directory doesn't exist! goodbye."
 checkconf_nodata="weblog's data directory doesn't exist! goodbye."
 checkconf_nocache="weblog's cache directory doesn't exist! goodbye."
+checkconf_noparts="weblog's parts directory doesn't exist! goodbye."
 checkconf_notemplates="weblog's templates directory doesn't exist! goodbye."
 
 # query_db
@@ -127,6 +128,9 @@ addweblog_author="enter author's name"
 addweblog_title="enter a title"
 addweblog_desc="enter a short description"
 addweblog_editnew="editing new entry ..."
+addweblog_newarticle="adding new article ..."
+addweblog_noarticledir="failed to verify articles directory! check ARTICLES_DIR in configuration."
+addweblog_noarticlesrc="no legitimate article source could be found!"
 
 # preview_weblog
 preview_nocmd="no preview commmand set! goodbye."
