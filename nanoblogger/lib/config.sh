@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-07-02T02:13:09-04:00
+# Last modified: 2008-07-03T19:16:02-04:00
 
 # --- WARNING ---
 # config variables that must always load
