@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-06-25T21:07:39-04:00
+# Last modified: 2008-07-03T21:37:53-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -562,7 +562,9 @@ fi
 
 # edit draft file
 nb_draft(){
-EDITDRAFT_FILE="$1"
+EDITDRAFT_OPTIONS="$1"
+EDITDRAFT_FILE="$2"
+[ -z "$EDITDRAFT_FILE" ] && EDITDRAFT_FILE="$1"
 [ ! -z "$USR_DRAFTFILE" ] && EDITDRAFT_FILE="$USR_DRAFTFILE"
 if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 	echo "'$EDITDRAFT_FILE' - $nbdraft_asknew [Y/n]"
@@ -576,7 +578,7 @@ if [ ! -z "$EDITDRAFT_FILE" ] && [ ! -f "$EDITDRAFT_FILE" ]; then
 fi
 if [ -f "$EDITDRAFT_FILE" ]; then
 	write_var "$USR_METAVAR" "$USR_SETVAR" "$EDITDRAFT_FILE"
-	nb_edit "$EDITDRAFT_FILE"
+	nb_edit "$EDITDRAFT_OPTIONS" "$EDITDRAFT_FILE"
 	# validate metafile
 	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$EDITDRAFT_FILE"
 	# modify date (DATE metadata)
