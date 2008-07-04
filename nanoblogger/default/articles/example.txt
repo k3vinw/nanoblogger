@@ -22,7 +22,8 @@ nb [--title 'Example Article'] [file example.txt] add article
 New articles can also be created manually using the <code>draft,
 query</code> and <code>update</code> actions.
 <pre>
-nb draft [blog_dir]articles/example.txt query main update
+nb draft [blog_dir]articles/example.txt
+nb query main update
 </pre>
 To remove an article simply rename it's suffix to something
 other than ".txt" or remove it from the <em>articles</em> directory ...

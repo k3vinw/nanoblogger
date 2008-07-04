@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-03T19:16:03-04:00
+# Last modified: 2008-07-03T21:37:50-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -787,7 +787,7 @@ case "$addweblog_type" in
 		article_filename=`chg_suffix "$article_filename" "$ARTICLES_SUFFIX"`
 		if [ -d "$article_dirname" ] && [ ! -f "$USR_ARTICLEFILE" ]; then
 			[ ! -z "$NB_ArticleFile" ] && make_file "$NB_ArticleFile" "$USR_TEMPLATE"
-			article_created=1; nb_draft "$USR_ARTICLEFILE"
+			article_created=1; nb_draft -p "$USR_ARTICLEFILE"
 		fi
 		[ ! -f "$USR_ARTICLEFILE" ] && die "$addweblog_noarticlesrc"
 		check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$USR_ARTICLEFILE"
