@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-03T21:37:50-04:00
+# Last modified: 2008-07-07T00:18:19-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -437,6 +437,9 @@ case "$editweblog_type" in
 			die "$editweblog_noaction"
 		fi
 	;;
+	meta-file|file)
+		nb_draft "$edit_idsel"
+	;;
 	tag|cat)
 		# edits categories
 		cat_num="$edit_idsel"; cat_var=`echo "$cat_num" |sed -e '/,/d'`
@@ -814,7 +817,11 @@ case "$addweblog_type" in
 			[ -f "$NB_ArticleFile" ] && rm -f "$NB_ArticleFile"
 			if [ "$article_created" = 1 ] || [ "$article_copied" = 1 ]; then
 				nb_msg "$addweblog_newarticle"
-				NB_QUERY=main; build_weblog; exit
+				NB_QUERY=main; build_weblog
+				# prompt for some post-tasks
+				[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
+				[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog
+				exit
 			fi
 		fi
 		die "$addweblog_noarticlesrc"
@@ -959,6 +966,8 @@ while [ $# -gt 0 ]; do
 		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;
 		--var)			check_arg "$2"; USR_METAVAR="$2"; shift;;
 		--version)		echo "NanoBlogger $VERSION"; exit;;
+		--no-preview) 		NOPREVIEW_WEBLOG=1;;
+		--no-publish) 		NOPUBLISH_WEBLOG=1;;
 		-b|--blog-dir)		check_arg "$2"; USR_BLOGDIR="$2"; shift;;
 		-f|--force) 		FORCE_UPDATE=1; UPDATECACHE_WEBLOG=1;;
 		-h|--help|help)		show_help; exit;;

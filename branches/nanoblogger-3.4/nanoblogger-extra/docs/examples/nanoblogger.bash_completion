@@ -52,7 +52,7 @@ _nanoblogger()
 			return 0
 			;;
 	edit)
-			COMPREPLY=( $( compgen -W "entry tag" -- $cur ) )
+			COMPREPLY=( $( compgen -W "entry file tag" -- $cur ) )
 			return 0
 			;;
 	query)

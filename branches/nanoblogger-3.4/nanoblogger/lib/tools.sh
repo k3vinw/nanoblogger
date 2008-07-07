@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-07-03T21:37:53-04:00
+# Last modified: 2008-07-07T00:14:53-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -587,38 +587,42 @@ fi
 }
 
 preview_weblog(){
-[ -z "$BLOG_PREVIEW_CMD" ] && die "$preview_nocmd"
-if [ "$BLOG_INTERACTIVE" = 1 ]; then
-	echo "$preview_asknow [y/N]"
-	read -p "$NB_PROMPT" choice
-	case $choice in
-		[Yy])
-			nb_msg "$preview_action"
-			$BLOG_PREVIEW_CMD;;
-		[Nn]|"")
-		;;
-	esac
-else
-	nb_msg "$preview_action"
-	$BLOG_PREVIEW_CMD
+if [ "$NOPREVIEW_WEBLOG" != 1 ] || [ "$PREVIEW_WEBLOG" = 1 ]; then
+	[ -z "$BLOG_PREVIEW_CMD" ] && die "$preview_nocmd"
+	if [ "$BLOG_INTERACTIVE" = 1 ]; then
+		echo "$preview_asknow [y/N]"
+		read -p "$NB_PROMPT" choice
+		case $choice in
+			[Yy])
+				nb_msg "$preview_action"
+				$BLOG_PREVIEW_CMD;;
+			[Nn]|"")
+			;;
+		esac
+	else
+		nb_msg "$preview_action"
+		$BLOG_PREVIEW_CMD
+	fi
 fi
 }
 
 publish_weblog(){
-[ -z "$BLOG_PUBLISH_CMD" ] && die "$publish_nocmd"
-if [ "$BLOG_INTERACTIVE" = 1 ]; then
-	echo "$publish_asknow [y/N]"
-	read -p "$NB_PROMPT" choice
-	case $choice in
-		[Yy])
-			nb_msg "$publish_action"
-			$BLOG_PUBLISH_CMD;;
-		[Nn]|"")
-			;;
-	esac
-else
-	nb_msg "$publish_action"
-	$BLOG_PUBLISH_CMD
+if [ "$NOPUBLISH_WEBLOG" != 1 ] || [ "$PUBLISH_WEBLOG" = 1 ]; then
+	[ -z "$BLOG_PUBLISH_CMD" ] && die "$publish_nocmd"
+	if [ "$BLOG_INTERACTIVE" = 1 ]; then
+		echo "$publish_asknow [y/N]"
+		read -p "$NB_PROMPT" choice
+		case $choice in
+			[Yy])
+				nb_msg "$publish_action"
+				$BLOG_PUBLISH_CMD;;
+			[Nn]|"")
+				;;
+		esac
+	else
+		nb_msg "$publish_action"
+		$BLOG_PUBLISH_CMD
+	fi
 fi
 }
 

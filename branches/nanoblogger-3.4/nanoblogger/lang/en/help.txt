@@ -12,17 +12,17 @@ Actions:
  					  weblog (directory).
  configure				- configure weblog (for 'update').
  delete <entry,tag> <ID>		- delete an entry, tag, or un-tag entry.
- draft <FILE> 				- edit or create metafile.
- edit <entry,tag> <ID>			- edit an entry or tag.
+ draft <FILE> 				- create and edit meta-file.
+ edit <entry,file,tag> <ID,FILE>	- edit entry, meta-file or tag.
  list					- list entries or tags (for
  					  'query' and 'tag', defaults to
 					  'max').
  make-page <FILE1> <FILE2> 		- create new weblog page (file2) from
-					  metafile (file1).
+					  meta-file (file1).
  tag-entry <ID>				- tag entry (for 'tag').
  tag-list 				- list tags (same as 'query tag list').
  manual					- view the manual.
- make-file <FILE> 			- create new metafile.
+ make-file <FILE> 			- create new meta-file.
  preview				- run command to preview weblog.
  publish				- run command to publish weblog.
  query <all,tag,DATE,main,max, 		- specify a query to run (for 'edit',
@@ -31,7 +31,7 @@ Actions:
  tag <ID,new> 				- specify tag (for 'add', 'delete',
  					  'edit', 'list', 'update', and
 					  'update-cache').
- file <FILE> 				- specify metafile to import as entry
+ file <FILE> 				- specify meta-file to import as entry
  					  (for 'add').
  update-cache 				- force cache update (for 'query',
  					  defaults to 'expired').
@@ -65,6 +65,8 @@ Options:
  					'draft', 'edit', 'make-file' and
 					'make-page').
  --set-var <INPUT>  			set meta-variable (for '--var').
+ --no-preview 				disables automatic preview (for 'add').
+ --no-publish 				disables automatic publish (for 'add').
  --version				display version information.
 
  tag,delete,edit,tag-entry accepts multiple ID numbers separated by commas (e.g.
