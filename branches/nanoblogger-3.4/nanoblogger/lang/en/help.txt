@@ -69,6 +69,16 @@ Options:
  --no-publish 				disables automatic publish (for 'add').
  --version				display version information.
 
+More Short Options:
+ -a 		equivalent of add action.
+ -c <ID> 	specifies tag (for '-d' and '-e').
+ -d <ID>	deletes entry (works with '-c').
+ -e <ID> 	edits entry (works with '-c').
+ -l 		equivalent of list action.
+ -m <ID> 	equivalent of tag-entry action.
+ -q 		equivalent of query action.
+ -u 		equivalent of update action.
+
  tag,delete,edit,tag-entry accepts multiple ID numbers separated by commas (e.g.
  1,2,3).
  

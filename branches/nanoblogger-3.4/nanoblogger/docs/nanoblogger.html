@@ -393,19 +393,23 @@ BLOG_ICON="images/favicon.ico"
 
     <p><em>BLOG_AUTHOR</em> can be used to set the author's name, the default is to set the author's name using the common USER variable. Setting <em>BLOG_AUTHOR</em> will override this behavior.</p>
 
-    <p><b>Setting the Maximum Number of Entries to Display for the Main Page</b></p>
+    <p><b>Setting the Default for the "max" Query</b></p>
 
-    <p><em>MAX_ENTRIES</em> sets the maximum number of entries that get displayed on the main page(s). Defaults to "10".</p>
+    <p><em>MAX_ENTRIES</em> sets the maximum number of entries returned by the "max" query. Defaults to "10".</p>
 
-    <p><b>Setting the Maximum Number of Entries to Display for Each Page</b></p>
+    <p><b>Setting the Maximum Number of Entries to Display for All Delimited Pages</b></p>
 
-    <p><em>MAX_PAGE_ENTRIES</em> sets the maximum number of entries to display for each page. Defaults to "$MAX_ENTRIES". The default for splitting archives and other such pages.</p>
+    <p><em>MAX_PAGE_ENTRIES</em> sets the default maximum number of entries to display for all delimited pages. Defaults to "$MAX_ENTRIES".</p>
 
     <p><em>MAX_CATPAGE_ENTRIES</em> sets the maximum number of entries to display for each category archive page. Defaults to "$MAX_PAGE_ENTRIES". The category archives will split when the number of entries is greater than <em>$MAX_CATPAGE_ENTRIES</em>.</p>
 
     <p><em>MAX_MONTHPAGE_ENTRIES</em> sets the maximum number of entries to display for each month archive page. Defaults to "$MAX_PAGE_ENTRIES". The month archives will split when the number of entries is greater than <em>$MAX_MONTHPAGE_ENTRIES</em>.</p>
 
-    <p><em>MAX_MAINPAGE_ENTRIES</em> sets the maximum number of entries to display for each main page. Defaults to "$MAX_PAGE_ENTRIES". The main page will split when <em>$MAX_MAINPAGE_ENTRIES</em> is less than <em>$MAX_ENTRIES</em>.</p>
+    <p><em>MAX_MAINPAGE_ENTRIES</em> sets the maximum number of entries to display for each main page. Defaults to "$MAX_PAGE_ENTRIES". The main page will split when <em>$MAX_MAINPAGE_ENTRIES</em> is less than <em>$MAX_ENTRIES</em> and greater than the results of <em>MAINPAGE_QUERY</em>.</p>
+
+    <p><b>Setting the Default Query For the Main Page</b></p>
+
+    <p><em>MAINPAGE_QUERY</em> sets the default query for the main page. Defaults to "max". When combined with <em>MAX_MAINPAGE_ENTRIES</em>, it can be used to paginate the main page.</p>
 
     <p><b>Setting the Default Text Formatting</b></p>
 
@@ -474,7 +478,7 @@ NOBODY = all except entry's BODY metadata (faster and smaller cache)
 
     <p><b>Changing the Default Query Mode</b></p>
 
-    <p><em>QUERY_MODE</em> specifies the default query mode for listing and managing entries. It also affects entries displayed on the main page. Defaults to "$MAX_ENTRIES", but can be just about any valid query. See the "query" action.</p>
+    <p><em>QUERY_MODE</em> specifies the default query mode for all weblog operations. Defaults to "all", but can be just about any valid query. See the "query" action for some possible queries.</p>
 
     <p><b>Links Configuration</b></p>
 

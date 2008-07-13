@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-07-03T19:16:02-04:00
+# Last modified: 2008-07-12T18:39:14-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -142,10 +142,12 @@ export NB_EDITOR
 : ${NB_SYND_FILETYPE:=xml}
 # default to AUTO_TZD for iso dates
 : ${BLOG_TZD:=$AUTO_TZD}
-# default to max filter for query mode
-: ${QUERY_MODE:=max}
+# defaults to all for query mode
+: ${QUERY_MODE:=all}
 # set default query mode for all operations
 : ${NB_QUERY:=$QUERY_MODE}
+# set default query for main page
+: ${MAINPAGE_QUERY:=max}
 # override default query mode
 [ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
 # defaults for maximum entries to display on each page
@@ -215,8 +217,8 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; NB_DATA_DIR=; NB_TEMPLATES_DIR=; NB_TEMP_
 	NB_UMASK=; \
  	BLOG_AUTHOR=; BLOG_CACHEMNG=; BLOG_INTERACTIVE=; BLOG_TZD=; \
 	CATEGORY_FEEDS=; CHRON_ORDER=; DATE_CMD=; DATE_LOCALE=; FRIENDLY_LINKS=; \
-	MAX_ENTRIES=; MAX_CACHE_ENTRIES=; MAX_CATPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; \
-	MAX_MONTHPAGE_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_TITLEWIDTH=; \
+	MAINPAGE_QUERY=; MAX_ENTRIES=; MAX_CACHE_ENTRIES=; MAX_CATPAGE_ENTRIES=; \
+	MAX_MAINPAGE_ENTRIES=; MAX_MONTHPAGE_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_TITLEWIDTH=; \
 	METADATA_MARKER=; METADATA_CLOSEVAR=; METADATA_CLOSETAG=; \
 	ENTRY_FORMAT=; PAGE_FORMAT=; \
 	SHOW_INDEXFILE=; SHOW_PERMALINKS=; SHOW_CATLINKS=; SORT_ARGS=; \

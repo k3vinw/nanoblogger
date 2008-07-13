@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-07T00:18:19-04:00
+# Last modified: 2008-07-12T19:24:18-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -270,9 +270,9 @@ build_weblog(){
 	nb_msg "$buildweblog_main"
 	export CACHE_TYPE=main
 	# reset UPDATE_LIST so main index gets updated
-	query_db "$QUERY_MODE" nocat
+	query_db "$MAINPAGE_QUERY" nocat
 	UPDATE_LIST=(${DB_RESULTS[*]})
-	paginate "$QUERY_MODE" nocat "$MAX_MAINPAGE_ENTRIES" "$MAIN_TEMPLATE" \
+	paginate "$MAINPAGE_QUERY" nocat "$MAX_MAINPAGE_ENTRIES" "$MAIN_TEMPLATE" \
 		"$ENTRY_TEMPLATE" "$BLOG_DIR/" "$NB_INDEXFILE"
 	if [ "$NB_QUERY" != main ]; then
 		# remove any expired cache data to save disk space
@@ -931,14 +931,18 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -a,-c,-l,-m,-q,-u only here for backwards compability purposes
+	# -a,-d,-e,-c,-l,-m,-q,-u exists for backwards compability
 	case "$1" in
 		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
-		edit|-e)		check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
+		edit)			check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
 					EDIT_WEBLOG=1;;
-		delete|-d)		check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
+		-e) 			check_arg "$2"; editweblog_type=entry; edit_idsel="$2"; shift
+					EDIT_WEBLOG=1;; # short option for backward compatibility
+		delete)			check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
 					DELETE_WEBLOG=1;;
+		-d) 			check_arg "$2"; delweblog_type=entry; delete_idsel="$2"; shift
+					DELETE_WEBLOG=1;; # short option for backward compatibility
 		draft) 			check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		file) 			check_arg "$2"; USR_ADDFILE="$2"; shift;;
 		list|-l)		LIST_WEBLOG=1;;
@@ -982,7 +986,6 @@ while [ $# -gt 0 ]; do
 	esac
 	shift
 done
-
 
 # post-processing for all command line args
 if [ "$CONFIG_WEBLOG" = 1 ]; then
