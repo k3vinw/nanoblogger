@@ -23,7 +23,7 @@ BODY:
 <li>delete entry ... <code>nb [query &lt;query&gt;] delete <em>entry</em> [entry_id]</code></li>
 <li>draft entry ... <code>nb draft [draft_file]</code></li>
 <li>import draft as entry ... <code>nb file [draft_file] add <em>entry</em></code></li>
-<li>force weblog update ... <code>nb query [all|DATE|main|max] update</code></li>
+<li>update weblog ... <code>nb [query &lt;all|DATE|main|max|articles|feeds&gt;] update</code></li>
 </ul>
 <p>&lt;query&gt; may equal <code>all,tag,DATE, or max</code> (defaults to max)</p>
 <p>
