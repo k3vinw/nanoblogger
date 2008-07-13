@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-12T19:24:18-04:00
+# Last modified: 2008-07-12T21:36:44-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC1"
@@ -931,7 +931,7 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -a,-d,-e,-c,-l,-m,-q,-u exists for backwards compability
+	# -a,-c,-d,-e,-l,-m,-q,-u exists for backwards compability
 	case "$1" in
 		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
