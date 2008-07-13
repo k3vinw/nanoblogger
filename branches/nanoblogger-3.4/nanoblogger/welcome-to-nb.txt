@@ -8,7 +8,7 @@ BODY:
 <p>Welcome to NanoBlogger, a small weblog engine for the UNIX command line.</p>
 <p><strong>Quick Reference</strong></p>
 <ul>
-<li>create new weblog (directory) ... <code>nb -b [blog_dir] add <em>weblog</em></code></li>
+<li>create new weblog (directory) ... <code>nb [-b &lt;blog_dir&gt;] add <em>weblog</em></code></li>
 <li>create new article ... <code>nb add <em>article</em></code></li>
 <li>create new entry (w/o tag) ... <code>nb add <em>entry</em></code></li>
 <li>create new tag ... <code>nb add <em>tag</em></code></li>
@@ -25,7 +25,7 @@ BODY:
 <li>import draft as entry ... <code>nb file [draft_file] add <em>entry</em></code></li>
 <li>update weblog ... <code>nb [query &lt;all|DATE|main|max|articles|feeds&gt;] update</code></li>
 </ul>
-<p>&lt;query&gt; may equal <code>all,tag,DATE, or max</code> (defaults to max)</p>
+<p>&lt;query&gt; may equal <code>all,tag,DATE, or max</code> (defaults to all)</p>
 <p>
 Thank you for choosing NanoBlogger. Please direct comments and suggestions to
 the <a href="http://groups.yahoo.com/group/nanoblogger/">mailing list</a> or
