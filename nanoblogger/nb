@@ -2,10 +2,10 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-12T21:36:44-04:00
+# Last modified: 2008-07-15T13:43:17-04:00
 
 # nanoblogger's version.
-VERSION="3.4 RC1"
+VERSION="3.4 RC2"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base
@@ -741,7 +741,7 @@ process_entry(){
 	# save current metadata to temp file
 	write_entry "$NB_EditFile"
 	# save user metadata and preserve structure from imported file
-	if  [ -f "$IMPORT_FILE" ]; then
+	if [ -f "$IMPORT_FILE" ]; then
 		write_var "$USR_METAVAR" "$USR_SETVAR" "$IMPORT_FILE"
 		cat "$IMPORT_FILE" > "$NB_EditFile"
 	fi
@@ -804,15 +804,18 @@ case "$addweblog_type" in
 		else
 			article_filename=`basename "$USR_ARTICLEFILE"`
 		fi
-		if [ ! -z "$NB_ArticleFile" ] || [ -d "$article_dirname" ]; then
+		if [ "$article_created" != 1 ]; then
 			[ -f "$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" ] &&
 				die "'$BLOG_DIR/$article_dir${article_dirbase}/$article_filename' - $samefilename"
 		fi
 		if [ ! -z "$article_dir" ] && [ -d "$BLOG_DIR/$article_dir${article_dirbase}" ]; then
-			if [ ! -f "$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" ]; then
-				cp "$USR_ARTICLEFILE" \
-				"$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" || exit
-				article_copied=1
+			article_internal=${article_dirname//*${article_dir}*/true}
+			if [ ! -z "$article_dirbase" ] || [ "$article_internal" != "true" ]; then
+				if [ ! -f "$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" ]; then
+					cp "$USR_ARTICLEFILE" \
+					"$BLOG_DIR/$article_dir${article_dirbase}/$article_filename" || exit
+					article_copied=1
+				fi
 			fi
 			[ -f "$NB_ArticleFile" ] && rm -f "$NB_ArticleFile"
 			if [ "$article_created" = 1 ] || [ "$article_copied" = 1 ]; then
@@ -931,7 +934,7 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -a,-c,-d,-e,-l,-m,-q,-u exists for backwards compability
+	# -E,-a,-c,-d,-e,-l,-m,-q,-u exists for backwards compability
 	case "$1" in
 		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
@@ -943,25 +946,27 @@ while [ $# -gt 0 ]; do
 					DELETE_WEBLOG=1;;
 		-d) 			check_arg "$2"; delweblog_type=entry; delete_idsel="$2"; shift
 					DELETE_WEBLOG=1;; # short option for backward compatibility
-		draft) 			check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
-		file) 			check_arg "$2"; USR_ADDFILE="$2"; shift;;
+		draft|-E) 		check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
+		import) 		check_arg "$2"; addweblog_type="$2"; USR_ADDFILE="$3"; shift 2
+					ADD_WEBLOG=1;;
 		list|-l)		LIST_WEBLOG=1;;
+		list-tags) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
 		make-page)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
 		manual)			load_config; load_lang; nb_browser "$NB_DOC_FILE"; exit;;
 		tag|-c)			check_arg "$2"; cat_num="$2"; shift;;
 		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
-		tag-list) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
 		publish)		PUBLISH_WEBLOG=1;;
 		preview)		PREVIEW_WEBLOG=1;;
-		query|-q)		NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
+		query|-q)		check_arg "$2"; NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
 		update|-u)		UPDATE_WEBLOG=1;;
 		update-cache) 		UPDATECACHE_WEBLOG=1;;
 		--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
 		--conf-file)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
 		--data-dir)		check_arg "$2"; USR_DATADIR="$2"; shift;;
 		--desc)			DESC_PROMPT=1; USR_DESC="$2"; shift;;
+		--meta-file) 		check_arg "$2"; USR_ADDFILE="$3";;
 		--title)		check_arg "$2"; USR_TITLE="$2"; shift;;
 		--plugin-dir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
 		--set-var)		check_arg "$2"; USR_SETVAR="$2"; shift;;

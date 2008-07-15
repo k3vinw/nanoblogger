@@ -544,7 +544,7 @@ nb [-b blog_dir] draft draft.txt
 
     <p>Importing the draft as a new entry:</p>
     <pre>
-nb [-b blog_dir] file draft.txt add entry
+nb [-b blog_dir] import entry draft.txt
     
 </pre>
 
@@ -568,7 +568,7 @@ nb [-b blog_dir] --title "New Entry" --author [entry_author] --text "This is my 
         
 </pre>Importing new entry from file:
     <pre>
-nb [-b blog_dir] file draft.txt add entry
+nb [-b blog_dir] import entry draft.txt
 </pre>
 
     <p><b>Listing Entries</b></p>
@@ -914,13 +914,13 @@ ARTICLES_DIR="articles articles/misc"
 
     <p>Creating new articles is made easy with help from the 'add article' command:</p>
     <pre>
-nb [--title 'Example Article'] [file example.txt] add article
+nb [--title 'Example Article'] add article
 
 </pre>
 
-    <p>Importing new article into an existing articles sub-directory:</p>
+    <p>Importing new article (into an existing articles sub-directory):</p>
     <pre>
-nb file [blog_dir/]articles/misc/example.txt add article
+nb import article [blog_dir/]articles/misc/example.txt
 
 </pre>
 
@@ -928,7 +928,7 @@ nb file [blog_dir/]articles/misc/example.txt add article
 
     <p>Manually refreshing articles listing and content:</p>
     <pre>
-nb query main update
+nb query articles update
 
 </pre>
   </div>

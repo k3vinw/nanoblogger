@@ -11,11 +11,12 @@ _nanoblogger()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
     dashoptions="--author --blog-dir --conf-file --data-dir --desc --draft --force \
-    	     --help --interactive --plugin-dir --set-var --text --title --template \
+    	     --help --interactive --meta-file --plugin-dir --set-var --text --title --template \
 	     --template-dir --var --verbose --version"
+    shortoptions="-a -c -d -E -e -l -m -q -u"
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-	    if [[ ${COMP_WORDS[i]} == @(add-new|add|configure|delete|draft|edit|entry|file|list|make-page|make-file|manual|tag|tag-entry|tag-list|preview|publish|query|update|udate-cache) ]]; then
+	    if [[ ${COMP_WORDS[i]} == @(add-new|add|configure|delete|draft|-E|edit|article|entry|file|import|list|list-tags|make-page|make-file|manual|tag|tag-entry|preview|publish|query|update|udate-cache) ]]; then
 		    special=${COMP_WORDS[i]}
 	    fi
     done
@@ -23,10 +24,14 @@ _nanoblogger()
     if [[ -n "$special" ]]; then
 	    case $special in
 		# don't complete anything once these options are found
-		@(manual|preview|publish|tag-list))
+		@(manual|preview|publish|list-tags))
 				return 0
 				;;
-	    	@(draft|file|make-*))
+	    	@(draft|-E|make-*))
+				_filedir
+				return 0
+				;;
+		@(*article|*entry|*file))
 				_filedir
 				return 0
 				;;
@@ -43,7 +48,7 @@ _nanoblogger()
 			_filedir
 			return 0
 			;;
-	add-new|add)
+	add-new|add|-a)
 			COMPREPLY=( $( compgen -W "article entry tag weblog" -- $cur ) )
 			return 0
 			;;
@@ -55,23 +60,32 @@ _nanoblogger()
 			COMPREPLY=( $( compgen -W "entry file tag" -- $cur ) )
 			return 0
 			;;
-	query)
+	import)
+			COMPREPLY=( $( compgen -W "article entry" -- $cur ) )
+			return 0
+			;;
+	query|-q)
 			COMPREPLY=( $( compgen -W "all articles tag main max expired feeds" -- $cur ) )
 			return 0
 			;;
-	tag)
+	tag|-c)
 			COMPREPLY=( $( compgen -W "new" -- $cur ) )
 			return 0
 			;;
     esac
 
-    if [[ "$cur" == -* ]]; then
-		COMPREPLY=( $( compgen -W "$dashoptions" -- $cur ) )
+    if [[ "$cur" == - ]]; then
+	    	COMPREPLY=( $( compgen -W "$shortoptions" -- $cur ) )
+
     else
+	    if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -W "$dashoptions" -- $cur ) )
+	    else
 		COMPREPLY=( $( compgen -W 'add-new add configure delete draft edit \
-					   file list make-page make-file manual \
-					   preview publish query tag tag-entry tag-list \
+					   import list make-page make-file manual \
+					   preview publish query tag tag-entry list-tags \
 					   update update-cache' -- $cur ) )
+	    fi
     fi
 
     return 0
