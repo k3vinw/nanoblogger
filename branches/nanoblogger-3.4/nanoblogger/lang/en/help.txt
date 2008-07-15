@@ -16,27 +16,27 @@ Actions:
  edit <entry,file,tag> <ID,FILE>	- edit entry, meta-file or tag.
  list					- list entries or tags (for
  					  'query' and 'tag', defaults to
-					  'max').
+					  'all').
+ list-tags 				- list tags (same as 'query tag list').
+ make-file <FILE> 			- create new meta-file.
  make-page <FILE1> <FILE2> 		- create new weblog page (file2) from
 					  meta-file (file1).
- tag-entry <ID>				- tag entry (for 'tag').
- tag-list 				- list tags (same as 'query tag list').
  manual					- view the manual.
- make-file <FILE> 			- create new meta-file.
  preview				- run command to preview weblog.
  publish				- run command to publish weblog.
  query <all,tag,DATE,main,max, 		- specify a query to run (for 'edit',
         expired,articles,feeds> 	  'delete', 'list', 'tag-entry',
 					  'update', and 'update-cache').
  tag <ID,new> 				- specify tag (for 'add', 'delete',
- 					  'edit', 'list', 'update', and
-					  'update-cache').
- file <FILE> 				- specify meta-file to import as entry
- 					  (for 'add').
+ 					  'edit', 'list', 'import', 'update',
+					  and 'update-cache').
+ tag-entry <ID>				- tag entry (for 'tag').
+ import <article,entry> <FILE> 		- import new article or entry from
+ 					  meta-file.
  update-cache 				- force cache update (for 'query',
  					  defaults to 'expired').
  update 				- force weblog update (for 'query',
- 					  defaults to 'max').
+ 					  defaults to 'all').
 
 Options:
  -b, --blog-dir <DIRECTORY>		specify weblog directory.
@@ -49,21 +49,21 @@ Options:
  -v, --verbose <1=on/0=off>		toggle verbosity.
  --conf-file <FILE>			specify an alternate configuration file.
  --desc <text>				set text of description (for 'add',
- 					'draft', 'make-file' and 'make-page').
+ 					'draft', 'import', and 'make-*').
  --data-dir <DIRECTORY>			specify weblog's data directory.
+ --meta-file <FILE> 			specify meta-file (for 'add').
  --title <TEXT> 			set title (for 'add', 'article', 'tag',
- 					'draft', 'make-file' and 'make-page').
+ 					'draft', 'import', and 'make-*').
  --author <TEXT>			set text of author (for 'add', 'draft',
- 					'make-file' and 'make-page').
+ 					'import' and 'make-*').
  --plugin-dir <DIRECTORY> 		specify weblog's plugin directory.
  --text <TEXT> 				set text of body (for 'add', 'draft',
- 					'make-file' and 'make-page').
+ 					'import' and 'make-*').
  --template <FILE>			specify file to load as template (for
- 					'draft', 'make-page' and 'make-file').
+ 					'draft', 'import' and 'make-*').
  --template-dir <DIRECTORY>		specify weblog's template directory.
  --var <VARIABLE>  	 		define meta-variable (for 'add',
- 					'draft', 'edit', 'make-file' and
-					'make-page').
+ 					'draft', 'edit', 'import' and 'make-*').
  --set-var <INPUT>  			set meta-variable (for '--var').
  --no-preview 				disables automatic preview (for 'add').
  --no-publish 				disables automatic publish (for 'add').
@@ -73,6 +73,7 @@ More Short Options:
  -a 		equivalent of add action.
  -c <ID> 	specifies tag (for '-d' and '-e').
  -d <ID>	deletes entry (works with '-c').
+ -E <FILE> 	equivalent of draft action.
  -e <ID> 	edits entry (works with '-c').
  -l 		equivalent of list action.
  -m <ID> 	equivalent of tag-entry action.

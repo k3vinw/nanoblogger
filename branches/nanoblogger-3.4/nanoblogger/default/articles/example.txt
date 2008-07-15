@@ -16,7 +16,7 @@ recently modified and refreshes the articles accordingly.
 New articles can easily be created using the <code>add article</code>
 action.
 <pre>
-nb [--title 'Example Article'] [file example.txt] add article
+nb [--title 'Example Article'] add article
 </pre>
 <p>
 New articles can also be created manually using the <code>draft,

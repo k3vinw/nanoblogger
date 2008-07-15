@@ -96,7 +96,7 @@ build_yeararchive(){
 
 		# create links for monthly archives
 		[ -z "$CAL_CMD" ] && CAL_CMD="cal"
-		$CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
+		$CAL_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 && CAL_VAR="1"
 			
 		make_monthlink(){
 		if [ "$CAL_VAR" = "1" ]; then

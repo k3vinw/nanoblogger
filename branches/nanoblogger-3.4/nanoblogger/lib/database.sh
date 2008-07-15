@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-06-30T02:16:29-04:00
+# Last modified: 2008-07-13T00:22:25-04:00
 
 # index related categories by id
 index_catids(){
@@ -241,6 +241,10 @@ else
 	done
 fi
 }
+# "main" is a special query that we redirect to MAINPAGE_QUERY
+[ "$db_query" = main ] && db_query="$MAINPAGE_QUERY"
+# "mode" is a special query that we redirect to $QUERY_MODE
+[ "$db_query" = mode ] && db_query="$QUERY_MODE"
 # initialize arrays
 DB_RESULTS=()
 case "$db_query" in
