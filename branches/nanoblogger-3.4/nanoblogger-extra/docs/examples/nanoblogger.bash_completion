@@ -13,10 +13,10 @@ _nanoblogger()
     dashoptions="--author --blog-dir --conf-file --data-dir --desc --draft --force \
     	     --help --interactive --meta-file --plugin-dir --query --set-var --tag --text \
 	     --title --template --template-dir --var --verbose --version"
-    shortoptions="-a -c -d -E -e -l -m -q -u"
+    shortoptions="-a -b -c -d -E -e -f -h -i -l -m -q -v -u"
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-	    if [[ ${COMP_WORDS[i]} == @(add-new|add|configure|delete|tag|draft|-E|edit|article|entry|file|import|list|make-page|make-file|manual|tag|--tag|tag-entry|preview|publish|--query|update|udate-cache) ]]; then
+	    if [[ ${COMP_WORDS[i]} == @(add-new|add|-b|configure|delete|draft|-E|edit|article|entry|tag|file|--meta-file|import|list|make-page|make-file|manual|--tag|tag-entry|preview|publish|--query|update|udate-cache) ]]; then
 		    special=${COMP_WORDS[i]}
 	    fi
     done
@@ -27,7 +27,7 @@ _nanoblogger()
 		@(manual|preview|publish))
 				return 0
 				;;
-	    	@(draft|-E|make-*))
+	    	@(draft|-E|make-*|--meta-file))
 				_filedir
 				return 0
 				;;

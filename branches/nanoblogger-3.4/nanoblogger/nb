@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-16T17:47:28-04:00
+# Last modified: 2008-07-17T02:12:16-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -974,7 +974,7 @@ while [ $# -gt 0 ]; do
 		--conf-file)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
 		--data-dir)		check_arg "$2"; USR_DATADIR="$2"; shift;;
 		--desc)			DESC_PROMPT=1; USR_DESC="$2"; shift;;
-		--meta-file) 		check_arg "$2"; USR_ADDFILE="$3";;
+		--meta-file) 		check_arg "$2"; USR_ADDFILE="$2"; shift;;
 		--title)		check_arg "$2"; USR_TITLE="$2"; shift;;
 		--plugin-dir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
 		--query|-q)		check_arg "$2"; NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
