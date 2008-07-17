@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-06-30T04:47:11-04:00
+# Last modified: 2008-07-16T22:54:53-04:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -170,6 +170,7 @@ case "$altlink_type" in
 		altlink_backup=${altlink_var%%\.*}
 		;;
 esac
+[ ! -f "$SCRATCH_FILE".altlinks ] && > "$SCRATCH_FILE".altlinks
 # link match failsafe
 [ -z "$link_match" ] &&
 	link_match=`translit_text "$notitle"`

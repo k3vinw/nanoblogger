@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-15T13:43:17-04:00
+# Last modified: 2008-07-16T17:47:28-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -659,6 +659,14 @@ build_weblog
 # list entries and categories
 list_weblog(){
 query_db; db_query="$NB_QUERY"
+# pre-processing for extensive list options
+if [ "$QUERY_WEBLOG" != 1 ] && [ ! -z "$listweblog_type" ]; then
+	db_query="$listweblog_type"
+fi
+if [ ! -z "$list_idsel" ]; then
+	case "$db_query" in tag|tag[a-z]) db_query=;; esac
+	cat_num="$list_idsel"
+fi
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 explode_list(){
 EXPLODE_RESULTS=($1)
@@ -699,12 +707,15 @@ list_entries(){
 }
 # lists entries
 case "$db_query" in
-	a|any|all) 	db_query=all; list_entries
+	a|any|all|entry|entries)
+			db_query=all; list_entries
 			nb_msg "$header_ID, $header_Title - ($header_Date) - [$header_Category]"
 			explode_list "${DB_RESULTS[*]}";;
-	*) 		list_entries
+	""|main|max|[0-9]*)
+			list_entries
 			nb_msg "$header_ID, $header_Title - ($header_Date) - [$header_Category]"
 			explode_list "${DB_RESULTS[*]}";;
+	*) 	die "$main_badopts $listweblog_type";;
 esac
 }
 
@@ -949,17 +960,14 @@ while [ $# -gt 0 ]; do
 		draft|-E) 		check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		import) 		check_arg "$2"; addweblog_type="$2"; USR_ADDFILE="$3"; shift 2
 					ADD_WEBLOG=1;;
-		list|-l)		LIST_WEBLOG=1;;
-		list-tags) 		NB_QUERY=tag; QUERY_WEBLOG=1; LIST_WEBLOG=1;;
+		list|-l)		listweblog_type="$2"; list_idsel="$3"; shift 2; LIST_WEBLOG=1;;
 		make-page)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
 		manual)			load_config; load_lang; nb_browser "$NB_DOC_FILE"; exit;;
-		tag|-c)			check_arg "$2"; cat_num="$2"; shift;;
 		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
 		publish)		PUBLISH_WEBLOG=1;;
 		preview)		PREVIEW_WEBLOG=1;;
-		query|-q)		check_arg "$2"; NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
 		update|-u)		UPDATE_WEBLOG=1;;
 		update-cache) 		UPDATECACHE_WEBLOG=1;;
 		--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
@@ -969,7 +977,9 @@ while [ $# -gt 0 ]; do
 		--meta-file) 		check_arg "$2"; USR_ADDFILE="$3";;
 		--title)		check_arg "$2"; USR_TITLE="$2"; shift;;
 		--plugin-dir) 		check_arg "$2"; USR_PLUGINSDIR="$2"; shift;;
+		--query|-q)		check_arg "$2"; NB_QUERY="$2"; shift; QUERY_WEBLOG=1;;
 		--set-var)		check_arg "$2"; USR_SETVAR="$2"; shift;;
+		--tag|-c)		check_arg "$2"; cat_num="$2"; shift;;
 		--text) 		check_arg "$2"; USR_TEXT="$2"; shift;;
 		--template)		check_arg "$2"; USR_TEMPLATE="$2"; shift;;
 		--template-dir)		check_arg "$2"; USR_TEMPLATE_DIR="$2"; shift;;

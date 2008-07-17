@@ -550,13 +550,13 @@ nb [-b blog_dir] import entry draft.txt
 
     <p><b>Creating Entries</b></p>
 
-    <p>Adding a new entry:</p>
+    <p>Adding new entry:</p>
     <pre>
 nb [-b blog_dir] add entry
         
-</pre>Tagging a new entry:
+</pre>Tagging new entry:
     <pre>
-nb [-b blog_dir] tag 1 add entry
+nb [-b blog_dir] --tag &lt;ID&gt; add entry
 
 </pre>Setting title and author for new entry:
     <pre>
@@ -579,11 +579,11 @@ nb [-b blog_dir] list
         
 </pre>Listing all entries:
     <pre>
-nb [-b blog_dir] query all list
+nb [-b blog_dir] list [all|entries]
         
 </pre>Listing entries by tag:
     <pre>
-nb [-b blog_dir] tag 1 query all list
+nb [-b blog_dir] list tag &lt;ID&gt; 
         
 </pre>
 
@@ -591,11 +591,11 @@ nb [-b blog_dir] tag 1 query all list
 
     <p>Editing the last entry created:</p>
     <pre>
-nb [-b blog_dir] edit entry 1
+nb [-b blog_dir] edit entry &lt;ID&gt;
         
-</pre>Editing an entry by tag:
+</pre>Editing entry by tag:
     <pre>
-nb [-b blog_dir] tag 1 edit entry 1
+nb [-b blog_dir] --tag &lt;ID&gt; edit entry &lt;ID&gt;
         
 </pre>Editing multiple entries:
     <pre>
@@ -605,47 +605,47 @@ nb [-b blog_dir] edit entry 1,2,3
 
     <p><b>Assigning Entries To Tags</b></p>
 
-    <p>Assigning a tag to an entry:</p>
+    <p>Assigning tag to entry:</p>
     <pre>
-nb [-b blog_dir] tag 1 tag-entry 1
+nb [-b blog_dir] --tag &lt;ID&gt; tag-entry &lt;ID&gt;
         
-</pre>Assigning multiple tags to an entry:
+</pre>Assigning multiple tags to entry:
     <pre>
-nb [-b blog_dir] tag 1,2,3 tag-entry 1
+nb [-b blog_dir] tag 1,2,3 tag-entry &lt;ID&gt;
         
-</pre>Assigning multiple entries to a tag:
+</pre>Assigning multiple entries to tag:
     <pre>
-nb [-b blog_dir] tag 1 tag-entry 1,2,3
+nb [-b blog_dir] --tag &lt;ID&gt; tag-entry 1,2,3
         
 </pre>
 
     <p><b>Deleting Entries</b></p>
 
-    <p>Permanently deleting an entry:</p>
+    <p>Permanently delete entry:</p>
     <pre>
-nb [-b blog_dir] delete entry 1
+nb [-b blog_dir] delete entry &lt;ID&gt;
         
-</pre>Permanently deleting multiple entries:
+</pre>Permanently delete multiple entries:
     <pre>
 nb [-b blog_dir] delete entry 1,2,3
         
-</pre>Untagging an entry:
+</pre>Un-tag entry:
     <pre>
-nb [-b blog_dir] tag 1 delete entry 1
+nb [-b blog_dir] --tag &lt;ID&gt; delete entry &lt;ID&gt;
         
 </pre>
 
     <p><b>Changing Entry's Date</b></p>
 
-    <p>Specifying a new entry's date using the TIMESTAMP meta-tag:</p>
+    <p>Specifying new entry's date using the TIMESTAMP meta-tag:</p>
     <pre>
 nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add entry
     
-</pre>Changing an old entry's date:
+</pre>Changing old entry's date:
     <pre>
 nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit entry 2
      
-</pre>Manually changing an entry's date:
+</pre>Manually changing entry's date:
     <pre>
 1. nb [-b blog_dir] edit entry 2
 2. TIMESTAMP: CCYY-MM-DD HH:MM:SS
@@ -676,15 +676,15 @@ nb [-b blog_dir] query tag list
         
 </pre>Tagging existing entries:
     <pre>
-nb [-b blog_dir] tag 1 tag-entry 1
+nb [-b blog_dir] --tag &lt;ID&gt; tag-entry &lt;ID&gt;
 
 </pre>Editing a tag's title:
     <pre>
-nb [-b blog_dir] --title example edit tag 1
+nb [-b blog_dir] --title example edit tag &lt;ID&gt;
         
 </pre>Deleting a tag:
     <pre>
-nb [-b blog_dir] delete tag 1
+nb [-b blog_dir] delete tag &lt;ID&gt;
         
 </pre>
 
@@ -694,16 +694,16 @@ nb [-b blog_dir] delete tag 1
 
     <p>Editing entries by query:</p>
     <pre>
-nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] query [all,CCYY-MM-DD,max] edit entry 1,2,3
+nb [-b blog_dir] --query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] --query [all,CCYY-MM-DD,max] edit entry 1,2,3
 </pre>Deleting entries by query:
     <pre>
-nb [-b blog_dir] query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] query [all,CCYY-MM-DD,max] delete entry 1,2,3
+nb [-b blog_dir] --query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] --query [all,CCYY-MM-DD,max] delete entry 1,2,3
 </pre>Editing entries by tag and query:
     <pre>
-nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] tag 2 query [all,CCYY-MM-DD,max] edit entry 1
+nb [-b blog_dir] --tag &lt;ID&gt; --query [all,CCYY-MM-DD,max] list
+nb [-b blog_dir] --tag &lt;ID&gt; --query [all,CCYY-MM-DD,max] edit entry &lt;ID&gt;
 </pre>
   </div>
 
@@ -904,7 +904,7 @@ ARTICLES_DIR="articles articles/misc"
 
     <p><b>Setting the Default Suffix for Articles</b></p>
 
-    <p><em>ARTICLES_SUFFIX</em> sets the suffix to include as an article under the articles directory. Defaults to ".txt".</p>
+    <p><em>ARTICLES_SUFFIX</em> sets the suffix to include as article under the articles directory. Defaults to ".txt".</p>
 
     <p><b>Setting the Default Template for Articles</b></p>
 
@@ -918,7 +918,7 @@ nb [--title 'Example Article'] add article
 
 </pre>
 
-    <p>Importing new article (into an existing articles sub-directory):</p>
+    <p>Importing new article (into existing articles sub-directory):</p>
     <pre>
 nb import article [blog_dir/]articles/misc/example.txt
 
@@ -1063,7 +1063,7 @@ nb query articles update
         <tr>
           <td align="left">atom.sh</td>
 
-          <td align="left">adds an atom feed</td>
+          <td align="left">adds atom feed</td>
 
           <td align="left">BLOG_FEED_ITEMS, ATOM_ITEMS, ATOM_CATFEEDS, ATOM_FEED_LANG</td>
 
@@ -1099,7 +1099,7 @@ nb query articles update
         <tr>
           <td align="left">entry/excerpt.sh*</td>
 
-          <td align="left">creates an excerpt from entry's text</td>
+          <td align="left">creates excerpt from entry's text</td>
 
           <td align="left">none</td>
 
@@ -1855,7 +1855,7 @@ mput *
 
     <p>In order to import entries, data must first be converted to the NanoBlogger format.</p>
 
-    <p><b>The Format of an Entry</b></p>
+    <p><b>Format of an Entry</b></p>
 
     <p>An entry file name is of the format:</p>
     <pre>
