@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-07-07T00:14:53-04:00
+# Last modified: 2008-07-18T11:58:54-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -631,16 +631,38 @@ update_cache(){
 cache_update="$1"
 cache_def="$2"
 CACHEUPDATE_LIST=($3)
+# pre-processing for extensive update-cache options
+if [ "$UPDATE_WEBLOG" = 1 ]; then
+	updcache_type="$updweblog_type"
+	updatec_idsel="$update_idsel"
+fi
+if [ "$QUERY_WEBLOG" != 1 ] && [ -z "$cache_update" ]; then
+	cache_update="$updcache_type"
+fi
+[ -z "$cache_update" ] && cache_update=expired
+[ ! -z "$cat_num" ] && cache_update=rebuild
+case "$updcache_type" in
+	tag|tag[a-z]) cache_update=rebuild; cat_num="$updatec_idsel"
+		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
+esac
 case "$cache_update" in
 	build)
-	[ -z "$cache_def" ] && cache_def=entry_metadata
+	[ -z "$cache_def" ] && cache_def="*"
+	if [ -z "${CACHEUPDATE_LIST[*]}" ]; then
+		query_db "$db_query" "$db_catquery"
+		CACHEUPDATE_LIST=(${DB_RESULTS[*]})
+	fi
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 	done
 	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list));;
 	rebuild)
 	> "$SCRATCH_FILE".$cache_def-cache_list
-	[ -z "$cache_def" ] && cache_def=entry_metadata
+	[ -z "$cache_def" ] && cache_def="*"
+	if [ -z "${CACHEUPDATE_LIST[*]}" ]; then
+		query_db "$db_query" "$db_catquery"
+		CACHEUPDATE_LIST=(${DB_RESULTS[*]})
+	fi
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
 		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
@@ -659,8 +681,7 @@ case "$cache_update" in
 			rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item"
 	done;;
 	*)
-	[ -z "$cache_def" ] &&
-		cache_def="*"
+	[ -z "$cache_def" ] && cache_def="*"
 	[ ! -z "$cache_update" ] && query_db "$cache_update" "$db_catquery"
 	for cache_item in ${DB_RESULTS[@]}; do
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def

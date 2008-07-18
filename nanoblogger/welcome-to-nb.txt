@@ -24,7 +24,7 @@ BODY:
 <li>draft entry or article ... <code>nb draft [draft_file]</code></li>
 <li>import draft as entry ... <code>nb import <em>entry</em> [draft_file]</code></li>
 <li>import draft as article ... <code>nb import <em>article</em> [draft_file]</code></li>
-<li>update weblog ... <code>nb [--query &lt;all|DATE|main|max|articles|feeds&gt;] update</code></li>
+<li>update weblog ... <code>nb update &lt;all|DATE|main|max|articles|feeds&gt;</code></li>
 </ul>
 <p><code>&lt;query&gt;</code> may equal <code>all,tag,DATE or max</code> (defaults to all)</p>
 <p>
