@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-18T11:40:59-04:00
+# Last modified: 2008-07-18T12:38:04-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -220,7 +220,7 @@ esac
 		rm -f "$BLOG_DIR/.nb_newblogdir"
 	fi
 	BUILD_QUERY="$NB_QUERY"
-	[ "$QUERY_WEBLOG" != 1 ] && BUILD_QUERY="$QUERY_MODE"
+	[ -z "$BUILD_QUERY" ] && BUILD_QUERY="$QUERY_MODE"
 	# for clean build remove all generated files
 	if [ "$BUILD_QUERY" = all ] && [ -z "$cat_num" ] && ! [[ $NB_UPDATE == *arch ]]; then
 		nb_msg "$buildweblog_all"
