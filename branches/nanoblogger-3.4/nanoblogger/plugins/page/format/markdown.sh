@@ -11,5 +11,7 @@ eval $MARKDOWN_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 &&
 if [ "$MARKDOWN_INPATH" = "true" ]; then
 	nb_msg "$plugins_entryfilteraction `basename $nb_plugin` ..."
 	MKPAGE_CONTENT=`echo "$MKPAGE_CONTENT" | ${MARKDOWN_CMD} ${MARKDOWN_OPTS}`
+else
+	die "$nb_plugin: $plugins_abort"
 fi
 
