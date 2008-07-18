@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-17T02:12:16-04:00
+# Last modified: 2008-07-18T11:40:59-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -199,6 +199,16 @@ EOF
 
 # build the weblog
 build_weblog(){
+# pre-processing for extensive update options
+if [ "$QUERY_WEBLOG" != 1 ]; then
+	NB_QUERY="$updweblog_type"; db_query="$NB_QUERY"
+fi
+case "$updweblog_type" in
+	article|article[a-z]) NB_QUERY=article; db_query=main;;
+	feed|feed[a-z]) NB_QUERY=feed; db_query=main;;
+	tag|tag[a-z]) if [ ! -z "$update_idsel" ]; then
+				db_query=; cat_num="$update_idsel"; fi;;
+esac
 	init_update(){
 	# add welcome message with category id 1 (nanoblogger-help) to new weblogs
 	if [ -f "$BLOG_DIR/.nb_newblogdir" ]; then
@@ -209,8 +219,10 @@ build_weblog(){
 		add_entry; cat_num="$old_catnum"
 		rm -f "$BLOG_DIR/.nb_newblogdir"
 	fi
+	BUILD_QUERY="$NB_QUERY"
+	[ "$QUERY_WEBLOG" != 1 ] && BUILD_QUERY="$QUERY_MODE"
 	# for clean build remove all generated files
-	if [ "$NB_QUERY" = all ] && [ -z "$cat_num" ] && ! [[ $NB_UPDATE == *arch ]]; then
+	if [ "$BUILD_QUERY" = all ] && [ -z "$cat_num" ] && ! [[ $NB_UPDATE == *arch ]]; then
 		nb_msg "$buildweblog_all"
 		# confirm removal of any previously generated files
 		[ "$BLOG_INTERACTIVE" = 1 ] && confirm_action
@@ -353,8 +365,7 @@ resort_db "$NB_DATA_DIR/master.db"
 # edit entry or tag by id number
 edit_weblog(){
 case "$editweblog_type" in
-	entry)
-		# edit entries
+	entry)  # edit entries
 		NUMVAR=`echo "$edit_idsel" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 		[ -z "$NUMVAR" ] && die "$novalid_entryid"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
@@ -436,12 +447,12 @@ case "$editweblog_type" in
 		else
 			die "$editweblog_noaction"
 		fi
+
 	;;
-	meta-file|file)
+	meta-file|file)  # edit files
 		nb_draft "$edit_idsel"
 	;;
-	tag|cat)
-		# edits categories
+	tag|cat) # edit categories
 		cat_num="$edit_idsel"; cat_var=`echo "$cat_num" |sed -e '/,/d'`
 		[ -z "$cat_var" ] && die "$editweblog_onecat"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
@@ -463,6 +474,7 @@ case "$editweblog_type" in
 		else
 			die "$editweblog_nomod"
 		fi
+
 	;;
 	*) 	die "$main_badopts $editweblog_type";;
 esac
@@ -475,8 +487,7 @@ delete_weblog(){
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 cat_list="$db_catquery"
 case "$delweblog_type" in
-	entry)
-		# deletes entries
+	entry) # delete entries
 		NUMVAR=`echo "$delete_idsel" |grep '[0-9]' |sed -e '/[\,]/ s// /g; /[A-Z,a-z\)\.\-]/d'`
 		[ -z "$NUMVAR" ] && die "$novalid_entryid"
 		if [ ! -z "$cat_list" ]; then
@@ -577,8 +588,7 @@ case "$delweblog_type" in
 		resort_categories
 		build_weblog
 	;;
-	tag|cat)
-		# deletes categories
+	tag|cat) # delete categories
 		cat_num="$delete_idsel"
 		[ -z "$cat_num" ] && die "$checkcatid_novalid"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
@@ -660,13 +670,13 @@ build_weblog
 list_weblog(){
 query_db; db_query="$NB_QUERY"
 # pre-processing for extensive list options
-if [ "$QUERY_WEBLOG" != 1 ] && [ ! -z "$listweblog_type" ]; then
-	db_query="$listweblog_type"
+if [ "$QUERY_WEBLOG" != 1 ]; then
+	NB_QUERY="$listweblog_type"; db_query="$NB_QUERY"
 fi
-if [ ! -z "$list_idsel" ]; then
-	case "$db_query" in tag|tag[a-z]) db_query=;; esac
-	cat_num="$list_idsel"
-fi
+case "$listweblog_type" in 
+	tag|tag[a-z]|cat) if [ ! -z "$list_idsel" ]; then
+			db_query=; cat_num="$list_idsel"; fi;;
+esac
 db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 explode_list(){
 EXPLODE_RESULTS=($1)
@@ -945,22 +955,26 @@ invalid_opt=`echo "$@" |grep '^[--]$*'`
 }
 while [ $# -gt 0 ]; do
 	bad_argument=$1
-	# -E,-a,-c,-d,-e,-l,-m,-q,-u exists for backwards compability
+	# -a,-c,-d,-E,-e,-l,-m,-q,-u exists for backwards compability
 	case "$1" in
 		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
-		edit)			check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
-					EDIT_WEBLOG=1;;
+		edit)			check_arg "$2"; editweblog_type="$2"
+					case "$3" in [0-9]*) edit_idsel="$3"; shift 2;; *) shift;;
+					esac; EDIT_WEBLOG=1;;
 		-e) 			check_arg "$2"; editweblog_type=entry; edit_idsel="$2"; shift
 					EDIT_WEBLOG=1;; # short option for backward compatibility
-		delete)			check_arg "$2"; delweblog_type="$2"; delete_idsel="$3"; shift 2
-					DELETE_WEBLOG=1;;
+		delete)			check_arg "$2"; delweblog_type="$2"
+					case "$3" in [0-9]*) delete_idsel="$3"; shift 2;; *) shift;;
+					esac; DELETE_WEBLOG=1;;
 		-d) 			check_arg "$2"; delweblog_type=entry; delete_idsel="$2"; shift
 					DELETE_WEBLOG=1;; # short option for backward compatibility
 		draft|-E) 		check_arg "$2"; USR_DRAFTFILE="$2"; shift; DRAFT_WEBLOG=1;;
 		import) 		check_arg "$2"; addweblog_type="$2"; USR_ADDFILE="$3"; shift 2
 					ADD_WEBLOG=1;;
-		list|-l)		listweblog_type="$2"; list_idsel="$3"; shift 2; LIST_WEBLOG=1;;
+		list|-l)		listweblog_type="$2"
+					case "$3" in [0-9]*) list_idsel="$3"; shift 2;; *) shift;;
+					esac; LIST_WEBLOG=1;;
 		make-page)		check_arg "$2"; USR_MKPSRCFILE="$2"; USR_MKPOUTFILE="$3"; shift 2
 					MAKEPAGE_WEBLOG=1;;
 		make-file)		check_arg "$2"; USR_MKFFILE="$2"; shift; MAKEFILE_WEBLOG=1;;
@@ -968,8 +982,12 @@ while [ $# -gt 0 ]; do
 		tag-entry|-m)		check_arg "$2"; catentry_num="$2"; shift; MOVE_WEBLOG=1;;
 		publish)		PUBLISH_WEBLOG=1;;
 		preview)		PREVIEW_WEBLOG=1;;
-		update|-u)		UPDATE_WEBLOG=1;;
-		update-cache) 		UPDATECACHE_WEBLOG=1;;
+		update|-u)		updweblog_type="$2";
+					case "$3" in [0-9]*) update_idsel="$3"; shift 2;; *) shift;;
+					esac; UPDATE_WEBLOG=1;;
+		update-cache) 		updcache_type="$2"
+					case "$3" in [0-9]*) updatec_idsel="$3"; shift 2;; *) shift;;
+					esac; UPDATECACHE_WEBLOG=1;;
 		--author)		check_arg "$2"; USR_AUTHOR="$2"; shift;;
 		--conf-file)		check_arg "$2"; USR_BLOGCONF="$2"; shift;;
 		--data-dir)		check_arg "$2"; USR_DATADIR="$2"; shift;;
@@ -1039,18 +1057,24 @@ fi
 if [ "$UPDATECACHE_WEBLOG" = 1 ]; then
 	USR_CACHEQUERY="$NB_QUERY"
 	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
-	[ -z "$USR_CACHEQUERY" ] && USR_CACHEQUERY=expired
 	update_cache "$USR_CACHEQUERY" "*"
 fi
 if [ "$UPDATE_WEBLOG" = 1 ]; then
 	check_config; db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 	build_weblog
-fi
-if [ "$PREVIEW_WEBLOG" = 1 ]; then
-	check_config; preview_weblog
-fi
-if [ "$PUBLISH_WEBLOG" = 1 ]; then
-	check_config; publish_weblog
+	if [ "$PREVIEW_WEBLOG" = 1 ]; then
+		check_config; preview_weblog
+	fi
+	if [ "$PUBLISH_WEBLOG" = 1 ]; then
+		check_config; publish_weblog
+	fi
+else
+	if [ "$PREVIEW_WEBLOG" = 1 ]; then
+		check_config; preview_weblog
+	fi
+	if [ "$PUBLISH_WEBLOG" = 1 ]; then
+		check_config; publish_weblog
+	fi
 fi
 
 exit 0

@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-07-13T00:22:25-04:00
+# Last modified: 2008-07-17T22:48:03-04:00
 
 # index related categories by id
 index_catids(){

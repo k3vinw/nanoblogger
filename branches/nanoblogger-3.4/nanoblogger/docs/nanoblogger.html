@@ -302,7 +302,7 @@ nb --blog-dir [myblog_dir] add weblog
   <div id="config">
     <h2><a id="s.5" name="s.5">5. Settings and Configuration</a></h2>To edit the weblog's configuration invoke:
     <pre>
-nb --blog-dir [myblog_dir] configure query all update
+nb --blog-dir [myblog_dir] configure update all
         
 </pre>This opens <em>blog.conf</em> from the weblog directory for editing and updates the entire weblog.
 
@@ -538,13 +538,13 @@ NB_LANG="es"
 
     <p>Creating a new draft:</p>
     <pre>
-nb [-b blog_dir] draft draft.txt
+nb [-b blog_dir] draft somefile.txt
     
 </pre>
 
     <p>Importing the draft as a new entry:</p>
     <pre>
-nb [-b blog_dir] import entry draft.txt
+nb [-b blog_dir] import entry somefile.txt
     
 </pre>
 
@@ -568,19 +568,16 @@ nb [-b blog_dir] --title "New Entry" --author [entry_author] --text "This is my 
         
 </pre>Importing new entry from file:
     <pre>
-nb [-b blog_dir] import entry draft.txt
+nb [-b blog_dir] import entry somefile.txt
+
 </pre>
 
     <p><b>Listing Entries</b></p>
 
-    <p>Listing current entries:</p>
+    <p>Listing entries:</p>
     <pre>
-nb [-b blog_dir] list
-        
-</pre>Listing all entries:
-    <pre>
-nb [-b blog_dir] list [all|entries]
-        
+nb [-b blog_dir] list [&lt;query&gt;]
+
 </pre>Listing entries by tag:
     <pre>
 nb [-b blog_dir] list tag &lt;ID&gt; 
@@ -611,7 +608,7 @@ nb [-b blog_dir] --tag &lt;ID&gt; tag-entry &lt;ID&gt;
         
 </pre>Assigning multiple tags to entry:
     <pre>
-nb [-b blog_dir] tag 1,2,3 tag-entry &lt;ID&gt;
+nb [-b blog_dir] --tag 1,2,3 tag-entry &lt;ID&gt;
         
 </pre>Assigning multiple entries to tag:
     <pre>
@@ -630,6 +627,12 @@ nb [-b blog_dir] delete entry &lt;ID&gt;
 nb [-b blog_dir] delete entry 1,2,3
         
 </pre>Un-tag entry:
+    <p>1.) find the entry ID from the listing:</p>
+    <pre>
+nb [-b blog_dir] --tag &lt;ID&gt; list
+
+</pre>
+    <p>2.) remove the entry using the entry ID we found in the first step:</p>
     <pre>
 nb [-b blog_dir] --tag &lt;ID&gt; delete entry &lt;ID&gt;
         
@@ -643,11 +646,11 @@ nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" add entry
     
 </pre>Changing old entry's date:
     <pre>
-nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit entry 2
+nb [-b blog_dir] --var TIMESTAMP --set-var "CCYY-MM-DD HH:MM:SS" edit entry &lt;ID&gt;
      
 </pre>Manually changing entry's date:
     <pre>
-1. nb [-b blog_dir] edit entry 2
+1. nb [-b blog_dir] edit entry &lt;ID&gt;
 2. TIMESTAMP: CCYY-MM-DD HH:MM:SS
      
 </pre><em>The date command must support the "<code>-d</code>" option for the date to follow the format set by "<code>$DATE_FORMAT</code>".</em>
@@ -672,7 +675,7 @@ nb [-b blog_dir] --title examples add tag
         
 </pre>Listing available tags:
     <pre>
-nb [-b blog_dir] query tag list
+nb [-b blog_dir] list tags
         
 </pre>Tagging existing entries:
     <pre>
@@ -690,20 +693,20 @@ nb [-b blog_dir] delete tag &lt;ID&gt;
 
     <h3>Advanced Management</h3>
 
-    <p>Use the "query" action to manipulate the list of entries which to operate from. First review your query by combining the "query" with the "list" action to see which entry ID(s) matched your query. Then operate from that same query by combining the "query" action with one of the "edit", "delete", "tag-entry", or "update" actions. Using the entry ID(s) from your last query accordingly.</p>
+    <p>Use the "--query" option to manipulate the list of entries which to operate from. First review your query by combining the "--query" with the "list" action to see which entry ID(s) matched your query. Then operate from that same query by combining the "--query" option with one of the "edit", "delete", "tag-entry", or "update" actions. Using the entry ID(s) from your last query accordingly.</p>
 
     <p>Editing entries by query:</p>
     <pre>
-nb [-b blog_dir] --query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] --query [all,CCYY-MM-DD,max] edit entry 1,2,3
+nb [-b blog_dir] --query &lt;all,CCYY-MM-DD,max&gt; list
+nb [-b blog_dir] --query &lt;all,CCYY-MM-DD,max&gt; edit entry &lt;ID&gt;
 </pre>Deleting entries by query:
     <pre>
-nb [-b blog_dir] --query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] --query [all,CCYY-MM-DD,max] delete entry 1,2,3
+nb [-b blog_dir] --query &lt;all,CCYY-MM-DD,max&gt; list
+nb [-b blog_dir] --query &lt;all,CCYY-MM-DD,max&gt; delete entry &lt;ID&gt;
 </pre>Editing entries by tag and query:
     <pre>
-nb [-b blog_dir] --tag &lt;ID&gt; --query [all,CCYY-MM-DD,max] list
-nb [-b blog_dir] --tag &lt;ID&gt; --query [all,CCYY-MM-DD,max] edit entry &lt;ID&gt;
+nb [-b blog_dir] --tag &lt;ID&gt; --query &lt;all,CCYY-MM-DD,max&gt; list
+nb [-b blog_dir] --tag &lt;ID&gt; --query &lt;all,CCYY-MM-DD,max&gt; edit entry &lt;ID&gt;
 </pre>
   </div>
 
@@ -928,7 +931,7 @@ nb import article [blog_dir/]articles/misc/example.txt
 
     <p>Manually refreshing articles listing and content:</p>
     <pre>
-nb query articles update
+nb update articles
 
 </pre>
   </div>
@@ -1900,7 +1903,7 @@ END-----
     <p>The imported entries should be copied into the <em>data</em> directory of your weblog.<br />
     Update the weblog with the new entries:</p>
     <pre>
-nb [-b blog_dir] --force query all update
+nb [-b blog_dir] --force update all
         
 </pre>
   </div>
@@ -1913,7 +1916,7 @@ nb [-b blog_dir] --force query all update
 nb [-b blogdir] make-file somefile.txt
 </pre>Import the meta-file as a new weblog entry:
     <pre>
-nb [-b blogdir] file somefile.txt add entry
+nb [-b blogdir] import entry somefile.txt
 </pre>or export the meta-file as a new weblog page:
     <pre>
 nb [-b blogdir] make-page somefile.txt somefile.html
