@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-07-18T12:38:04-04:00
+# Last modified: 2008-07-18T23:34:23-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -959,9 +959,8 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		add|add-new|-a) 	check_arg "$2"; addweblog_type="$2"; shift; ADD_WEBLOG=1;;
 		configure)		CONFIG_WEBLOG=1;;
-		edit)			check_arg "$2"; editweblog_type="$2"
-					case "$3" in [0-9]*) edit_idsel="$3"; shift 2;; *) shift;;
-					esac; EDIT_WEBLOG=1;;
+		edit)			check_arg "$2"; editweblog_type="$2"; edit_idsel="$3"; shift 2
+					EDIT_WEBLOG=1;;
 		-e) 			check_arg "$2"; editweblog_type=entry; edit_idsel="$2"; shift
 					EDIT_WEBLOG=1;; # short option for backward compatibility
 		delete)			check_arg "$2"; delweblog_type="$2"
