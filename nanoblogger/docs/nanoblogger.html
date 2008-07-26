@@ -218,7 +218,7 @@
     <p><b>Synopsis</b></p>
     <pre>
  
-nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>] &lt;<span class="underline">actions</span>&gt;
+nb [<span class="underline">-b blog_dir</span>] [<span class="underline">options</span>] &lt;<span class="underline">actions</span>&gt; [&lt;<span class="underline">keyword</span>&gt; (variable)]
         
 </pre>
 
@@ -586,7 +586,7 @@ nb [-b blog_dir] list tag &lt;ID&gt;
 
     <p><b>Editing Entries</b></p>
 
-    <p>Editing the last entry created:</p>
+    <p>Editing entry:</p>
     <pre>
 nb [-b blog_dir] edit entry &lt;ID&gt;
         
@@ -1128,7 +1128,7 @@ nb update articles
 
           <td align="left">uses markdown to handle formatting</td>
 
-          <td align="left">none</td>
+          <td align="left">MARKDOWN_CMD, MARKDOWN_OPTS</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
@@ -1164,7 +1164,7 @@ nb update articles
 
           <td align="left">generates random quotes</td>
 
-          <td align="left">FORTUNE_FILE</td>
+          <td align="left">FORTUNE_CMD, FORTUNE_FILE</td>
 
           <td align="left">$NB_Fortune</td>
 
@@ -1176,7 +1176,7 @@ nb update articles
 
           <td align="left">validates HTML/XML code</td>
 
-          <td align="left">TIDY_HTML_ARGS, TIDY_XML_ARGS</td>
+          <td align="left">TIDY_CMD, TIDY_HTML_ARGS, TIDY_XML_ARGS</td>
 
           <td align="left">$NB_Tidy, $BLOG_DIR/tidy.log</td>
 
@@ -1236,7 +1236,7 @@ nb update articles
 
           <td align="left">uses markdown to handle formatting</td>
 
-          <td align="left">none</td>
+          <td align="left">MARKDOWN_CMD, MARKDOWN_OPTS</td>
 
           <td align="left">$NB_MetaBody, $NB_EntryBody</td>
 
