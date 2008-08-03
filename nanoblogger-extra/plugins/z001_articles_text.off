@@ -76,7 +76,7 @@ add_articlelink(){
 create_article(){
 MKPAGE_SRCFILE="$BLOG_DIR/$ATCLSECTION_DIR/$article_srcfile"
 MKPAGE_OUTFILE="$BLOG_DIR/$ATCLSECTION_DIR/$article_file"
-[ "$USR_QUERY" = articles ] || [ "$USR_QUERY" = all ] && rm -f "$MKPAGE_OUTFILE"
+[ "$NB_QUERY" = articles ] || [ "$NB_QUERY" = all ] && rm -f "$MKPAGE_OUTFILE"
 if [ "$MKPAGE_SRCFILE" -nt "$MKPAGE_OUTFILE" ]; then
 	NB_MetaBody=`sed 1d "$BLOG_DIR/$ATCLSECTION_DIR/$article_srcfile"`
 	# modify page content used by make_page function
