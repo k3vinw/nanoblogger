@@ -16,7 +16,7 @@ _nanoblogger()
     shortoptions="-a -b -c -d -E -e -f -h -i -l -m -q -v -u"
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-	    if [[ ${COMP_WORDS[i]} == @(add-new|add|-b|configure|delete|draft|-E|edit|article|entry|tag|file|--meta-file|import|list|make-page|make-file|manual|--tag|tag-entry|preview|publish|--query|update|udate-cache) ]]; then
+	    if [[ ${COMP_WORDS[i]} == @(add|-b|configure|delete|draft|-E|edit|article|entry|tag|file|--meta-file|import|list|make-page|make-file|manual|--tag|tag-entry|preview|publish|--query|update|udate-cache) ]]; then
 		    special=${COMP_WORDS[i]}
 	    fi
     done
@@ -48,7 +48,7 @@ _nanoblogger()
 			_filedir
 			return 0
 			;;
-	add-new|add|-a)
+	add|-a)
 			COMPREPLY=( $( compgen -W "article entry tag weblog" -- $cur ) )
 			return 0
 			;;
@@ -93,7 +93,7 @@ _nanoblogger()
 	    if [[ "$cur" == -* ]]; then
 		COMPREPLY=( $( compgen -W "$dashoptions" -- $cur ) )
 	    else
-		COMPREPLY=( $( compgen -W 'add-new add configure delete draft edit \
+		COMPREPLY=( $( compgen -W 'add configure delete draft edit \
 					   import list make-page make-file manual \
 					   preview publish tag-entry update \
 					   update-cache' -- $cur ) )

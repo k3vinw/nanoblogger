@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-07-12T18:39:14-04:00
+# Last modified: 2008-08-02T00:42:22-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -148,8 +148,6 @@ export NB_EDITOR
 : ${NB_QUERY:=$QUERY_MODE}
 # set default query for main page
 : ${MAINPAGE_QUERY:=max}
-# override default query mode
-[ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
 # defaults for maximum entries to display on each page
 : ${MAX_ENTRIES:=10}
 : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
