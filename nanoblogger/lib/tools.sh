@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-07-18T11:58:54-04:00
+# Last modified: 2008-08-07T10:33:03-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -653,21 +653,21 @@ case "$cache_update" in
 		CACHEUPDATE_LIST=(${DB_RESULTS[*]})
 	fi
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
-		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
+		echo "$cache_item" >> "$SCRATCH_FILE".cache_list.tmp
 	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list));;
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".cache_list.tmp));;
 	rebuild)
-	> "$SCRATCH_FILE".$cache_def-cache_list
+	> "$SCRATCH_FILE".cache_list.tmp
 	[ -z "$cache_def" ] && cache_def="*"
 	if [ -z "${CACHEUPDATE_LIST[*]}" ]; then
 		query_db "$db_query" "$db_catquery"
 		CACHEUPDATE_LIST=(${DB_RESULTS[*]})
 	fi
 	for cache_item in ${CACHEUPDATE_LIST[@]}; do
-		echo "$cache_item" >> "$SCRATCH_FILE".$cache_def-cache_list
+		echo "$cache_item" >> "$SCRATCH_FILE".cache_list.tmp
 		rm -f "$BLOG_DIR/$CACHE_DIR/$cache_item".$cache_def
 	done
-	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".$cache_def-cache_list));;
+	CACHEUPDATE_LIST=($(< "$SCRATCH_FILE".cache_list.tmp));;
 	expired)
 	[ -z "$cache_def" ] && cache_def="*"
 	# always cache more recent entries
