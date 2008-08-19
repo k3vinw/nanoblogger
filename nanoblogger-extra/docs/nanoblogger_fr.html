@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta name="generator" content="HTML Tidy for MkLinux (vers 6 November 2007), see www.w3.org"/>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Manuel utilisateur NanoBlogger</title>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+
+
+  <meta name="generator" content="HTML Tidy for MkLinux (vers 6 November 2007), see www.w3.org">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Manuel utilisateur NanoBlogger</title>
+  
   <style type="text/css">
 /*<![CDATA[*/
         <!--
@@ -93,9 +94,7 @@ li {
         }       
         -->
 /*]]>*/
-    </style>
-</head>
-<body>
+    </style></head><body>
   <div id="summary" style="border-top: 1px solid rgb(153, 153, 153); border-bottom: 1px solid rgb(153, 153, 153);">
     <h1>
         Manuel utilisateur de NanoBlogger
@@ -104,14 +103,14 @@ li {
     <h2>by <a href="mailto:n1xt3r%7B-at-symbol-%7Dfastmail.fm">n1xt3r</a> (Kevin Wood) </h2>
 
 <h2>Traduit de l'anglais par <a href="mailto:deber@users.sourceforge.net">Denis Bernard</a>  </h2>
-    <p><em>Le guide officiel du moteur de blog NanoBlogger<br/>version du 26 juillet 2008</em></p>
+    <p><em>Le guide officiel du moteur de blog NanoBlogger<br>version du 26 juillet 2008</em></p>
  </div>
 
   <div id="toc">
     <p><b>Table des matières</b></p>
 
     <table summary="toc" style="border: 0px none ;">
-      <tr>
+      <tbody><tr>
         <td>1.</td>
 
         <td><a href="#s.1">Introduction</a></td>
@@ -202,7 +201,7 @@ li {
        <td>16.</td>
        <td><a href="#s.16">Crédits</a></td>	
     </tr>
-</table>
+</tbody></table>
   </div>
 
   <div id="intro">
@@ -388,7 +387,7 @@ l'encodage des caractères.</p>
 </pre>
 
     <p><b>Activer l'affichage dans les liens du fichier index du répertoire</b></p>
-    <p><em>SHOW_INDEXFILE</em> active l'affichage dans les liens du fichier index du répertoire. Par défaut mis à "1", activé.<br/>NdT : en fait c'est l'affichage ou
+    <p><em>SHOW_INDEXFILE</em> active l'affichage dans les liens du fichier index du répertoire. Par défaut mis à "1", activé.<br>NdT : en fait c'est l'affichage ou
     non de l'URL complète, avec ou sans "index.html" par ex.</p>
 
     <p><b>Définir le nom de l'auteur</b></p>
@@ -651,8 +650,7 @@ la fois la catégorie et l'entrée doivent être spécifiés.</p>
 <p>1.) trouver le numéro de l'entrée depuis la liste :</p>
     <pre>nb [-b blog_rep]--tag &lt;ID&gt; list</pre>
 <p>2.) ôter l'entrée utilisant le numéro d'entrée trouvée dans la première étape :</p>
-<pre>
-nb [-b blog_rep] --tag &lt;ID&gt; delete entry &lt;ID&gt;
+<pre>nb [-b blog_rep] --tag &lt;ID&gt; delete entry &lt;ID&gt;
 </pre>
 
     <p><b>Changer la date des entrées</b></p>
@@ -894,18 +892,28 @@ nb [-b blog_rep]--tag &lt;ID&gt; --query &lt;all,CCYY-MM-DD,max&gt; edit entry &
  <div id="articles.plugin">
   <h2><a id="s.8" name="s.8">8. Articles et le plugin des articles</a></h2>
 <p>
-Les articles sont indépendants des archives principales du blog et procure une rapide et facile façon d'organiser et de créer un contenant suplémentaire pour le blog. la gestion est presque entièrement faite au travers d'un gestionnaire de fichier (ou la ligne de commande). Les articles sont créés simplement depuis des métafichiers trouvé dans le répertoire des articles. La réactualisation des articles se fait à la prochaine mise à jour du blog ou par une mise à jour provoquée, selon ce qui arrive en premier. La génération de l'index et du contenu dépend du plugin 'articles'. Pour plus d'information au sujet du plugin 'articles', veuillez voir "*articles_meta.sh" dans <a href="#s.9">À propos des plugins</a>.</p>
+Les articles sont indépendants des archives principales du blog et
+procurent une façon facile et rapide d'organiser et de créer un contenu
+supplémentaire pour le blog. La gestion est presque entièrement faite au
+travers d'un gestionnaire de fichier (ou la ligne de commande). Les
+articles sont créés simplement depuis des métafichiers trouvés dans le
+répertoire des articles. La réactualisation des articles se fait à la
+prochaine mise à jour du blog ou par une mise à jour provoquée, selon
+ce qui arrive en premier. La génération de l'index et du contenu dépend
+du plugin 'articles'. Pour plus d'information au sujet du plugin
+'articles', veuillez vous référer "*articles_meta.sh" dans <a href="#s.9">À propos des plugins</a>.</p>
 
 
   <h3>Configuration des articles</h3>
 
    <p><b>Établissement du répertoire "articles"</b></p>
 
-	     <p><em>ARTICLES_DIR</em> assigne le nom du répertoire "articles" pour votre blog. Par défaut : "articles". plusieurs répertoires d'articles peuvent être spécifiés.</p>
+	     <p><em>ARTICLES_DIR</em>
+assigne le nom du répertoire "articles" pour votre blog. Par défaut :
+"articles". plusieurs répertoires d'articles peuvent être spécifiés.</p>
 
              <p>Exemple :</p>
- 	     <pre>
-  	 ARTICLES_DIR="articles articles/divers"
+ 	     <pre>  	 ARTICLES_DIR="articles articles/divers"
  
 	 </pre>
 
@@ -919,27 +927,24 @@ Les articles sont indépendants des archives principales du blog et procure une 
 
          <p><b>Assigner le template par défaut pour les articles</b></p>
 
-         <p><em>ARTICLES_TEMPLATE</em>assigne le tempalte par défaut à utiliser pour les nouveaux articles. Par défaut : "[blog_dir/]templates/makepage.htm".</p>
+         <p><em>ARTICLES_TEMPLATE</em> assigne le template par défaut à utiliser pour les nouveaux articles. Par défaut : "[blog_dir/]templates/makepage.htm".</p>
 
   	     <h3>Ajouter de nouveaux articles</h3>
 
-         <p>La création de nouveaux articles est facilement fait à l'aide de la commande 'add article' :</p>
-         <pre>
-	 nb [--title 'Exemple d'article'] add article
+         <p>La création de nouveaux articles est facilement faite à l'aide de la commande 'add article' :</p>
+         <pre>	 nb [--title 'Exemple d'article'] add article
 
          </pre>
 
          <p>Importation d'un nouvel article (dans un sous-répertoire d'articles existant) :</p>
-         <pre>
- 	 nb import article [blog_rep/]articles/divers/exemple.txt
+         <pre> 	 nb import article [blog_rep/]articles/divers/exemple.txt
 
   	 </pre>
 
          <p><b>Réactualisation manuelle d'articles</b></p>
 
          <p>Réactualisation manuelle des index et contenus des articles :</p>
-         <pre>
- 	 nb update articles
+         <pre> 	 nb update articles
 
   	 </pre>
    </div>
@@ -1937,7 +1942,7 @@ END-----
 
     <p><b>Mise à jour du répertoire "Data" du blog</b></p>
 
-    <p>Les entrées importées devraient être copiées dans le répertoire <em>data</em> de votre blog.<br/>
+    <p>Les entrées importées devraient être copiées dans le répertoire <em>data</em> de votre blog.<br>
     Mettre à jour le blog avec les nouvelles entrées :</p>
     <pre>nb [-b blog_rep] --force update all
         
@@ -2058,18 +2063,18 @@ Walther's Diary"[4], qui inspira à Bowie la création de MicroBlogger.
 Enfin, merci à ceux ayant contribué à un patch ou une demande de
 fonctionnalité. Voir le ChangeLog. </p>
 
-<p><a href="http://blogkomm.com/">1. http://blogkomm.com</a><br/>
- <a href="http://js-kit.com/">2. http://js-kit.com</a><br/>
-<a href="http://www.haloscan.com/">3. http://www.haloscan.com</a><br/>
-<a href="http://reactor-core.org/%7Edjw/diary/">4. http://reactor-core.org/~djw/diary/</a><br/></p>
+<p><a href="http://blogkomm.com/">1. http://blogkomm.com</a><br>
+ <a href="http://js-kit.com/">2. http://js-kit.com</a><br>
+<a href="http://www.haloscan.com/">3. http://www.haloscan.com</a><br>
+<a href="http://reactor-core.org/%7Edjw/diary/">4. http://reactor-core.org/~djw/diary/</a><br></p>
 	<h3>Crédits pour la traduction française</h3>
 <dl>
 <dt>Relecture (mise en français ) :</dt>
-<dd>Hubert Lombard (version 554)</dd>
+<dd>Hubert Lombard (versions 554 et 602)</dd>
 </dl>
 
     <div class="copyright">
-      <span>Copyright © 2003-2008 Kevin Wood. Tous droits réservés.<br/>
+      <span>Copyright © 2003-2008 Kevin Wood. Tous droits réservés.<br>
             Copyright © 2007-2008 Denis Bernard, pour la traduction. </span>
     </div>
   </div>
