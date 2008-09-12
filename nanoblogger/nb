@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-08-02T00:45:11-04:00
+# Last modified: 2008-09-11T23:37:03-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -701,7 +701,7 @@ case "$db_query" in
 			nb_msg "$header_ID, $header_Title"
 			query_db; id=0
 			cat_items=${#db_categories[*]}
-			while [ "$id" -lt "$cat_items" ]; do
+			while [ "$id" -le "$cat_items" ]; do
 				let id=${id}+1
 				[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
 				echo " $id, `nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE 1`"

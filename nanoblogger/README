@@ -1,4 +1,4 @@
-# Last modified: 2008-06-26T15:45:37-04:00
+# Last modified: 2008-09-11T22:14:32-04:00
 
 NanoBlogger is a small weblog engine written in Bash for the command
 line. It uses common UNIX tools such as cat, grep, and sed to create
@@ -41,9 +41,9 @@ copy over your styles and templates directory. If you decide to do this,
 you may find that your style sheets or templates no longer work as
 expected. In which case some adjustments will have to be made before
 they work properly with the new version. A side-by-side comparison
-between the old and new version will be your best recourse as long as a
-standardized method ceases to exist. You will find this to be true among
-other aspects of this seemingly constantly evolving software.
+between the old and new version will be your best recourse. Consider
+this a small trade-off for the ability to fully customize the weblog's
+appearance.
 
 ### Configuration ###
 
