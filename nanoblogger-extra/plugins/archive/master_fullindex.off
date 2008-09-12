@@ -7,7 +7,7 @@
 MASTERIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Delete_CatDBFile$Move_EntryFile$USR_TITLE"
 
 # check for weblog modifications
-if [ ! -z "$MASTERIMOD_VAR" ] || [ "$USR_QUERY" = all ]; then
+if [ ! -z "$MASTERIMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 	nb_msg "$plugins_action full archive index page ..."
 	# make NB_ArchiveEntryLinks placeholder
 	query_db all

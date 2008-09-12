@@ -8,35 +8,27 @@ Usage:
  $BASENAME [-b blog_dir] [options] <action>
 
 Actions:
- add					- create new entry, tag, or weblog
-					  (directory).
+ add [article|entry|tag|weblog] 	- create new article, entry, tag, or
+ 					  weblog (directory).
  configure				- configure weblog (for 'update').
- delete <ID,tag>			- delete an entry, tag, or un-tag entry.
- draft <FILE> 				- edit or create metafile.
- edit <ID,tag>				- edit an entry or tag.
- list					- list entries or tags (for
- 					  'query' and 'tag', defaults to
-					  'max').
+ delete [entry|tag] <ID>		- delete entry, tag, or un-tag entry.
+ draft <FILE> 				- create and edit meta-file.
+ edit [[entry|tag] <ID>]|file <FILE>]	- edit entry, meta-file or tag.
+ list [all|tags|DATE|max|tag <ID>]	- list entries or tags (defaults to
+					  'all').
+ import [article|entry] <FILE> 		- import new article or entry from
+ 					  meta-file.
+ make-file <FILE> 			- create new meta-file.
  make-page <FILE1> <FILE2> 		- create new weblog page (file2) from
-					  metafile (file1).
- tag-entry <ID>				- tag entry (for 'tag').
- tag-list 				- list tags (same as 'query tag list').
+					  meta-file (file1).
  manual					- view the manual.
- make-file <FILE> 			- create new metafile.
  preview				- run command to preview weblog.
  publish				- run command to publish weblog.
- query <all,tag,DATE,main,max, 		- specify a query to run (for 'edit',
-        expired> 			  'delete', 'list', 'tag-entry',
-					  'update', and 'update-cache').
- tag <ID,new> 				- specify tag (for 'add', 'delete',
- 					  'edit', 'list', 'update', and
-					  'update-cache').
- file <FILE> 				- specify metafile to import as entry
- 					  (for 'add').
- update-cache 				- force cache update (for 'query',
- 					  defaults to 'expired').
- update 				- force weblog update (for 'query',
- 					  defaults to 'max').
+ tag-entry <ID>				- tag entry (for '--tag').
+ update [all|tag|DATE|main|max| 	- force weblog update (defaults to
+ 	articles|feeds|tag <ID>]	  'all').
+ update-cache [all|tag|DATE|main|max| 	- force cache update (defaults to
+ 	expired|tag <ID>]		  'expired').
 
 Options:
  -b, --blog-dir <DIRECTORY>		specify weblog directory.
@@ -47,41 +39,51 @@ Options:
  					'delete', 'preview', 'publish', and
 					'update').
  -v, --verbose <1=on/0=off>		toggle verbosity.
- --conf-file <FILE>			specify an alternate configuration file.
+ --conf-file <FILE>			specify alternate configuration file.
  --desc <text>				set text of description (for 'add',
- 					'draft', 'make-file' and 'make-page').
+ 					'draft', 'import', and 'make-*').
  --data-dir <DIRECTORY>			specify weblog's data directory.
- --title <TEXT> 			set title (for 'add', 'tag', 'draft',
- 					'make-file' and 'make-page').
+ --meta-file <FILE> 			specify meta-file (for 'add').
+ --title <TEXT> 			set title (for 'add', 'article',
+ 					'draft', 'edit', 'import', and
+					'make-*').
  --author <TEXT>			set text of author (for 'add', 'draft',
- 					'make-file' and 'make-page').
+ 					'import' and 'make-*').
  --plugin-dir <DIRECTORY> 		specify weblog's plugin directory.
+ -q, --query [all|tag|DATE|main|max] 	- specify a query to run (for 'edit',
+ 					  'delete', 'list', 'tag-entry',
+					  'update', and 'update-cache').
+ -c, --tag <ID> 			- specify tag (for 'add', 'delete',
+ 					  'edit', 'list', 'import', 'update',
+					  and 'update-cache').
  --text <TEXT> 				set text of body (for 'add', 'draft',
- 					'make-file' and 'make-page').
+ 					'import' and 'make-*').
  --template <FILE>			specify file to load as template (for
- 					'draft', 'make-page' and 'make-file').
+ 					'draft', 'import' and 'make-*').
  --template-dir <DIRECTORY>		specify weblog's template directory.
  --var <VARIABLE>  	 		define meta-variable (for 'add',
- 					'draft', 'edit', 'make-file' and
-					'make-page').
+ 					'draft', 'edit', 'import' and 'make-*').
  --set-var <INPUT>  			set meta-variable (for '--var').
+ --no-preview 				disables automatic preview (for 'add').
+ --no-publish 				disables automatic publish (for 'add').
  --version				display version information.
 
- tag,delete,edit,tag-entry accepts multiple ID numbers seperated by commas (e.g.
- 1,2,3).
+More Short Options:
+ -a 		equivalent of add action.
+ -d <ID>	deletes entry (works with '-c').
+ -E <FILE> 	equivalent of draft action.
+ -e <ID> 	edits entry (works with '-c').
+ -l 		equivalent of list action.
+ -m <ID> 	equivalent of tag-entry action.
+ -u 		equivalent of update action.
+
+ --tag,delete,edit,tag-entry accepts multiple ID numbers separated by commas
+ (e.g.  1,2,3).
  
  DATE = CCYY-MM-DD, CCYY-MM, CCYY (or range = DATE1,DATE2)
 
-Examples:
-
- specify the weblog directory to create or add new entry
-	nb -b ~/public_html/weblog add
-
- create new "examples" tag
-	nb -b ~/public_html/weblog tag new --title examples add
-
- create new entry using nothing but command line options
-	nb -b ~/public_html/weblog --author 'myname' --title 'Title' --text 'Text!' add
+note: special queries such as "articles" and "feeds" typically get combined with
+      the update action.
 
 More info:
  URL: http://nanoblogger.sourceforge.net

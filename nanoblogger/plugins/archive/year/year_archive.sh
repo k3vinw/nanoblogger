@@ -7,7 +7,7 @@ build_yeararchive(){
 	query_db "$yearn"
 	YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 	# check for weblog modifications
-	if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ]; then
+	if [ ! -z "$YEARIMOD_VAR" ] || [ ! -z "$YEARIMOD_QUERY" ] || [ "$NB_QUERY" = all ] || [ ! -z "$UPDATE_LIST" ]; then
 		# set previous and next links for given year
 		set_yearnavlinks(){
 		yearnavlinks_var=${1//[\/]/-}
@@ -96,7 +96,7 @@ build_yeararchive(){
 
 		# create links for monthly archives
 		[ -z "$CAL_CMD" ] && CAL_CMD="cal"
-		$CAL_CMD > "$SCRATCH_FILE".cal_test 2>&1 && CAL_VAR="1"
+		$CAL_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 && CAL_VAR="1"
 			
 		make_monthlink(){
 		if [ "$CAL_VAR" = "1" ]; then
