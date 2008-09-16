@@ -1,7 +1,7 @@
 # NanoBlogger MyMood plugin that replaces mood placeholders
 # with mood images - controled by moods.conf
 
-# modifies $My_Mood placeholder for templates
+# modifies $NB_MyMood placeholder for templates
 
 set_baseurl "./"
 
@@ -12,8 +12,8 @@ MOODS_CONF="${MOODS_DIR}/moods.conf"
 if [ -d "$MOODS_DIR" ]; then
 	create_moods(){
 	mood_url=`echo "${MOODS_URL//\//\\\\/}\\\\/${mood_img//\//\\\\/}"`
-	#sed_script='/[ ]'$mood_var'[ ]/ s// <img src="'$mood_url'" alt="'$mood_var'" border="0" \/> /g'
-	sed_script='/\([ ]'$mood_var'[ ]\|[ ]'$mood_var'$\|^'$mood_var'[ ]\)/ s// <img src="'$mood_url'" alt="'$mood_var'" \/> /g'
+	sed_sub=' <img src="'$mood_url'" alt="'$mood_var'" \/>'
+	sed_script='/[ ]'$mood_var'[ ]/ s// '$sed_sub' /g; /[ ]'$mood_var'$/ s// '$sed_sub'/g; /^'$mood_var'[ ]/ s//'$sed_sub' /g'
 	TEMP_MOOD=$(< "$SCRATCH_FILE")
 	sed -e "$sed_script" > "$SCRATCH_FILE" <<-EOF
 		$TEMP_MOOD

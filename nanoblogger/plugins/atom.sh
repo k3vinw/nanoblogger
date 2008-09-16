@@ -125,8 +125,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 	ARCHIVE_LIST=(${DB_RESULTS[@]})
 	> "$SCRATCH_FILE".atomfeed
 	for entry in ${ARCHIVE_LIST[@]}; do
-		load_entry "$NB_DATA_DIR/$entry" ALL
 		set_entrylink "$entry"
+		load_entry "$NB_DATA_DIR/$entry" ALL
 		Atom_EntryTime=`echo "$entry" |sed -e '/\_/ s//\:/g; s/[\.]'$NB_DATATYPE'//g'`
 		Atom_EntryDate=`echo "$Atom_EntryTime${BLOG_FEED_TZD}"`
 		# non-portable find command!
