@@ -14,7 +14,7 @@
 # </div>
 
 # set tidy command
-TIDY_CMD="tidy"
+: ${TIDY_CMD:=tidy}
 
 # set additional arguments
 : ${TIDY_HTML_ARGS:=-asxhtml -n -utf8}

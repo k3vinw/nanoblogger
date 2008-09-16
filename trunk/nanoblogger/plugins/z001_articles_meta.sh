@@ -40,7 +40,7 @@ read_metadata TITLE "$BLOG_DIR/$ATCLSECTION_DIR/$articlelink_var"
 if [ -z "$METADATA" ]; then
 	article_title="$notitle"
 else
-	article_title="$METADATA"
+	article_title="${METADATA//\-/&#150;}"
 fi
 
 # new way
@@ -78,7 +78,7 @@ NB_ArticlesListTitleHTML=$(< "$ARTICLE_PLUGIN_OUTFILE")
 }
 
 add_articlelink(){
-	echo '<!--'$BLOGPAGE_TITLE'--><a href="'${BASE_URL}$ATCLSECTION_DIR/$article_link'">'$BLOGPAGE_TITLE'</a><br />' >> "$ARTICLE_PLUGIN_OUTFILE"
+	echo '<!-- '$BLOGPAGE_TITLE' --><a href="'${BASE_URL}$ATCLSECTION_DIR/$article_link'">'$BLOGPAGE_TITLE'</a><br />' >> "$ARTICLE_PLUGIN_OUTFILE"
 	}
 
 create_article(){

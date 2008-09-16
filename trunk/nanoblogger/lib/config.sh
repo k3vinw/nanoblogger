@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-06-06T08:42:07-04:00
+# Last modified: 2008-08-04T15:48:20-04:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -54,6 +54,8 @@ export BLOG_DIR
 : ${PLUGINS_DIR:=$NB_BASE_DIR/plugins}
 # default location for user plugins
 : ${USR_PLUGINSDIR:=$BLOG_DIR/plugins}
+# default articles suffix
+: ${ARTICLES_SUFFIX:=txt}
 
 # --- WARNING ---
 # changing the following requires manually modifying
@@ -71,6 +73,8 @@ CACHE_DIR="$BLOG_CACHE_DIR"
 PARTS_DIR="$BLOG_PARTS_DIR"
 # default directory to store parts of weblog
 [ -z "$PARTS_DIR" ] && PARTS_DIR=parts
+# default directory to store articles of weblog
+[ -z "$ARTICLES_DIR" ] && ARTICLES_DIR=articles
 
 # letter to prepend to entry's html id tag
 # WARNING: effects permanent links
@@ -109,6 +113,11 @@ fi
 : ${NB_EDITOR:=vi}
 # export NB_EDITOR for the benefit of other components
 export NB_EDITOR
+# cleanup EDITOR/NB_EDITOR & create NB_EDITORNAME for templates
+if [ -z "$NB_EDITORNAME" ]; then
+	NB_EDITORNAME="${NB_EDITOR//*\// }"
+	NB_EDITORNAME="${NB_EDITORNAME// -*/}"
+fi
 # default file creation mask
 [ -z "$NB_UMASK" ] && NB_UMASK=`umask`
 # default to txt for datatype suffix
@@ -138,12 +147,12 @@ export NB_EDITOR
 : ${NB_SYND_FILETYPE:=xml}
 # default to AUTO_TZD for iso dates
 : ${BLOG_TZD:=$AUTO_TZD}
-# default to max filter for query mode
-: ${QUERY_MODE:=max}
+# defaults to all for query mode
+: ${QUERY_MODE:=all}
 # set default query mode for all operations
 : ${NB_QUERY:=$QUERY_MODE}
-# override default query mode
-[ ! -z "$USR_QUERY" ] && NB_QUERY="$USR_QUERY"
+# set default query for main page
+: ${MAINPAGE_QUERY:=max}
 # defaults for maximum entries to display on each page
 : ${MAX_ENTRIES:=10}
 : ${MAX_PAGE_ENTRIES:=$MAX_ENTRIES}
@@ -211,8 +220,8 @@ deconfig(){ ARCHIVES_DIR=; CACHE_DIR=; NB_DATA_DIR=; NB_TEMPLATES_DIR=; NB_TEMP_
 	NB_UMASK=; \
  	BLOG_AUTHOR=; BLOG_CACHEMNG=; BLOG_INTERACTIVE=; BLOG_TZD=; \
 	CATEGORY_FEEDS=; CHRON_ORDER=; DATE_CMD=; DATE_LOCALE=; FRIENDLY_LINKS=; \
-	MAX_ENTRIES=; MAX_CACHE_ENTRIES=; MAX_CATPAGE_ENTRIES=; MAX_MAINPAGE_ENTRIES=; \
-	MAX_MONTHPAGE_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_TITLEWIDTH=; \
+	MAINPAGE_QUERY=; MAX_ENTRIES=; MAX_CACHE_ENTRIES=; MAX_CATPAGE_ENTRIES=; \
+	MAX_MAINPAGE_ENTRIES=; MAX_MONTHPAGE_ENTRIES=; MAX_PAGE_ENTRIES=; MAX_TITLEWIDTH=; \
 	METADATA_MARKER=; METADATA_CLOSEVAR=; METADATA_CLOSETAG=; \
 	ENTRY_FORMAT=; PAGE_FORMAT=; \
 	SHOW_INDEXFILE=; SHOW_PERMALINKS=; SHOW_CATLINKS=; SORT_ARGS=; \

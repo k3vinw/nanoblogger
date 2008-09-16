@@ -26,7 +26,7 @@ template_rentries="Entrées récentes"
 template_syndicate="Syndiquer"
 template_syndicate_main="Site"
 template_status="Statut du blog"
-template_powered="Propulsé par : $NB_EDITOR, bash, cat, grep, sed et"
+template_powered="Propulsé par : $NB_EDITORNAME, bash, cat, grep, sed et"
 articles_nolist="0"
 categories_nolist="0"
 

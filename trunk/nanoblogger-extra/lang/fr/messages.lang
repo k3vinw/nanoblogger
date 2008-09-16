@@ -18,6 +18,7 @@ checkconf_nousrconf="le fichier de configuration du blog n'existe pas ! bye."
 checkconf_noblogdir="le répertoire de blog n'existe pas ! bye."
 checkconf_nodata="le répertoire data du blog n'existe pas ! bye."
 checkconf_nocache="le répertoire cache du blog n'existe pas ! bye."
+checkconf_noparts="le répertoire parts du blog n'existe pas ! bye."
 checkconf_notemplates="le répertoire templates du blog n'existe pas ! bye."
 
 # query_db
@@ -44,10 +45,10 @@ makepage_nooutput="fichier de sortie non spécifié."
 makepage_notemplate="le fichier template n'existe pas ! bye."
 
 # paginate
-paginate_action="pagination de"
+paginate_action="génération pages"
 
 # build_archives
-buildarchives_action="confection des archives..."
+buildarchives_action="génération des archives..."
 
 # build_weblog
 buildweblog_all="mise à jour de tous les fichiers du blog ! ça peut prendre du temps..."
@@ -128,6 +129,9 @@ addweblog_author="entrez le nom de l'auteur"
 addweblog_title="entrez un titre"
 addweblog_desc="entrez une courte description"
 addweblog_editnew="édition d'une nouvelle entrée..."
+addweblog_newarticle="ajout d'un nouvel article..."
+addweblog_noarticledir="échec lors de la vérification du répertoire articles ! contrôler ARTICLES_DIR dans la configuration."
+addweblog_noarticlesrc="aucune source valide d'article n'a pu être trouvée !"
 
 # preview_weblog
 prewiew_nocmd="commande d'aperçu non configurée ! bye."
