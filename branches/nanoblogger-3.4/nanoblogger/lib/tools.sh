@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-08-07T10:33:03-04:00
+# Last modified: 2008-09-21T00:17:36-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -242,14 +242,16 @@ build_catlist(){
 # acquire all the categories
 for relative_entry in ${FIND_CATLIST[@]}; do
 	raw_db "$relative_entry"
-	cat_ids=`print_cat "${DB_RESULTS[*]}"`
-	cat_ids="${cat_ids//\,/ }"
-	for cat_id in $cat_ids; do
-		cat_var="$cat_id"
-		cat_db="cat_$cat_id.$NB_DBTYPE"
-		build_catlist
+	for relcat_entry in ${DB_RESULTS[@]}; do
+		cat_ids=`print_cat "$relcat_entry"`
+		cat_ids="${cat_ids//\,/ }"
+		for cat_id in $cat_ids; do
+			cat_var="$cat_id"
+			cat_db="cat_$cat_id.$NB_DBTYPE"
+			build_catlist
+		done
+		cat_id=; cat_ids=; cat_var=; cat_db=;
 	done
-	cat_id=; cat_ids=; cat_var=; cat_db=;
 done
 CAT_LIST=( ${cat_list[@]} )
 [ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
