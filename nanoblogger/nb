@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-09-21T00:18:00-04:00
+# Last modified: 2008-09-21T01:26:53-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -452,7 +452,8 @@ case "$editweblog_type" in
 		nb_draft "$edit_idsel"
 	;;
 	tag|cat) # edit categories
-		cat_num="$edit_idsel"; cat_var=`echo "$cat_num" |sed -e '/,/d'`
+		[ -z "$cat_num" ] && [ ! -z "$edit_idsel" ] && cat_num="$edit_idsel"
+		cat_var=`echo "$cat_num" |sed -e '/,/d'`
 		[ -z "$cat_var" ] && die "$editweblog_onecat"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 		nb_msg "$editweblog_catinfo $cat_num"
@@ -588,7 +589,7 @@ case "$delweblog_type" in
 		build_weblog
 	;;
 	tag|cat) # delete categories
-		cat_num="$delete_idsel"
+		[ -z "$cat_num" ] && [ ! -z "$delete_idsel" ] && cat_num="$delete_idsel"
 		[ -z "$cat_num" ] && die "$checkcatid_novalid"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 		cat_list="$db_catquery"
