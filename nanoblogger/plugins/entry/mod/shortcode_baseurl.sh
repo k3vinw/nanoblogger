@@ -11,40 +11,22 @@ shortcode_baseurl_specified="${NB_EntryBody//*[\[]base?url[\]]*/true}"
 # e.g. %base_url% -> "./" or "../"
 oldsc_baseurl_specified(){
 if [ "$oldscode_baseurl_specified" = true ]; then
+	shortcode_baseurl_output=; shortcode_baseurl_sedscript=
 	baseurl_link="${BASE_URL//\//\\/}"
-	sc_lines=`echo "$NB_EntryBody" |grep -n "\%base\_url\%" |sed -e '/[ ]/ s//_SHORTCODESPACER_/g'`
-	sc_idlist=(`for sc_line in ${sc_lines[@]}; do echo ${sc_line%%\:*}; done`)
-	shortcode_baseurl_data=`echo "$NB_EntryBody" |sed -e '/\%base\_url\%/!d; /[ ]/ s//_SHORTCODESPACER_/g'`
-	sc_lineid=0
-	for shortcode_baseurl_line in ${shortcode_baseurl_data[@]}; do
-		shortcode_baseurl_output=; shortcode_baseurl_sedscript=
-		shortcode_baseurl_line="${shortcode_baseurl_line//_SHORTCODESPACER_/ }"
-		sc_id="${sc_idlist[$sc_lineid]}"
-		shortcode_baseurl_output="$baseurl_link"
-		shortcode_baseurl_sedscript=''$sc_id' s/\%base\_url\%/'$shortcode_baseurl_output'/'
-		NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$shortcode_baseurl_sedscript"`
-		let sc_lineid=${sc_lineid}+1
-	done
+	shortcode_baseurl_output="$baseurl_link"
+	shortcode_baseurl_sedscript=''$sc_id' s/\%base\_url\%/'$shortcode_baseurl_output'/'
+	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$shortcode_baseurl_sedscript"`
 fi
 }
 
 # shortocode for base-url
 sc_baseurl_specified(){
 if [ "$shortcode_baseurl_specified" = true ]; then
+	shortcode_baseurl_output=; shortcode_baseurl_sedscript=
 	baseurl_link="${BASE_URL//\//\\/}"
-	sc_lines=`echo "$NB_EntryBody" |grep -n "\[base.url\]" |sed -e '/[ ]/ s//_SHORTCODESPACER_/g'`
-	sc_idlist=(`for sc_line in ${sc_lines[@]}; do echo ${sc_line%%\:*}; done`)
-	shortcode_baseurl_data=`echo "$NB_EntryBody" |sed -e '/\[base.url\]/!d; /[ ]/ s//_SHORTCODESPACER_/g'`
-	sc_lineid=0
-	for shortcode_baseurl_line in ${shortcode_baseurl_data[@]}; do
-		shortcode_baseurl_output=; shortcode_baseurl_sedscript=
-		shortcode_baseurl_line="${shortcode_baseurl_line//_SHORTCODESPACER_/ }"
-		sc_id="${sc_idlist[$sc_lineid]}"
-		shortcode_baseurl_output="$baseurl_link"
-		shortcode_baseurl_sedscript=''$sc_id' s/\[base.url\]/'$shortcode_baseurl_output'/'
-		NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$shortcode_baseurl_sedscript"`
-		let sc_lineid=${sc_lineid}+1
-	done
+	shortcode_baseurl_output="$baseurl_link"
+	shortcode_baseurl_sedscript='s/\[base.url\]/'$shortcode_baseurl_output'/g'
+	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$shortcode_baseurl_sedscript"`
 fi
 }
 
