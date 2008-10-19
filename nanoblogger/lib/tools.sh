@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-09-21T00:17:36-04:00
+# Last modified: 2008-10-18T20:39:29-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -555,6 +555,7 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+	load_plugins page/mod
 	MKPAGE_CONTENT="$NB_MetaBody"
 	MKPAGE_FORMAT="$NB_MetaFormat"
 	: ${MKPAGE_FORMAT:=$BLOGPAGE_FORMAT}
