@@ -25,7 +25,7 @@ if [ "$shortcode_yahoobuzz_specified" = true ]; then
 		yahoobuzz_link=`echo "${yahoobuzz_link//\//\\\\/}\\\\"`
 		shortcode_yahoobuzz_output=' <script type="text\/javascript" src="'$yahoobuzz_jscript'" badgetype="medium-votes"\>'$yahoobuzz_link'<\/script\>'
 		sc_id="${sc_idlist[$sc_lineid]}"
-		shortcode_yahoobuzz_sedscript=''$sc_id' s/[ ]\[yahoo.buzz\]/ '$shortcode_yahoobuzz_output' /; '$sc_id' s/[ ]\[yahoo.buzz\]$/ '$shortcode_yahoobuzz_output'/; '$sc_id' s/^\[yahoo.buzz\]/'$shortcode_yahoobuzz_output' /'
+		shortcode_yahoobuzz_sedscript=''$sc_id' s/[ ]\[yahoo.buzz\]/ '$shortcode_yahoobuzz_output' /g; '$sc_id' s/[ ]\[yahoo.buzz\]$/ '$shortcode_yahoobuzz_output'/g; '$sc_id' s/^\[yahoo.buzz\] /'$shortcode_yahoobuzz_output' /g; '$sc_id' s/^\[yahoo.buzz\]$/'$shortcode_yahoobuzz_output'/g'
 		NB_MetaBody=`echo "$NB_MetaBody" |sed -e "$shortcode_yahoobuzz_sedscript"`
 		let sc_lineid=${sc_lineid}+1
 	done
