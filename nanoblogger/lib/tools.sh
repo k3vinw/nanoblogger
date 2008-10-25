@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-25T16:46:52-04:00
+# Last modified: 2008-10-25T17:18:59-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -630,6 +630,7 @@ if [ -f "$EDITDRAFT_FILE" ]; then
 	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$EDITDRAFT_FILE"
 	# modify date (DATE metadata)
 	meta_timestamp && write_metadata DATE "$NB_MetaDate" "$EDITDRAFT_FILE"
+	nb_preview metafile "$EDITDRAFT_FILE"
 fi
 }
 
