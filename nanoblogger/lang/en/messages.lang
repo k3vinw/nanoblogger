@@ -136,6 +136,9 @@ addweblog_noarticlesrc="no legitimate article source could be found!"
 preview_nocmd="no preview commmand set! goodbye."
 preview_action="previewing weblog ..."
 preview_asknow="would you like to preview your weblog now?"
+# IMPORTANT: key letters (e.g. "p:") are hard-coded
+preview_menu="p:Preview, e:Edit c:Continue a:Abort"
+preview_aborted="editing session aborted!"
 
 # publish_weblog
 publish_nocmd="no publish command set! goodbye."

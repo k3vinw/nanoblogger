@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-18T20:39:29-04:00
+# Last modified: 2008-10-25T16:40:34-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -126,6 +126,47 @@ if [ ! -f "$EDIT_FILE" ]; then
 	nb_msg "'$EDIT_FILE' - $nbedit_nofile"
 	die "'$EDIT_FILE' - $nbedit_failed"
 fi
+}
+
+# preview metadata article or entry
+# synopsis: nb_preview [entry|metafile] srcfile
+nb_preview(){
+preview_type="$1"
+preview_srcfile="$2"
+PREVIEW_TEMPLATE="$MAKEPAGE_TEMPLATE"
+while [ "$continue_editsess" != false ]; do
+	case $preview_type in
+		entry)
+			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
+				"$preview_srcfile"
+			load_entry "$preview_srcfile"
+			NB_EntryBody="$NB_MetaBody"
+			load_template "$NB_TEMPLATE_DIR/$ENTRY_TEMPLATE"
+			write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
+			PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
+			make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
+				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE";;
+		*)
+			check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$USR_ARTICLEFILE"
+			weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
+				"$BLOG_DIR/preview.$NB_FILETYPE";;
+	esac
+	if [ -f "$BLOG_DIR/preview.$NB_FILETYPE" ]; then
+		nb_msg "$preview_menu"
+		read -p "$NB_PROMPT" preview_choice
+		case $preview_choice in
+			[Pp])
+				nb_browser "$BLOG_DIR/preview.$NB_FILETYPE";;
+			[Ee])
+				nb_edit -p "$preview_srcfile";;
+			[Cc]|"")
+				rm -f "$BLOG_DIR/preview.$NB_FILETYPE"
+				continue_editsess=false;;
+			[Aa])
+				die "$preview_aborted";;
+		esac
+	fi
+done
 }
 
 # print a file (line by line)
@@ -425,6 +466,7 @@ WRITE_ENTRY_FILE="$1"
 # help ease transition from 3.2.x or earlier
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
+NB_EntryBody="$NB_MetaBody"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 mkdir -p `dirname "$WRITE_ENTRY_FILE"`
 write_template > "$WRITE_ENTRY_FILE"
@@ -436,7 +478,7 @@ load_entry(){
 ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
-: ${ENTRY_PLUGINSLOOP:=entry/mod entry/format entry}
+: ${ENTRY_PLUGINSLOOP:=shortcode entry/mod entry/format entry}
 : ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=${entry:8:2}
@@ -555,7 +597,9 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
-	load_plugins page/mod
+	for weblogpage_plugin in shortcode page/mod; do
+		load_plugins $weblogpage_plugin
+	done
 	MKPAGE_CONTENT="$NB_MetaBody"
 	MKPAGE_FORMAT="$NB_MetaFormat"
 	: ${MKPAGE_FORMAT:=$BLOGPAGE_FORMAT}
