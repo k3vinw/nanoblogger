@@ -12,10 +12,10 @@ shortcode_baseurl_specified="${NB_MetaBody//*[\[]base?url[\]]*/true}"
 oldsc_baseurl_specified(){
 if [ "$oldscode_baseurl_specified" = true ]; then
 	shortcode_baseurl_output=; shortcode_baseurl_sedscript=
-	set_baseurl "" "$BLOGPAGE_OUTFILE"
+	[ -f "$BLOGPAGE_SRCFILE" ] && set_baseurl "" "$BLOGPAGE_OUTFILE"
 	baseurl_link="${BASE_URL//\//\\/}"
 	shortcode_baseurl_output="$baseurl_link"
-	shortcode_baseurl_sedscript=''$sc_id' s/\%base\_url\%/'$shortcode_baseurl_output'/'
+	shortcode_baseurl_sedscript='s/\%base\_url\%/'$shortcode_baseurl_output'/'
 	NB_MetaBody=`echo "$NB_MetaBody" |sed -e "$shortcode_baseurl_sedscript"`
 fi
 }
@@ -24,7 +24,7 @@ fi
 sc_baseurl_specified(){
 if [ "$shortcode_baseurl_specified" = true ]; then
 	shortcode_baseurl_output=; shortcode_baseurl_sedscript=
-	set_baseurl "" "$BLOGPAGE_OUTFILE"
+	[ -f "$BLOGPAGE_SRCFILE" ] && set_baseurl "" "$BLOGPAGE_OUTFILE"
 	baseurl_link="${BASE_URL//\//\\/}"
 	shortcode_baseurl_output="$baseurl_link"
 	shortcode_baseurl_sedscript='s/\[base.url\]/'$shortcode_baseurl_output'/g'
