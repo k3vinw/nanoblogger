@@ -10,7 +10,7 @@ if [ -d "$MOODS_DIR" ]; then
 	mood_url=`echo "${MOODS_URL//\//\\\\/}\\\\/${mood_img//\//\\\\/}"`
 	sed_sub=' <img src="'$mood_url'" alt="'$mood_var'" \/>'
 	sed_script='/[ ]'$mood_var'[ ]/ s// '$sed_sub' /g; /[ ]'$mood_var'$/ s// '$sed_sub'/g; /^'$mood_var'[ ]/ s//'$sed_sub' /g'
-	NB_EntryBody=`echo "$NB_EntryBody" |sed -e "$sed_script"`
+	NB_MetaBody=`echo "$NB_MetaBody" |sed -e "$sed_script"`
 	}
 
 	load_moods(){

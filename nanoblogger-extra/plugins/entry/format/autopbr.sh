@@ -2,5 +2,5 @@
 # 2 line breaks (blank line) = <p></p>
 
 # nb_msg "$plugins_textformataction `basename $nb_plugin` ..."
-NB_EntryBody=`echo "$NB_EntryBody" |sed -e '/^$/ s//\<p\>\<\/p\>/g'`
+NB_MetaBody=`echo "$NB_MetaBody" |sed -e '/^$/ s//\<p\>\<\/p\>/g'`
 
