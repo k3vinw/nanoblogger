@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-26T16:58:14-04:00
+# Last modified: 2008-10-26T18:00:11-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -139,7 +139,9 @@ while [ "$continue_editsess" != false ]; do
 		entry)
 			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 				"$preview_srcfile"
+			CACHE_TYPE=preview
 			entry=`basename "$preview_srcfile"`
+			entry="${entry##nb_edit-entry-}"
 			set_entrylink "$entry"
 			set_baseurl "" "$BLOG_DIR/preview.$NB_FILETYPE"
 			load_entry "$preview_srcfile"
@@ -149,7 +151,8 @@ while [ "$continue_editsess" != false ]; do
 			write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
 			PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
 			make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
-				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE";;
+				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE"
+			rm -f "$BLOG_DIR/$CACHE_DIR"/*."$CACHE_TYPE"; CACHE_TYPE=;;
 		*)
 			check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
 			weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
