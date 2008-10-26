@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-25T22:50:43-04:00
+# Last modified: 2008-10-26T16:58:14-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -139,23 +139,17 @@ while [ "$continue_editsess" != false ]; do
 		entry)
 			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 				"$preview_srcfile"
-			ENTRY_PLUGINSLOOP="shortcode entry/mod entry/format"
-			load_metadata ALL "$preview_srcfile"
-			for entry_pluginsdir in $ENTRY_PLUGINSLOOP; do
-				if [ "$entry_pluginsdir" = "entry/format" ]; then
-					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
-					load_plugins $entry_pluginsdir "$NB_EntryFormat"
-				else
-					load_plugins $entry_pluginsdir
-				fi
-			done
+			entry=`basename "$preview_srcfile"`
+			set_entrylink "$entry"
+			set_baseurl "" "$BLOG_DIR/preview.$NB_FILETYPE"
+			load_entry "$preview_srcfile"
+			year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
 			NB_EntryBody="$NB_MetaBody"
 			load_template "$NB_TEMPLATE_DIR/$ENTRY_TEMPLATE"
 			write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
 			PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
 			make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
-				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE"
-			ENTRY_PLUGINSLOOP=;;
+				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE";;
 		*)
 			check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
 			weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
