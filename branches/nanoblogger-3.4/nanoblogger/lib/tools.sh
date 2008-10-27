@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-26T18:00:11-04:00
+# Last modified: 2008-10-26T23:10:16-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -134,43 +134,52 @@ nb_preview(){
 preview_type="$1"
 preview_srcfile="$2"
 PREVIEW_TEMPLATE="$MAKEPAGE_TEMPLATE"
+preview_entry(){
+	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
+	"$preview_srcfile"
+	CACHE_TYPE=preview
+	entry=`basename "$preview_srcfile"`
+	entry="${entry##nb_edit-entry-}"
+	set_entrylink "$entry"
+	set_baseurl "" "$BLOG_DIR/preview.$NB_FILETYPE"
+	load_entry "$preview_srcfile" ALL "$CACHE_TYPE"
+	year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
+	NB_EntryBody="$NB_MetaBody"
+	load_template "$NB_TEMPLATE_DIR/$ENTRY_TEMPLATE"
+	write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
+	PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
+	make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
+	"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE"
+	[ "$ABSOLUTE_LINKS" = 1 ] || BASE_URL=
+	rm -f "$BLOG_DIR/$CACHE_DIR"/*."$CACHE_TYPE"; CACHE_TYPE=
+}
+preview_page(){
+	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
+	weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
+		"$BLOG_DIR/preview.$NB_FILETYPE"
+}
 while [ "$continue_editsess" != false ]; do
 	case $preview_type in
-		entry)
-			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-				"$preview_srcfile"
-			CACHE_TYPE=preview
-			entry=`basename "$preview_srcfile"`
-			entry="${entry##nb_edit-entry-}"
-			set_entrylink "$entry"
-			set_baseurl "" "$BLOG_DIR/preview.$NB_FILETYPE"
-			load_entry "$preview_srcfile"
-			year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
-			NB_EntryBody="$NB_MetaBody"
-			load_template "$NB_TEMPLATE_DIR/$ENTRY_TEMPLATE"
-			write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
-			PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
-			make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
-				"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE"
-			rm -f "$BLOG_DIR/$CACHE_DIR"/*."$CACHE_TYPE"; CACHE_TYPE=;;
-		*)
-			check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
-			weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
-				"$BLOG_DIR/preview.$NB_FILETYPE";;
+		entry) 	[ -N "$preview_srcfile" ] && preview_entry
+			run_preview=preview_entry;;
+		*) 	[ -N "$preview_srcfile" ] && preview_page
+			run_preview=preview_page;;
 	esac
-	if [ -f "$BLOG_DIR/preview.$NB_FILETYPE" ]; then
+	if [ -f "$preview_srcfile" ]; then
 		nb_msg "$preview_menu"
 		read -p "$NB_PROMPT" preview_choice
 		case $preview_choice in
-			[Pp])
-				nb_browser "$BLOG_DIR/preview.$NB_FILETYPE";;
-			[Ee])
-				nb_edit -p "$preview_srcfile";;
+			[Pp]) 	nb_browser "$BLOG_DIR/preview.$NB_FILETYPE";;
+			[Rr]) 	$run_preview;;
+			[Ee]) 	nb_edit -p "$preview_srcfile";;
 			[Cc]|"")
 				rm -f "$BLOG_DIR/preview.$NB_FILETYPE"
+				if [ "$preview_type" = entry ]; then
+					[ ! -z "$entry" ] && update_cache rebuild "*" "$entry"
+				fi
 				continue_editsess=false;;
-			[Aa])
-				die "$preview_aborted";;
+			[Aa]) 	die "$preview_aborted";;
+			*) 	nb_msg "$menu_badchoice $preview_choice";;
 		esac
 	fi
 done

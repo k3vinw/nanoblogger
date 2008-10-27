@@ -1,5 +1,6 @@
-# Entry Modify plugin that converts mood variables
-# to emoticons - controlled by moods.conf file
+# NanoBlogger Moods Shortcode Plugin
+# converts mood variables into emoticons
+# - control using moods.conf file
 
 : ${MOODS_DIR:=$BLOG_DIR/moods}
 MOODS_URL="${BASE_URL}moods"
