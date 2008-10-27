@@ -137,8 +137,11 @@ preview_nocmd="no preview commmand set! goodbye."
 preview_action="previewing weblog ..."
 preview_asknow="would you like to preview your weblog now?"
 # IMPORTANT: key letters (e.g. "p:") are hard-coded
-preview_menu="p:Preview, e:Edit c:Continue a:Abort"
+preview_menu="p:Preview, r:Reload, e:Edit c:Continue a:Abort"
 preview_aborted="editing session aborted!"
+
+# generic menu
+menu_badchoice="invalid choice:"
 
 # publish_weblog
 publish_nocmd="no publish command set! goodbye."
