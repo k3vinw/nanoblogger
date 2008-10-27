@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-26T23:10:16-04:00
+# Last modified: 2008-10-26T23:26:25-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -134,6 +134,7 @@ nb_preview(){
 preview_type="$1"
 preview_srcfile="$2"
 PREVIEW_TEMPLATE="$MAKEPAGE_TEMPLATE"
+preview_count=0
 preview_entry(){
 	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
 	"$preview_srcfile"
@@ -160,9 +161,11 @@ preview_page(){
 }
 while [ "$continue_editsess" != false ]; do
 	case $preview_type in
-		entry) 	[ -N "$preview_srcfile" ] && preview_entry
+		entry) 	[ "$preview_count" -lt 0 ] ||
+				[ -N "$preview_srcfile" ] && preview_entry
 			run_preview=preview_entry;;
-		*) 	[ -N "$preview_srcfile" ] && preview_page
+		*) 	[ "$preview_count" -lt 0 ] ||
+				[ -N "$preview_srcfile" ] && preview_page
 			run_preview=preview_page;;
 	esac
 	if [ -f "$preview_srcfile" ]; then
@@ -182,6 +185,7 @@ while [ "$continue_editsess" != false ]; do
 			*) 	nb_msg "$menu_badchoice $preview_choice";;
 		esac
 	fi
+	let preview_count=$preview_count+1
 done
 }
 
