@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-26T23:26:25-04:00
+# Last modified: 2008-10-26T23:43:35-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -169,13 +169,12 @@ while [ "$continue_editsess" != false ]; do
 			run_preview=preview_page;;
 	esac
 	if [ -f "$preview_srcfile" ]; then
-		nb_msg "$preview_menu"
-		read -p "$NB_PROMPT" preview_choice
+		read -p "$preview_menu" preview_choice
 		case $preview_choice in
 			[Pp]) 	nb_browser "$BLOG_DIR/preview.$NB_FILETYPE";;
 			[Rr]) 	$run_preview;;
 			[Ee]) 	nb_edit -p "$preview_srcfile";;
-			[Cc]|"")
+			"")
 				rm -f "$BLOG_DIR/preview.$NB_FILETYPE"
 				if [ "$preview_type" = entry ]; then
 					[ ! -z "$entry" ] && update_cache rebuild "*" "$entry"
