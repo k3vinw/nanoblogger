@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-26T23:43:35-04:00
+# Last modified: 2008-10-27T00:14:00-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -184,7 +184,7 @@ while [ "$continue_editsess" != false ]; do
 			*) 	nb_msg "$menu_badchoice $preview_choice";;
 		esac
 	fi
-	let preview_count=$preview_count+1
+	let preview_count=${preview_count}+1
 done
 }
 
@@ -537,6 +537,7 @@ if [ -f "$ENTRY_FILE" ]; then
 			load_plugins entry
 		fi
 	fi
+	entry_pluginsdir=
 fi
 }
 
@@ -624,6 +625,7 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	: ${MKPAGE_FORMAT:=$BLOGPAGE_FORMAT}
 	make_page "$BLOGPAGE_SRCFILE" "$BLOGPAGE_TEMPLATE" "$BLOGPAGE_OUTFILE"
 fi
+weblogpage_plugin=
 }
 
 # edit draft file
