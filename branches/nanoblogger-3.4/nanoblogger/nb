@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-10-26T18:51:15-04:00
+# Last modified: 2008-10-27T00:38:34-04:00
 
 # nanoblogger's version.
 VERSION="3.4 RC2"
@@ -837,7 +837,7 @@ case "$addweblog_type" in
 			[ -f "$NB_ArticleFile" ] && rm -f "$NB_ArticleFile"
 			if [ "$article_created" = 1 ] || [ "$article_copied" = 1 ]; then
 				nb_msg "$addweblog_newarticle"
-				NB_QUERY=main; build_weblog
+				QUERY_WEBLOG=1; NB_QUERY=main; build_weblog
 				# prompt for some post-tasks
 				[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
 				[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog
