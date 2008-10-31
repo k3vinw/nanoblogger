@@ -138,6 +138,10 @@ prewiew_nocmd="commande d'aperçu non configurée ! bye."
 preview_action="aperçu du blog ..."
 preview_asknow="aimeriez-vous un aperçu de votre blog maintenant ?"
 
+# IMPORTANT: key letters (e.g. "p:") are hard-coded
+preview_menu="e: Éditer p: Prévisualiser r: Recharger a: Abandon (ou taper [entrée] pour continuer): "
+preview_aborted="abandon de la session d'édition !"
+
 # publish_weblog
 publish_nocmd="commande de publication non configurée ! bye."
 publish_action="publication du blog..."

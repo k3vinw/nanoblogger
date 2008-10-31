@@ -3,6 +3,9 @@
 # - control using moods.conf file
 
 : ${MOODS_DIR:=$BLOG_DIR/moods}
+# don't change BASE_URL of entries
+[ ! -z "$weblogpage_plugin" ] && set_baseurl "" "$BLOGPAGE_OUTFILE"
+
 MOODS_URL="${BASE_URL}moods"
 MOODS_CONF="${MOODS_DIR}/moods.conf"
 
