@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-10-27T00:14:00-04:00
+# Last modified: 2008-11-01T13:09:00-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -133,6 +133,7 @@ fi
 nb_preview(){
 preview_type="$1"
 preview_srcfile="$2"
+preview_outfile="$3"
 PREVIEW_TEMPLATE="$MAKEPAGE_TEMPLATE"
 preview_count=0
 preview_entry(){
@@ -150,14 +151,14 @@ preview_entry(){
 	write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
 	PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
 	make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
-	"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$BLOG_DIR/preview.$NB_FILETYPE"
+	"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$preview_outfile"
 	[ "$ABSOLUTE_LINKS" = 1 ] || BASE_URL=
 	rm -f "$BLOG_DIR/$CACHE_DIR"/*."$CACHE_TYPE"; CACHE_TYPE=
 }
 preview_page(){
 	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
 	weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
-		"$BLOG_DIR/preview.$NB_FILETYPE"
+		"$preview_outfile"
 }
 while [ "$continue_editsess" != false ]; do
 	case $preview_type in
@@ -169,13 +170,20 @@ while [ "$continue_editsess" != false ]; do
 			run_preview=preview_page;;
 	esac
 	if [ -f "$preview_srcfile" ]; then
+		# make sure the prompt is not left void
+		[ -z "$preview_menu" ] && preview_menu="e:Edit p:Preview r:Reload a:Abort (or press [enter] to continue): "
 		read -p "$preview_menu" preview_choice
 		case $preview_choice in
-			[Pp]) 	nb_browser "$BLOG_DIR/preview.$NB_FILETYPE";;
+			[Pp]) 	if [ -f "$preview_outfile" ]; then
+					nb_browser "$BLOG_DIR/preview.$NB_FILETYPE"
+				else
+					# TODO: replace with $preview_nofile
+					nb_msg "$nbedit_nofile"
+				fi;;
 			[Rr]) 	$run_preview;;
 			[Ee]) 	nb_edit -p "$preview_srcfile";;
 			"")
-				rm -f "$BLOG_DIR/preview.$NB_FILETYPE"
+				[ -f "$preview_outfile" ] && rm -f "$preview_outfile"
 				if [ "$preview_type" = entry ]; then
 					[ ! -z "$entry" ] && update_cache rebuild "*" "$entry"
 				fi
@@ -651,7 +659,7 @@ if [ -f "$EDITDRAFT_FILE" ]; then
 	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$EDITDRAFT_FILE"
 	# modify date (DATE metadata)
 	meta_timestamp && write_metadata DATE "$NB_MetaDate" "$EDITDRAFT_FILE"
-	nb_preview metafile "$EDITDRAFT_FILE"
+	nb_preview metafile "$EDITDRAFT_FILE" "$BLOG_DIR/preview.$NB_FILETYPE"
 fi
 }
 
