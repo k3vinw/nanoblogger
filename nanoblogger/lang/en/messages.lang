@@ -139,6 +139,7 @@ preview_asknow="would you like to preview your weblog now?"
 # IMPORTANT: key letters (e.g. "p:") are hard-coded
 preview_menu="e:Edit p:Preview r:Reload a:Abort (or press [enter] to continue): "
 preview_aborted="editing session aborted!"
+preview_nofile="preview file doesn't exist! please try reloading preview."
 
 # generic menu
 menu_badchoice="invalid choice:"
