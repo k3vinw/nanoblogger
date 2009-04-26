@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-11-01T13:09:00-04:00
+# Last modified: 2009-04-25T20:21:05-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -91,7 +91,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
-		$browser_cmd "$BROWSER_URL" && break
+		eval $browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
 	if [ $? != 0 ]; then
@@ -115,85 +115,17 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
 	-p) # prompt to continue (kludge for editors that detach from process)
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then
 	nb_msg "'$EDIT_FILE' - $nbedit_nofile"
 	die "'$EDIT_FILE' - $nbedit_failed"
 fi
-}
-
-# preview metadata article or entry
-# synopsis: nb_preview [entry|metafile] srcfile
-nb_preview(){
-preview_type="$1"
-preview_srcfile="$2"
-preview_outfile="$3"
-PREVIEW_TEMPLATE="$MAKEPAGE_TEMPLATE"
-preview_count=0
-preview_entry(){
-	check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-	"$preview_srcfile"
-	CACHE_TYPE=preview
-	entry=`basename "$preview_srcfile"`
-	entry="${entry##nb_edit-entry-}"
-	set_entrylink "$entry"
-	set_baseurl "" "$BLOG_DIR/preview.$NB_FILETYPE"
-	load_entry "$preview_srcfile" ALL "$CACHE_TYPE"
-	year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
-	NB_EntryBody="$NB_MetaBody"
-	load_template "$NB_TEMPLATE_DIR/$ENTRY_TEMPLATE"
-	write_template > "$BLOG_DIR/$PARTS_DIR/preview.htm"
-	PREVIEW_TEMPLATE="$PERMALINK_TEMPLATE"
-	make_page "$BLOG_DIR/$PARTS_DIR/preview.htm" \
-	"$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" "$preview_outfile"
-	[ "$ABSOLUTE_LINKS" = 1 ] || BASE_URL=
-	rm -f "$BLOG_DIR/$CACHE_DIR"/*."$CACHE_TYPE"; CACHE_TYPE=
-}
-preview_page(){
-	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$preview_srcfile"
-	weblog_page "$preview_srcfile" "$NB_TEMPLATE_DIR/$PREVIEW_TEMPLATE" \
-		"$preview_outfile"
-}
-while [ "$continue_editsess" != false ]; do
-	case $preview_type in
-		entry) 	[ "$preview_count" -lt 0 ] ||
-				[ -N "$preview_srcfile" ] && preview_entry
-			run_preview=preview_entry;;
-		*) 	[ "$preview_count" -lt 0 ] ||
-				[ -N "$preview_srcfile" ] && preview_page
-			run_preview=preview_page;;
-	esac
-	if [ -f "$preview_srcfile" ]; then
-		# make sure the prompt is not left void
-		[ -z "$preview_menu" ] && preview_menu="e:Edit p:Preview r:Reload a:Abort (or press [enter] to continue): "
-		read -p "$preview_menu" preview_choice
-		case $preview_choice in
-			[Pp]) 	if [ -f "$preview_outfile" ]; then
-					nb_browser "$BLOG_DIR/preview.$NB_FILETYPE"
-				else
-					# TODO: replace with $preview_nofile
-					nb_msg "$nbedit_nofile"
-				fi;;
-			[Rr]) 	$run_preview;;
-			[Ee]) 	nb_edit -p "$preview_srcfile";;
-			"")
-				[ -f "$preview_outfile" ] && rm -f "$preview_outfile"
-				if [ "$preview_type" = entry ]; then
-					[ ! -z "$entry" ] && update_cache rebuild "*" "$entry"
-				fi
-				continue_editsess=false;;
-			[Aa]) 	die "$preview_aborted";;
-			*) 	nb_msg "$menu_badchoice $preview_choice";;
-		esac
-	fi
-	let preview_count=${preview_count}+1
-done
 }
 
 # print a file (line by line)
@@ -659,7 +591,6 @@ if [ -f "$EDITDRAFT_FILE" ]; then
 	check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$EDITDRAFT_FILE"
 	# modify date (DATE metadata)
 	meta_timestamp && write_metadata DATE "$NB_MetaDate" "$EDITDRAFT_FILE"
-	nb_preview metafile "$EDITDRAFT_FILE" "$BLOG_DIR/preview.$NB_FILETYPE"
 fi
 }
 
