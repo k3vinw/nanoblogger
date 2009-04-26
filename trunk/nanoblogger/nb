@@ -1,11 +1,11 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger HEAD Copyright 2008 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-09-11T23:37:03-04:00
+# Last modified: 2009-04-25T21:37:13-04:00
 
 # nanoblogger's version.
-VERSION="3.4 RC2"
+VERSION="HEAD"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base
