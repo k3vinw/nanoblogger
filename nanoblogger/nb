@@ -1,11 +1,11 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger 3.4 Copyright 2008 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.4 Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2008-11-01T13:05:14-04:00
+# Last modified: 2009-04-25T21:45:58-04:00
 
 # nanoblogger's version.
-VERSION="3.4 RC2"
+VERSION="3.4"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base
@@ -388,7 +388,6 @@ case "$editweblog_type" in
 			# write any user metadata
 			write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$Edit_EntryFile"
 			nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
-			nb_preview entry "$NB_DATA_DIR/$Edit_EntryFile" "$BLOG_DIR/preview.$NB_FILETYPE"
 			# load user specified timestamp
 			read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
 			New_TimeStamp="$METADATA"
@@ -448,7 +447,6 @@ case "$editweblog_type" in
 	;;
 	meta-file|file)  # edit files
 		nb_draft "$edit_idsel"
-		nb_preview metafile "$edit_idsel" "$BLOG_DIR/preview.$NB_FILETYPE"
 	;;
 	tag|cat) # edit categories
 		[ -z "$cat_num" ] && [ ! -z "$edit_idsel" ] && cat_num="$edit_idsel"
@@ -771,7 +769,6 @@ process_entry(){
 			read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
 		nb_edit -p "$NB_EditFile"
 		write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
-		nb_preview entry "$NB_EditFile" "$BLOG_DIR/preview.$NB_FILETYPE"
 	fi
 }
 # process new
@@ -810,7 +807,6 @@ case "$addweblog_type" in
 			article_created=1; nb_draft -p "$USR_ARTICLEFILE"
 		fi
 		[ ! -f "$USR_ARTICLEFILE" ] && die "$addweblog_noarticlesrc"
-		nb_preview metafile "$NB_ArticleFile" "$BLOG_DIR/preview.$NB_FILETYPE"
 		if [ ! -z "$NB_ArticleFile" ]; then
 			read_metadata TITLE "$USR_ARTICLEFILE"
 			if [ ! -z "$METADATA" ]; then

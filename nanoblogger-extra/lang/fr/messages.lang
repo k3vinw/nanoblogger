@@ -137,10 +137,13 @@ addweblog_noarticlesrc="aucune source valide d'article n'a pu être trouvée !"
 prewiew_nocmd="commande d'aperçu non configurée ! bye."
 preview_action="aperçu du blog ..."
 preview_asknow="aimeriez-vous un aperçu de votre blog maintenant ?"
-
 # IMPORTANT: key letters (e.g. "p:") are hard-coded
 preview_menu="e: Éditer p: Prévisualiser r: Recharger a: Abandon (ou taper [entrée] pour continuer): "
 preview_aborted="abandon de la session d'édition !"
+preview_nofile="le fichier à prévisualiser n'existe pas ! veuillez essayer de le recharger."
+
+# generic menu
+menu_badchoice="mauvais choix :"
 
 # publish_weblog
 publish_nocmd="commande de publication non configurée ! bye."
