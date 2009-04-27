@@ -1,4 +1,4 @@
-TITLE: Welcome to NanoBlogger HEAD!
+TITLE: Welcome to NanoBlogger 3.4!
 AUTHOR: n1xt3r
 DATE:
 DESC: nanoblogger welcome message

@@ -1,11 +1,11 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger HEAD Copyright 2008 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.4 Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2009-04-25T21:37:13-04:00
+# Last modified: 2009-04-25T21:45:58-04:00
 
 # nanoblogger's version.
-VERSION="HEAD"
+VERSION="3.4"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base
@@ -256,7 +256,7 @@ esac
 	if [ -z $cat_num ] && ! [[ $NB_UPDATE == *arch ]]; then
 		find_categories "${UPDATE_LIST[*]}"
 	else
-		find_categories
+		[ -z "$CAT_LIST" ] && find_categories
 	fi
 	# update previous entry's nav. links for new entries
 	if [ ! -z "$New_EntryFile" ]; then
@@ -388,9 +388,6 @@ case "$editweblog_type" in
 			# write any user metadata
 			write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_DATA_DIR/$Edit_EntryFile"
 			nb_edit -p "$NB_DATA_DIR/$Edit_EntryFile"
-			# validate metafile
-			check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-				"$NB_DATA_DIR/$Edit_EntryFile"
 			# load user specified timestamp
 			read_metadata TIMESTAMP "$NB_DATA_DIR/$Edit_EntryFile"
 			New_TimeStamp="$METADATA"
@@ -452,7 +449,8 @@ case "$editweblog_type" in
 		nb_draft "$edit_idsel"
 	;;
 	tag|cat) # edit categories
-		cat_num="$edit_idsel"; cat_var=`echo "$cat_num" |sed -e '/,/d'`
+		[ -z "$cat_num" ] && [ ! -z "$edit_idsel" ] && cat_num="$edit_idsel"
+		cat_var=`echo "$cat_num" |sed -e '/,/d'`
 		[ -z "$cat_var" ] && die "$editweblog_onecat"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 		nb_msg "$editweblog_catinfo $cat_num"
@@ -588,7 +586,7 @@ case "$delweblog_type" in
 		build_weblog
 	;;
 	tag|cat) # delete categories
-		cat_num="$delete_idsel"
+		[ -z "$cat_num" ] && [ ! -z "$delete_idsel" ] && cat_num="$delete_idsel"
 		[ -z "$cat_num" ] && die "$checkcatid_novalid"
 		db_catquery=`cat_id "$cat_num"`; check_catid "$cat_num"
 		cat_list="$db_catquery"
@@ -699,10 +697,9 @@ done
 case "$db_query" in
 	tag|tag[a-z]|cat) [ -z "${db_categories[*]}" ] && die "$listweblog_nocat"
 			nb_msg "$header_ID, $header_Title"
-			query_db; id=0
-			cat_items=${#db_categories[*]}
-			while [ "$id" -le "$cat_items" ]; do
-				let id=${id}+1
+			query_db
+			for cat_db in ${db_categories[@]}; do
+				id=${cat_db//\.$NB_DBTYPE/}; id=${id//*_/}
 				[ -f "$NB_DATA_DIR/cat_$id.$NB_DBTYPE" ] &&
 				echo " $id, `nb_print "$NB_DATA_DIR"/cat_$id.$NB_DBTYPE 1`"
 			done; exit;;
@@ -767,14 +764,11 @@ process_entry(){
 	fi
 	if [ -z "$NB_EntryBody" ]; then
 		nb_msg "$addweblog_editnew"
-		nb_edit -p "$NB_EditFile"
 		# preserve custom meta variable and data
 		[ ! -z "$USR_METAVAR" ] &&
 			read_metadata "$USR_METAVAR" "$NB_EditFile"; USR_SETVAR="$METADATA"
+		nb_edit -p "$NB_EditFile"
 		write_var "$USR_METAVAR" "$USR_SETVAR" "$NB_EditFile"
-		# validate metafile
-		check_metavars "TITLE: AUTHOR: DATE: BODY: $METADATA_CLOSEVAR" \
-			"$NB_EditFile"
 	fi
 }
 # process new
@@ -813,7 +807,6 @@ case "$addweblog_type" in
 			article_created=1; nb_draft -p "$USR_ARTICLEFILE"
 		fi
 		[ ! -f "$USR_ARTICLEFILE" ] && die "$addweblog_noarticlesrc"
-		check_metavars "TITLE: BODY: $METADATA_CLOSEVAR" "$USR_ARTICLEFILE"
 		if [ ! -z "$NB_ArticleFile" ]; then
 			read_metadata TITLE "$USR_ARTICLEFILE"
 			if [ ! -z "$METADATA" ]; then
@@ -840,7 +833,7 @@ case "$addweblog_type" in
 			[ -f "$NB_ArticleFile" ] && rm -f "$NB_ArticleFile"
 			if [ "$article_created" = 1 ] || [ "$article_copied" = 1 ]; then
 				nb_msg "$addweblog_newarticle"
-				NB_QUERY=main; build_weblog
+				QUERY_WEBLOG=1; NB_QUERY=main; build_weblog
 				# prompt for some post-tasks
 				[ ! -z "$BLOG_PREVIEW_CMD" ] && preview_weblog
 				[ ! -z "$BLOG_PUBLISH_CMD" ] && publish_weblog

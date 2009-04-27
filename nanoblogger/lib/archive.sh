@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-07-16T22:54:53-04:00
+# Last modified: 2008-10-26T16:58:50-04:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -295,9 +295,7 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 			set_entrylink "$entry"
 			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE" "$CACHE_TYPE"
-			year=${month:0:4}
-			month=${month:5:2}
-			day=${entry:8:2}
+			year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
 			findba_entries "$entry" "${MASTER_DB_RESULTS[*]}"
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"

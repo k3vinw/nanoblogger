@@ -11,12 +11,12 @@ _nanoblogger()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
     dashoptions="--author --blog-dir --conf-file --data-dir --desc --draft --force \
-    	     --help --interactive --meta-file --plugin-dir --query --set-var --tag --text \
-	     --title --template --template-dir --var --verbose --version"
+    	     --help --interactive --meta-file --no-preview --no-publish --plugin-dir --query \
+	     --set-var --tag --text --title --template --template-dir --var --verbose --version"
     shortoptions="-a -b -c -d -E -e -f -h -i -l -m -q -v -u"
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-	    if [[ ${COMP_WORDS[i]} == @(add|-b|configure|delete|draft|-E|edit|article|entry|tag|file|--meta-file|import|list|make-page|make-file|manual|--tag|tag-entry|preview|publish|--query|update|udate-cache) ]]; then
+	    if [[ ${COMP_WORDS[i]} == @(add|-b|configure|delete|draft|-E|edit|article|entry|tag|file|--meta-file|import|list|make-page|make-file|manual|--tag|tag-entry|preview|publish|--query|update|update-cache) ]]; then
 		    special=${COMP_WORDS[i]}
 	    fi
     done

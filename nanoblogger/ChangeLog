@@ -1,3 +1,110 @@
+2009-04-26 02:03  n1xt3r
+
+	* lang/en/help.txt: Adds language definitions for traditional
+	  Chinese (Taiwan) (Jedi).
+
+2009-04-26 01:55  n1xt3r
+
+	* docs/nanoblogger.html, lib/config.sh, lib/tools.sh, nb: -
+	  Prepares branch for final release.
+	  - Holds preview feature for future release.
+	  - Updates language definitions for French translation (Denis
+	  Bernard).
+
+2008-10-31 22:39  n1xt3r
+
+	* nb, plugins/shortcode/moods.sh: - Fixes bug causing lengthy
+	  updates when adding new articles.
+	  - Fixes regression in moods.sh plugin causing broken relative
+	  links.
+	  - Updates French translation for the messages definitions.
+
+2008-10-27 04:22  n1xt3r
+
+	* lang/en/messages.lang, lib/tools.sh,
+	  plugins/shortcode/baseurl.sh: - Provides method for shortcode
+	  plugins to reliably alter their output
+	  based on where they are called from.
+	  - Fixes regression in baseurl.sh shortcode plugin that produced
+	  flakey
+	  results.
+
+2008-10-27 03:20  n1xt3r
+
+	* plugins/shortcode/baseurl.sh, plugins/shortcode/moods.sh: - Fixes
+	  regression in baseurl.sh shortcode plugin that broke $BASE_URL.
+
+2008-10-26 21:15  n1xt3r
+
+	* lib/archive.sh, plugins/entry/mod/moods.sh, plugins/shortcode/moods.sh:
+	- Re-implements entry/mod moods.sh plugin as shortcode plugin.
+
+2008-10-26 03:24  n1xt3r
+
+	* lib/tools.sh, plugins/entry/format/autobr.sh,
+	  plugins/entry/format/raw.sh, plugins/entry/mod/moods.sh:
+	  Ignores entry plugins designed for main loop.
+
+2008-10-25 21:10  n1xt3r
+
+	* plugins/shortcode/baseurl.sh: - Fixes sed script for replacing
+	  old "%base_url%" shortcode.
+	  - Now checks before replacing BASE_URL variable in shortcode
+	  plugin.
+
+2008-10-25 20:46  n1xt3r
+
+	* plugins/entry/format/markdown.sh,
+	  plugins/entry/mod/shortcode_baseurl.sh,
+	  plugins/page/mod/shortcode_baseurl.sh, plugins/shortcode,
+	  plugins/shortcode/baseurl.sh:
+	  - Consolidates page mod and entry mod shortcode plugins.
+
+2008-10-19 12:31  n1xt3r
+
+	* plugins/entry/mod/shortcode_baseurl.sh,
+	  plugins/page/mod/shortcode_baseurl.sh: - Improves reliability of
+	  shortcode base-url plugin.
+	  - Adds examples to shortcode youtube plugin in comments.
+
+2008-10-19 03:29  n1xt3r
+
+	* lib/tools.sh, nb, plugins/entry/mod/base_url.sh,
+	  plugins/entry/mod/shortcode_baseurl.sh, plugins/page/mod,
+	  plugins/page/mod/shortcode_baseurl.sh: - Finally adds ability to
+	  modify other weblog pages (like articles) through
+	  page modify plugins.
+	  - Adds new shortcode plugins for entries and other weblog pages.
+	  - Replaces old shortcode plugin for creating relative links.
+	  - Fixes potential overflow errors in three different style sheets
+	  (Denis
+	  Bernard).
+	  - Syncs French translation with English (Denis Bernard).
+
+2008-09-25 02:57  n1xt3r
+
+	* nb: Fixes race condition between two variables that caused
+	  "--tag" option to be
+	  overridden, potentially leading to confusing error messsages.
+
+2008-09-21 04:57  n1xt3r
+
+	* lib/database.sh, lib/tools.sh, nb: Fixes bug that could prevent
+	  some related categories from being updated.
+
+2008-09-17 20:06  n1xt3r
+
+	* ChangeLog, lang/en/messages.lang, nb,
+	  plugins/entry/format/markdown.sh,
+	  plugins/page/format/markdown.sh: - Fixes major logical bug that
+	  could lead to categories being erroneously
+	  omitted from listing (Andy Spiegl).
+	  - Fixes bug that caused markdown plugin to hang (Tobias
+	  Rehbeino).
+	  - Fixes bug that contained incorrect syntax in message displayed
+	  for
+	  unconfigured weblogs.
+
 2008-09-12 03:55  n1xt3r
 
 	* ChangeLog, README, nb: Fixes bug that caused tags with ID numbers
@@ -858,34 +965,4 @@
 2007-01-13 23:01  n1xt3r
 
 	* Added some verbosity to the clean parts directory plugin.
-
-2007-01-13 22:01  n1xt3r
-
-	* Updated ChangeLog for 3.3.
-
-2007-01-13 21:58  n1xt3r
-
-	* - Major updates to default templates and style sheets that
-	  effects the
-	  rendering in web browsers.
-	  - Improved --query option to work in conjunction with the --list
-	  option.
-	  - New nb_browser message for language definitions.
-
-2007-01-13 21:31  n1xt3r
-
-	* - Fix: multiple minor update issues when by deleting categories.
-	  - Fix: multiple accounts where a file should've been tested for
-	  existance
-	  that created a series of noncritical errors.
-
-2007-01-04 20:52  n1xt3r
-
-	* - Fix: CATEGORY_FEEDS had no effect.
-	  - Fix: query limit of -1 was ignored.
-	  - Fix: tried to show delete information before checking if entry
-	  existed.
-	  - Fix: MAX_TITLE_WIDTH was too short, now defaults to 150.
-	  - Documented language definitions.
-	  - Several updates to documentation and comments.
 

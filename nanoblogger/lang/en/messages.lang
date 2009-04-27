@@ -119,7 +119,7 @@ addweblog_nocreate="failed to create weblog directory!"
 addweblog_copyaction="copying default weblog files ..."
 addweblog_askconf="would you like to configure the new weblog now?"
 addweblog_confaction="configuring new weblog ..."
-addweblog_noconf="weblog not configured! configure with '`basename $0` --blog-dir [blog_dir] configure query all update'"
+addweblog_noconf="weblog not configured! configure with '`basename $0` --blog-dir [blog_dir] configure update all'"
 addweblog_newcat="creating new tag"
 addweblog_titlecat="enter name for the new tag"
 addweblog_untitled="Untitled"
@@ -136,6 +136,13 @@ addweblog_noarticlesrc="no legitimate article source could be found!"
 preview_nocmd="no preview commmand set! goodbye."
 preview_action="previewing weblog ..."
 preview_asknow="would you like to preview your weblog now?"
+# IMPORTANT: key letters (e.g. "p:") are hard-coded
+preview_menu="e:Edit p:Preview r:Reload a:Abort (or press [enter] to continue): "
+preview_aborted="editing session aborted!"
+preview_nofile="preview file doesn't exist! please try reloading preview."
+
+# generic menu
+menu_badchoice="invalid choice:"
 
 # publish_weblog
 publish_nocmd="no publish command set! goodbye."
