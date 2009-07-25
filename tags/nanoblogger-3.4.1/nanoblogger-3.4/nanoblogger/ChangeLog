@@ -1,9 +1,0 @@
-2009-07-25 18:39  n1xt3r
-
-	* plugins/archive/master_index.sh: Fix: Bash 4 throwed error due to
-	  improper syntax formatting.
-
-2009-07-25 18:53  n1xt3r
-
-	* nb: First minor version of 3.4.
-
