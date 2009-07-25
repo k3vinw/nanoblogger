@@ -1,0 +1,150 @@
+# NanoBlogger Traditional Chinese language definitions
+# Messages
+# lang/zh_TW/messages.lang
+
+# main
+main_badopts="無效的選項:"
+main_panic="請試著用 '`basename $0` --help' 獲取更多資訊."
+
+# check_arg
+checkarg_badarg="選項需要有參數!"
+checkarg_help="請試著用 '`basename $0` --help' 獲取更多資訊."
+
+# check_conf
+checkconf_nobase="基礎目錄不存在! 掰啦."
+checkconf_noblog="沒有指定網誌目錄! 掰啦."
+checkconf_nousrconf="網誌組態檔不存在! 掰啦."
+checkconf_noblogdir="網誌目錄不存在! 掰啦."
+checkconf_nodata="網誌資料目錄不存在! 掰啦."
+checkconf_nocache="網誌快取目錄不存在! 掰啦."
+checkconf_noparts="網誌部件目錄不存在! 掰啦."
+checkconf_notemplates="網誌模版目錄不存在! 掰啦."
+
+# query_db
+querydb_init="正在初始化主資料庫 ..."
+querydb_update="正在更新資料庫 ..."
+
+# validate tag id(s)
+catid_bad="不良的 ID!"
+checkcatid_invalid="無效的標籤 ID:"
+checkcatid_novalid="必須要指定有效的標籤 ID!"
+
+# validate metadata files
+checkmetavars_novar="缺少詮釋變數:"
+
+# config_weblog
+configweblog_nomod="沒有任何變動! 掰啦."
+
+# load_template
+loadtemplate_nofile="模版檔不存在! 掰啦."
+
+# make_page
+makepage_nosource="原始檔不存在! 掰啦."
+makepage_nooutput="未指定輸出檔."
+makepage_notemplate="模版檔不存在! 掰啦."
+
+# paginate
+paginate_action="正在分頁"
+
+# build_archives
+buildarchives_action="正在產生彙整 ..."
+
+# build_weblog
+buildweblog_all="正在更新所有的網誌檔案! 這可能得花上一段時間 ..."
+buildweblog_files="正在產生網誌檔案 ..."
+buildweblog_main="正在產生主索引頁面 ..."
+buildweblog_cache="正在出清快取資料 ..."
+
+# import_file
+importfile_nofile="不存在!"
+
+# nb_browser
+nbbrowser_running="正在執行:"
+nbbrowser_nobrowser="請在 \$NB_BROWSER 或 \$BROWSER 定義另一個網頁瀏覽器."
+
+# nb_draft
+nbdraft_asknew="檔案不存在! 要建立一個嗎?"
+
+# nb_edit
+nbedit_nofile="檔案不存在!"
+nbedit_prompt="請按 [Enter] 繼續:"
+nbedit_failed="寫入檔案失敗! 掰啦."
+
+# add_entry
+addentry_catinfo="已選取的標籤 ID:"
+addentry_action="正在加入新項目 ..."
+
+# confirm_action
+confirmaction_ask="你確定嗎?"
+
+# misc. validation errors
+novalid_entryid="一定要指定有效的項目 ID."
+invalid_entryid="無效的項目 ID:"
+novalid_entrytime="一定要指定有效的時戳 - 'YYYY-MM-DD HH:MM:SS'"
+invalid_entrytime="無效的時戳, 不然就是有衝突"
+
+# edit_weblog
+editweblog_onecat="編輯標題時祇能指定一個標籤!"
+editweblog_title="正在變更標題為:"
+editweblog_catinfo="已選取的標籤 ID:"
+editweblog_nomod="沒有任何變動! 掰啦."
+editweblog_action="正在處理有變更的網誌項目 ..."
+editweblog_noaction="沒有任何變動! 掰啦."
+
+# delete_weblog
+deleteweblog_delcat="正在刪除標籤 ID:"
+deleteweblog_onecat="移除項目標籤時祇能指定一個標籤!"
+deleteweblog_catinfo="已選取的標籤 ID:"
+deleteweblog_delentry="正在刪除項目 ID:"
+
+# header attributes
+header_ID="ID"
+header_Title="標題"
+header_Category="標籤 ID"
+header_Date="時間"
+
+# list_weblog
+listweblog_nocat="沒有任何標籤! 掰啦."
+listweblog_nomatch="根據你的條件查找不到任何東西! 掰啦."
+
+# cat_entry
+catentry_catfirst="一定要在像目前指定標籤!"
+catentry_catinfo="已選取的標籤 ID:"
+catentry_tagging="正在替項目 ID 貼上標籤:"
+
+# add_weblog
+addweblog_noweblog="未指定網誌目錄! 掰啦."
+addweblog_newblog="正在建立網誌目錄"
+addweblog_nocreate="建立網誌目錄時失敗!"
+addweblog_copyaction="正在複製預設的網誌檔案 ..."
+addweblog_askconf="請問你現在是否要組態新網誌?"
+addweblog_confaction="正在組態新網誌 ..."
+addweblog_noconf="網誌尚未組態! 請用 '`basename $0` --blog-dir [部落格目錄] configure query all update' 指令來加以組態"
+addweblog_newcat="正在建立新標籤"
+addweblog_titlecat="請輸入新標籤的名稱"
+addweblog_untitled="未命名"
+addweblog_madecat="為此所建的資料庫貼上標籤:"
+addweblog_author="請輸入作者名號"
+addweblog_title="請輸入標題"
+addweblog_desc="請輸入簡短描述"
+addweblog_editnew="正在編輯新項目 ..."
+addweblog_newarticle="正在加入新文章 ..."
+addweblog_noarticledir="驗證文章目錄時失敗! 請檢查組態中的 ARTICLES_DIR 設定."
+addweblog_noarticlesrc="找不到合宜的文章來源!"
+
+# preview_weblog
+preview_nocmd="未設定預覽指令! 掰啦."
+preview_action="正在預覽網誌 ..."
+preview_asknow="請問你現在是否要預覽你的網誌?"
+
+# publish_weblog
+publish_nocmd="未設定發佈指令! 掰啦."
+publish_action="正在發佈網誌 ..."
+publish_asknow="請問你現在是否要發佈網誌?"
+
+# misc.
+notitle="未命名"
+nowritedir="沒有寫入目錄的權限! 掰啦."
+samefilename="檔名已存在!"
+filterdate_failed="日期過濾失敗, 正在改用時戳."
+

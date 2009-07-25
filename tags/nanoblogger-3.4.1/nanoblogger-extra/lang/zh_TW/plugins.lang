@@ -1,0 +1,11 @@
+# NanoBlogger Traditional Chinese language definitions
+# Plugins
+# lang/zh_TW/plugins.lang
+
+# plugins - generic messages
+plugins_action="正在產生"
+plugins_loadaction="正在載入 ..."
+plugins_entryfilteraction="正在過濾文字:"
+plugins_articles="文章"
+plugins_abort="外過模組失敗! 請檢查外掛模組的設定是否正確, 或者乾脆停用"
+
