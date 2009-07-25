@@ -73,7 +73,8 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 				$NB_ArchiveCategoryLinks
 			</div>
 			<br />
-		EOF)
+		EOF
+		)
 	fi
 
 	# make NB_ArchiveLinks placeholder
