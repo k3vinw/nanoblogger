@@ -5,7 +5,7 @@
 : ${MARKDOWN_CMD:=markdown}
 : ${MARKDOWN_OPTS:= }
 
-eval $MARKDOWN_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 &&
+echo test |eval $MARKDOWN_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 &&
 	MARKDOWN_INPATH=true
 
 if [ "$MARKDOWN_INPATH" = "true" ]; then

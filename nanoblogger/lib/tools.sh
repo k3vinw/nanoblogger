@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2008-08-07T10:33:03-04:00
+# Last modified: 2009-04-25T20:21:05-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -91,7 +91,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
-		$browser_cmd "$BROWSER_URL" && break
+		eval $browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
 	if [ $? != 0 ]; then
@@ -115,11 +115,11 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
 	-p) # prompt to continue (kludge for editors that detach from process)
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then
@@ -242,14 +242,16 @@ build_catlist(){
 # acquire all the categories
 for relative_entry in ${FIND_CATLIST[@]}; do
 	raw_db "$relative_entry"
-	cat_ids=`print_cat "${DB_RESULTS[*]}"`
-	cat_ids="${cat_ids//\,/ }"
-	for cat_id in $cat_ids; do
-		cat_var="$cat_id"
-		cat_db="cat_$cat_id.$NB_DBTYPE"
-		build_catlist
+	for relcat_entry in ${DB_RESULTS[@]}; do
+		cat_ids=`print_cat "$relcat_entry"`
+		cat_ids="${cat_ids//\,/ }"
+		for cat_id in $cat_ids; do
+			cat_var="$cat_id"
+			cat_db="cat_$cat_id.$NB_DBTYPE"
+			build_catlist
+		done
+		cat_id=; cat_ids=; cat_var=; cat_db=;
 	done
-	cat_id=; cat_ids=; cat_var=; cat_db=;
 done
 CAT_LIST=( ${cat_list[@]} )
 [ -z "${CAT_LIST[*]}" ] && [ ! -z "$cat_num" ] &&
@@ -423,6 +425,7 @@ WRITE_ENTRY_FILE="$1"
 # help ease transition from 3.2.x or earlier
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
+NB_EntryBody="$NB_MetaBody"
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 mkdir -p `dirname "$WRITE_ENTRY_FILE"`
 write_template > "$WRITE_ENTRY_FILE"
@@ -434,7 +437,7 @@ load_entry(){
 ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
-: ${ENTRY_PLUGINSLOOP:=entry/mod entry/format entry}
+: ${ENTRY_PLUGINSLOOP:=shortcode entry/mod entry/format entry}
 : ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=${entry:8:2}
@@ -474,6 +477,7 @@ if [ -f "$ENTRY_FILE" ]; then
 			load_plugins entry
 		fi
 	fi
+	entry_pluginsdir=
 fi
 }
 
@@ -553,11 +557,15 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+	for weblogpage_plugin in shortcode page/mod; do
+		load_plugins $weblogpage_plugin
+	done
 	MKPAGE_CONTENT="$NB_MetaBody"
 	MKPAGE_FORMAT="$NB_MetaFormat"
 	: ${MKPAGE_FORMAT:=$BLOGPAGE_FORMAT}
 	make_page "$BLOGPAGE_SRCFILE" "$BLOGPAGE_TEMPLATE" "$BLOGPAGE_OUTFILE"
 fi
+weblogpage_plugin=
 }
 
 # edit draft file
