@@ -1,5 +1,5 @@
 NanoBlogger - Command line weblog engine.
-Version $VERSION, Copyright (C) $CURRENT_YEAR Kevin Wood <un1xt3r-at-fastmail-dot-fm>
+Version $VERSION, Copyright $COPYRIGHT Kevin Wood <un1xt3r-at-fastmail-dot-fm>
 
 NanoBlogger comes with ABSOLUTELY NO WARRANTY; see version 2 of the GNU General
 Public License for further details

@@ -2,10 +2,12 @@
 ############################################################
 #  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2009-08-02T00:44:49-04:00
+# Last modified: 2009-08-09T20:21:35-04:00
 
 # nanoblogger's version.
 VERSION="SVN"
+# nanoblogger's copyright 
+COPYRIGHT="2004-2009"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base
@@ -928,11 +930,11 @@ esac
 }
 
 show_help(){
-nb_eval date && CURRENT_YEAR=`date '+%Y'`
+nb_eval "date '+%Y' |grep '[0-9]'" && CURRENT_YEAR=`date '+%Y'` && COPYRIGHT="2004-$CURRENT_YEAR"
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
 # transform keywords to variables and delete all hash-marked lines for display
-sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /[\$]CURRENT_YEAR/ s//${CURRENT_YEAR}/g; /^[\#]/d" <<-EOF
+sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /[\$]COPYRIGHT/ s//${COPYRIGHT}/g; /^[\#]/d" <<-EOF
 	$NB_ShowHelp
 EOF
 }
