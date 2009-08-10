@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <meta name="generator" content="HTML Tidy for MkLinux (vers 6 November 2007), see www.w3.org" />
+  <meta name="generator" content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   <title>NanoBlogger User Manual</title>
@@ -627,11 +627,13 @@ nb [-b blog_dir] delete entry &lt;ID&gt;
 nb [-b blog_dir] delete entry 1,2,3
         
 </pre>Un-tag entry:
+
     <p>1.) find the entry ID from the listing:</p>
     <pre>
 nb [-b blog_dir] --tag &lt;ID&gt; list
 
 </pre>
+
     <p>2.) remove the entry using the entry ID we found in the first step:</p>
     <pre>
 nb [-b blog_dir] --tag &lt;ID&gt; delete entry &lt;ID&gt;
@@ -1517,6 +1519,18 @@ TIDY_XML_ARGS="-xml -n -utf8 -wrap 0"
           <td align="left">stdout</td>
 
           <td align="left">if $2 is null, then $1 assumed to be file</td>
+        </tr>
+
+        <tr>
+          <td align="left">nb_eval</td>
+
+          <td align="left">silent wrapper to eval</td>
+
+          <td align="left">$?</td>
+
+          <td align="left">$DEVNULL</td>
+
+          <td align="left">returns exit status 0 upon success</td>
         </tr>
 
         <tr>

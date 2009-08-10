@@ -92,11 +92,12 @@ build_yeararchive(){
 				- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
 				$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories")<br />
 			EOF
-		done; month=)
+		done; month=
+		)
 
 		# create links for monthly archives
 		[ -z "$CAL_CMD" ] && CAL_CMD="cal"
-		$CAL_CMD > "$SCRATCH_FILE".plugin_devnull 2>&1 && CAL_VAR="1"
+		nb_eval "$CAL_CMD" && CAL_VAR="1"
 			
 		make_monthlink(){
 		if [ "$CAL_VAR" = "1" ]; then

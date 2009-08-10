@@ -1,8 +1,8 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger SVN Copyright 2008 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2009-07-26T00:34:34-04:00
+# Last modified: 2009-08-02T00:44:49-04:00
 
 # nanoblogger's version.
 VERSION="SVN"
@@ -928,10 +928,11 @@ esac
 }
 
 show_help(){
+nb_eval date && CURRENT_YEAR=`date '+%Y'`
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
 # transform keywords to variables and delete all hash-marked lines for display
-sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /^[\#]/d" <<-EOF
+sed -e "/[\$]VERSION/ s//${VERSION}/g; /[\$]BASENAME/ s//${BASENAME}/g; /[\$]CURRENT_YEAR/ s//${CURRENT_YEAR}/g; /^[\#]/d" <<-EOF
 	$NB_ShowHelp
 EOF
 }

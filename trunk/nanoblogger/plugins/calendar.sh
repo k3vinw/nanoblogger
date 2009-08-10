@@ -14,7 +14,7 @@ cal_file="$3"
 : ${CAL_CMD:=cal}
 mkdir -p `dirname "$cal_file"`
 # halt if cal command fails
-$CAL_CMD > "$cal_file" 2>&1 || continue
+nb_eval "$CAL_CMD" || continue
 PLUGIN_CALENDAR=1
 [ -z "$cal_year" ] &&
 	cal_year=`date +%Y`
