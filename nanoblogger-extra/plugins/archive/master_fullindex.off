@@ -26,7 +26,8 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 			- <a href="${ARCHIVES_PATH}$NB_EntryPermalink">$NB_ArchiveEntryTitle</a>
 			$([ ! -z "$NB_EntryCategories" ] && echo "- $NB_EntryCategories" |sed -e '{$ s/\,$//; }')<br />
 		EOF
-	done; month=)
+	done; month=
+	)
 
 	# create links for categories
 	build_catlinks(){
@@ -83,7 +84,8 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ "$NB_QUERY" = all ]; then
 				$NB_ArchiveCategoryLinks
 			</div>
 			<br />
-		EOF)
+		EOF
+		)
 	fi
 
 	# make NB_ArchiveLinks placeholder

@@ -39,7 +39,7 @@ fi
 	die "tidy FAILED to modify input"
 }
 
-if $TIDY_CMD -v > "$TIDY_PLUGIN_OUTFILE" 2>&1; then
+if nb_eval "$TIDY_CMD -v"; then
 	if [ ! -f "$TIDY_LOGFILE" ] || [ "$tidylog_restarted" != 1 ]; then
 		> "$TIDY_LOGFILE"
 		tidylog_restarted=1

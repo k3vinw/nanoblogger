@@ -15,7 +15,7 @@
 
 PLUGIN_OUTFILE="$BLOG_DIR/$PARTS_DIR/fortune.$NB_FILETYPE"
 
-if $FORTUNE_CMD > "$PLUGIN_OUTFILE" 2>&1; then
+if nb_eval "$FORTUNE_CMD"; then
 	nb_msg "$plugins_action fortune ..."
 	echo '<div class="fortune">' > "$PLUGIN_OUTFILE"
 	$FORTUNE_CMD ${FORTUNE_FILE} \
