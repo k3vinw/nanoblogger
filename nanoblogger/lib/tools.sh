@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2010-02-12T21:41:09-05:00
+# Last modified: 2010-02-12T22:46:45-05:00
 
 # simple command evaluator that attempts to mask output
 nb_eval(){
@@ -463,6 +463,8 @@ if [ -f "$ENTRY_FILE" ]; then
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 			load_metadata ALL "$ENTRY_FILE"
+			load_plugins shortcode
+			NB_EntryBody="$NB_MetaBody" # prep for template (switch back to NB_EntryBody)
 			for entry_pluginsdir in $ENTRY_PLUGINSLOOP; do
 				if [ "$entry_pluginsdir" = "entry/format" ]; then
 					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
@@ -471,9 +473,6 @@ if [ -f "$ENTRY_FILE" ]; then
 					load_plugins $entry_pluginsdir
 				fi
 			done
-			NB_MetaBody="$NB_EntryBody" # prep for shortcode plugins (switch to NB_MetaBody)
-			load_plugins shortcode
-			NB_EntryBody="$NB_MetaBody" # prep for template (switch back to NB_EntryBody)
 			write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
 			# update cache list for some post-cache management
 			#update_cache build $ENTRY_CACHETYPE "$entry"
@@ -535,6 +534,9 @@ set_baseurl "" "$MKPAGE_OUTFILE"
 # load file as content
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 # let plugins modify the content
+NB_MetaBody="$MKPAGE_CONTENT"
+load_plugins shortcode
+MKPAGE_CONTENT="$NB_MetaBody"
 load_plugins page
 : ${MKPAGE_FORMAT:=$PAGE_FORMAT}
 load_plugins page/format "$MKPAGE_FORMAT"
