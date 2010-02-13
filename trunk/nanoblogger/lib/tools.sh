@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2009-08-02T00:44:50-04:00
+# Last modified: 2010-02-12T21:41:09-05:00
 
 # simple command evaluator that attempts to mask output
 nb_eval(){
@@ -471,6 +471,9 @@ if [ -f "$ENTRY_FILE" ]; then
 					load_plugins $entry_pluginsdir
 				fi
 			done
+			NB_MetaBody="$NB_EntryBody" # prep for shortcode plugins (switch to NB_MetaBody)
+			load_plugins shortcode
+			NB_EntryBody="$NB_MetaBody" # prep for template (switch back to NB_EntryBody)
 			write_entry "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE"
 			# update cache list for some post-cache management
 			#update_cache build $ENTRY_CACHETYPE "$entry"
