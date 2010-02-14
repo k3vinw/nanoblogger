@@ -157,8 +157,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			#Atom_EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			Atom_EntryExcerpt="$NB_EntryExcerpt"
 		else
-			#Atom_EntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
-			Atom_EntryExcerpt="$NB_EntryBody"
+			#Atom_EntryExcerpt=`echo "$NB_MetaBody" |esc_chars`
+			Atom_EntryExcerpt="$NB_MetaBody"
 		fi
 		Atom_EntryEnclosure=; # initialize variable
 		# dissect ENCLOSURE metadata
