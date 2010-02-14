@@ -148,8 +148,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			#NB_RSS2EntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			NB_RSS2EntryExcerpt="$NB_EntryExcerpt"
 		else
-			#NB_RSS2EntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
-			NB_RSS2EntryExcerpt="$NB_EntryBody"
+			#NB_RSS2EntryExcerpt=`echo "$NB_MetaBody" |esc_chars`
+			NB_RSS2EntryExcerpt="$NB_MetaBody"
 		fi
 		# for escaped text/html only
 		#<description><![CDATA[$NB_RSS2EntryExcerpt]]></description>

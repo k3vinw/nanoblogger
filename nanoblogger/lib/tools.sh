@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2010-02-12T22:46:45-05:00
+# Last modified: 2010-02-14T15:15:35-05:00
 
 # simple command evaluator that attempts to mask output
 nb_eval(){
@@ -97,7 +97,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
-		$browser_cmd "$BROWSER_URL" && break
+		eval $browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
 	if [ $? != 0 ]; then
@@ -121,11 +121,11 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
 	-p) # prompt to continue (kludge for editors that detach from process)
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		$NB_EDITOR "$EDIT_FILE"
+		eval $NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then
@@ -429,6 +429,7 @@ WRITE_ENTRY_FILE="$1"
 # help ease transition from 3.2.x or earlier
 [ ! -f "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE" ] &&
 	cp "$NB_BASE_DIR/default/templates/$METADATAENTRY_TEMPLATE" "$NB_TEMPLATE_DIR"
+NB_EntryBody="$NB_MetaBody" # set here for entry template
 load_template "$NB_TEMPLATE_DIR/$METADATAENTRY_TEMPLATE"
 mkdir -p `dirname "$WRITE_ENTRY_FILE"`
 write_template > "$WRITE_ENTRY_FILE"
@@ -440,7 +441,7 @@ load_entry(){
 ENTRY_FILE="$1"
 ENTRY_DATATYPE="$2"
 ENTRY_CACHETYPE="$3"
-: ${ENTRY_PLUGINSLOOP:=entry/mod entry/format entry}
+: ${ENTRY_PLUGINSLOOP:=shortcode entry/mod entry/format entry}
 : ${ENTRY_DATATYPE:=ALL}
 if [ -f "$ENTRY_FILE" ]; then
 	entry_day=${entry:8:2}
@@ -463,8 +464,6 @@ if [ -f "$ENTRY_FILE" ]; then
 		if [ "$ENTRY_FILE" -nt "$BLOG_DIR/$CACHE_DIR/$entry.$ENTRY_CACHETYPE" ]; then
 			#nb_msg "UPDATING CACHE - $entry.$ENTRY_CACHETYPE"
 			load_metadata ALL "$ENTRY_FILE"
-			load_plugins shortcode
-			NB_EntryBody="$NB_MetaBody" # prep for template (switch back to NB_EntryBody)
 			for entry_pluginsdir in $ENTRY_PLUGINSLOOP; do
 				if [ "$entry_pluginsdir" = "entry/format" ]; then
 					[ -z "$NB_EntryFormat" ] && NB_EntryFormat="$ENTRY_FORMAT"
@@ -534,14 +533,10 @@ set_baseurl "" "$MKPAGE_OUTFILE"
 # load file as content
 : ${MKPAGE_CONTENT:=$(< "$MKPAGE_SRCFILE")}
 # let plugins modify the content
-NB_MetaBody="$MKPAGE_CONTENT"
-load_plugins shortcode
-MKPAGE_CONTENT="$NB_MetaBody"
 load_plugins page
 : ${MKPAGE_FORMAT:=$PAGE_FORMAT}
 load_plugins page/format "$MKPAGE_FORMAT"
-# Set NB_Entries for backwards compatibility
-NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT"
+NB_MetaBody="$MKPAGE_CONTENT"; NB_Entries="$MKPAGE_CONTENT" # leave here for backwards compatibility
 load_template "$MKPAGE_TEMPLATE"
 mkdir -p `dirname "$MKPAGE_OUTFILE"`
 write_template > "$MKPAGE_OUTFILE"
@@ -564,6 +559,9 @@ if [ -f "$BLOGPAGE_SRCFILE" ]; then
 	[ ! -z "$USR_DESC" ] && NB_MetaDescription="$USR_DESC"
 	[ ! -z "$USR_TITLE" ] && NB_MetaTitle="$USR_TITLE"
 	[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"
+	for weblogpage_plugin in shortcode page/mod; do
+		load_plugins $weblogpage_plugin
+	done
 	MKPAGE_CONTENT="$NB_MetaBody"
 	MKPAGE_FORMAT="$NB_MetaFormat"
 	: ${MKPAGE_FORMAT:=$BLOGPAGE_FORMAT}

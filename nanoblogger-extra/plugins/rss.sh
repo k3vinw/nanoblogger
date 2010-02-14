@@ -143,8 +143,8 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 			#NB_RSSEntryExcerpt=`echo "$NB_EntryExcerpt" |esc_chars`
 			NB_RSSEntryExcerpt="$NB_EntryExcerpt"
 		else
-			#NB_RSSEntryExcerpt=`echo "$NB_EntryBody" |esc_chars`
-			NB_RSSEntryExcerpt="$NB_EntryBody"
+			#NB_RSSEntryExcerpt=`echo "$NB_MetaBody" |esc_chars`
+			NB_RSSEntryExcerpt="$NB_MetaBody"
 		fi
 		cat >> "$SCRATCH_FILE".rssfeed <<-EOF
 			<item rdf:about="${NB_RSSArchivesPath}$NB_EntryPermalink">
