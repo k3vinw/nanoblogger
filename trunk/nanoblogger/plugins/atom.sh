@@ -39,6 +39,10 @@ NB_AtomModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_FEED_TZD}"`
 # set link to the archives
 NB_AtomArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
 
+# set link for main template
+set_baseurl './'
+NB_AtomFeedLink='<a href="'${BASE_URL}$NB_AtomFile'" class="feed-small">Atom</a>'
+
 # set language of atom feed 
 # unfortunately BLOG_FEED_LANG is useless here
 : ${ATOM_FEED_LANG:=en}
