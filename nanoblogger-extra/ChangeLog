@@ -1,3 +1,10 @@
+2010-02-15 19:07  n1xt3r
+
+	* ChangeLog, plugins/rss.sh: - Fix: wrong logic found in
+	  load_plugins() loop, could cause loop to exit before
+	  completion.
+	  - Improves integration of feed links.
+
 2010-02-15 03:18  n1xt3r
 
 	* plugins/rss.sh: Cleans up logic for toggling category based
@@ -6,8 +13,8 @@
 2010-02-15 01:14  n1xt3r
 
 	* plugins/entry/format/autopbr.sh,
-	  plugins/entry/format/autotag-p.sh: Bug Fix: missing syndication
-	  links in archives (Charles Curley).
+	  plugins/entry/format/autotag-p.sh: Fix: missing syndication links
+	  in archives (Charles Curley).
 
 2010-02-14 20:42  n1xt3r
 
