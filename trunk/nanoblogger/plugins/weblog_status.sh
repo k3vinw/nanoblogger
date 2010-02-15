@@ -18,11 +18,11 @@ nb_msg "$plugins_action weblog status ..."
 if [ ! -f "$WEBLOG_STATUSTEMPLATE" ] ; then
 	# WEBLOG_STATUSTEMPLATE doesn't exist, get it from default
 	cp "$WEBLOGSTATUS_TEMPLATECOPY" "$WEBLOG_STATUSTEMPLATE" ||
-		die "$nb_plugin: failed to copy '$WEBLOGSTATUS_TEMPLATECOPY!' repair nanoblogger! goodbye."
+		die "$nb_plugin: failed to copy '$WEBLOGSTATUS_TEMPLATECOPY!' please repair nanoblogger! goodbye."
 fi
 
 [ -r "$WEBLOG_STATUSTEMPLATE" ] ||
-    die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' - template doens't exist! goodbye."
+    die "`basename $0`: '$WEBLOG_STATUSTEMPLATE' - missing template! goodbye."
 
 TOTAL_CATEGORIES=`for catdbs in "$NB_DATA_DIR"/cat_*."$NB_DBTYPE"; do echo $catdbs; done |grep -c "."`
 TOTAL_ENTRIES=`grep -c "." "$NB_DATA_DIR/master.$NB_DBTYPE"`
