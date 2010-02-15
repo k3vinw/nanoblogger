@@ -183,28 +183,28 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 
 	# generate category feed entries
 	build_rss_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$RSS2_CATFEEDS" = 1 ; then
-		db_categories=(${CAT_LIST[@]})
-		if [ ! -z "${db_categories[*]}" ]; then
-			for cat_db in ${db_categories[@]}; do
-				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
-					set_catlink "$cat_db"
-					NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`
-					NB_RSS2CatLink="$category_link"
-					NB_RSS2CatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
-					nb_msg "$plugins_action $category_dir rss $NB_RSS2Ver feed  ..."
-					build_rssfeed "$cat_db"
-					make_rssfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_RSS2CatFile"
-				fi
-			done
-		fi
+	db_categories=(${CAT_LIST[@]})
+	if [ ! -z "${db_categories[*]}" ]; then
+		for cat_db in ${db_categories[@]}; do
+			if [ -f "$NB_DATA_DIR/$cat_db" ]; then
+				set_catlink "$cat_db"
+				NB_RSS2CatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-rss.'$NB_SYND_FILETYPE'/g'`
+				NB_RSS2CatLink="$category_link"
+				NB_RSS2CatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
+				nb_msg "$plugins_action $category_dir rss $NB_RSS2Ver feed  ..."
+				build_rssfeed "$cat_db"
+				make_rssfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_RSS2CatFile"
+			fi
+		done
 	fi
 	}
 
 	nb_msg "$plugins_action rss $NB_RSS2Ver feed ..."
 	build_rssfeed nocat
 	make_rssfeed "$BLOG_DIR/$NB_RSS2File"
-	build_rss_catfeeds
+	if [ "$CATEGORY_FEEDS" = 1 ] && [ "$RSS2_CATFEEDS" = 1 ]; then
+		build_rss_catfeeds
+	fi
 fi
 
 # restore chronological order

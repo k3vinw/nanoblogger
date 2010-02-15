@@ -198,28 +198,28 @@ if [ ! -z "$FEEDMOD_VAR" ] || case "$NB_QUERY" in \
 
 	# generate cat feed entries
 	build_atom_catfeeds(){
-	if [ "$CATEGORY_FEEDS" = 1 ] || test -z "$CATEGORY_FEEDS" -a "$ATOM_CATFEEDS" = 1; then
-		db_categories=(${CAT_LIST[@]})
-		if [ ! -z "${db_categories[*]}" ]; then
-			for cat_db in ${db_categories[@]}; do
-				if [ -f "$NB_DATA_DIR/$cat_db" ]; then
-					set_catlink "$cat_db"
-					NB_AtomCatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
-					NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
-					NB_AtomCatLink="$category_link"
-					nb_msg "$plugins_action $category_dir atom $NB_AtomVer feed ..."
-					build_atomfeed "$cat_db"
-					make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomCatFile"
-				fi
-			done
-		fi
+	db_categories=(${CAT_LIST[@]})
+	if [ ! -z "${db_categories[*]}" ]; then
+		for cat_db in ${db_categories[@]}; do
+			if [ -f "$NB_DATA_DIR/$cat_db" ]; then
+				set_catlink "$cat_db"
+				NB_AtomCatTitle=`nb_print "$NB_DATA_DIR/$cat_db" 1 |esc_chars`
+				NB_AtomCatFile=`echo "$category_file" |sed -e 's/[\.]'$NB_FILETYPE'/-atom.'$NB_SYND_FILETYPE'/g'`
+				NB_AtomCatLink="$category_link"
+				nb_msg "$plugins_action $category_dir atom $NB_AtomVer feed ..."
+				build_atomfeed "$cat_db"
+				make_atomfeed "$BLOG_DIR/$ARCHIVES_DIR/$NB_AtomCatFile"
+			fi
+		done
 	fi
 	}
 
 	nb_msg "$plugins_action atom $NB_AtomVer feed ..."
 	build_atomfeed nocat
 	make_atomfeed "$BLOG_DIR/$NB_AtomFile"
-	build_atom_catfeeds
+	if [ "$CATEGORY_FEEDS" = 1 ] && [ "$ATOM_CATFEEDS" = 1 ]; then
+		build_atom_catfeeds
+	fi
 fi
 
 # restore chronological order
