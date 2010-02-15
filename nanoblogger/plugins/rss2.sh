@@ -37,6 +37,10 @@ NB_RSS2ModDate=`date "+%Y-%m-%dT%H:%M:%S${BLOG_FEED_TZD}"`
 # set link to archives
 NB_RSS2ArchivesPath="$BLOG_FEED_URL/$ARCHIVES_DIR/"
 
+# set link for main template
+set_baseurl './'
+NB_RSS2FeedLink='<a href="'${BASE_URL}$NB_RSS2File'" class="feed-small">RSS</a>'
+
 # backwards support for deprecated BLOG_LANG
 : ${BLOG_FEED_LANG:=$BLOG_LANG}
 

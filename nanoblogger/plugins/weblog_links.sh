@@ -1,5 +1,5 @@
 # Nanoblogger Plugin: Weblog Links
-# Last modified: 2008-01-13T21:36:41-05:00
+# Last modified: 2010-02-15T01:42:38-05:00
 
 # <div class="sidetitle">
 # Links
@@ -113,17 +113,26 @@ NB_CategoryLinks=$(< "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE")
 [ -z "$NB_CategoryLinks" ] && NB_CategoryLinks="$categories_nolist"
 
 # create links to feeds
-if [ "$CATEGORY_FEEDS" = 1 ] || [ "$ATOM_CATFEEDS" = 1 -a "$RSS2_CATFEEDS" = 1 ]; then
-	# TODO: find a better way to check if atom or rss feeds exist before adding them blindly
-	# TODO: include RSS 1.0 feeds or just forget about them?
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>, <a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
-elif [ "$ATOM_CATFEEDS" = 1 ] && [ "$RSS2_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
-elif [ "$RSS2_CATFEEDS" = 1 ] && [ "$ATOM_CATFEEDS" != 1 ]; then
-	sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
-	NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
+# TODO: include RSS 1.0 feeds or just forget about them?
+if [[ ! -z "$NB_RSS2Ver" && ! -z "$NB_AtomVer" ]]; then
+	NB_BlogFeeds="$template_syndicate_main ($NB_RSS2FeedLink, $NB_AtomFeedLink)<br />"
+elif [[ ! -z "$NB_RSS2Ver" && -z "$NB_AtomVer" ]]; then
+	NB_BlogFeeds="$template_syndicate_main ($NB_RSS2FeedLink)<br />"
+elif [[ -z "$NB_RSS2Ver" && ! -z "$NB_AtomVer" ]]; then
+	NB_BlogFeeds="$template_syndicate_main ($NB_AtomFeedLink)<br />"
+fi
+if [ "$CATEGORY_FEEDS" = 1 ]; then
+	if [[ "$ATOM_CATFEEDS" = 1 && "$RSS2_CATFEEDS" = 1 ]]; then
+		# TODO: find a better way to check if atom or rss feeds exist before adding them blindly
+		sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>, <a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+		NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
+	elif [[ "$ATOM_CATFEEDS" = 1  &&  "$RSS2_CATFEEDS" != 1 ]]; then
+		sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-atom.xml" class="feed-small">Atom</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+		NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
+	elif [[ "$RSS2_CATFEEDS" = 1 && "$ATOM_CATFEEDS" != 1 ]]; then
+		sed 's@<a href="\([^"]*\)\('$NB_INDEX'\)\{'$SHOW_INDEXFILE'\}">\([^<]*\)</a>.*@\3 (<a href="\1index-rss.xml" class="feed-small">RSS</a>)<br />@' "$BLOG_DIR/$PARTS_DIR/cat_links.$NB_FILETYPE" > "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE"
+		NB_CategoryFeeds=$(< "$BLOG_DIR/$PARTS_DIR/cat_feeds.$NB_FILETYPE")
+	fi
 fi
 
 # helper to create links to year archives
