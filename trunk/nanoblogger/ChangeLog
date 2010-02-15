@@ -1,3 +1,11 @@
+2010-02-15 19:07  n1xt3r
+
+	* ChangeLog, default/templates/main_index.htm, nb, plugins/atom.sh,
+	  plugins/rss2.sh, plugins/weblog_links.sh: - Fix: wrong logic
+	  found in load_plugins() loop, could cause loop to exit before
+	  completion.
+	  - Improves integration of feed links.
+
 2010-02-15 03:18  n1xt3r
 
 	* default/blog.conf, docs/nanoblogger.html, plugins/atom.sh,
@@ -11,7 +19,7 @@
 	  nb.conf, plugins/archive/master_index.sh,
 	  plugins/entry/format/autobr.sh,
 	  plugins/entry/format/autotag-br.sh, plugins/page/feed_links.sh,
-	  plugins/weblog_status.sh: Bug Fix: missing syndication links in
+	  plugins/weblog_status.sh: Fix: missing syndication links in
 	  archives (Charles Curley).
 
 2010-02-14 20:42  n1xt3r
@@ -31,9 +39,9 @@
 
 2010-02-13 02:54  n1xt3r
 
-	* lib/tools.sh: Bug Fix: Addresses issue where entry plugin data
-	  was not being properly retained
-	  by NB_EntryBody.
+	* lib/tools.sh: Fix: Addresses issue where entry plugin data was
+	  not being properly retained by
+	  NB_EntryBody.
 
 2009-08-10 00:27  n1xt3r
 
