@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2010-02-15T01:37:33-05:00
+# Last modified: 2010-02-15T23:16:28-05:00
 
 # nanoblogger's version.
 VERSION="SVN"
@@ -746,7 +746,7 @@ process_entry(){
 			echo "$addweblog_title"
 			read -p "$NB_PROMPT" NB_EntryTitle
 		fi
-		[ ! -z "$USR_TEXT" ] && NB_EntryBody="$USR_TEXT"; USR_TEXT=
+		[ ! -z "$USR_TEXT" ] && NB_MetaBody="$USR_TEXT"; USR_TEXT=
 		[ ! -z "$USR_DESC" ] && NB_EntryDescription="$USR_DESC"
 		# prompt for description interactively
 		if [ -z "$NB_EntryDescription" ] && [ "$DESC_PROMPT" != 1 ] &&
@@ -770,7 +770,7 @@ process_entry(){
 		write_var "$USR_METAVAR" "$USR_SETVAR" "$IMPORT_FILE"
 		cat "$IMPORT_FILE" > "$NB_EditFile"
 	fi
-	if [ -z "$NB_EntryBody" ]; then
+	if [ -z "$NB_MetaBody" ]; then
 		nb_msg "$addweblog_editnew"
 		nb_edit -p "$NB_EditFile"
 		# preserve custom meta variable and data

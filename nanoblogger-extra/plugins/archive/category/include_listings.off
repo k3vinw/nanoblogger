@@ -1,5 +1,7 @@
 # Category archive plugin: Include Listings
 # generates entries listings for inclusion elsewhere on a site.
+#
+# FIXME: investigate possible conflict with build_catarchives().
 
 # define templates
 CATENTRY_INC_TEMPLATE="category_inc_entry.htm"
