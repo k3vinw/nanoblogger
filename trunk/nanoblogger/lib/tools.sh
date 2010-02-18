@@ -1,9 +1,9 @@
 # Module for utility functions
-# Last modified: 2010-02-14T15:15:35-05:00
+# Last modified: 2010-02-17T00:44:49-05:00
 
 # simple command evaluator that attempts to mask output
 nb_eval(){
-	DEVNULL=`eval "$1" 2>&1`
+	FAKE_DEVNULL=`eval "$@" 2>&1`
 	return $?
 }
 
@@ -97,7 +97,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
-		eval $browser_cmd "$BROWSER_URL" && break
+		nb_eval $browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
 	if [ $? != 0 ]; then
@@ -121,11 +121,11 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
 	-p) # prompt to continue (kludge for editors that detach from process)
-		eval $NB_EDITOR "$EDIT_FILE"
+		nb_eval $NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		eval $NB_EDITOR "$EDIT_FILE"
+		nb_eval $NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then
