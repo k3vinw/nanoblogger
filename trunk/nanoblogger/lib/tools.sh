@@ -1,11 +1,5 @@
 # Module for utility functions
-# Last modified: 2010-02-17T00:44:49-05:00
-
-# simple command evaluator that attempts to mask output
-nb_eval(){
-	FAKE_DEVNULL=`eval "$@" 2>&1`
-	return $?
-}
+# Last modified: 2010-02-20T15:26:37-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.

@@ -1,6 +1,6 @@
 # build monthly archives
 build_montharchive(){
-	export CACHE_TYPE=month
+	export CACHE_TYPE=month ARCHIVE_TYPE=month
 	[ ! -z "$MONTHARCH_DATATYPE" ] &&
 		ARCH_DATATYPE="$MONTHARCH_DATATYPE"
 	query_db "$month"
@@ -22,6 +22,9 @@ build_montharchive(){
 			NB_MonthlyCalendar=$(< "$BLOG_DIR/$PARTS_DIR/$month_dir/cal.$NB_FILETYPE")
 			# pretty-print NB_ArchiveTitle
 			NB_ArchiveTitle="$CAL_HEAD"
+		fi
+		if [ ! -f "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" ] && [ ! -z "$ARCHIVE_INDEX_TEMPLATE" ]; then
+			MONTH_TEMPLATE="$ARCHIVE_INDEX_TEMPLATE" # fallback to archive index template
 		fi
 		paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
 			"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"

@@ -4,6 +4,7 @@
 YEARIMOD_VAR="$New_EntryFile$Edit_EntryFile$Delete_EntryFile$Cat_EntryFile$USR_TITLE"
 
 build_yeararchive(){
+	export ARCHIVE_TYPE=year
 	query_db "$yearn"
 	YEARIMOD_QUERY=`echo "$NB_QUERY" |grep "^$yearn"`
 	# check for weblog modifications
@@ -143,8 +144,12 @@ build_yeararchive(){
 		# build master archive index
 		MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$yearn/$NB_INDEXFILE"
 		# set title for makepage template
-		MKPAGE_TITLE="$yearn $template_archives"
+		#MKPAGE_TITLE="$yearn $template_archives";
+		NB_ArchiveTitle="$yearn"
 		MKPAGE_CONTENT="$NB_ArchiveLinks"
+		if [ ! -f "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" ] && [ ! -z "$ARCHIVE_INDEX_TEMPLATE" ]; then
+			YEAR_TEMPLATE="$ARCHIVE_INDEX_TEMPLATE" # fallback to archive index template
+		fi
 		make_page "$BLOG_DIR/$PARTS_DIR/$yearn/archive_links.$NB_FILETYPE" "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" "$MKPAGE_OUTFILE"
 	fi
 }

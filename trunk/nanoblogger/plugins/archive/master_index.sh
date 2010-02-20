@@ -94,14 +94,14 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 	MKPAGE_TITLE="$template_archives"
 	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	ARCHIVE_INDEX_TEMPLATECOPY="$NB_BASE_DIR/default/templates/archive_index.htm"
-	ARCHIVE_INDEX_TEMPLATE="$NB_TEMPLATE_DIR/archive_index.htm"
+	: ${ARCHIVE_INDEX_TEMPLATE:=archive_index.htm} # should already be set in nb.conf
 	if [ ! -f "$ARCHIVE_INDEX_TEMPLATE" ] ; then
 		# ARCHIVE_INDEX_TEMPLATE does not exist, get it from default
-		cp "$ARCHIVE_INDEX_TEMPLATECOPY" "$ARCHIVE_INDEX_TEMPLATE" ||
+		cp "$ARCHIVE_INDEX_TEMPLATECOPY" "$NB_TEMPLATE_DIR/$ARCHIVE_INDEX_TEMPLATE" ||
 			die "$nb_plugin: failed to copy '$ARCHIVE_INDEX_TEMPLATE'! please repair nanoblogger! goodbye/"
 	fi
-	[ -r "$ARCHIVE_INDEX_TEMPLATE" ] ||
+	[ -r "$NB_TEMPLATE_DIR/$ARCHIVE_INDEX_TEMPLATE" ] ||
 		die "`basename $0`: '$ARCHIVE_INDEX_TEMPLATE' - missing template! goodbye."
-	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$MAKEPAGE_TEMPLATE" "$MKPAGE_OUTFILE"
+	make_page "$BLOG_DIR/$PARTS_DIR"/archive_links.$NB_FILETYPE "$NB_TEMPLATE_DIR/$ARCHIVE_INDEX_TEMPLATE" "$MKPAGE_OUTFILE"
 fi
 
