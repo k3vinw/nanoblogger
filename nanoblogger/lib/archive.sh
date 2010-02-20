@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2008-07-16T22:54:53-04:00
+# Last modified: 2010-02-20T14:47:01-05:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -285,7 +285,7 @@ build_entryarchives(){
 ENTRYARCHIVES_LIST=($1)
 ENTRYARCHIVES_TEMPLATE="$2"
 ENTRYARCHIVES_DATATYPE="$3"
-: ${CACHE_TYPE:=entry}
+: ${CACHE_TYPE:=entry};
 for entry in ${ENTRYARCHIVES_LIST[@]}; do
 	entry=${entry%%>*}
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
@@ -453,8 +453,11 @@ ARCH_DATATYPE=; page_filedir=
 
 # build category archives
 build_catarchives(){
-export CACHE_TYPE=cat
+export CACHE_TYPE=cat ARCHIVE_TYPE=cat
 if [ ! -z "${CAT_LIST[*]}" ]; then
+	if [ ! -f "$NB_TEMPLATE_DIR/$CATEGORY_TEMPLATE" ] && [ ! -z "$ARCHIVE_INDEX_TEMPLATE" ]; then
+		CATEGORY_TEMPLATE="$ARCHIVE_INDEX_TEMPLATE" # fallback to archive index template
+	fi
 	for cat_arch in ${CAT_LIST[@]}; do
 		if [ -f "$NB_DATA_DIR/$cat_arch" ]; then
 			NB_ArchiveTitle=`nb_print "$NB_DATA_DIR/$cat_arch" 1`
@@ -523,7 +526,7 @@ load_plugins archive/year
 [ "$MONTH_ARCHIVES" = 1 ] &&
 	load_plugins archive/month
 # build entry archives
-export CACHE_TYPE=entry
+export CACHE_TYPE=entry ARCHIVE_TYPE=entry
 [ "$ENTRY_ARCHIVES" = 1 ] &&
 	build_entryarchives "${UPDATE_LIST[*]}" "$PERMALINKENTRY_TEMPLATE" ALL
 }

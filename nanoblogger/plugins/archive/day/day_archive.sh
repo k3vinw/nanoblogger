@@ -1,6 +1,6 @@
 # build daily archives
 build_dayarchive(){
-	export CACHE_TYPE=day
+	export CACHE_TYPE=day ARCHIVE_TYPE=day
 	[ ! -z "$DAYARCH_DATATYPE" ] &&
 		ARCH_DATATYPE="$DAYARCH_DATATYPE"
 	query_db "$day"

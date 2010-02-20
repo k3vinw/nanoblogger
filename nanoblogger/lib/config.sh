@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2008-08-04T15:48:20-04:00
+# Last modified: 2010-02-20T01:13:07-05:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -84,7 +84,7 @@ x_id="$BLOG_ENTRYID_TAG"
 # ---
 
 # default verbosity, 0 = silent
-: ${VERBOSE:=1}
+: ${VERBOSE:=0}
 # default to $USER for author
 : ${BLOG_AUTHOR:=$USER}
 # allow user specified author names
