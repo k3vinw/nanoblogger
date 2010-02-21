@@ -1,5 +1,5 @@
 # Module for archive functions
-# Last modified: 2010-02-20T14:47:01-05:00
+# Last modified: 2010-02-21T13:14:42-05:00
 
 # set base url based on parameters
 set_baseurl(){
@@ -285,7 +285,7 @@ build_entryarchives(){
 ENTRYARCHIVES_LIST=($1)
 ENTRYARCHIVES_TEMPLATE="$2"
 ENTRYARCHIVES_DATATYPE="$3"
-: ${CACHE_TYPE:=entry};
+: ${CACHE_TYPE:=entry}
 for entry in ${ENTRYARCHIVES_LIST[@]}; do
 	entry=${entry%%>*}
 	if [ -f "$NB_DATA_DIR/$entry" ]; then
@@ -295,9 +295,7 @@ for entry in ${ENTRYARCHIVES_LIST[@]}; do
 			set_baseurl "" "$BLOG_DIR/$ARCHIVES_DIR/$permalink_file"
 			set_entrylink "$entry"
 			load_entry "$NB_DATA_DIR/$entry" "$ENTRYARCHIVES_DATATYPE" "$CACHE_TYPE"
-			year=${month:0:4}
-			month=${month:5:2}
-			day=${entry:8:2}
+			year=${month:0:4}; month=${month:5:2}; day=${entry:8:2}
 			findba_entries "$entry" "${MASTER_DB_RESULTS[*]}"
 			set_entrynavlinks prev "$before_entry"
 			set_entrynavlinks next "$after_entry"

@@ -1,5 +1,5 @@
 # Module for error handling
-# Last modified: 2010-02-20T13:06:38-05:00
+# Last modified: 2010-02-21T16:16:15-05:00
 
 # function that immitate perl's die command
 die(){
@@ -17,11 +17,12 @@ EOF
 }
 
 # function wrapper to eval
+#FIXME: doh! why so hard to quite eval??
 nb_eval(){
 	if [ "$VERBOSE" != 0 ]; then
 		eval "$@" # verbose eval
 	else
-		FAKE_DEVNULL=`eval "$@" 2>&1`
+		eval "$@" # verbose eval
 	fi
 	return $?
 }

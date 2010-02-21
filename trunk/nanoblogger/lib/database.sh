@@ -1,5 +1,5 @@
 # Module for database functions
-# Last modified: 2008-07-17T22:48:03-04:00
+# Last modified: 2010-02-21T13:16:11-05:00
 
 # index related categories by id
 index_catids(){
@@ -52,7 +52,7 @@ rebuild_maindb(){
 print_entry(){ echo "${1%%>[0-9]*}"; }
 print_cat(){
 prcat_entry="${1%%>[0-9]*}"
-prcat_catids="${1##*\>}"
+prcat_catids="${1##*\>}"; prcat_ids="${prcat_ids## }"
 [ "$prcat_entry" != "$prcat_catids" ] &&
 	echo "$prcat_catids"
 }

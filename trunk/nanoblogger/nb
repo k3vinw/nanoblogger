@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2010-02-20T18:58:52-05:00
+# Last modified: 2010-02-21T16:17:48-05:00
 
 # nanoblogger's version.
 VERSION="SVN-trunk"
@@ -29,6 +29,10 @@ NB_LIB_DIR="${NB_BASE_DIR}/lib"
 . ${NB_LIB_DIR}/database.sh
 . ${NB_LIB_DIR}/archive.sh
 # --
+
+# -- misc --
+# setup fake /dev/null for undesired output
+: ${DEV_NULL:=$NB_TEMP_DIR/nb_scratch$$-dev_null}
 
 # load specified or default language
 load_lang(){
