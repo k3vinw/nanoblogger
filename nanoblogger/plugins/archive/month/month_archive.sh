@@ -23,9 +23,6 @@ build_montharchive(){
 			# pretty-print NB_ArchiveTitle
 			NB_ArchiveTitle="$CAL_HEAD"
 		fi
-		if [ ! -f "$NB_TEMPLATE_DIR/$MONTH_TEMPLATE" ] && [ ! -z "$ARCHIVE_INDEX_TEMPLATE" ]; then
-			MONTH_TEMPLATE="$ARCHIVE_INDEX_TEMPLATE" # fallback to archive index template
-		fi
 		paginate "$month" nocat "$MAX_MONTHPAGE_ENTRIES" "$MONTH_TEMPLATE" \
 			"$MONTHENTRY_TEMPLATE" "$BLOG_DIR/$ARCHIVES_DIR/" "$month_file"
 		if [ "$DAY_ARCHIVES" = 1 ]; then
