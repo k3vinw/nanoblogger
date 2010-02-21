@@ -1,5 +1,5 @@
 # Module for configuration file management
-# Last modified: 2010-02-20T01:13:07-05:00
+# Last modified: 2010-02-21T16:15:49-05:00
 
 # --- WARNING ---
 # config variables that must always load
@@ -83,6 +83,8 @@ x_id="$BLOG_ENTRYID_TAG"
 : ${x_id:=e}
 # ---
 
+# setup fake /dev/null for undesired output
+: ${DEV_NULL:=$NB_TEMP_DIR/nb_scratch$$-dev_null}
 # default verbosity, 0 = silent
 : ${VERBOSE:=0}
 # default to $USER for author
