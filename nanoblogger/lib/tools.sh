@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2010-02-21T16:20:15-05:00
+# Last modified: 2010-02-21T23:34:55-05:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -91,7 +91,7 @@ if [ ! -z "$BROWSER_CMD" ]; then
 		browserurl_sedvar="${BROWSER_URL//\//\\/}"
 		browser_cmd=`echo "$browser" |sed -e 's/\%REM\%/ /g; s/\%\%/\%/g; s/\%s/'$browserurl_sedvar'/g'`
 		nb_msg "$nbbrowser_running $browser_cmd $BROWSER_URL ..."
-		nb_eval $browser_cmd "$BROWSER_URL" && break
+		$browser_cmd "$BROWSER_URL" && break
 		# on failure, continue to next in list
 	done
 	if [ $? != 0 ]; then
@@ -115,11 +115,11 @@ EDIT_DIR="${EDIT_FILE%%\/${EDIT_FILE##*\/}}"
 	die "'$EDIT_DIR' - $nowritedir"
 case "$EDIT_OPTIONS" in
 	-p) # prompt to continue (kludge for editors that detach from process)
-		nb_eval $NB_EDITOR "$EDIT_FILE"
+		$NB_EDITOR "$EDIT_FILE"
 		read -p "$nbedit_prompt" enter_key
 	;;
 	*) # default action
-		nb_eval $NB_EDITOR "$EDIT_FILE"
+		$NB_EDITOR "$EDIT_FILE"
 	;;
 esac
 if [ ! -f "$EDIT_FILE" ]; then

@@ -1,5 +1,5 @@
 # Module for error handling
-# Last modified: 2010-02-21T16:16:15-05:00
+# Last modified: 2010-02-22T00:35:11-05:00
 
 # function that immitate perl's die command
 die(){
@@ -9,21 +9,29 @@ EOF
 exit 1
 }
 
-# function wrapper to echo
+# function that immitates echo
 nb_msg(){
 cat <<-EOF
 	$@
 EOF
 }
 
-# function wrapper to eval
-#FIXME: doh! why so hard to quite eval??
+# helper function to test noisy commands quickly by redirecting output to a
+# shell variable
 nb_eval(){
 	if [ "$VERBOSE" != 0 ]; then
-		eval "$@" # verbose eval
+		$@
 	else
-		eval "$@" # verbose eval
+		CMD_WRAPPER=`$@ 2>&1`
 	fi
-	return $?
 }
 
+# helper function to redirect command output to temp file
+nb_null(){
+	if [ "$VERBOSE" != 0 ]; then
+		$@
+	else
+		: ${DEV_NULL:=$NB_TEMP_DIR/nb_scratch$$-dev_null}
+		$@ > "$DEV_NULL" 2>&1
+	fi
+}
