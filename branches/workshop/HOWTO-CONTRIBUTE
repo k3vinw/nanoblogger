@@ -1,0 +1,49 @@
+# This file contains submission process
+
+You can contribute by many means, among of them:
+
+1.. Reporting a bug
+    ***************
+          See file REPORTING-BUGS
+
+2. Bug fix or coding improvement
+   *****************************
+          We accept any patch for bug resolution or any
+          suggestion to improve existing code (quality,
+          speed, security...).
+
+3. Translation
+   ***********
+          If there is already some file already translated
+          in your language, see file TRANSLATORS.
+          Else, we accept any translation in any language!
+
+4. Style Sheets
+   ************
+          We accept to examine any style sheet you could
+          bring. Please check it against the W3 css-validator
+          <http://jigsaw.w3.org/css-validator/>
+          in order to be standard compliant.
+
+5. Templates or plugins
+   ********************
+          Sorry, we do not accept any more templates or
+          plugins. Because we want keep Nanoblogger small
+          and bringing new code could make our soft unstable.
+          Furthermore, it is time consuming to test that new code
+          and the team is doing this development at their own
+          free time. If, definitively, you want extend some feature
+          of NB, we suggest you create a new project. In this
+          case, we grant you permission to prefix the name of
+          your project by these three signs: <NB->.
+
+How to send your contribution?
+          The preferred way is at Source forge website:
+          <http://sourceforge.net/projects/nanoblogger/>
+          You will find a place to post your patch or style sheet.
+          It is better to be member of Sourceforge.net in order
+          to identify you and then, contact you back. Furthermore
+          your name will added to contributors / translators list.
+          Alternatively, you can contact any team member if you
+          encounter some difficulty with use the website interface
+          or even a translator if you can't communicate in English.
