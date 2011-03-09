@@ -1,5 +1,5 @@
 # Module for error handling
-# Last modified: 2010-02-22T00:35:11-05:00
+# Last modified: 2011-03-09T18:04:49-05:00
 
 # function that immitate perl's die command
 die(){
@@ -31,6 +31,7 @@ nb_null(){
 	if [ "$VERBOSE" != 0 ]; then
 		$@
 	else
+		[ -w /dev/null ] && DEV_NULL=/dev/null # when possible use the real /dev/null
 		: ${DEV_NULL:=$NB_TEMP_DIR/nb_scratch$$-dev_null}
 		$@ > "$DEV_NULL" 2>&1
 	fi
