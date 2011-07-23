@@ -2,7 +2,7 @@
 ############################################################
 #  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2010-02-22T00:43:31-05:00
+# Last modified: 2011-07-23T17:13:08-04:00
 
 # nanoblogger's version.
 VERSION="SVN-trunk"
@@ -406,8 +406,10 @@ case "$editweblog_type" in
 			New_TimeStamp="$METADATA"
 			# use specified timestamp as entry's new date
 			chg_entrydate "$Edit_EntryFile" "$New_TimeStamp"
-			[ -f "$NB_DATA_DIR/$New_EntryDateFile" ] &&
+			if [ -f "$NB_DATA_DIR/$New_EntryDateFile" ]; then
+				Old_EntryFile="$Edit_EntryFile"
 				Edit_EntryFile="$New_EntryDateFile"
+			fi
 			# add timestamp modified entries to update list
 			if [ ! -z "$Old_EntryFile" ]; then
 				echo "$Old_EntryFile" >> "$SCRATCH_FILE".edit_weblog
@@ -415,6 +417,9 @@ case "$editweblog_type" in
 				find_categories "$Old_EntryFile"
 				for olde_catdb in ${CAT_LIST[*]}; do
 					delete_db "$Old_EntryFile" "$NB_DATA_DIR/$olde_catdb"
+					if [ ! -z "$New_TimeStamp" ]; then # update with new timestamp
+						update_catdb "$Edit_EntryFile" "$NB_DATA_DIR/$olde_catdb"
+					fi
 				done
 				delete_db "$Old_EntryFile" "$NB_DATA_DIR/master.db"
 				update_maindb "$Edit_EntryFile" "$NB_DATA_DIR/master.db"
