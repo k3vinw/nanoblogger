@@ -144,8 +144,7 @@ build_yeararchive(){
 		# build master archive index
 		MKPAGE_OUTFILE="$BLOG_DIR/$ARCHIVES_DIR/$yearn/$NB_INDEXFILE"
 		# set title for makepage template
-		#MKPAGE_TITLE="$yearn $template_archives";
-		NB_ArchiveTitle="$yearn"
+		MKPAGE_TITLE="$yearn $template_archives";
 		MKPAGE_CONTENT="$NB_ArchiveLinks"
 		if [ ! -f "$NB_TEMPLATE_DIR/$YEAR_TEMPLATE" ] && [ ! -z "$ARCHIVE_INDEX_TEMPLATE" ]; then
 			YEAR_TEMPLATE="$ARCHIVE_INDEX_TEMPLATE" # fallback to archive index template

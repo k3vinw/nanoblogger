@@ -1,5 +1,5 @@
 # Module for utility functions
-# Last modified: 2010-06-06T18:19:03-04:00
+# Last modified: 2011-07-31T16:28:44-04:00
 
 # create a semi ISO 8601 formatted timestamp for archives
 # used explicitly, please don't edit unless you know what you're doing.
@@ -324,8 +324,8 @@ case $METADATA_TYPE in
 		read_metadata DATE "$METADATA_FILE"; NB_MetaDate="$METADATA"
 		NB_EntryDate="$NB_MetaDate";;
 	DESC)
-		NB_EntryDescription="$NB_MetaDescription"
-		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA";;
+		read_metadata DESC "$METADATA_FILE"; NB_MetaDescription="$METADATA"
+		NB_EntryDescription="$NB_MetaDescription";;
 	FORMAT)
 		read_metadata FORMAT "$METADATA_FILE"; NB_MetaFormat="$METADATA"
 		NB_EntryFormat="$NB_MetaFormat";;
