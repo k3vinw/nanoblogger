@@ -2,12 +2,12 @@
 ############################################################
 #  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2011-07-23T17:13:08-04:00
+# Last modified: 2011-07-31T16:53:21-04:00
 
 # nanoblogger's version.
-VERSION="SVN-trunk"
+VERSION="3.5-RC1"
 # nanoblogger's copyright 
-COPYRIGHT="2004-2010"
+COPYRIGHT="2004-2011"
 
 # -- hardcoded paths --
 # where to expect nanoblogger's base

@@ -1,4 +1,4 @@
-TITLE: Welcome to NanoBlogger SVN!
+TITLE: Welcome to NanoBlogger 3.5!
 AUTHOR: n1xt3r
 DATE:
 DESC: nanoblogger welcome message

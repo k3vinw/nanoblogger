@@ -95,7 +95,7 @@ if [ ! -z "$MASTERIMOD_VAR" ] || [ ! -z "$MASTERIMOD_QUERY" ] || [ "$NB_QUERY" =
 	MKPAGE_CONTENT="$NB_ArchiveLinks"
 	ARCHIVE_INDEX_TEMPLATECOPY="$NB_BASE_DIR/default/templates/archive_index.htm"
 	: ${ARCHIVE_INDEX_TEMPLATE:=archive_index.htm} # should already be set in nb.conf
-	if [ ! -f "$ARCHIVE_INDEX_TEMPLATE" ] ; then
+	if [ ! -f "$NB_TEMPLATE_DIR/$ARCHIVE_INDEX_TEMPLATE" ] ; then
 		# ARCHIVE_INDEX_TEMPLATE does not exist, get it from default
 		cp "$ARCHIVE_INDEX_TEMPLATECOPY" "$NB_TEMPLATE_DIR/$ARCHIVE_INDEX_TEMPLATE" ||
 			die "$nb_plugin: failed to copy '$ARCHIVE_INDEX_TEMPLATE'! please repair nanoblogger! goodbye/"
