@@ -1,8 +1,8 @@
 #! /bin/bash
 ############################################################
-#  NanoBlogger SVN Copyright 2009 n1xt3r (Kevin R. Wood)   #
+#  NanoBlogger 3.5 Copyright 2011 n1xt3r (Kevin R. Wood)   #
 ############################################################
-# Last modified: 2011-07-31T16:53:21-04:00
+# Last modified: 2011-08-05T14:49:37-04:00
 
 # nanoblogger's version.
 VERSION="3.5-RC1"
@@ -943,7 +943,7 @@ esac
 }
 
 show_help(){
-nb_eval "date '+%Y' |grep '[0-9]'" && CURRENT_YEAR=`date '+%Y'` && COPYRIGHT="2004-$CURRENT_YEAR"
+nb_null date '+%Y' |grep -q '[0-9]' && CURRENT_YEAR=`date '+%Y'` && COPYRIGHT="2004-$CURRENT_YEAR"
 NB_ShowHelp=$(< "${NB_LANG_DIR}/$NB_LANG"/help.txt)
 BASENAME=`basename $0`
 # transform keywords to variables and delete all hash-marked lines for display
